@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import Settings from '@folio/stripes-components/lib/Settings';
 import GeneralSettings from './general-settings';
 import SomeFeatureSettings from './some-feature-settings';
@@ -13,12 +14,12 @@ export default class ReceivingSettings extends React.Component {
   pages = [
     {
       route: 'general',
-      label: this.props.stripes.intl.formatMessage({ id: 'ui-receiving.settings.general' }),
+      label: <FormattedMessage id="ui-receiving.settings.general" />,
       component: GeneralSettings,
     },
     {
       route: 'somefeature',
-      label: this.props.stripes.intl.formatMessage({ id: 'ui-receiving.settings.some-feature' }),
+      label: <FormattedMessage id="ui-receiving.settings.some-feature" />,
       component: SomeFeatureSettings,
     },
   ];
