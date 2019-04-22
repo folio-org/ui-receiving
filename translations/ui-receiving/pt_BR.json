@@ -1,5 +1,5 @@
 {
-    "meta.title": "Localizador de acordo ERM (plugin)",
+    "meta.title": "Recebimento",
     "search": "Pesquisa",
     "resultCount": "{count, number} {count, plural, one {Registro encontrado} other {Registros encontrados}}",
     "data.contactTypes.email": "E-mail",
