@@ -30,3 +30,7 @@ yarn-error.log*
 **/node_modules/*
 *.idea*
 *.DS_Store
+
+# stripes
+.stripesclirc
+stripes.config.js.local
