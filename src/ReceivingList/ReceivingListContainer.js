@@ -46,7 +46,7 @@ const ReceivingListContainer = ({ mutator, location }) => {
       .then(response => {
         if (!offset) setTitlesCount(response.totalRecords);
 
-        setTitles((prev) => [...prev, ...response.poLines]);
+        setTitles((prev) => [...prev, ...response.titles]);
       })
       .finally(() => setIsLoading(false));
   };

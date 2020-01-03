@@ -34,3 +34,7 @@ yarn-error.log*
 # stripes
 .stripesclirc
 stripes.config.js.local
+
+# tests
+/artifacts
+junit.xml

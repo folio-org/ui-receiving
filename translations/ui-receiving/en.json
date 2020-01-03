@@ -1,5 +1,7 @@
 {
   "meta.title": "Receiving",
 
-  "titles.search": "Search"
+  "titles.search": "Search",
+  "titles.orderStatus": "Order status",
+  "titles.title": "Title"
 }

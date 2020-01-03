@@ -1,1 +1,1 @@
-export const TITLES_API = 'orders/order-lines';
+export const TITLES_API = 'orders/titles';
