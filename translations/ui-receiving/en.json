@@ -3,5 +3,14 @@
 
   "titles.search": "Search",
   "titles.orderStatus": "Order status",
+  "title.button.save": "Save & close",
+  "title.button.cancel": "Cancel",
+  "title.paneTitle.create": "New title",
+  "title.section.itemDetails": "Item details",
+  "title.section.lineDetails": "PO line details",
+  "titles.lineNumber": "POL number",
+  "title.titleLookUp": "Title look-up",
+  "title.lineLookUp": "POL number look-up",
+  "title.titleLookUpNoPlugin": "[no instance-selection plugin]",
   "titles.title": "Title"
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   withRouter,
@@ -20,6 +20,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import ReceivingListFilter from './ReceivingListFilter';
+import { renderNewButton } from './renderNewButton';
 
 const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
 const visibleColumns = ['title'];
@@ -51,6 +52,8 @@ const ReceivingList = ({
     changeSorting,
   ] = useLocationSorting(location, history, resetData, sortableFields);
 
+  const renderLastMenu = useCallback(renderNewButton, []);
+
   return (
     <Paneset>
       <FiltersPane>
@@ -77,6 +80,7 @@ const ReceivingList = ({
       <ResultsPane
         title={resultsPaneTitle}
         count={titlesCount}
+        renderLastMenu={renderLastMenu}
       >
         <MultiColumnList
           id="receivings-list"
