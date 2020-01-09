@@ -1,4 +1,13 @@
 {
     "meta.title": "接收中",
-    "titles.search": "Search"
+    "titles.search": "搜索",
+    "titles.orderStatus": "Order status",
+    "titles.title": "Title",
+    "title.paneTitle.create": "New title",
+    "title.section.itemDetails": "Item details",
+    "title.section.lineDetails": "PO line details",
+    "titles.lineNumber": "POL number",
+    "title.titleLookUp": "Title look-up",
+    "title.lineLookUp": "POL number look-up",
+    "title.titleLookUpNoPlugin": "[no instance-selection plugin]"
 }

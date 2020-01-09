@@ -1,4 +1,13 @@
 {
     "meta.title": "Receiving",
-    "titles.search": "Search"
+    "titles.search": "Search",
+    "titles.orderStatus": "Order status",
+    "titles.title": "Title",
+    "title.paneTitle.create": "New title",
+    "title.section.itemDetails": "Item details",
+    "title.section.lineDetails": "PO line details",
+    "titles.lineNumber": "POL number",
+    "title.titleLookUp": "Title look-up",
+    "title.lineLookUp": "POL number look-up",
+    "title.titleLookUpNoPlugin": "[no instance-selection plugin]"
 }

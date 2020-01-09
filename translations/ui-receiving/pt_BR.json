@@ -1,4 +1,13 @@
 {
     "meta.title": "Recebimento",
-    "titles.search": "Pesquisa"
+    "titles.search": "Pesquisa",
+    "titles.orderStatus": "Status do pedido",
+    "titles.title": "Título",
+    "title.paneTitle.create": "New title",
+    "title.section.itemDetails": "Item details",
+    "title.section.lineDetails": "PO line details",
+    "titles.lineNumber": "POL number",
+    "title.titleLookUp": "Title look-up",
+    "title.lineLookUp": "POL number look-up",
+    "title.titleLookUpNoPlugin": "[no instance-selection plugin]"
 }
