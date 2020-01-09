@@ -22,7 +22,4 @@ const Receiving = () => {
   );
 };
 
-Receiving.propTypes = {
-};
-
 export default Receiving;
