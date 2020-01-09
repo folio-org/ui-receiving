@@ -9,12 +9,3 @@ export const titlesResource = {
   path: TITLES_API,
   accumulate: true,
 };
-
-export const identifierTypesResource = {
-  ...baseManifest,
-  path: 'identifier-types',
-  params: {
-    query: 'cql.allRecords=1 sortby name',
-  },
-  records: 'identifierTypes',
-};

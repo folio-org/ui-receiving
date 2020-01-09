@@ -3,12 +3,11 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleFormContainer } from './TitleForm';
 
-const Receiving = ({ match }) => {
+const Receiving = () => {
   return (
     <Switch>
       <Route
@@ -24,7 +23,6 @@ const Receiving = ({ match }) => {
 };
 
 Receiving.propTypes = {
-  match: ReactRouterPropTypes.match.isRequired,
 };
 
 export default Receiving;

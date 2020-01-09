@@ -3,17 +3,14 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { get } from 'lodash';
-import { OnChange } from 'react-final-form-listeners';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Accordion,
   AccordionSet,
-  Button,
   Col,
   ExpandAllButton,
   Pane,
-  PaneFooter,
   Paneset,
   Row,
   TextField,
@@ -21,6 +18,7 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
+  FormFooter,
   useAccordionToggle,
   validateRequired,
 } from '@folio/stripes-acq-components';
@@ -29,45 +27,6 @@ import {
   SECTIONS,
 } from './constants';
 import ProductIdDetailsForm from './ProductIdDetailsForm';
-
-const FormFooter = ({
-  handleSubmit,
-  onCancel,
-  pristine,
-  submitting,
-}) => {
-  const start = (
-    <Button
-      buttonStyle="default mega"
-      data-test-cancel-button
-      marginBottom0
-      onClick={onCancel}
-    >
-      <FormattedMessage id="ui-receiving.title.button.cancel" />
-    </Button>
-  );
-
-  const end = (
-    <Button
-      buttonStyle="primary mega"
-      data-test-save-button
-      disabled={pristine || submitting}
-      id="clickable-save-title"
-      marginBottom0
-      onClick={handleSubmit}
-      type="submit"
-    >
-      <FormattedMessage id="ui-receiving.title.button.save" />
-    </Button>
-  );
-
-  return (
-    <PaneFooter
-      renderStart={start}
-      renderEnd={end}
-    />
-  );
-};
 
 const TitleForm = ({
   handleSubmit,
@@ -147,11 +106,6 @@ const TitleForm = ({
                         type="text"
                         validate={validateRequired}
                       />
-                      <OnChange name="title">
-                        {(value, previous) => {
-                          console.log('OnChange title', value, previous);
-                        }}
-                      </OnChange>
                       <Pluggable
                         aria-haspopup="true"
                         dataKey="instances"
@@ -166,7 +120,6 @@ const TitleForm = ({
                   </Row>
                   <Row>
                     <ProductIdDetailsForm
-                      onChangeField={(e, v) => console.log('onChangeField', e, v)}
                       identifierTypes={identifierTypes}
                     />
                   </Row>
@@ -225,7 +178,6 @@ TitleForm.propTypes = {
 export default stripesFinalForm({
   navigationCheck: true,
   // subscription: { values: true },
-  // validateOnBlur: true,
   mutators: {
     setTitleValue: (args, state, tools) => {
       const { id, title } = get(args, '0', {});

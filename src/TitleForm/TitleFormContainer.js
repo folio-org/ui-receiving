@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
+import { LoadingView } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
+import { identifierTypesManifest } from '@folio/stripes-acq-components';
 
 import {
   identifierTypesResource,
@@ -23,20 +25,21 @@ function TitleFormContainer({ history, match, mutator }) {
 
   const onCancel = useCallback(
     () => history.push('/receiving'),
-    [],
+    [history],
   );
   const onSubmit = useCallback(
-    ({ poLineNumber, ...newTitle }) => {
+    ({ _poLineNumber, ...newTitle }) => {
       return mutator.titles.POST(newTitle)
-        .then(savedTitle => {
+        .then(() => {
           setTimeout(() => history.push('/receiving'));
         });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [history, titleId],
   );
 
   if (!identifierTypes) {
-    return null;
+    return <LoadingView />;
   }
 
   return (
@@ -51,7 +54,7 @@ function TitleFormContainer({ history, match, mutator }) {
 
 TitleFormContainer.manifest = Object.freeze({
   identifierTypes: {
-    ...identifierTypesResource,
+    ...identifierTypesManifest,
     accumulate: true,
     fetch: false,
   },
