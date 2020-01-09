@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { LoadingView } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 import { identifierTypesManifest } from '@folio/stripes-acq-components';
 
@@ -25,7 +24,8 @@ function TitleFormContainer({ history, match, mutator }) {
     [history],
   );
   const onSubmit = useCallback(
-    ({ _poLineNumber, ...newTitle }) => {
+    // eslint-disable-next-line no-unused-vars
+    ({ poLineNumber, ...newTitle }) => {
       return mutator.titles.POST(newTitle)
         .then(() => {
           setTimeout(() => history.push('/receiving'));
@@ -36,7 +36,7 @@ function TitleFormContainer({ history, match, mutator }) {
   );
 
   if (!identifierTypes) {
-    return <LoadingView />;
+    return null;
   }
 
   return (
