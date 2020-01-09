@@ -6,10 +6,7 @@ import { LoadingView } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 import { identifierTypesManifest } from '@folio/stripes-acq-components';
 
-import {
-  identifierTypesResource,
-  titlesResource,
-} from '../common/resources';
+import { titlesResource } from '../common/resources';
 import TitleForm from './TitleForm';
 
 function TitleFormContainer({ history, match, mutator }) {
