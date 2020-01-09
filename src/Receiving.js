@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Switch,
   Route,
 } from 'react-router-dom';
 
+import { Callout } from '@folio/stripes/components';
+import { ToastContext } from '@folio/stripes-acq-components';
+
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleFormContainer } from './TitleForm';
 
+const callout = React.createRef();
+
 const Receiving = () => {
   return (
-    <Switch>
-      <Route
-        component={TitleFormContainer}
-        path="/receiving/create"
-      />
-      <Route
-        component={ReceivingListContainer}
-        path="/receiving"
-      />
-    </Switch>
+    <Fragment>
+      <ToastContext.Provider value={callout}>
+        <Switch>
+          <Route
+            component={TitleFormContainer}
+            path="/receiving/create"
+          />
+          <Route
+            component={ReceivingListContainer}
+            path="/receiving"
+          />
+        </Switch>
+      </ToastContext.Provider>
+      <Callout ref={callout} />
+    </Fragment>
   );
 };
 

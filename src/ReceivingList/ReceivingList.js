@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
+  Route,
   withRouter,
 } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -19,6 +20,7 @@ import {
   useLocationSorting,
 } from '@folio/stripes-acq-components';
 
+import TitleDetailsContainer from '../TitleDetails';
 import ReceivingListFilter from './ReceivingListFilter';
 import { renderNewButton } from './renderNewButton';
 
@@ -33,6 +35,7 @@ const ReceivingList = ({
   history,
   isLoading,
   location,
+  match,
   onNeedMoreData,
   resetData,
   titles,
@@ -53,6 +56,16 @@ const ReceivingList = ({
   ] = useLocationSorting(location, history, resetData, sortableFields);
 
   const renderLastMenu = useCallback(renderNewButton, []);
+
+  const selectedTitle = useCallback(
+    (e, { id }) => {
+      history.push({
+        pathname: `/receiving/${id}/view`,
+        search: location.search,
+      });
+    },
+    [history, location.search],
+  );
 
   return (
     <Paneset>
@@ -92,11 +105,17 @@ const ReceivingList = ({
           autosize
           virtualize
           onNeedMoreData={onNeedMoreData}
+          onRowClick={selectedTitle}
           sortOrder={sortingField}
           sortDirection={sortingDirection}
           onHeaderClick={changeSorting}
         />
       </ResultsPane>
+
+      <Route
+        path={`${match.path}/:id/view`}
+        component={TitleDetailsContainer}
+      />
     </Paneset>
   );
 };
@@ -109,6 +128,7 @@ ReceivingList.propTypes = {
   titles: PropTypes.arrayOf(PropTypes.object),
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
+  match: ReactRouterPropTypes.match.isRequired,
 };
 
 ReceivingList.defaultProps = {

@@ -10,5 +10,23 @@
   "title.titleLookUp": "Title look-up",
   "title.lineLookUp": "POL number look-up",
   "title.titleLookUpNoPlugin": "[no instance-selection plugin]",
-  "titles.title": "Title"
+  "titles.title": "Title",
+
+  "title.actions.load.error": "Failed to load Title or PO line data",
+
+  "title.contributors": "Contributors",
+  "title.edition": "Edition",
+  "title.expected": "Expected",
+  "title.expectedDate": "Expected date",
+  "title.information": "Title information",
+  "title.polNumber": "POL number",
+  "title.productIds": "Product identifiers",
+  "title.publicationDate": "Publication date",
+  "title.publisher": "Publisher",
+  "title.received": "Received",
+  "title.receivingNote": "Receiving note",
+  "title.subscriptionFrom": "Subscription from",
+  "title.subscriptionInterval": "Subscription interval",
+  "title.subscriptionTo": "Subscription to",
+  "title.title": "Title"
 }
