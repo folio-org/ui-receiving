@@ -56,6 +56,14 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     [location.search, history],
   );
 
+  const onEdit = useCallback(
+    () => history.push({
+      pathname: `/receiving/${title.id}/edit`,
+      search: location.search,
+    }),
+    [history, title.id, location.search],
+  );
+
   if (isLoading) {
     return (<LoadingPane onClose={onClose} />);
   }
@@ -65,6 +73,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onClose={onClose}
       title={title}
       poLine={poLine}
+      onEdit={onEdit}
     />
   );
 };

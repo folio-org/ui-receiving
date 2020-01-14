@@ -12,7 +12,13 @@
   "title.titleLookUpNoPlugin": "[no instance-selection plugin]",
   "titles.title": "Title",
 
+  "title.modalLabel.edit": "Add title",
+  "title.edit.save": "Save & close",
+  "title.details.button.edit": "Edit",
+  "title.edit.cancel": "Cancel",
   "title.actions.load.error": "Failed to load Title or PO line data",
+  "title.actions.save.success": "The title <b>{title}</b> has been successfully added for <b>PO line {poLineNumber}</b>",
+  "title.actions.save.error": "The title <b>{title}</b> has not been added for <b>PO line {poLineNumber}</b>",
 
   "title.contributors": "Contributors",
   "title.edition": "Edition",

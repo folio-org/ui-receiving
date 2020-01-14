@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Accordion,
@@ -9,7 +10,10 @@ import {
   ExpandAllButton,
   Pane,
   Row,
+  PaneMenu,
+  Button,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import { useAccordionToggle } from '@folio/stripes-acq-components';
 
@@ -19,8 +23,22 @@ import {
   TITLE_ACCORDION_LABELS,
 } from './constants';
 
-const TitleDetails = ({ onClose, title, poLine }) => {
+const TitleDetails = ({ onClose, title, poLine, onEdit }) => {
   const [expandAll, sections, toggleSection] = useAccordionToggle();
+
+  const lastMenu = (
+    <PaneMenu>
+      <IfPermission perm="ui-receiving.edit">
+        <Button
+          onClick={onEdit}
+          marginBottom0
+          buttonStyle="primary"
+        >
+          <FormattedMessage id="ui-receiving.title.details.button.edit" />
+        </Button>
+      </IfPermission>
+    </PaneMenu>
+  );
 
   return (
     <Pane
@@ -30,6 +48,7 @@ const TitleDetails = ({ onClose, title, poLine }) => {
       paneTitle={title.title}
       paneSub={poLine.poLineNumber}
       onClose={onClose}
+      lastMenu={lastMenu}
     >
       <Row end="xs">
         <Col xs={12}>
@@ -84,6 +103,7 @@ TitleDetails.propTypes = {
   title: PropTypes.object.isRequired,
   poLine: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
 };
 
 export default TitleDetails;

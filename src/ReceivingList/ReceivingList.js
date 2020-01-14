@@ -23,6 +23,7 @@ import {
 import TitleDetailsContainer from '../TitleDetails';
 import ReceivingListFilter from './ReceivingListFilter';
 import { renderNewButton } from './renderNewButton';
+import { TitleEditContainer } from '../TitleEdit';
 
 const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
 const visibleColumns = ['title'];
@@ -115,6 +116,10 @@ const ReceivingList = ({
       <Route
         path={`${match.path}/:id/view`}
         component={TitleDetailsContainer}
+      />
+      <Route
+        path={`${match.path}/:id/edit`}
+        component={TitleEditContainer}
       />
     </Paneset>
   );

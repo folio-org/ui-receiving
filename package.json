@@ -44,7 +44,9 @@
         "displayName": "Receiving: Permissions required to call services",
         "visible": false,
         "subPermissions": [
-          "configuration.entries.collection.get"
+          "configuration.entries.collection.get",
+          "inventory-storage.identifier-types.collection.get",
+          "orders.po-lines.item.get"
         ]
       },
       {
@@ -53,6 +55,8 @@
         "visible": false,
         "subPermissions": [
           "module.receiving.enabled",
+          "orders.titles.collection.get",
+          "orders.titles.item.get",
           "ui-receiving.third-party-services"
         ]
       },
@@ -70,6 +74,7 @@
         "displayName": "Receiving: View, edit",
         "visible": true,
         "subPermissions": [
+          "orders.titles.item.put",
           "ui-receiving.view"
         ]
       },
@@ -78,6 +83,7 @@
         "displayName": "Receiving: View, edit, create",
         "visible": true,
         "subPermissions": [
+          "orders.titles.item.post",
           "ui-receiving.edit"
         ]
       },
@@ -86,12 +92,13 @@
         "displayName": "Receiving: View, edit, delete",
         "visible": true,
         "subPermissions": [
+          "orders.titles.item.delete",
           "ui-receiving.edit"
         ]
       },
       {
         "permissionName": "ui-receiving.settings",
-        "displayName": "Settings (Receiving): view, edit, create, delete",
+        "displayName": "Settings (Receiving): Can view and edit settings",
         "visible": true,
         "subPermissions": [
           "configuration.all",
