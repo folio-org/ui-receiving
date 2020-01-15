@@ -16,13 +16,22 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titlesResource } from '../common/resources';
-
+import {
+  getKeywordQuery,
+} from './ReceivingListSearchConfig';
 import ReceivingList from './ReceivingList';
 
 const RESULT_COUNT_INCREMENT = 30;
 const buildTitlesQuery = makeQueryBuilder(
-  'cql.allRecords=1 sortby title',
-  (query) => `(title=${query}*)`,
+  'cql.allRecords=1',
+  (query, qindex) => {
+    if (qindex) {
+      return `(${qindex}=${query}*)`;
+    }
+
+    return getKeywordQuery(query);
+  },
+  'sortby title/sort.ascending',
 );
 
 const resetData = () => {};

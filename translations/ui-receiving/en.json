@@ -1,6 +1,14 @@
 {
   "meta.title": "Receiving",
 
+  "search.keyword": "Keyword",
+  "search.title": "Title (Receiving titles)",
+  "search.poLine.titleOrPackage": "Package (POL Package name)",
+  "search.productIds": "Product ID (For the specific title or the package)",
+  "search.purchaseOrder.poNumber": "PO number",
+  "search.poLine.poLineNumber": "POL number",
+  "search.barcode": "Barcode",
+
   "titles.search": "Search",
   "titles.orderStatus": "Order status",
   "title.paneTitle.create": "New title",

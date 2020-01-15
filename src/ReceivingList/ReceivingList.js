@@ -18,12 +18,16 @@ import {
   SingleSearchForm,
   useLocationFilters,
   useLocationSorting,
+  useToggle,
 } from '@folio/stripes-acq-components';
 
 import TitleDetailsContainer from '../TitleDetails';
 import ReceivingListFilter from './ReceivingListFilter';
 import { renderNewButton } from './renderNewButton';
 import { TitleEditContainer } from '../TitleEdit';
+import {
+  searchableIndexes,
+} from './ReceivingListSearchConfig';
 
 const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
 const visibleColumns = ['title'];
@@ -49,12 +53,15 @@ const ReceivingList = ({
     applySearch,
     changeSearch,
     resetFilters,
+    changeIndex,
+    searchIndex,
   ] = useLocationFilters(location, history, resetData);
   const [
     sortingField,
     sortingDirection,
     changeSorting,
   ] = useLocationSorting(location, history, resetData, sortableFields);
+  const [isFiltersOpened, toggleFilters] = useToggle(true);
 
   const renderLastMenu = useCallback(renderNewButton, []);
 
@@ -70,31 +77,37 @@ const ReceivingList = ({
 
   return (
     <Paneset>
-      <FiltersPane>
-        <SingleSearchForm
-          applySearch={applySearch}
-          changeSearch={changeSearch}
-          searchQuery={searchQuery}
-          isLoading={isLoading}
-          ariaLabelId="ui-receiving.titles.search"
-        />
+      {isFiltersOpened && (
+        <FiltersPane>
+          <SingleSearchForm
+            applySearch={applySearch}
+            changeSearch={changeSearch}
+            searchQuery={searchQuery}
+            isLoading={isLoading}
+            ariaLabelId="ui-receiving.titles.search"
+            searchableIndexes={searchableIndexes}
+            changeSearchIndex={changeIndex}
+            selectedIndex={searchIndex}
+          />
 
-        <ResetButton
-          id="reset-receiving-filters"
-          reset={resetFilters}
-          disabled={!location.search}
-        />
+          <ResetButton
+            id="reset-receiving-filters"
+            reset={resetFilters}
+            disabled={!location.search}
+          />
 
-        <ReceivingListFilter
-          activeFilters={filters}
-          applyFilters={applyFilters}
-        />
-      </FiltersPane>
+          <ReceivingListFilter
+            activeFilters={filters}
+            applyFilters={applyFilters}
+          />
+        </FiltersPane>
+      )}
 
       <ResultsPane
         title={resultsPaneTitle}
         count={titlesCount}
         renderLastMenu={renderLastMenu}
+        toggleFiltersPane={toggleFilters}
       >
         <MultiColumnList
           id="receivings-list"
