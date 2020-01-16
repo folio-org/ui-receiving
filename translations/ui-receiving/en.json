@@ -42,5 +42,7 @@
   "title.subscriptionFrom": "Subscription from",
   "title.subscriptionInterval": "Subscription interval",
   "title.subscriptionTo": "Subscription to",
-  "title.title": "Title"
+  "title.title": "Title",
+  "title.package": "Package",
+  "title.locations": "Locations"
 }

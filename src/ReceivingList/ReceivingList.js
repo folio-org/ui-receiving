@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { FormattedMessage } from 'react-intl';
+import { get } from 'lodash';
 
 import {
   Paneset,
@@ -13,6 +14,7 @@ import {
 } from '@folio/stripes/components';
 import {
   FiltersPane,
+  FolioFormattedDate,
   ResultsPane,
   ResetButton,
   SingleSearchForm,
@@ -29,10 +31,22 @@ import {
 } from './ReceivingListSearchConfig';
 
 const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
-const visibleColumns = ['title'];
-const sortableFields = ['title'];
+const visibleColumns = ['title', 'poLine.receiptDate', 'poLine.titleOrPackage', 'poLine.poLineNumber', 'poLine.receivingNote', 'locations'];
+const sortableFields = ['title', 'poLine.receiptDate', 'poLine.titleOrPackage', 'poLine.poLineNumber', 'poLine.receivingNote'];
 const columnMapping = {
-  title: <FormattedMessage id="ui-receiving.titles.title" />,
+  'title': <FormattedMessage id="ui-receiving.titles.title" />,
+  'poLine.receiptDate': <FormattedMessage id="ui-receiving.title.expectedDate" />,
+  'poLine.titleOrPackage': <FormattedMessage id="ui-receiving.title.package" />,
+  'poLine.poLineNumber': <FormattedMessage id="ui-receiving.title.polNumber" />,
+  'poLine.receivingNote': <FormattedMessage id="ui-receiving.title.receivingNote" />,
+  'locations': <FormattedMessage id="ui-receiving.title.locations" />,
+};
+const resultsFormatter = {
+  'poLine.receiptDate': data => <FolioFormattedDate value={get(data, 'poLine.receiptDate')} />,
+  'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : ''),
+  'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
+  'poLine.receivingNote': data => get(data, 'poLine.details.receivingNote'),
+  'locations': data => get(data, 'poLine.locations', []).join(', '),
 };
 
 const ReceivingList = ({
@@ -114,6 +128,7 @@ const ReceivingList = ({
           contentData={titles}
           visibleColumns={visibleColumns}
           columnMapping={columnMapping}
+          formatter={resultsFormatter}
           loading={isLoading}
           autosize
           virtualize
