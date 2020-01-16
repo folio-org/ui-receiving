@@ -3,6 +3,7 @@
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (in progress)
 
 ### Stories
+* [UIREC-32](https://issues.folio.org/browse/UIREC-32) Add piece for a title
 * [UIREC-39](https://issues.folio.org/browse/UIREC-39) Receiving: search for titles - Column headers
 * [UIREC-31](https://issues.folio.org/browse/UIREC-31) Receiving: search for titles
 * [UIREC-34](https://issues.folio.org/browse/UIREC-34) Add success message for create title

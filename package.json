@@ -16,6 +16,7 @@
     "route": "/receiving",
     "home": "/receiving",
     "okapiInterfaces": {
+      "locations": "3.0",
       "orders": "8.0"
     },
     "queryResource": "query",
@@ -46,6 +47,7 @@
         "subPermissions": [
           "configuration.entries.collection.get",
           "inventory-storage.identifier-types.collection.get",
+          "inventory-storage.locations.collection.get",
           "orders.po-lines.item.get"
         ]
       },
@@ -149,6 +151,7 @@
     "react-router-prop-types": "^1.0.4"
   },
   "optionalDependencies": {
+    "@folio/plugin-create-item": "^1.4.0",
     "@folio/plugin-find-instance": "^1.5.0",
     "@folio/plugin-find-po-line": "^1.2.0"
   },
