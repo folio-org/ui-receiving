@@ -3,6 +3,7 @@
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (in progress)
 
 ### Stories
+* [UIREC-31](https://issues.folio.org/browse/UIREC-31) Receiving: search for titles
 * [UIREC-34](https://issues.folio.org/browse/UIREC-34) Add success message for create title
 * [UIREC-28](https://issues.folio.org/browse/UIREC-28) Add Title for receiving/check-in
 * [UIREC-27](https://issues.folio.org/browse/UIREC-27) View title in receiving area
