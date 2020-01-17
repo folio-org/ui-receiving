@@ -94,7 +94,7 @@ const TitleForm = ({
                   <Row>
                     <Col
                       data-test-col-title-title
-                      xs={3}
+                      xs={12}
                     >
                       <Field
                         component={TextField}
@@ -130,7 +130,7 @@ const TitleForm = ({
                   <Row>
                     <Col
                       data-test-col-title-line-number
-                      xs={6}
+                      xs={3}
                     >
                       <Field
                         component={TextField}
