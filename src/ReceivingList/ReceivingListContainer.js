@@ -9,11 +9,9 @@ import {
 } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import queryString from 'query-string';
-import { uniq } from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
-  batchFetch,
   makeQueryBuilder,
 } from '@folio/stripes-acq-components';
 
@@ -26,6 +24,11 @@ import {
   getKeywordQuery,
 } from './ReceivingListSearchConfig';
 import ReceivingList from './ReceivingList';
+
+import {
+  fetchTitleOrderLines,
+  fetchOrderLineLocations,
+} from './utils';
 
 const RESULT_COUNT_INCREMENT = 30;
 const buildTitlesQuery = makeQueryBuilder(
@@ -61,32 +64,16 @@ const ReceivingListContainer = ({ mutator, location }) => {
       },
     })
       .then(titlesResponse => {
-        const orderLinesQuery = titlesResponse.titles
-          .filter(title => !orderLinesMap[title.poLineId])
-          .map(title => `id==${title.poLineId}`)
-          .join(' or ');
-
-        const orderLinesPromise = orderLinesQuery
-          ? mutator.receivingListOrderLines.GET({
-            params: {
-              limit: RESULT_COUNT_INCREMENT,
-              query: orderLinesQuery,
-            },
-          })
-          : Promise.resolve([]);
+        const orderLinesPromise = fetchTitleOrderLines(
+          mutator.receivingListOrderLines, titlesResponse.titles, orderLinesMap,
+        );
 
         return Promise.all([titlesResponse, orderLinesPromise]);
       })
       .then(([titlesResponse, orderLinesResponse]) => {
-        const unfetchedLocations = orderLinesResponse
-          .reduce((acc, orderLine) => {
-            return [...acc, ...(orderLine.locations || []).filter(({ locationId }) => !locationsMap[locationId])];
-          }, [])
-          .map(({ locationId }) => locationId);
-
-        const locationsPromise = unfetchedLocations.length
-          ? batchFetch(mutator.receivingListLocations, uniq(unfetchedLocations))
-          : Promise.resolve([]);
+        const locationsPromise = fetchOrderLineLocations(
+          mutator.receivingListLocations, orderLinesResponse, locationsMap,
+        );
 
         return Promise.all([titlesResponse, orderLinesResponse, locationsPromise]);
       })

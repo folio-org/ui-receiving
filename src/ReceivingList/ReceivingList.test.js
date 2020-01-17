@@ -10,6 +10,11 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 
 import ReceivingList from './ReceivingList';
 
+// TODO: move to stripes-acq-components mock
+jest.mock('@folio/stripes-core/src/components/IfPermission', () => {
+  return () => <span>IfPermission</span>;
+});
+
 jest.mock('react-virtualized-auto-sizer/dist/index.cjs', () => {
   return (props) => {
     const renderCallback = props.children;
@@ -22,7 +27,7 @@ jest.mock('react-virtualized-auto-sizer/dist/index.cjs', () => {
 });
 
 const generateTitle = () => ({
-  title: faker.name.title(),
+  title: `${faker.name.title()}_${(new Date()).valueOf()}`,
 });
 
 const titlesCount = 24;
