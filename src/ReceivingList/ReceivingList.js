@@ -24,7 +24,6 @@ import {
 import TitleDetailsContainer from '../TitleDetails';
 import ReceivingListFilter from './ReceivingListFilter';
 import { renderNewButton } from './renderNewButton';
-import { TitleEditContainer } from '../TitleEdit';
 import {
   searchableIndexes,
 } from './ReceivingListSearchConfig';
