@@ -5,21 +5,26 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  identifierTypesManifest,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import { PO_LINES_API } from '../common/constants';
 import { titleResource } from '../common/resources';
-import TitleEdit from './TitleEdit';
+import TitleForm from '../TitleForm/TitleForm';
 
 function TitleEditContainer({ history, location, match, mutator }) {
   const titleId = match.params.id;
   const [title, setTitle] = useState();
   const showCallout = useShowCallout();
   const [poLine, setPoLine] = useState();
+  const [identifierTypes, setIdentifierTypes] = useState();
 
   useEffect(() => {
     setTitle();
+    mutator.identifierTypes.GET()
+      .then(setIdentifierTypes)
+      .catch(() => setIdentifierTypes([]));
     mutator.editTitle.GET()
       .then(titleResponse => {
         setTitle(titleResponse);
@@ -31,7 +36,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
       .then(setPoLine)
       .catch(() => showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showCallout, titleId]);
+  }, [titleId]);
 
   const onCancel = useCallback(
     () => history.push({
@@ -68,7 +73,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
     [onCancel, titleId],
   );
 
-  if (!title || !poLine) {
+  if (!title || !poLine || !identifierTypes) {
     return null;
   }
 
@@ -78,7 +83,8 @@ function TitleEditContainer({ history, location, match, mutator }) {
   };
 
   return (
-    <TitleEdit
+    <TitleForm
+      identifierTypes={identifierTypes}
       initialValues={initialValues}
       onCancel={onCancel}
       onSubmit={onSubmit}
@@ -94,6 +100,11 @@ TitleEditContainer.manifest = Object.freeze({
   },
   editTitlePOLine: {
     ...baseManifest,
+    accumulate: true,
+    fetch: false,
+  },
+  identifierTypes: {
+    ...identifierTypesManifest,
     accumulate: true,
     fetch: false,
   },

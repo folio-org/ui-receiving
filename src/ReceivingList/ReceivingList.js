@@ -130,10 +130,6 @@ const ReceivingList = ({
         path={`${match.path}/:id/view`}
         component={TitleDetailsContainer}
       />
-      <Route
-        path={`${match.path}/:id/edit`}
-        component={TitleEditContainer}
-      />
     </Paneset>
   );
 };

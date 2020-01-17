@@ -9,6 +9,7 @@ import { ToastContext } from '@folio/stripes-acq-components';
 
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleFormContainer } from './TitleForm';
+import { TitleEditContainer } from './TitleEdit';
 
 const callout = React.createRef();
 
@@ -17,6 +18,10 @@ const Receiving = () => {
     <Fragment>
       <ToastContext.Provider value={callout}>
         <Switch>
+          <Route
+            path="/receiving/:id/edit"
+            component={TitleEditContainer}
+          />
           <Route
             component={TitleFormContainer}
             path="/receiving/create"

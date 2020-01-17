@@ -66,7 +66,6 @@ const TitleForm = ({
           id="pane-title-form"
           onClose={onCancel}
           paneTitle={paneTitle}
-          paneSub={title}
           footer={paneFooter}
         >
           <Row>
