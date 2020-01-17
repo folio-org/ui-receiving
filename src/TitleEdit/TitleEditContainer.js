@@ -30,8 +30,8 @@ function TitleEditContainer({ history, location, match, mutator }) {
       })
       .then(setPoLine)
       .catch(() => showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titleId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showCallout, titleId]);
 
   const onCancel = useCallback(
     () => history.push({
