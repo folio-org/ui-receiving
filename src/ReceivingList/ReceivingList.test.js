@@ -26,6 +26,10 @@ jest.mock('react-virtualized-auto-sizer/dist/index.cjs', () => {
   };
 });
 
+jest.mock('./ReceivingListFilter', () => {
+  return () => <span>ReceivingListFilter</span>;
+});
+
 const generateTitle = () => ({
   title: `${faker.name.title()}_${(new Date()).valueOf()}`,
 });

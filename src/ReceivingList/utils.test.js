@@ -1,11 +1,16 @@
 import '@folio/stripes-acq-components/test/jest/__mock__';
 import {
   LIMIT_MAX,
+  ORDER_FORMATS,
 } from '@folio/stripes-acq-components';
 
 import {
+  FILTERS,
+} from './constants';
+import {
   fetchTitleOrderLines,
   fetchOrderLineLocations,
+  buildTitlesQuery,
 } from './utils';
 
 describe('ReceivingList utils', () => {
@@ -125,6 +130,60 @@ describe('ReceivingList utils', () => {
           expect(mutator.GET).not.toHaveBeenCalled();
           expect(response).toEqual([]);
         });
+    });
+  });
+
+  describe('buildTitlesQuery', () => {
+    it('should not include material type when it is not defined in query params', () => {
+      const queryParams = { [FILTERS.ORDER_FORMAT]: 'orderFormat' };
+      const titlesQuery = buildTitlesQuery(queryParams);
+
+      expect(titlesQuery.includes('eresource.materialType')).toBeFalsy();
+      expect(titlesQuery.includes('physical.materialType')).toBeFalsy();
+    });
+
+    it('should include material type for eresource when it is defined', () => {
+      const queryParams = {
+        [FILTERS.ORDER_FORMAT]: ORDER_FORMATS.electronicResource,
+        [FILTERS.MATERIAL_TYPE]: 'materialTypeId',
+      };
+      const titlesQuery = buildTitlesQuery(queryParams);
+
+      expect(titlesQuery.includes('eresource.materialType')).toBeTruthy();
+      expect(titlesQuery.includes('physical.materialType')).toBeFalsy();
+    });
+
+    it('should include material type for physical when it is defined', () => {
+      const queryParams = {
+        [FILTERS.ORDER_FORMAT]: ORDER_FORMATS.physicalResource,
+        [FILTERS.MATERIAL_TYPE]: 'materialTypeId',
+      };
+      const titlesQuery = buildTitlesQuery(queryParams);
+
+      expect(titlesQuery.includes('eresource.materialType')).toBeFalsy();
+      expect(titlesQuery.includes('physical.materialType')).toBeTruthy();
+    });
+
+    it('should include material type for physical and electroni when it is defined', () => {
+      const queryParams = {
+        [FILTERS.ORDER_FORMAT]: ORDER_FORMATS.PEMix,
+        [FILTERS.MATERIAL_TYPE]: 'materialTypeId',
+      };
+      const titlesQuery = buildTitlesQuery(queryParams);
+
+      expect(titlesQuery.includes('eresource.materialType')).toBeTruthy();
+      expect(titlesQuery.includes('physical.materialType')).toBeTruthy();
+    });
+
+    it('should include material type for other when it is defined', () => {
+      const queryParams = {
+        [FILTERS.ORDER_FORMAT]: ORDER_FORMATS.other,
+        [FILTERS.MATERIAL_TYPE]: 'materialTypeId',
+      };
+      const titlesQuery = buildTitlesQuery(queryParams);
+
+      expect(titlesQuery.includes('eresource.materialType')).toBeFalsy();
+      expect(titlesQuery.includes('physical.materialType')).toBeTruthy();
     });
   });
 });

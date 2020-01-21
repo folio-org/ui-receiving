@@ -48,6 +48,7 @@
           "configuration.entries.collection.get",
           "inventory-storage.identifier-types.collection.get",
           "inventory-storage.locations.collection.get",
+          "inventory-storage.material-types.collection.get",
           "orders.po-lines.item.get"
         ]
       },
@@ -153,7 +154,8 @@
   "optionalDependencies": {
     "@folio/plugin-create-item": "^1.4.0",
     "@folio/plugin-find-instance": "^1.5.0",
-    "@folio/plugin-find-po-line": "^1.2.0"
+    "@folio/plugin-find-po-line": "^1.2.0",
+    "@folio/plugin-find-organization": "^1.5.0"
   },
   "peerDependencies": {
     "@folio/stripes": "^2.12.0",

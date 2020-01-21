@@ -9,6 +9,14 @@
   "search.poLine.poLineNumber": "POL number",
   "search.barcode": "Barcode",
 
+  "filter.orderStatus": "Order status",
+  "filter.vendor": "Vendor",
+  "filter.orderType": "Order type",
+  "filter.materialType": "Material type",
+  "filter.orderFormat": "Order format",
+  "filter.location": "Location",
+
+
   "titles.search": "Search",
   "titles.orderStatus": "Order status",
   "title.paneTitle.create": "New title",

@@ -11,37 +11,21 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import queryString from 'query-string';
 
 import { stripesConnect } from '@folio/stripes/core';
-import {
-  makeQueryBuilder,
-} from '@folio/stripes-acq-components';
 
 import {
   titlesResource,
   orderLinesResource,
   locationsResource,
 } from '../common/resources';
-import {
-  getKeywordQuery,
-} from './ReceivingListSearchConfig';
 import ReceivingList from './ReceivingList';
 
 import {
-  fetchTitleOrderLines,
   fetchOrderLineLocations,
+  fetchTitleOrderLines,
+  buildTitlesQuery,
 } from './utils';
 
 const RESULT_COUNT_INCREMENT = 30;
-const buildTitlesQuery = makeQueryBuilder(
-  'cql.allRecords=1',
-  (query, qindex) => {
-    if (qindex) {
-      return `(${qindex}=${query}*)`;
-    }
-
-    return getKeywordQuery(query);
-  },
-  'sortby title/sort.ascending',
-);
 
 const resetData = () => {};
 
