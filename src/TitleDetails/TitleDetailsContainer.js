@@ -17,10 +17,14 @@ import {
   locationsResource,
   orderPiecesResource,
   pieceResource,
+  receivingResource,
   titleResource,
 } from '../common/resources';
 import TitleDetails from './TitleDetails';
-import { checkInItems } from './utils';
+import {
+  checkInItems,
+  unreceivePiece,
+} from './utils';
 
 const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const titleId = match.params.id;
@@ -142,6 +146,23 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     [fetchPieces, title.title],
   );
 
+  const onUnreceivePiece = useCallback(
+    (piece) => {
+      unreceivePiece(piece, mutator.receive)
+        .then(() => {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.unreceivePiece.success',
+            type: 'success',
+            values: { title: title.title },
+          });
+        })
+        .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.unreceivePiece.error', type: 'error' }))
+        .finally(() => fetchPieces(poLine.id));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fetchPieces, title.title, poLine.id],
+  );
+
   if (isLoading || !locations || !pieces) {
     return (<LoadingPane onClose={onClose} />);
   }
@@ -153,6 +174,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onCheckIn={onCheckIn}
       onClose={onClose}
       onEdit={onEdit}
+      onUnreceivePiece={onUnreceivePiece}
       pieces={pieces}
       poLine={poLine}
       title={title}
@@ -178,6 +200,7 @@ TitleDetailsContainer.manifest = Object.freeze({
     fetch: false,
   },
   checkIn: checkInResource,
+  receive: receivingResource,
 });
 
 TitleDetailsContainer.propTypes = {

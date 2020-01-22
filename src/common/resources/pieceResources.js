@@ -3,9 +3,10 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  CHECKIN_API,
   ORDER_PIECES_API,
   PIECES_API,
-  CHECKIN_API,
+  RECEIVE_API,
 } from '../constants';
 
 export const pieceResource = {
@@ -30,5 +31,13 @@ export const checkInResource = {
   clientGeneratePk: false,
   fetch: false,
   path: CHECKIN_API,
+  records: 'toBeReceived',
+};
+
+export const receivingResource = {
+  ...baseManifest,
+  accumulate: true,
+  clientGeneratePk: false,
+  path: RECEIVE_API,
   records: 'toBeReceived',
 };

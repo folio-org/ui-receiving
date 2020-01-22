@@ -3,6 +3,8 @@
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (in progress)
 
 ### Stories
+* [UIREC-36](https://issues.folio.org/browse/UIREC-36) Unreceive piece for a given Title
+* [UIREC-29](https://issues.folio.org/browse/UIREC-29) Receiving: filter titles
 * [UIREC-33](https://issues.folio.org/browse/UIREC-33) Update app icon
 * [UIREC-32](https://issues.folio.org/browse/UIREC-32) Add piece for a title
 * [UIREC-39](https://issues.folio.org/browse/UIREC-39) Receiving: search for titles - Column headers
