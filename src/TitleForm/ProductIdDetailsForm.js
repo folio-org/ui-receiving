@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
@@ -6,6 +6,7 @@ import { FieldArray } from 'react-final-form-arrays';
 
 import {
   Col,
+  Label,
   Row,
   TextField,
   RepeatableField,
@@ -15,11 +16,35 @@ import {
   validateRequired,
 } from '@folio/stripes-acq-components';
 
-function ProductIdDetailsForm({ disabled, identifierTypes }) {
-  const removeField = useCallback((fields, index) => {
-    fields.remove(index);
-  }, []);
+const headLabels = (
+  <Row>
+    <Col xs>
+      <Label
+        id="productIdsFormProductIdLabel"
+        required
+      >
+        <FormattedMessage id="ui-receiving.title.productIds.productId" />
+      </Label>
+    </Col>
 
+    <Col xs>
+      <Label id="productIdsFormQualifierLabel">
+        <FormattedMessage id="ui-receiving.title.productIds.qualifier" />
+      </Label>
+    </Col>
+
+    <Col xs>
+      <Label
+        id="productIdsFormProductIdTypeLabel"
+        required
+      >
+        <FormattedMessage id="ui-receiving.title.productIds.productIdType" />
+      </Label>
+    </Col>
+  </Row>
+);
+
+function ProductIdDetailsForm({ disabled, identifierTypes }) {
   if (!identifierTypes) return null;
   const identifierTypesOptions = identifierTypes.map(({ id, name }) => ({
     value: id,
@@ -31,9 +56,9 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
       <Row>
         <Col xs>
           <Field
+            ariaLabelledBy="productIdsFormProductIdLabel"
             component={TextField}
             fullWidth
-            label={<FormattedMessage id="ui-orders.itemDetails.productId" />}
             name={`${elem}.productId`}
             disabled={disabled}
             required
@@ -42,19 +67,19 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
         </Col>
         <Col xs>
           <Field
+            ariaLabelledBy="productIdsFormQualifierLabel"
             component={TextField}
             fullWidth
-            label={<FormattedMessage id="ui-orders.itemDetails.qualifier" />}
             name={`${elem}.qualifier`}
             disabled={disabled}
           />
         </Col>
         <Col xs>
           <FieldSelectFinal
+            ariaLabelledBy="productIdsFormProductIdTypeLabel"
             dataOptions={identifierTypesOptions}
             disabled={disabled}
             fullWidth
-            label={<FormattedMessage id="ui-orders.itemDetails.productIdType" />}
             name={`${elem}.productIdType`}
             required
             validate={validateRequired}
@@ -66,13 +91,11 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
 
   return (
     <FieldArray
-      addLabel={<FormattedMessage id="ui-orders.itemDetails.addProductIdBtn" />}
+      addLabel={<FormattedMessage id="ui-receiving.title.productIds.add" />}
       component={RepeatableField}
-      emptyMessage={<FormattedMessage id="ui-orders.itemDetails.addProductId" />}
+      headLabels={headLabels}
       id="productIds"
-      legend={<FormattedMessage id="ui-orders.itemDetails.productIds" />}
       name="productIds"
-      onRemove={removeField}
       props={{
         canAdd: !disabled,
         canRemove: !disabled,

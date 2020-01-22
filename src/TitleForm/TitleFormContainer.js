@@ -4,6 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
+  contributorNameTypesManifest,
   identifierTypesManifest,
   useShowCallout,
 } from '@folio/stripes-acq-components';
@@ -14,21 +15,25 @@ import TitleForm from './TitleForm';
 function TitleFormContainer({ history, match, mutator }) {
   const titleId = match.params.id;
   const [identifierTypes, setIdentifierTypes] = useState();
+  const [contributorNameTypes, setContributorNameTypes] = useState();
   const showCallout = useShowCallout();
 
   useEffect(() => {
     mutator.identifierTypes.GET()
       .then(setIdentifierTypes)
       .catch(() => setIdentifierTypes([]));
+    mutator.contributorNameTypes.GET()
+      .then(setContributorNameTypes)
+      .catch(() => setContributorNameTypes([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titleId]);
+  }, []);
 
   const onCancel = useCallback(
     () => history.push('/receiving'),
     [history],
   );
   const onSubmit = useCallback(
-    ({ poLineNumber, ...newTitle }) => {
+    ({ poLine, ...newTitle }) => {
       return mutator.titles.POST(newTitle)
         .then(() => {
           showCallout({
@@ -36,7 +41,7 @@ function TitleFormContainer({ history, match, mutator }) {
             type: 'success',
             values: {
               title: newTitle.title,
-              poLineNumber,
+              poLineNumber: poLine.poLineNumber,
             },
           });
           setTimeout(() => history.push('/receiving'));
@@ -46,7 +51,7 @@ function TitleFormContainer({ history, match, mutator }) {
           type: 'error',
           values: {
             title: newTitle.title,
-            poLineNumber,
+            poLineNumber: poLine.poLineNumber,
           },
         }));
     },
@@ -54,12 +59,13 @@ function TitleFormContainer({ history, match, mutator }) {
     [history, showCallout, titleId],
   );
 
-  if (!identifierTypes) {
+  if (!identifierTypes || !contributorNameTypes) {
     return null;
   }
 
   return (
     <TitleForm
+      contributorNameTypes={contributorNameTypes}
       identifierTypes={identifierTypes}
       initialValues={{}}
       onCancel={onCancel}
@@ -69,6 +75,11 @@ function TitleFormContainer({ history, match, mutator }) {
 }
 
 TitleFormContainer.manifest = Object.freeze({
+  contributorNameTypes: {
+    ...contributorNameTypesManifest,
+    accumulate: true,
+    fetch: false,
+  },
   identifierTypes: {
     ...identifierTypesManifest,
     accumulate: true,

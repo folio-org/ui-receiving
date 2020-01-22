@@ -5,6 +5,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  contributorNameTypesManifest,
   identifierTypesManifest,
   useShowCallout,
 } from '@folio/stripes-acq-components';
@@ -19,12 +20,20 @@ function TitleEditContainer({ history, location, match, mutator }) {
   const showCallout = useShowCallout();
   const [poLine, setPoLine] = useState();
   const [identifierTypes, setIdentifierTypes] = useState();
+  const [contributorNameTypes, setContributorNameTypes] = useState();
 
   useEffect(() => {
-    setTitle();
     mutator.identifierTypes.GET()
       .then(setIdentifierTypes)
       .catch(() => setIdentifierTypes([]));
+    mutator.contributorNameTypes.GET()
+      .then(setContributorNameTypes)
+      .catch(() => setContributorNameTypes([]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setTitle();
     mutator.editTitle.GET()
       .then(titleResponse => {
         setTitle(titleResponse);
@@ -47,7 +56,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
   );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
-    ({ poLineNumber, ...newTitle }) => {
+    ({ poLine: line, ...newTitle }) => {
       return mutator.editTitle.PUT(newTitle)
         .then(() => {
           showCallout({
@@ -55,7 +64,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
             type: 'success',
             values: {
               title: newTitle.title,
-              poLineNumber,
+              poLineNumber: line.poLineNumber,
             },
           });
           setTimeout(onCancel);
@@ -65,7 +74,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
           type: 'error',
           values: {
             title: newTitle.title,
-            poLineNumber,
+            poLineNumber: line.poLineNumber,
           },
         }));
     },
@@ -73,17 +82,18 @@ function TitleEditContainer({ history, location, match, mutator }) {
     [onCancel, titleId],
   );
 
-  if (!title || !poLine || !identifierTypes) {
+  if (!title || !poLine || !identifierTypes || !contributorNameTypes) {
     return null;
   }
 
   const initialValues = {
     ...title,
-    poLineNumber: poLine.poLineNumber,
+    poLine,
   };
 
   return (
     <TitleForm
+      contributorNameTypes={contributorNameTypes}
       identifierTypes={identifierTypes}
       initialValues={initialValues}
       onCancel={onCancel}
@@ -93,6 +103,11 @@ function TitleEditContainer({ history, location, match, mutator }) {
 }
 
 TitleEditContainer.manifest = Object.freeze({
+  contributorNameTypes: {
+    ...contributorNameTypesManifest,
+    accumulate: true,
+    fetch: false,
+  },
   editTitle: {
     ...titleResource,
     accumulate: true,
