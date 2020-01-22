@@ -17,7 +17,9 @@
     "home": "/receiving",
     "okapiInterfaces": {
       "locations": "3.0",
-      "orders": "8.0"
+      "order-lines": "1.0",
+      "pieces": "1.0",
+      "receiving": "1.0"
     },
     "queryResource": "query",
     "icons": [
