@@ -11,13 +11,15 @@ const columnMapping = {
   format: <FormattedMessage id="ui-receiving.piece.format" />,
   receiptDate: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
   receivedDate: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
+  actions: null,
 };
 
-const PiecesList = ({ pieces, title, visibleColumns }) => {
+const PiecesList = ({ pieces, title, visibleColumns, renderActions }) => {
   const formatter = {
     title: () => title,
     receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
     receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
+    actions: renderActions,
   };
 
   return (
@@ -34,6 +36,7 @@ const PiecesList = ({ pieces, title, visibleColumns }) => {
 
 PiecesList.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
+  renderActions: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string,
 };
