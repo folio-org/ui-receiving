@@ -89,7 +89,7 @@ const ReceivingList = ({
   );
 
   return (
-    <Paneset>
+    <Paneset data-test-titles-list>
       {isFiltersOpened && (
         <FiltersPane>
           <SingleSearchForm
