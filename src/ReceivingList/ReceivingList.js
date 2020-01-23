@@ -31,18 +31,26 @@ import {
 } from './ReceivingListSearchConfig';
 
 const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
-const visibleColumns = ['title', 'poLine.receiptDate', 'poLine.titleOrPackage', 'poLine.poLineNumber', 'poLine.receivingNote', 'locations'];
-const sortableFields = ['title', 'poLine.receiptDate', 'poLine.titleOrPackage', 'poLine.poLineNumber', 'poLine.receivingNote'];
+const visibleColumns = [
+  'title', 'poLine.physical.expectedReceiptDate',
+  'poLine.titleOrPackage', 'poLine.poLineNumber',
+  'poLine.receivingNote', 'locations',
+];
+const sortableFields = [
+  'title', 'poLine.receiptDate',
+  'poLine.titleOrPackage', 'poLine.poLineNumber',
+  'poLine.receivingNote',
+];
 const columnMapping = {
   'title': <FormattedMessage id="ui-receiving.titles.title" />,
-  'poLine.receiptDate': <FormattedMessage id="ui-receiving.title.expectedReceiptDate" />,
+  'poLine.physical.expectedReceiptDate': <FormattedMessage id="ui-receiving.title.expectedReceiptDate" />,
   'poLine.titleOrPackage': <FormattedMessage id="ui-receiving.title.package" />,
   'poLine.poLineNumber': <FormattedMessage id="ui-receiving.title.polNumber" />,
   'poLine.receivingNote': <FormattedMessage id="ui-receiving.title.receivingNote" />,
   'locations': <FormattedMessage id="ui-receiving.title.locations" />,
 };
 const resultsFormatter = {
-  'poLine.receiptDate': data => <FolioFormattedDate value={get(data, 'poLine.receiptDate')} />,
+  'poLine.physical.expectedReceiptDate': data => <FolioFormattedDate value={get(data, 'poLine.physical.expectedReceiptDate')} />,
   'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : ''),
   'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
   'poLine.receivingNote': data => get(data, 'poLine.details.receivingNote'),

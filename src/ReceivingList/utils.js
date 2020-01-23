@@ -66,7 +66,7 @@ export const buildTitlesQuery = (queryParams) => {
     materialTypeFilterQuery = `(${materialTypeFilterQuery})`;
   } else if (materialType) {
     materialTypeFilterQuery =
-      `(poLine.materialTypeElectronic=="${materialType}" or poLine.materialTypePhysical=="${materialType}")`;
+      `(poLine.eresource.materialType=="${materialType}" or poLine.physical.materialType=="${materialType}")`;
   }
 
   if (materialTypeFilterQuery) {
