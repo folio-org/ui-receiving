@@ -82,7 +82,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
     [onCancel, titleId],
   );
 
-  if (!title || !poLine || !identifierTypes || !contributorNameTypes) {
+  if (!(title && poLine && identifierTypes && contributorNameTypes)) {
     return null;
   }
 
