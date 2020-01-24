@@ -6,3 +6,5 @@ export const PIECES_API = 'orders-storage/pieces';
 export const ORDER_PIECES_API = 'orders/pieces';
 export const CHECKIN_API = 'orders/check-in';
 export const RECEIVE_API = 'orders/receive';
+export const ITEMS_API = 'inventory/items';
+export const REQUESTS_API = 'circulation/requests';

@@ -1,41 +1,32 @@
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import {
   find,
+  get,
   some,
 } from 'lodash';
 
 import { ITEM_STATUS } from './constants';
 
-export const checkInItems = (pieces, mutator) => {
-  const linesMap = {};
-
-  pieces.forEach(piece => {
-    const item = {
-      id: piece.id,
-      barcode: piece.barcode,
-      callNumber: piece.callNumber,
-      comment: piece.comment,
-      caption: piece.caption,
-      supplement: piece.supplement,
-      locationId: piece.locationId || null,
-      itemStatus: piece.itemStatus,
-    };
-    const line = linesMap[piece.poLineId];
-
-    if (line) {
-      line.checkedIn += 1;
-      line.checkInPieces.push(item);
-    } else {
-      linesMap[piece.poLineId] = {
-        poLineId: piece.poLineId,
-        checkedIn: 1,
-        checkInPieces: [item],
-      };
-    }
-  });
+export const checkInItems = (piece, mutator) => {
+  const item = {
+    id: piece.id,
+    barcode: piece.barcode,
+    callNumber: piece.callNumber,
+    comment: piece.comment,
+    caption: piece.caption,
+    supplement: piece.supplement,
+    locationId: piece.locationId || null,
+    itemStatus: piece.itemStatus,
+  };
 
   const postData = {
-    toBeCheckedIn: Object.values(linesMap),
-    totalRecords: pieces.length,
+    toBeCheckedIn: [{
+      poLineId: piece.poLineId,
+      checkedIn: 1,
+      checkInPieces: [item],
+    }],
+    totalRecords: 1,
   };
 
   return mutator.POST(postData).then(({ receivingResults }) => {
@@ -85,3 +76,37 @@ export const unreceivePiece = (piece, mutator) => {
     return receivingResults;
   });
 };
+
+export const getPieceStatusFromItem = (itemStatus) => {
+  return itemStatus === ITEM_STATUS.onOrder
+    ? ITEM_STATUS.inProcess
+    : itemStatus;
+};
+
+export const getItemStatusLabel = (itemStatus) => {
+  const status = itemStatus || ITEM_STATUS.undefined;
+
+  return status === ITEM_STATUS.onOrder
+    ? (
+      <FormattedMessage
+        id={`ui-receiving.piece.itemStatus.${ITEM_STATUS.inProcess}`}
+        defaultMessage={status}
+      />
+    )
+    : itemStatus;
+};
+
+export const getPiecesToReceive = (expectedPieces = [], items = [], requests = []) => (
+  expectedPieces.map(piece => {
+    const item = find(items, ['id', piece.itemId]);
+    const request = find(requests, ['id', piece.itemId]);
+
+    return ({
+      ...piece,
+      barcode: get(item, 'barcode', ''),
+      callNumber: get(item, 'itemLevelCallNumber', ''),
+      itemStatus: getPieceStatusFromItem(get(item, 'status.name', '')),
+      request,
+    });
+  })
+);

@@ -29,6 +29,7 @@ import TitleInformation from './TitleInformation';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
+import ReceivingModal from './ReceivingModal';
 import {
   ORDER_FORMAT_TO_PIECE_FORMAT,
   PIECE_FORMAT_OPTIONS,
@@ -36,31 +37,41 @@ import {
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
-import { getPOLLocationsForSelect } from './utils';
+import {
+  getPOLLocationsForSelect,
+  getPiecesToReceive,
+} from './utils';
 
 const TitleDetails = ({
+  items,
   locations,
   onAddPiece,
   onCheckIn,
   onClose,
   onEdit,
+  onReceive,
   onUnreceivePiece,
   pieces,
   poLine,
+  requests,
   title,
 }) => {
   const [expandAll, sections, toggleSection] = useAccordionToggle();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
-  const [isAddPieceModalOpened, toggleAddPieceModalOpened] = useModalToggle();
+  const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
   const [isUnreceiveConfirmation, toggleUnreceiveConfirmation] = useModalToggle();
+  const [isReceivingModalOpened, toggleReceivingModal] = useModalToggle();
+  const [pieceValues, setPieceValues] = useState({});
   const [pieceToUnreceive, setPieceToUnreceive] = useState();
+  const [pieceToReceive, setPieceToReceive] = useState();
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
+
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
   const { orderFormat, id: poLineId, receiptDate, poLineNumber, locations: poLineLocations } = poLine;
-  const initialValuesPiece = { receiptDate, poLineId };
+  const initialValuesPiece = { receiptDate, poLineId, ...pieceValues };
 
   let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
 
@@ -74,10 +85,10 @@ const TitleDetails = ({
       return (
         title.isAcknowledged
           ? toggleAcknowledgeNote()
-          : toggleAddPieceModalOpened()
+          : toggleAddPieceModal()
       );
     },
-    [title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModalOpened],
+    [title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModal],
   );
 
   const getCreateInventoryValues = useCallback(
@@ -91,9 +102,17 @@ const TitleDetails = ({
   const onSave = useCallback(
     (values) => {
       onAddPiece(values);
-      toggleAddPieceModalOpened();
+      toggleAddPieceModal();
     },
-    [onAddPiece, toggleAddPieceModalOpened],
+    [onAddPiece, toggleAddPieceModal],
+  );
+
+  const onReceivePiece = useCallback(
+    (piece) => {
+      onReceive(piece);
+      toggleReceivingModal();
+    },
+    [onReceive, toggleReceivingModal],
   );
 
   const newPieceButton = (
@@ -119,6 +138,22 @@ const TitleDetails = ({
       toggleUnreceiveConfirmation();
     },
     [toggleUnreceiveConfirmation, setPieceToUnreceive],
+  );
+
+  const mountReceivingModal = useCallback(
+    (piece) => {
+      setPieceToReceive(piece);
+      toggleReceivingModal();
+    },
+    [toggleReceivingModal, setPieceToReceive],
+  );
+
+  const onEditPiece = useCallback(
+    (piece) => {
+      setPieceValues(piece);
+      openModal();
+    },
+    [openModal, setPieceValues],
   );
 
   const lastMenu = (
@@ -186,7 +221,9 @@ const TitleDetails = ({
           displayWhenOpen={newPieceButton}
         >
           <ExpectedPiecesList
-            pieces={expectedPieces}
+            onEditPiece={onEditPiece}
+            onReceivePiece={mountReceivingModal}
+            pieces={getPiecesToReceive(expectedPieces, items, requests)}
             title={title.title}
           />
         </Accordion>
@@ -212,7 +249,7 @@ const TitleDetails = ({
           onCancel={toggleAcknowledgeNote}
           onConfirm={() => {
             toggleAcknowledgeNote();
-            toggleAddPieceModalOpened();
+            toggleAddPieceModal();
           }}
           open
         />
@@ -220,7 +257,7 @@ const TitleDetails = ({
 
       {isAddPieceModalOpened && (
         <AddPieceModal
-          close={toggleAddPieceModalOpened}
+          close={toggleAddPieceModal}
           createInventoryValues={getCreateInventoryValues()}
           initialValues={initialValuesPiece}
           instanceId={title.instanceId}
@@ -242,25 +279,41 @@ const TitleDetails = ({
           open
         />
       )}
+
+      {isReceivingModalOpened && (
+        <ReceivingModal
+          close={toggleReceivingModal}
+          initialValues={pieceToReceive}
+          locations={getPOLLocationsForSelect(locations, poLineLocations)}
+          onSubmit={onReceivePiece}
+          poLineNumber={poLineNumber}
+          title={title.title}
+        />
+      )}
     </Pane>
   );
 };
 
 TitleDetails.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object),
   locations: PropTypes.arrayOf(PropTypes.object),
   onAddPiece: PropTypes.func.isRequired,
   onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  onReceive: PropTypes.func.isRequired,
   onUnreceivePiece: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
+  requests: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.object.isRequired,
 };
 
 TitleDetails.defaultProps = {
   locations: [],
   pieces: [],
+  items: [],
+  requests: [],
 };
 
 export default TitleDetails;
