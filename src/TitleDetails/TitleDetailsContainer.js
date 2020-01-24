@@ -113,13 +113,19 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .then(() => showCallout({
           messageId: 'ui-receiving.piece.actions.addPiece.success',
           type: 'success',
-          values: { title: title.title },
+          values: { caption: values.caption },
         }))
-        .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.addPiece.error', type: 'error' }))
+        .catch(() => {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.addPiece.error',
+            type: 'error',
+            values: { caption: values.caption },
+          });
+        })
         .finally(() => fetchPieces(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchPieces, title.title],
+    [fetchPieces],
   );
 
   const onCheckIn = useCallback(
@@ -131,7 +137,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.addPiece.success',
             type: 'success',
-            values: { title: title.title },
+            values: { caption: values.caption },
           });
 
           return checkInItems([{
@@ -143,7 +149,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .finally(() => fetchPieces(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchPieces, title.title],
+    [fetchPieces, poLine.id],
   );
 
   const onUnreceivePiece = useCallback(
@@ -153,14 +159,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.unreceivePiece.success',
             type: 'success',
-            values: { title: title.title },
+            values: { caption: piece.caption },
           });
         })
-        .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.unreceivePiece.error', type: 'error' }))
+        .catch(() => {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.unreceivePiece.error',
+            type: 'error',
+            values: { caption: piece.caption },
+          });
+        })
         .finally(() => fetchPieces(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchPieces, title.title, poLine.id],
+    [fetchPieces, poLine.id],
   );
 
   if (isLoading || !locations || !pieces) {
