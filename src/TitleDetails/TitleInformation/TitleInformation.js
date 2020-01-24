@@ -11,7 +11,7 @@ import {
 
 import {
   ContributorDetails,
-  FolioFormattedTime,
+  FolioFormattedDate,
   ProductIdDetails,
 } from '@folio/stripes-acq-components';
 
@@ -21,7 +21,7 @@ const TitleInformation = ({
   instanceId,
   poLineNumber,
   productIds,
-  publicationDate,
+  publishedDate,
   publisher,
   receiptDate,
   receivingNote,
@@ -64,7 +64,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.publicationDate" />}
-            value={<FolioFormattedTime dateString={publicationDate} />}
+            value={publishedDate}
           />
         </Col>
         <Col
@@ -84,7 +84,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.subscriptionFrom" />}
-            value={<FolioFormattedTime dateString={subscriptionFrom} />}
+            value={<FolioFormattedDate value={subscriptionFrom} />}
           />
         </Col>
         <Col
@@ -94,7 +94,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.subscriptionTo" />}
-            value={<FolioFormattedTime dateString={subscriptionTo} />}
+            value={<FolioFormattedDate value={subscriptionTo} />}
           />
         </Col>
         <Col
@@ -145,8 +145,8 @@ const TitleInformation = ({
           md={3}
         >
           <KeyValue
-            label={<FormattedMessage id="ui-receiving.title.expectedDate" />}
-            value={<FolioFormattedTime dateString={receiptDate} />}
+            label={<FormattedMessage id="ui-receiving.title.expectedReceiptDate" />}
+            value={<FolioFormattedDate value={receiptDate} />}
           />
         </Col>
         <Col
@@ -170,7 +170,7 @@ TitleInformation.propTypes = {
   instanceId: PropTypes.string,
   poLineNumber: PropTypes.string,
   productIds: PropTypes.arrayOf(PropTypes.object),
-  publicationDate: PropTypes.string,
+  publishedDate: PropTypes.string,
   publisher: PropTypes.string,
   receiptDate: PropTypes.string,
   receivingNote: PropTypes.string,
@@ -186,7 +186,7 @@ TitleInformation.defaultProps = {
   instanceId: '',
   poLineNumber: '',
   productIds: [],
-  publicationDate: '',
+  publishedDate: '',
   publisher: '',
   receiptDate: '',
   receivingNote: '',
