@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import PiecesList from '../PiecesList';
-import ReceivedPiecesActions from '../PiecesActions';
+import { ReceivedPiecesActions } from '../PiecesActions';
 
 const visibleColumns = ['title', 'caption', 'format', 'receivedDate', 'actions'];
 

@@ -47,8 +47,8 @@ export const INVENTORY_RECORDS_TYPE = {
 export const ITEM_STATUS = {
   inProcess: 'In process',
   onOrder: 'On order',
-  received: 'Received',
   available: 'Available',
   inTransit: 'In transit',
+  orderClosed: 'Order closed',
   undefined: 'Undefined',
 };

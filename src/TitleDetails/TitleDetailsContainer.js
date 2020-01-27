@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
+  batchFetch,
   baseManifest,
   LoadingPane,
   useShowCallout,
@@ -19,6 +20,8 @@ import {
   pieceResource,
   receivingResource,
   titleResource,
+  itemsResource,
+  requestsResource,
 } from '../common/resources';
 import TitleDetails from './TitleDetails';
 import {
@@ -34,18 +37,44 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const [poLine, setPoLine] = useState({});
   const [pieces, setPieces] = useState();
   const [locations, setLocations] = useState();
+  const [items, setItems] = useState();
+  const [requests, setRequests] = useState();
 
-  const fetchPieces = useCallback(
+  const fetchReceivingResources = useCallback(
     (lineId) => {
       setPieces();
+      setItems();
+      setRequests();
 
-      mutator.pieces.GET({
+      return mutator.pieces.GET({
         params: {
           query: `poLineId==${lineId} sortby receiptDate`,
         },
       })
-        .then(setPieces)
-        .catch(() => setPieces([]));
+        .then((fetchedPieces) => {
+          setPieces(fetchedPieces);
+
+          const itemsIds = fetchedPieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId);
+          const requestsPromise = batchFetch(mutator.requests, fetchedPieces, (piecesChunk) => {
+            const itemIdsQuery = piecesChunk
+              .filter(piece => piece.itemId)
+              .map(piece => `itemId=${piece.itemId}`)
+              .join(' or ');
+
+            return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
+          });
+
+          return Promise.all([batchFetch(mutator.items, itemsIds), requestsPromise]);
+        })
+        .then(([pieceItems, itemRequests]) => {
+          setItems(pieceItems);
+          setRequests(itemRequests);
+        })
+        .catch(() => {
+          setPieces([]);
+          setItems([]);
+          setRequests([]);
+        });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [poLine.id],
@@ -68,7 +97,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .then(line => {
           setPoLine(line);
 
-          return fetchPieces(line.id);
+          return fetchReceivingResources(line.id);
         })
         .catch(() => {
           showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' });
@@ -108,24 +137,25 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const onAddPiece = useCallback(
     (values) => {
       const mutatorMethod = values.id ? 'PUT' : 'POST';
+      const actionType = values.id ? 'updatePiece' : 'addPiece';
 
       mutator.orderPieces[mutatorMethod](values)
         .then(() => showCallout({
-          messageId: 'ui-receiving.piece.actions.addPiece.success',
+          messageId: `ui-receiving.piece.actions.${actionType}.success`,
           type: 'success',
           values: { caption: values.caption },
         }))
         .catch(() => {
           showCallout({
-            messageId: 'ui-receiving.piece.actions.addPiece.error',
+            messageId: `ui-receiving.piece.actions.${actionType}.error`,
             type: 'error',
             values: { caption: values.caption },
           });
         })
-        .finally(() => fetchPieces(poLine.id));
+        .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchPieces],
+    [fetchReceivingResources],
   );
 
   const onCheckIn = useCallback(
@@ -140,16 +170,33 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
             values: { caption: values.caption },
           });
 
-          return checkInItems([{
+          return checkInItems({
             ...piece,
             itemStatus: ITEM_STATUS.inProcess,
-          }], mutator.checkIn);
+          }, mutator.checkIn);
         })
         .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
-        .finally(() => fetchPieces(poLine.id));
+        .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchPieces, poLine.id],
+    [fetchReceivingResources],
+  );
+
+  const onReceive = useCallback(
+    (values) => {
+      return checkInItems(values, mutator.checkIn)
+        .then(() => {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.checkInItem.success',
+            type: 'success',
+            values: { caption: values.caption },
+          });
+        })
+        .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
+        .finally(() => fetchReceivingResources(poLine.id));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fetchReceivingResources, poLine.id],
   );
 
   const onUnreceivePiece = useCallback(
@@ -169,26 +216,29 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
             values: { caption: piece.caption },
           });
         })
-        .finally(() => fetchPieces(poLine.id));
+        .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchPieces, poLine.id],
+    [fetchReceivingResources, poLine.id],
   );
 
-  if (isLoading || !locations || !pieces) {
+  if (isLoading || !(locations && pieces && items && requests)) {
     return (<LoadingPane onClose={onClose} />);
   }
 
   return (
     <TitleDetails
+      items={items}
       locations={locations}
       onAddPiece={onAddPiece}
       onCheckIn={onCheckIn}
       onClose={onClose}
       onEdit={onEdit}
+      onReceive={onReceive}
       onUnreceivePiece={onUnreceivePiece}
       pieces={pieces}
       poLine={poLine}
+      requests={requests}
       title={title}
     />
   );
@@ -213,6 +263,8 @@ TitleDetailsContainer.manifest = Object.freeze({
   },
   checkIn: checkInResource,
   receive: receivingResource,
+  items: itemsResource,
+  requests: requestsResource,
 });
 
 TitleDetailsContainer.propTypes = {

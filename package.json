@@ -16,6 +16,8 @@
     "route": "/receiving",
     "home": "/receiving",
     "okapiInterfaces": {
+      "circulation": "9.0",
+      "inventory": "10.0",
       "locations": "3.0",
       "order-lines": "1.0",
       "pieces": "1.0",
@@ -47,11 +49,13 @@
         "displayName": "Receiving: Permissions required to call services",
         "visible": false,
         "subPermissions": [
+          "circulation.requests.collection.get",
           "configuration.entries.collection.get",
           "inventory-storage.contributor-name-types.collection.get",
           "inventory-storage.identifier-types.collection.get",
           "inventory-storage.locations.collection.get",
           "inventory-storage.material-types.collection.get",
+          "inventory.items.collection.get",
           "orders.po-lines.item.get"
         ]
       },
