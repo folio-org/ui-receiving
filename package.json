@@ -123,6 +123,12 @@
     "test": "yarn run test:e2e && yarn run test:unit"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.7.4",
     "@bigtest/interactor": "^0.9.3",
     "@bigtest/mocha": "^0.5.1",
     "@bigtest/react": "^0.1.2",
@@ -131,8 +137,7 @@
     "@folio/stripes-cli": "^1.13.0",
     "@testing-library/react": "^9.3.2",
     "babel-eslint": "^9.0.0",
-    "babel-jest": "^23.6.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-jest": "^25.1.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "eslint": "^6.2.1",
@@ -140,7 +145,7 @@
     "eslint-plugin-jest": "^23.0.4",
     "faker": "^4.1.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^23.0.0",
+    "jest": "^25.1.0",
     "jest-css-modules": "^2.1.0",
     "jest-junit": "^9.0.0",
     "miragejs": "^0.1.32"
