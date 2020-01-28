@@ -1,10 +1,11 @@
 import {
-  collection,
   interactor,
   isPresent,
 } from '@bigtest/interactor';
 
 import { TextFieldInteractor } from '@folio/stripes-acq-components/test/bigtest/interactors';
+
+import { TIMEOUT } from './consts';
 
 export default @interactor class TitleFormInteractor {
   static defaultScope = '#pane-title-form';
@@ -12,6 +13,6 @@ export default @interactor class TitleFormInteractor {
 
   isLoaded = isPresent('#accordion-toggle-button-itemDetails');
   whenLoaded() {
-    return this.timeout(5000).when(() => this.isLoaded);
+    return this.timeout(TIMEOUT).when(() => this.isLoaded);
   }
 }

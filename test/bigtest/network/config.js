@@ -6,10 +6,15 @@ import {
   configUsers,
   configLocations,
   configMaterialTypes,
+  configLines,
 } from '@folio/stripes-acq-components/test/bigtest/network';
 
-import { PO_LINES_API } from '../../../src/common/constants';
-import { configTitles } from './configs';
+import {
+  configTitles,
+  configItems,
+  configPieces,
+  configRequests,
+} from './configs';
 
 export default function config() {
   configFunds(this);
@@ -20,6 +25,8 @@ export default function config() {
   configTags(this);
   configUsers(this);
   configTitles(this);
-
-  this.get(PO_LINES_API, () => ({ poLines: [] }));
+  configItems(this);
+  configPieces(this);
+  configRequests(this);
+  configLines(this);
 }
