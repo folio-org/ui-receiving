@@ -81,7 +81,6 @@
   "piece.actions.unreceivePiece.success": "The piece <b>{caption}</b> was successfully <b>unreceived</b>",
   "piece.actions.updatePiece.error": "The piece <b>{caption}</b> was not updated",
   "piece.actions.updatePiece.success": "The piece <b>{caption}</b> was successfully <b>updated</b>",
-  "piece.actions.viewDetails":"View details",
   "piece.addPieceModal.editTitle": "Edit piece",
   "piece.addPieceModal.title": "Add piece",
   "piece.barcode": "Barcode",

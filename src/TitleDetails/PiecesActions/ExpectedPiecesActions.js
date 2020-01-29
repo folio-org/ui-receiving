@@ -57,13 +57,6 @@ const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) =
             >
               <FormattedMessage id="ui-receiving.piece.actions.edit" />
             </Button>
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-button-view-piece
-              onClick={toggleActionMenu}
-            >
-              <FormattedMessage id="ui-receiving.piece.actions.viewDetails" />
-            </Button>
           </MenuSection>
         </DropdownMenu>
       )}

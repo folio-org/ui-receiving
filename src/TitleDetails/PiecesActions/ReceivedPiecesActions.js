@@ -68,15 +68,6 @@ const ReceivedPiecesActions = ({ onUnreceivePiece, receivedPiece }) => {
             >
               <FormattedMessage id="ui-receiving.piece.actions.unreceive" />
             </Button>
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-button-view-piece
-              onClick={() => {
-                toggleActionMenu();
-              }}
-            >
-              <FormattedMessage id="ui-receiving.piece.actions.viewDetails" />
-            </Button>
           </MenuSection>
         </DropdownMenu>
       )}
