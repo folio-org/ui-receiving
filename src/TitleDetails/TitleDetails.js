@@ -70,7 +70,7 @@ const TitleDetails = ({
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
-  const { orderFormat, id: poLineId, receiptDate, poLineNumber, locations: poLineLocations } = poLine;
+  const { orderFormat, id: poLineId, receiptDate, poLineNumber, locations: poLineLocations, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate, poLineId, ...pieceValues };
 
   let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
@@ -115,14 +115,16 @@ const TitleDetails = ({
     [onReceive, toggleReceivingModal],
   );
 
-  const newPieceButton = (
-    <Button
-      data-test-add-piece-button
-      onClick={openModal}
-    >
-      <FormattedMessage id="ui-receiving.piece.button.addPiece" />
-    </Button>
-  );
+  const newPieceButton = checkinItems
+    ? (
+      <Button
+        data-test-add-piece-button
+        onClick={openModal}
+      >
+        <FormattedMessage id="ui-receiving.piece.button.addPiece" />
+      </Button>
+    )
+    : null;
 
   const confirmUnreceivePiece = useCallback(
     () => {

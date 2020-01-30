@@ -181,8 +181,8 @@ AddPieceModal.propTypes = {
   instanceId: PropTypes.string,
   onCheckIn: PropTypes.func.isRequired,
   pieceFormatOptions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    value: PropTypes.string,
   })),
 };
 

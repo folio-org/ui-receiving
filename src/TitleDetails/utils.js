@@ -105,7 +105,7 @@ export const getPiecesToReceive = (expectedPieces = [], items = [], requests = [
       ...piece,
       barcode: get(item, 'barcode', ''),
       callNumber: get(item, 'itemLevelCallNumber', ''),
-      itemStatus: getPieceStatusFromItem(get(item, 'status.name', '')),
+      itemStatus: getPieceStatusFromItem(get(item, 'status.name', ITEM_STATUS.undefined)),
       request,
     });
   })

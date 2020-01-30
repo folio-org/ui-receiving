@@ -15,3 +15,6 @@
 * [UIREC-27](https://issues.folio.org/browse/UIREC-27) View title in receiving area
 * [UIREC-26](https://issues.folio.org/browse/UIREC-26) Create three pane layout for receiving
 * New app created with stripes-cli
+
+### Bug fixes
+* [UIREC-43](https://issues.folio.org/browse/UIREC-43) Add piece button showing for Titles that are not "Manually add pieces for receiving"
