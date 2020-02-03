@@ -3,6 +3,7 @@
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (in progress)
 
 ### Stories
+* [UIREC-45](https://issues.folio.org/browse/UIREC-45) Update receiving icon to new version
 * [UIREC-35](https://issues.folio.org/browse/UIREC-35) Edit or receive piece from title view
 * [UIREC-36](https://issues.folio.org/browse/UIREC-36) Unreceive piece for a given Title
 * [UIREC-29](https://issues.folio.org/browse/UIREC-29) Receiving: filter titles
