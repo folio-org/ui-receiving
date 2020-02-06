@@ -7,23 +7,23 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 
 import TitleInformation from './TitleInformation';
 
-const renderTitleInformation = (title) => (render(
+const renderTitleInformation = (titleProp) => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
       <TitleInformation
-        contributors={title.contributors}
-        edition={title.edition}
-        instanceId={title.instanceId}
-        poLineNumber={title.poLineNumber}
-        productIds={title.productIds}
-        publishedDate={title.publishedDate}
-        publisher={title.publisher}
-        receiptDate={title.receiptDate}
-        receivingNote={title.receivingNote}
-        subscriptionFrom={title.subscriptionFrom}
-        subscriptionInterval={title.subscriptionInterval}
-        subscriptionTo={title.subscriptionTo}
-        title={title.title}
+        contributors={titleProp.contributors}
+        edition={titleProp.edition}
+        instanceId={titleProp.instanceId}
+        poLineNumber={titleProp.poLineNumber}
+        productIds={titleProp.productIds}
+        publishedDate={titleProp.publishedDate}
+        publisher={titleProp.publisher}
+        receiptDate={titleProp.receiptDate}
+        receivingNote={titleProp.receivingNote}
+        subscriptionFrom={titleProp.subscriptionFrom}
+        subscriptionInterval={titleProp.subscriptionInterval}
+        subscriptionTo={titleProp.subscriptionTo}
+        title={titleProp.title}
       />
     </MemoryRouter>
   </IntlProvider>,
