@@ -31,7 +31,14 @@ const TitleInformation = ({
   title,
 }) => {
   const titleValue = instanceId
-    ? <Link to={`/inventory/view/${instanceId}`}>{title}</Link>
+    ? (
+      <Link
+        data-testid="titleInstanceLink"
+        to={`/inventory/view/${instanceId}`}
+      >
+        {title}
+      </Link>
+    )
     : title;
 
   return (

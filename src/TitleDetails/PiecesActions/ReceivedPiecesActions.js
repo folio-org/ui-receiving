@@ -42,6 +42,7 @@ const ReceivedPiecesActions = ({ onUnreceivePiece, receivedPiece }) => {
   return (
     <Dropdown
       id="received-piece-action-menu"
+      data-testid="receivedPieceActionMenu"
       open={isActionMenuOpened}
       onToggle={toggleActionMenu}
       hasPadding
@@ -61,6 +62,7 @@ const ReceivedPiecesActions = ({ onUnreceivePiece, receivedPiece }) => {
             <Button
               buttonStyle="dropdownItem"
               data-test-button-unreceive-piece
+              data-testid="unreceivePiece"
               onClick={() => {
                 toggleActionMenu();
                 onUnreceivePiece(piece);

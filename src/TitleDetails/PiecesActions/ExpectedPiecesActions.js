@@ -21,6 +21,7 @@ const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) =
   return (
     <Dropdown
       id="expected-piece-action-menu"
+      data-testid="expectedPieceActionMenu"
       open={isActionMenuOpened}
       onToggle={toggleActionMenu}
       hasPadding
@@ -39,6 +40,7 @@ const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) =
           <MenuSection id="expected-piece-actions">
             <Button
               buttonStyle="dropdownItem"
+              data-testid="receivePiece"
               data-test-button-receive-piece
               onClick={() => {
                 toggleActionMenu();
@@ -49,6 +51,7 @@ const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) =
             </Button>
             <Button
               buttonStyle="dropdownItem"
+              data-testid="editPiece"
               data-test-button-edit-piece
               onClick={() => {
                 toggleActionMenu();
