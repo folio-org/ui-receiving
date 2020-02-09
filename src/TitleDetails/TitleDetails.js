@@ -38,7 +38,7 @@ import {
   TITLE_ACCORDION,
 } from './constants';
 import {
-  getPOLLocationsForSelect,
+  getLocationsForSelect,
   getPiecesToReceive,
 } from './utils';
 
@@ -70,7 +70,7 @@ const TitleDetails = ({
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
-  const { orderFormat, id: poLineId, receiptDate, poLineNumber, locations: poLineLocations, checkinItems } = poLine;
+  const { orderFormat, id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate, poLineId, ...pieceValues };
 
   let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
@@ -263,7 +263,7 @@ const TitleDetails = ({
           createInventoryValues={getCreateInventoryValues()}
           initialValues={initialValuesPiece}
           instanceId={title.instanceId}
-          locations={getPOLLocationsForSelect(locations, poLineLocations)}
+          locations={getLocationsForSelect(locations)}
           onCheckIn={onCheckIn}
           onSubmit={onSave}
           pieceFormatOptions={pieceFormatOptions}
@@ -286,7 +286,7 @@ const TitleDetails = ({
         <ReceivingModal
           close={toggleReceivingModal}
           initialValues={pieceToReceive}
-          locations={getPOLLocationsForSelect(locations, poLineLocations)}
+          locations={getLocationsForSelect(locations)}
           onSubmit={onReceivePiece}
           poLineNumber={poLineNumber}
           title={title.title}

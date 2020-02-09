@@ -38,20 +38,10 @@ export const checkInItems = (piece, mutator) => {
   });
 };
 
-export const getPOLLocationsForSelect = (locations, poLineLocations = []) => (
-  poLineLocations.map(({ locationId }) => {
-    const location = find(locations, ['id', locationId]);
-
-    return (
-      location
-        ? {
-          label: `${location.name} (${location.code})`,
-          value: location.id,
-        }
-        : ''
-    );
-  }).filter(Boolean)
-);
+export const getLocationsForSelect = (locations) => locations.map(({ name, id, code }) => ({
+  label: `${name} (${code})`,
+  value: id,
+}));
 
 export const unreceivePiece = (piece, mutator) => {
   const { id, poLineId } = piece;

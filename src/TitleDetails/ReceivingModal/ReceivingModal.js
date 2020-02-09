@@ -14,6 +14,9 @@ import {
   TextArea,
   TextField,
 } from '@folio/stripes/components';
+import {
+  LocationLookup,
+} from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 import { FieldSelectFinal } from '@folio/stripes-acq-components';
 
@@ -28,6 +31,7 @@ const ReceivingModal = ({
   title,
 }) => {
   const initialValues = get(form.getState(), 'initialValues', {});
+  const selectLocation = form.mutators.setLocationValue;
 
   const footer = (
     <ModalFooter>
@@ -91,6 +95,7 @@ const ReceivingModal = ({
               label={<FormattedMessage id="ui-receiving.piece.location" />}
               name="locationId"
             />
+            <LocationLookup onLocationSelected={selectLocation} />
           </Col>
           <Col xs>
             <Field
@@ -139,4 +144,11 @@ ReceivingModal.defaultProps = {
 
 export default stripesFinalForm({
   navigationCheck: true,
+  mutators: {
+    setLocationValue: (args, state, tools) => {
+      const { id } = get(args, '0', {});
+
+      tools.changeValue(state, 'locationId', () => id);
+    },
+  },
 })(ReceivingModal);

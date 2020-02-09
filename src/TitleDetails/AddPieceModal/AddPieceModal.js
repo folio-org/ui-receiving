@@ -18,6 +18,9 @@ import {
   TextArea,
   TextField,
 } from '@folio/stripes/components';
+import {
+  LocationLookup,
+} from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
@@ -40,6 +43,7 @@ const AddPieceModal = ({
   pieceFormatOptions,
 }) => {
   const addItem = form.mutators.setItemValue;
+  const selectLocation = form.mutators.setLocationValue;
   const formValues = get(form.getState(), 'values', {});
   const { format, id, itemId, locationId } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
@@ -152,6 +156,7 @@ const AddPieceModal = ({
               name="locationId"
               required={isLocationRequired}
             />
+            <LocationLookup onLocationSelected={selectLocation} />
           </Col>
           <Col xs>
             <Field
@@ -199,6 +204,11 @@ export default stripesFinalForm({
       const { id } = get(args, '0', {});
 
       tools.changeValue(state, 'itemId', () => id);
+    },
+    setLocationValue: (args, state, tools) => {
+      const { id } = get(args, '0', {});
+
+      tools.changeValue(state, 'locationId', () => id);
     },
   },
 })(AddPieceModal);
