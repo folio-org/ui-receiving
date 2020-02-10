@@ -12,7 +12,7 @@ import {
 import { titlesResource } from '../common/resources';
 import TitleForm from './TitleForm';
 
-function TitleFormContainer({ history, match, mutator }) {
+function TitleFormContainer({ history, location, match, mutator }) {
   const titleId = match.params.id;
   const [identifierTypes, setIdentifierTypes] = useState();
   const [contributorNameTypes, setContributorNameTypes] = useState();
@@ -29,13 +29,16 @@ function TitleFormContainer({ history, match, mutator }) {
   }, []);
 
   const onCancel = useCallback(
-    () => history.push('/receiving'),
-    [history],
+    () => history.push({
+      pathname: '/receiving',
+      search: location.search,
+    }),
+    [history, location.search],
   );
   const onSubmit = useCallback(
     ({ poLine, ...newTitle }) => {
       return mutator.titles.POST(newTitle)
-        .then(() => {
+        .then(({ id }) => {
           showCallout({
             messageId: 'ui-receiving.title.actions.save.success',
             type: 'success',
@@ -44,7 +47,10 @@ function TitleFormContainer({ history, match, mutator }) {
               poLineNumber: poLine.poLineNumber,
             },
           });
-          setTimeout(() => history.push('/receiving'));
+          setTimeout(() => history.push({
+            pathname: `/receiving/${id}/view`,
+            search: location.search,
+          }));
         })
         .catch(() => showCallout({
           messageId: 'ui-receiving.title.actions.save.error',
@@ -56,7 +62,7 @@ function TitleFormContainer({ history, match, mutator }) {
         }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [history, showCallout, titleId],
+    [history, showCallout, titleId, location.search],
   );
 
   if (!identifierTypes || !contributorNameTypes) {
@@ -94,6 +100,7 @@ TitleFormContainer.manifest = Object.freeze({
 
 TitleFormContainer.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
+  location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
 };

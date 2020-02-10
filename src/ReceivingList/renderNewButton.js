@@ -7,7 +7,7 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 
-export const renderNewButton = () => {
+export const renderNewButton = (locationSearch) => {
   return (
     <IfPermission perm="ui-receiving.create">
       <PaneMenu>
@@ -16,7 +16,10 @@ export const renderNewButton = () => {
             <Button
               id="clickable-new-title"
               aria-label={ariaLabel}
-              to="/receiving/create"
+              to={{
+                pathname: '/receiving/create',
+                search: locationSearch,
+              }}
               buttonStyle="primary"
               marginBottom0
             >
