@@ -290,11 +290,11 @@ export default stripesFinalForm({
       tools.changeValue(state, 'instanceId', () => id);
 
       if (publication && publication.length) {
-        const { publisher, dateOfPublication = '' } = publication[0];
+        const { publisher, dateOfPublication } = publication[0];
 
         tools.changeValue(state, 'publisher', () => publisher);
 
-        if (dateOfPublication.length === ALLOWED_YEAR_LENGTH) {
+        if (dateOfPublication && dateOfPublication.length === ALLOWED_YEAR_LENGTH) {
           tools.changeValue(state, 'publishedDate', () => dateOfPublication);
         }
       }

@@ -84,7 +84,7 @@ const ReceivingList = ({
   ] = useLocationSorting(location, history, resetData, sortableFields);
   const [isFiltersOpened, toggleFilters] = useToggle(true);
 
-  const renderLastMenu = useCallback(renderNewButton, []);
+  const renderLastMenu = useCallback(() => renderNewButton(location.search), [location.search]);
 
   const selectedTitle = useCallback(
     (e, { id }) => {
