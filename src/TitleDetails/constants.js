@@ -3,6 +3,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { ORDER_FORMATS } from '@folio/stripes-acq-components';
 
+import { PIECE_FORMAT } from '../common/constants';
+
 export const TITLE_ACCORDION = {
   information: 'information',
   expected: 'expected',
@@ -14,28 +16,6 @@ export const TITLE_ACCORDION_LABELS = {
   [TITLE_ACCORDION.expected]: <FormattedMessage id="ui-receiving.title.expected" />,
   [TITLE_ACCORDION.received]: <FormattedMessage id="ui-receiving.title.received" />,
 };
-
-export const PIECE_STATUS = {
-  expected: 'Expected',
-  received: 'Received',
-};
-
-export const PIECE_FORMAT = {
-  electronic: 'Electronic',
-  physical: 'Physical',
-  other: 'Other',
-};
-
-export const PIECE_FORMAT_LABELS = {
-  [PIECE_FORMAT.electronic]: <FormattedMessage id="ui-receiving.piece.pieceFormat.electronic" />,
-  [PIECE_FORMAT.physical]: <FormattedMessage id="ui-receiving.piece.pieceFormat.physical" />,
-  [PIECE_FORMAT.other]: <FormattedMessage id="ui-receiving.piece.pieceFormat.other" />,
-};
-
-export const PIECE_FORMAT_OPTIONS = [
-  { labelId: 'ui-receiving.piece.pieceFormat.electronic', value: PIECE_FORMAT.electronic },
-  { labelId: 'ui-receiving.piece.pieceFormat.physical', value: PIECE_FORMAT.physical },
-];
 
 export const ORDER_FORMAT_TO_PIECE_FORMAT = {
   [ORDER_FORMATS.electronicResource]: PIECE_FORMAT.electronic,

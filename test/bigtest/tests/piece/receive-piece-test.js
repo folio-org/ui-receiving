@@ -8,7 +8,7 @@ import {
   ReceivingFormInteractor,
   TitleDetailsInteractor,
 } from '../../interactors';
-import { PIECE_FORMAT } from '../../../../src/TitleDetails/constants';
+import { PIECE_FORMAT } from '../../../../src/common/constants';
 
 describe('Edit piece', () => {
   const titleDetails = new TitleDetailsInteractor();

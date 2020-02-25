@@ -1,7 +1,7 @@
 import { Factory } from 'miragejs';
 import faker from 'faker';
 
-import { PIECE_STATUS } from '../../../../src/TitleDetails/constants';
+import { PIECE_STATUS } from '../../../../src/common/constants';
 
 export default Factory.extend({
   id: () => faker.random.uuid(),

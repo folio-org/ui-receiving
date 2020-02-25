@@ -9,7 +9,7 @@ import { TitleDetailsInteractor } from '../../interactors';
 import {
   PIECE_FORMAT,
   PIECE_STATUS,
-} from '../../../../src/TitleDetails/constants';
+} from '../../../../src/common/constants';
 
 describe('Unreceive piece', () => {
   const titleDetails = new TitleDetailsInteractor();

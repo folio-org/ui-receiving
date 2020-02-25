@@ -10,6 +10,7 @@ import { ToastContext } from '@folio/stripes-acq-components';
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleFormContainer } from './TitleForm';
 import { TitleEditContainer } from './TitleEdit';
+import { TitleReceiveContainer } from './TitleReceive';
 
 const callout = React.createRef();
 
@@ -25,6 +26,10 @@ const Receiving = () => {
           <Route
             component={TitleFormContainer}
             path="/receiving/create"
+          />
+          <Route
+            component={TitleReceiveContainer}
+            path="/receiving/receive/:id"
           />
           <Route
             component={ReceivingListContainer}

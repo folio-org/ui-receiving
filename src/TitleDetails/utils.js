@@ -1,5 +1,3 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import {
   find,
   get,
@@ -38,11 +36,6 @@ export const checkInItems = (piece, mutator) => {
   });
 };
 
-export const getLocationsForSelect = (locations) => locations.map(({ name, id, code }) => ({
-  label: `${name} (${code})`,
-  value: id,
-}));
-
 export const unreceivePiece = (piece, mutator) => {
   const { id, poLineId } = piece;
   const item = {
@@ -70,19 +63,6 @@ export const unreceivePiece = (piece, mutator) => {
 export const getPieceStatusFromItem = (itemStatus) => {
   return itemStatus === ITEM_STATUS.onOrder
     ? ITEM_STATUS.inProcess
-    : itemStatus;
-};
-
-export const getItemStatusLabel = (itemStatus) => {
-  const status = itemStatus || ITEM_STATUS.undefined;
-
-  return status === ITEM_STATUS.onOrder
-    ? (
-      <FormattedMessage
-        id={`ui-receiving.piece.itemStatus.${ITEM_STATUS.inProcess}`}
-        defaultMessage={status}
-      />
-    )
     : itemStatus;
 };
 

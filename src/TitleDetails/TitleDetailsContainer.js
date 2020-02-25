@@ -182,23 +182,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     [fetchReceivingResources],
   );
 
-  const onReceive = useCallback(
-    (values) => {
-      return checkInItems(values, mutator.checkIn)
-        .then(() => {
-          showCallout({
-            messageId: 'ui-receiving.piece.actions.checkInItem.success',
-            type: 'success',
-            values: { caption: values.caption },
-          });
-        })
-        .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
-        .finally(() => fetchReceivingResources(poLine.id));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, poLine.id],
-  );
-
   const onUnreceivePiece = useCallback(
     (piece) => {
       unreceivePiece(piece, mutator.receive)
@@ -234,7 +217,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onCheckIn={onCheckIn}
       onClose={onClose}
       onEdit={onEdit}
-      onReceive={onReceive}
       onUnreceivePiece={onUnreceivePiece}
       pieces={pieces}
       poLine={poLine}

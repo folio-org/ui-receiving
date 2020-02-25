@@ -14,7 +14,7 @@ import { useToggle } from '@folio/stripes-acq-components';
 // eslint-disable-next-line no-unused-vars
 const tranformPieceToEdit = ({ barcode, callNumber, request, itemStatus, rowIndex, ...piece }) => piece;
 
-const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) => {
+const ExpectedPiecesActions = ({ onEditPiece, expectedPiece }) => {
   const [isActionMenuOpened, toggleActionMenu] = useToggle();
   const pieceToEdit = tranformPieceToEdit(expectedPiece);
 
@@ -40,17 +40,6 @@ const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) =
           <MenuSection id="expected-piece-actions">
             <Button
               buttonStyle="dropdownItem"
-              data-testid="receivePiece"
-              data-test-button-receive-piece
-              onClick={() => {
-                toggleActionMenu();
-                onReceivePiece(expectedPiece);
-              }}
-            >
-              <FormattedMessage id="ui-receiving.piece.actions.receive" />
-            </Button>
-            <Button
-              buttonStyle="dropdownItem"
               data-testid="editPiece"
               data-test-button-edit-piece
               onClick={() => {
@@ -70,7 +59,6 @@ const ExpectedPiecesActions = ({ onEditPiece, expectedPiece, onReceivePiece }) =
 ExpectedPiecesActions.propTypes = {
   expectedPiece: PropTypes.object.isRequired,
   onEditPiece: PropTypes.func.isRequired,
-  onReceivePiece: PropTypes.func.isRequired,
 };
 
 export default ExpectedPiecesActions;

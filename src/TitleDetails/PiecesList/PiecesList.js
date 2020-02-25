@@ -9,8 +9,7 @@ import {
 } from '@folio/stripes/components';
 import { FolioFormattedDate } from '@folio/stripes-acq-components';
 
-import { PIECE_FORMAT_LABELS } from '../constants';
-
+import { PIECE_FORMAT_LABELS } from '../../common/constants';
 import styles from './PiecesList.css';
 
 const columnMapping = {
