@@ -3,6 +3,7 @@
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (in progress)
 
 ### Stories
+* [UIREC-52](https://issues.folio.org/browse/UIREC-52) Update title record Expected and Received accordion columns
 * [UIREC-48](https://issues.folio.org/browse/UIREC-48) Select any location for piece when receiving
 * [UIREC-45](https://issues.folio.org/browse/UIREC-45) Update receiving icon to new version
 * [UIREC-35](https://issues.folio.org/browse/UIREC-35) Edit or receive piece from title view

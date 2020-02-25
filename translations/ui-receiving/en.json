@@ -99,6 +99,7 @@
   "piece.location": "Select location",
   "piece.pieceFormat.electronic": "Electronic",
   "piece.pieceFormat.physical": "Physical",
+  "piece.pieceFormat.other": "Other",
   "piece.receiptDate": "Expected receipt date",
   "piece.receivedDate": "Received date",
   "piece.receivingNoteModal.title": "Receiving note",

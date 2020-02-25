@@ -6,7 +6,6 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 
 import ExpectedPiecesList from './ExpectedPiecesList';
 
-const title = 'ABA Journal';
 const pieces = [{
   caption: 'ABA',
   format: 'Physical',
@@ -17,7 +16,6 @@ const renderPiecesList = (onEditPiece, onReceivePiece) => (render(
   <IntlProvider locale="en">
     <ExpectedPiecesList
       pieces={pieces}
-      title={title}
       onEditPiece={onEditPiece}
       onReceivePiece={onReceivePiece}
     />
@@ -39,15 +37,14 @@ describe('Given Expected Pieces List', () => {
     const { getByText, getByTestId } = renderPiecesList(onEditPiece, onReceivePiece);
 
     // header is rendered
-    expect(getByText('ui-receiving.piece.title')).toBeDefined();
     expect(getByText('ui-receiving.piece.caption')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
+    expect(getByText('ui-receiving.piece.request')).toBeDefined();
 
     // piece item is rendered
-    expect(getByText(title)).toBeDefined();
     expect(getByText(pieces[0].caption)).toBeDefined();
-    expect(getByText(pieces[0].format)).toBeDefined();
+    expect(getByText('ui-receiving.piece.pieceFormat.physical')).toBeDefined();
     expect(getByText(pieces[0].receiptDate)).toBeDefined();
     expect(getByTestId('expectedPieceActionMenu')).toBeDefined();
   });

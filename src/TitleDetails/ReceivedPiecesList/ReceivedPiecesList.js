@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import PiecesList from '../PiecesList';
 import { ReceivedPiecesActions } from '../PiecesActions';
 
-const visibleColumns = ['title', 'caption', 'format', 'receivedDate', 'actions'];
+const visibleColumns = ['barcode', 'caption', 'format', 'receivedDate', 'request', 'actions'];
 
-const ReceivedPiecesList = ({ pieces, title, onUnreceivePiece }) => {
+const ReceivedPiecesList = ({ pieces, items, requests, onUnreceivePiece }) => {
   const renderActions = (piece) => (
     <ReceivedPiecesActions
       onUnreceivePiece={onUnreceivePiece}
@@ -16,8 +16,9 @@ const ReceivedPiecesList = ({ pieces, title, onUnreceivePiece }) => {
 
   return (
     <PiecesList
-      title={title}
       pieces={pieces}
+      items={items}
+      requests={requests}
       visibleColumns={visibleColumns}
       renderActions={renderActions}
     />
@@ -27,11 +28,14 @@ const ReceivedPiecesList = ({ pieces, title, onUnreceivePiece }) => {
 ReceivedPiecesList.propTypes = {
   onUnreceivePiece: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string,
+  items: PropTypes.arrayOf(PropTypes.object),
+  requests: PropTypes.arrayOf(PropTypes.object),
 };
 
 ReceivedPiecesList.defaultProps = {
   pieces: [],
+  items: [],
+  requests: [],
 };
 
 export default ReceivedPiecesList;

@@ -226,7 +226,7 @@ const TitleDetails = ({
             onEditPiece={onEditPiece}
             onReceivePiece={mountReceivingModal}
             pieces={getPiecesToReceive(expectedPieces, items, requests)}
-            title={title.title}
+            requests={requests}
           />
         </Accordion>
 
@@ -237,7 +237,8 @@ const TitleDetails = ({
           <ReceivedPiecesList
             onUnreceivePiece={mountUnreceivePieceConfirmation}
             pieces={receivedPieces}
-            title={title.title}
+            items={items}
+            requests={requests}
           />
         </Accordion>
       </AccordionSet>
