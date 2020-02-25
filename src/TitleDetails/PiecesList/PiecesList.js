@@ -50,11 +50,11 @@ const PiecesList = ({ pieces, items, requests, visibleColumns, renderActions }) 
     ),
     receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
     receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
-    barcode: piece => (items.find(item => item.id === piece.itemId) || {}).barcode,
+    barcode: piece => items.find(item => item.id === piece.itemId)?.barcode || '-',
     request: piece => (
       requests.find(request => request.itemId === piece.itemId)
         ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-        : ''
+        : '-'
     ),
     actions: renderActions,
   };
