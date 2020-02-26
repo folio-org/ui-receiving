@@ -14,6 +14,7 @@ import {
   configItems,
   configPieces,
   configRequests,
+  configTitleReceive,
 } from './configs';
 
 export default function config() {
@@ -29,4 +30,5 @@ export default function config() {
   configPieces(this);
   configRequests(this);
   configLines(this);
+  configTitleReceive(this);
 }

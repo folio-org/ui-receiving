@@ -5,14 +5,14 @@ import { ORDER_FORMATS } from '@folio/stripes-acq-components';
 
 import setupApplication from '../../helpers/setup-application';
 import {
-  ReceivingFormInteractor,
+  TitleReceiveInteractor,
   TitleDetailsInteractor,
 } from '../../interactors';
 import { PIECE_FORMAT } from '../../../../src/common/constants';
 
 describe('Edit piece', () => {
   const titleDetails = new TitleDetailsInteractor();
-  const receivingForm = new ReceivingFormInteractor();
+  const titleReceive = new TitleReceiveInteractor();
 
   setupApplication();
 
@@ -29,23 +29,35 @@ describe('Edit piece', () => {
       format: PIECE_FORMAT.physical,
     });
 
-    this.visit(`/receiving/${title.id}/view`);
-    await titleDetails.whenLoaded();
-    await titleDetails.expectedPiecesAccordion.pieces(0).actions.click();
-    await titleDetails.expectedPiecesAccordion.receiveButton.click();
+    this.visit(`/receiving/receive/${title.id}`);
+    await titleReceive.whenLoaded();
   });
 
-  it('receiving form is visible', function () {
-    expect(receivingForm.isPresent).to.be.true;
+  it('receiving screen is visible', function () {
+    expect(titleReceive.isPresent).to.be.true;
+    expect(titleReceive.receiveButton.isDisabled).to.be.true;
   });
 
-  describe('click receive button', function () {
+  describe('click Cancel button', function () {
     beforeEach(async function () {
-      await receivingForm.receiveButton.click();
+      await titleReceive.cancelButton.click();
+      await titleDetails.whenLoaded();
     });
 
-    it('closes receiving modal', function () {
-      expect(receivingForm.isPresent).to.be.false;
+    it('returns to Title details pane', function () {
+      expect(titleDetails.isPresent).to.be.true;
+    });
+  });
+
+  describe('click Receive button', function () {
+    beforeEach(async function () {
+      await titleReceive.pieces(0).checked.clickAndBlur();
+      await titleReceive.receiveButton.click();
+      await titleDetails.whenLoaded();
+    });
+
+    it('returns to Title details pane', function () {
+      expect(titleDetails.isPresent).to.be.true;
     });
   });
 });

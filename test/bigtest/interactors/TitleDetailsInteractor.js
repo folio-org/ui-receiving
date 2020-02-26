@@ -19,8 +19,6 @@ import { TIMEOUT } from './consts';
   });
 
   editButton = new ButtonInteractor('[data-test-button-edit-piece]');
-
-  receiveButton = new ButtonInteractor('[data-test-button-receive-piece]');
 }
 
 @interactor class ReceivedPiecesAccordion {
@@ -37,6 +35,7 @@ export default @interactor class TitleDetailsInteractor {
 
   expectedPiecesAccordion = new ExpectedPiecesAccordion();
   receivedPiecesAccordion = new ReceivedPiecesAccordion();
+  receiveButton = new ButtonInteractor('[data-test-title-receive-button]');
 
   isLoaded = isPresent('#accordion-toggle-button-information');
   whenLoaded() {

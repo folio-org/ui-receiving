@@ -50,6 +50,7 @@ const TitleReceiveList = ({ fields, props: { locationOptions, selectLocation, to
         ),
         checked: record => (
           <Field
+            data-test-title-receive-checked
             name={`${field}[${record.rowIndex}].checked`}
             component={Checkbox}
             type="checkbox"
@@ -150,6 +151,7 @@ const TitleReceive = ({
     <FormFooter
       handleSubmit={handleSubmit}
       isSubmitDisabled={values[field].every(({ checked }) => !checked)}
+      label={<FormattedMessage id="ui-receiving.title.details.button.receive" />}
       onCancel={onCancel}
       pristine={pristine}
       submitting={submitting}

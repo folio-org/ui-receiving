@@ -33,7 +33,6 @@ export const checkInResource = {
   clientGeneratePk: false,
   fetch: false,
   path: CHECKIN_API,
-  records: 'toBeReceived',
 };
 
 export const receivingResource = {

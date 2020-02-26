@@ -239,8 +239,8 @@ const TitleForm = ({
                     <Col xs={3}>
                       <KeyValue label={<FormattedMessage id="ui-receiving.title.receivingNote" />}>
                         <span style={{
-                          'white-space': 'pre-line',
-                          'overflow-wrap': 'break-word',
+                          whiteSpace: 'pre-line',
+                          overflowWrap: 'break-word',
                         }}
                         >
                           {get(details, 'receivingNote')}
