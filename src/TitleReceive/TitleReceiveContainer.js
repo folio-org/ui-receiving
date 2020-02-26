@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { get } from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   batchFetch,
   getLocationOptions,
-  ITEM_STATUS,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -26,16 +24,10 @@ import {
 } from '../common/resources';
 import {
   checkInItems,
+  getItemsMap,
+  getPieceStatusFromItem,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
-
-export const getPieceStatusFromItem = (itemsMap, itemId) => {
-  const itemStatus = get(itemsMap, `${itemId}.status.name`, ITEM_STATUS.undefined);
-
-  return itemStatus === ITEM_STATUS.onOrder
-    ? ITEM_STATUS.inProcess
-    : itemStatus;
-};
 
 function TitleReceiveContainer({ history, location, match, mutator }) {
   const showCallout = useShowCallout();
@@ -101,14 +93,14 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
             return Promise.all([batchFetch(mutator.items, itemsIds), requestsPromise, piecesResponse]);
           })
           .then(([itemsResponse, requestsResponse, piecesResponse]) => {
-            const itemsMap = Object.assign({}, ...itemsResponse.map(item => ({ [item.id]: item })));
+            const itemsMap = getItemsMap(itemsResponse);
             const requestsMap = requestsResponse.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
 
             setPieces(piecesResponse.map((piece) => ({
               ...piece,
               barcode: itemsMap[piece.itemId]?.barcode,
               callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
-              itemStatus: getPieceStatusFromItem(itemsMap, piece.itemId),
+              itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
               request: requestsMap[piece.itemId],
             })));
           });

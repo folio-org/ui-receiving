@@ -5,14 +5,14 @@ import { withRouter } from 'react-router-dom';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
-  batchFetch,
   baseManifest,
+  batchFetch,
+  ITEM_STATUS,
   LoadingPane,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import { PO_LINES_API } from '../common/constants';
-import { ITEM_STATUS } from './constants';
 import {
   checkInResource,
   locationsResource,
@@ -23,9 +23,9 @@ import {
   itemsResource,
   requestsResource,
 } from '../common/resources';
+import { checkInItems } from '../common/utils';
 import TitleDetails from './TitleDetails';
 import {
-  checkInItems,
   unreceivePiece,
 } from './utils';
 
@@ -170,11 +170,15 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
             values: { caption: values.caption },
           });
 
-          return checkInItems({
-            ...piece,
-            itemStatus: ITEM_STATUS.inProcess,
-          }, mutator.checkIn);
+          return checkInItems(
+            [{
+              ...piece,
+              itemStatus: ITEM_STATUS.inProcess,
+            }],
+            mutator.checkIn,
+          );
         })
+        .then(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.success', type: 'success' }))
         .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
         .finally(() => fetchReceivingResources(poLine.id));
     },

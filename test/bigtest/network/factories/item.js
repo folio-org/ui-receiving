@@ -1,7 +1,7 @@
 import { Factory } from 'miragejs';
 import faker from 'faker';
 
-import { ITEM_STATUS } from '../../../../src/TitleDetails/constants';
+import { ITEM_STATUS } from '@folio/stripes-acq-components';
 
 export default Factory.extend({
   id: faker.random.uuid,

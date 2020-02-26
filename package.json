@@ -20,6 +20,7 @@
       "inventory": "10.0",
       "locations": "3.0",
       "order-lines": "1.0",
+      "orders-storage.pieces": "3.2",
       "pieces": "1.0",
       "receiving": "1.0"
     },
@@ -56,6 +57,7 @@
           "inventory-storage.locations.collection.get",
           "inventory-storage.material-types.collection.get",
           "inventory.items.collection.get",
+          "orders-storage.pieces.collection.get",
           "orders.po-lines.item.get"
         ]
       },
