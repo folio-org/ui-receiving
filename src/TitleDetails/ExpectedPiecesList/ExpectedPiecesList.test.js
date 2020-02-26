@@ -61,17 +61,4 @@ describe('Given Expected Pieces List', () => {
       expect(onEditPiece).toHaveBeenCalled();
     });
   });
-
-  describe('When receive piece is pressed', () => {
-    it('Than passed callback should be called', () => {
-      const { getByTestId } = renderPiecesList(onEditPiece, onReceivePiece);
-
-      fireEvent(getByTestId('receivePiece'), new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-      }));
-
-      expect(onReceivePiece).toHaveBeenCalled();
-    });
-  });
 });
