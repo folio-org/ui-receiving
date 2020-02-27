@@ -12,21 +12,16 @@ const pieces = [{
   receiptDate: '2021-02-06',
   receivedDate: '2020-02-06',
   itemId: 'item1',
-}];
-const items = [{
-  id: pieces[0].itemId,
   barcode: 'A43GA',
-}];
-const requests = [{
-  itemId: pieces[0].itemId,
+  request: {
+    itemId: 'item1',
+  },
 }];
 
 const renderPiecesList = () => (render(
   <IntlProvider locale="en">
     <PiecesList
       pieces={pieces}
-      items={items}
-      requests={requests}
       visibleColumns={['barcode', 'caption', 'format', 'receiptDate', 'receivedDate', 'request', 'actions']}
       renderActions={() => 'Actions'}
     />
@@ -48,7 +43,7 @@ describe('Given Pieces List', () => {
     expect(getByText('ui-receiving.piece.request')).toBeDefined();
 
     // piece item is rendered
-    expect(getByText(items[0].barcode)).toBeDefined();
+    expect(getByText(pieces[0].barcode)).toBeDefined();
     expect(getByText(pieces[0].caption)).toBeDefined();
     expect(getByText('ui-receiving.piece.pieceFormat.physical')).toBeDefined();
     expect(getByText(pieces[0].receiptDate)).toBeDefined();
