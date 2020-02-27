@@ -39,6 +39,7 @@ import {
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
+import { TitleDetailsActions } from './TitleDetailsActions';
 
 const TitleDetails = ({
   locations,
@@ -102,22 +103,11 @@ const TitleDetails = ({
 
   const expectedPiecesActions = useMemo(
     () => (
-      <>
-        <Button
-          data-test-title-receive-button
-          to={`/receiving/receive/${title.id}`}
-        >
-          <FormattedMessage id="ui-receiving.title.details.button.receive" />
-        </Button>
-        {checkinItems && (
-          <Button
-            data-test-add-piece-button
-            onClick={openModal}
-          >
-            <FormattedMessage id="ui-receiving.piece.button.addPiece" />
-          </Button>
-        )}
-      </>
+      <TitleDetailsActions
+        checkinItems={checkinItems}
+        openModal={openModal}
+        titleId={title.id}
+      />
     ),
     [title.id, checkinItems, openModal],
   );
