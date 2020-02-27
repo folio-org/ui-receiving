@@ -39,12 +39,8 @@ import {
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
-import {
-  getPiecesToReceive,
-} from './utils';
 
 const TitleDetails = ({
-  items,
   locations,
   onAddPiece,
   onCheckIn,
@@ -53,7 +49,6 @@ const TitleDetails = ({
   onUnreceivePiece,
   pieces,
   poLine,
-  requests,
   title,
 }) => {
   const [expandAll, sections, toggleSection] = useAccordionToggle();
@@ -218,8 +213,7 @@ const TitleDetails = ({
         >
           <ExpectedPiecesList
             onEditPiece={onEditPiece}
-            pieces={getPiecesToReceive(expectedPieces, items, requests)}
-            requests={requests}
+            pieces={expectedPieces}
           />
         </Accordion>
 
@@ -230,8 +224,6 @@ const TitleDetails = ({
           <ReceivedPiecesList
             onUnreceivePiece={mountUnreceivePieceConfirmation}
             pieces={receivedPieces}
-            items={items}
-            requests={requests}
           />
         </Accordion>
       </AccordionSet>
@@ -280,7 +272,6 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object),
   locations: PropTypes.arrayOf(PropTypes.object),
   onAddPiece: PropTypes.func.isRequired,
   onCheckIn: PropTypes.func.isRequired,
@@ -289,15 +280,12 @@ TitleDetails.propTypes = {
   onUnreceivePiece: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
-  requests: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.object.isRequired,
 };
 
 TitleDetails.defaultProps = {
   locations: [],
   pieces: [],
-  items: [],
-  requests: [],
 };
 
 export default TitleDetails;

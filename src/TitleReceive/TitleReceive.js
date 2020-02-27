@@ -79,7 +79,11 @@ const TitleReceiveList = ({ fields, props: { locationOptions, selectLocation, to
             />
           </div>
         ),
-        hasRequest: record => Boolean(record.request) && <FormattedMessage id="ui-receiving.piece.request.isOpened" />,
+        hasRequest: record => (
+          record.request
+            ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
+            : '-'
+        ),
         format: ({ format }) => PIECE_FORMAT_LABELS[format],
       };
     },

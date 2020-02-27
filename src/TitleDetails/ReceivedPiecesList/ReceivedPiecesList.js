@@ -6,7 +6,7 @@ import { ReceivedPiecesActions } from '../PiecesActions';
 
 const visibleColumns = ['barcode', 'caption', 'format', 'receivedDate', 'request', 'actions'];
 
-const ReceivedPiecesList = ({ pieces, items, requests, onUnreceivePiece }) => {
+const ReceivedPiecesList = ({ pieces, onUnreceivePiece }) => {
   const renderActions = (piece) => (
     <ReceivedPiecesActions
       onUnreceivePiece={onUnreceivePiece}
@@ -17,8 +17,6 @@ const ReceivedPiecesList = ({ pieces, items, requests, onUnreceivePiece }) => {
   return (
     <PiecesList
       pieces={pieces}
-      items={items}
-      requests={requests}
       visibleColumns={visibleColumns}
       renderActions={renderActions}
     />
@@ -28,14 +26,10 @@ const ReceivedPiecesList = ({ pieces, items, requests, onUnreceivePiece }) => {
 ReceivedPiecesList.propTypes = {
   onUnreceivePiece: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
-  items: PropTypes.arrayOf(PropTypes.object),
-  requests: PropTypes.arrayOf(PropTypes.object),
 };
 
 ReceivedPiecesList.defaultProps = {
   pieces: [],
-  items: [],
-  requests: [],
 };
 
 export default ReceivedPiecesList;

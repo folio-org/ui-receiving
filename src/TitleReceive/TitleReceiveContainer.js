@@ -5,7 +5,6 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
-  batchFetch,
   getLocationOptions,
   useShowCallout,
 } from '@folio/stripes-acq-components';
@@ -24,8 +23,7 @@ import {
 } from '../common/resources';
 import {
   checkInItems,
-  getItemsMap,
-  getPieceStatusFromItem,
+  getHydratedPieces,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
 
@@ -79,31 +77,8 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
             query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.expected} sortby locationId`,
           },
         })
-          .then((piecesResponse) => {
-            const itemsIds = piecesResponse.filter(({ itemId }) => itemId).map(({ itemId }) => itemId);
-            const requestsPromise = batchFetch(mutator.requests, piecesResponse, (piecesChunk) => {
-              const itemIdsQuery = piecesChunk
-                .filter(piece => piece.itemId)
-                .map(piece => `itemId==${piece.itemId}`)
-                .join(' or ');
-
-              return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
-            });
-
-            return Promise.all([batchFetch(mutator.items, itemsIds), requestsPromise, piecesResponse]);
-          })
-          .then(([itemsResponse, requestsResponse, piecesResponse]) => {
-            const itemsMap = getItemsMap(itemsResponse);
-            const requestsMap = requestsResponse.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
-
-            setPieces(piecesResponse.map((piece) => ({
-              ...piece,
-              barcode: itemsMap[piece.itemId]?.barcode,
-              callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
-              itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
-              request: requestsMap[piece.itemId],
-            })));
-          });
+          .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
+          .then(setPieces);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

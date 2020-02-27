@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
-  batchFetch,
   ITEM_STATUS,
   LoadingPane,
   useShowCallout,
@@ -23,7 +22,10 @@ import {
   itemsResource,
   requestsResource,
 } from '../common/resources';
-import { checkInItems } from '../common/utils';
+import {
+  checkInItems,
+  getHydratedPieces,
+} from '../common/utils';
 import TitleDetails from './TitleDetails';
 import {
   unreceivePiece,
@@ -37,43 +39,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const [poLine, setPoLine] = useState({});
   const [pieces, setPieces] = useState();
   const [locations, setLocations] = useState();
-  const [items, setItems] = useState();
-  const [requests, setRequests] = useState();
 
   const fetchReceivingResources = useCallback(
     (lineId) => {
       setPieces();
-      setItems();
-      setRequests();
 
       return mutator.pieces.GET({
         params: {
           query: `poLineId==${lineId} sortby receiptDate`,
         },
       })
-        .then((fetchedPieces) => {
-          setPieces(fetchedPieces);
-
-          const itemsIds = fetchedPieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId);
-          const requestsPromise = batchFetch(mutator.requests, fetchedPieces, (piecesChunk) => {
-            const itemIdsQuery = piecesChunk
-              .filter(piece => piece.itemId)
-              .map(piece => `itemId=${piece.itemId}`)
-              .join(' or ');
-
-            return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
-          });
-
-          return Promise.all([batchFetch(mutator.items, itemsIds), requestsPromise]);
-        })
-        .then(([pieceItems, itemRequests]) => {
-          setItems(pieceItems);
-          setRequests(itemRequests);
-        })
+        .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
+        .then(setPieces)
         .catch(() => {
           setPieces([]);
-          setItems([]);
-          setRequests([]);
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -209,13 +188,12 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     [fetchReceivingResources, poLine.id],
   );
 
-  if (isLoading || !(locations && pieces && items && requests)) {
+  if (isLoading || !(locations && pieces)) {
     return (<LoadingPane onClose={onClose} />);
   }
 
   return (
     <TitleDetails
-      items={items}
       locations={locations}
       onAddPiece={onAddPiece}
       onCheckIn={onCheckIn}
@@ -224,7 +202,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onUnreceivePiece={onUnreceivePiece}
       pieces={pieces}
       poLine={poLine}
-      requests={requests}
       title={title}
     />
   );

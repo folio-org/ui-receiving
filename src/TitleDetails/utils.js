@@ -1,12 +1,8 @@
 import {
-  find,
-  get,
   some,
 } from 'lodash';
 
 import { ITEM_STATUS } from '@folio/stripes-acq-components';
-
-import { getPieceStatusFromItem } from '../common/utils';
 
 export const unreceivePiece = (piece, mutator) => {
   const { id, poLineId } = piece;
@@ -29,21 +25,5 @@ export const unreceivePiece = (piece, mutator) => {
     }
 
     return receivingResults;
-  });
-};
-
-export const getPiecesToReceive = (expectedPieces = [], items = [], requests = []) => {
-
-  return expectedPieces.map(piece => {
-    const item = find(items, ['id', piece.itemId]);
-    const request = find(requests, ['id', piece.itemId]);
-
-    return ({
-      ...piece,
-      barcode: get(item, 'barcode', ''),
-      callNumber: get(item, 'itemLevelCallNumber', ''),
-      itemStatus: getPieceStatusFromItem(item),
-      request,
-    });
   });
 };

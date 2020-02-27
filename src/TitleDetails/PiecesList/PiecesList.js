@@ -22,7 +22,7 @@ const columnMapping = {
   actions: null,
 };
 
-const PiecesList = ({ pieces, items, requests, visibleColumns, renderActions }) => {
+const PiecesList = ({ pieces, id, visibleColumns, renderActions }) => {
   const formatter = {
     format: piece => (
       <span>
@@ -49,9 +49,9 @@ const PiecesList = ({ pieces, items, requests, visibleColumns, renderActions }) 
     ),
     receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
     receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
-    barcode: piece => items.find(item => item.id === piece.itemId)?.barcode || '-',
+    barcode: piece => piece.barcode || '-',
     request: piece => (
-      requests.find(request => request.itemId === piece.itemId)
+      piece.request
         ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
         : '-'
     ),
@@ -63,7 +63,7 @@ const PiecesList = ({ pieces, items, requests, visibleColumns, renderActions }) 
       columnMapping={columnMapping}
       contentData={pieces}
       formatter={formatter}
-      id="pieces-list"
+      id={id}
       interactive={false}
       visibleColumns={visibleColumns}
     />
@@ -72,16 +72,13 @@ const PiecesList = ({ pieces, items, requests, visibleColumns, renderActions }) 
 
 PiecesList.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
-  items: PropTypes.arrayOf(PropTypes.object),
-  requests: PropTypes.arrayOf(PropTypes.object),
+  id: PropTypes.string,
   renderActions: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 PiecesList.defaultProps = {
   pieces: [],
-  items: [],
-  requests: [],
 };
 
 export default PiecesList;

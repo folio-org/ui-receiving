@@ -1,8 +1,4 @@
 import {
-  createGetAll,
-} from '@folio/stripes-acq-components/test/bigtest/network/configs';
-
-import {
   CHECKIN_API,
   RECEIVE_API,
 } from '../../../../src/common/constants';

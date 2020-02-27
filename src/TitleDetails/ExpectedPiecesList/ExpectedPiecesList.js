@@ -6,7 +6,7 @@ import { ExpectedPiecesActions } from '../PiecesActions';
 
 const visibleColumns = ['caption', 'format', 'receiptDate', 'request', 'actions'];
 
-const ExpectedPiecesList = ({ pieces, requests, onEditPiece }) => {
+const ExpectedPiecesList = ({ pieces, onEditPiece }) => {
   const renderActions = (piece) => (
     <ExpectedPiecesActions
       expectedPiece={piece}
@@ -17,7 +17,6 @@ const ExpectedPiecesList = ({ pieces, requests, onEditPiece }) => {
   return (
     <PiecesList
       pieces={pieces}
-      requests={requests}
       renderActions={renderActions}
       visibleColumns={visibleColumns}
     />
@@ -27,12 +26,10 @@ const ExpectedPiecesList = ({ pieces, requests, onEditPiece }) => {
 ExpectedPiecesList.propTypes = {
   onEditPiece: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
-  requests: PropTypes.arrayOf(PropTypes.object),
 };
 
 ExpectedPiecesList.defaultProps = {
   pieces: [],
-  requests: [],
 };
 
 export default ExpectedPiecesList;
