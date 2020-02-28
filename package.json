@@ -139,7 +139,7 @@
     "@bigtest/mocha": "^0.5.1",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.0.0",
-    "@folio/stripes": "^2.12.0",
+    "@folio/stripes": "^3.0.0",
     "@folio/stripes-cli": "^1.13.0",
     "@testing-library/react": "^9.3.2",
     "babel-eslint": "^9.0.0",
@@ -155,6 +155,10 @@
     "jest-css-modules": "^2.1.0",
     "jest-junit": "^9.0.0",
     "miragejs": "^0.1.32",
+    "react": "^16.5.1",
+    "react-dom": "^16.5.1",
+    "react-intl": "^2.5.0",
+    "react-router-dom": "^5.0.1",
     "regenerator-runtime": "^0.13.3"
   },
   "dependencies": {
@@ -163,13 +167,10 @@
     "lodash": "^4.17.5",
     "prop-types": "^15.5.10",
     "query-string": "^6.1.0",
-    "react": "^16.5.1",
-    "react-dom": "^16.5.1",
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.2",
     "react-hot-loader": "^4.3.12",
-    "react-intl": "^2.5.0",
     "react-router-prop-types": "^1.0.4"
   },
   "optionalDependencies": {
@@ -179,8 +180,9 @@
     "@folio/plugin-find-organization": "^1.5.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^2.12.0",
+    "@folio/stripes": "^3.0.0",
     "react": "*",
+    "react-intl": "^2.5.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1"
   }
