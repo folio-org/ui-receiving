@@ -158,7 +158,8 @@
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-intl": "^2.5.0",
-    "react-router-dom": "^5.0.1",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "regenerator-runtime": "^0.13.3"
   },
   "dependencies": {
@@ -183,7 +184,7 @@
     "@folio/stripes": "^3.0.0",
     "react": "*",
     "react-intl": "^2.5.0",
-    "react-router": "^5.0.1",
-    "react-router-dom": "^5.0.1"
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0"
   }
 }
