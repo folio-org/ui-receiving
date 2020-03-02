@@ -60,6 +60,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
       checked: (
         <Checkbox
           checked={isAllChecked}
+          data-test-unreceive-title-checked
           onChange={toggleAll}
         />
       ),
