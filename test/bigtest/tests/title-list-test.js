@@ -1,19 +1,32 @@
 import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
+import { ORDER_FORMATS } from '@folio/stripes-acq-components';
+
 import setupApplication from '../helpers/setup-application';
-import { TitlesListInteractor } from '../interactors';
+import {
+  TitleDetailsInteractor,
+  TitlesListInteractor,
+} from '../interactors';
 
 const LIST_COUNT = 3;
 
 describe('Titles list', () => {
   const listPage = new TitlesListInteractor();
+  const titleDetails = new TitleDetailsInteractor();
 
   setupApplication();
 
-  beforeEach(function () {
-    this.server.createList('title', LIST_COUNT);
+  beforeEach(async function () {
+    const line = this.server.create('line', {
+      orderFormat: ORDER_FORMATS.physicalResource,
+    });
+
+    this.server.createList('title', LIST_COUNT, {
+      poLineId: line.id,
+    });
     this.visit('/receiving');
+    await listPage.whenLoaded();
   });
 
   it('renders row for each title from response', () => {
@@ -25,10 +38,12 @@ describe('Titles list', () => {
   describe('clicking on the first title row', () => {
     beforeEach(async () => {
       await listPage.rows(0).click();
+      await titleDetails.whenLoaded();
     });
 
-    it('stays calm', () => {
+    it('stays calm and shows details', () => {
       expect(listPage.isPresent).to.equal(true);
+      expect(titleDetails.isPresent).to.equal(true);
     });
   });
 });
