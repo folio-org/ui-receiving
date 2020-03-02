@@ -28,6 +28,7 @@ const TitleUnreceive = ({
 }) => {
   const paneFooter = (
     <FormFooter
+      data-test-unreceive-title-footer
       handleSubmit={handleSubmit}
       isSubmitDisabled={values[FIELD_NAME].every(({ checked }) => !checked)}
       label={<FormattedMessage id="ui-receiving.title.details.button.unreceive" />}
@@ -41,6 +42,7 @@ const TitleUnreceive = ({
     <form>
       <Paneset>
         <Pane
+          data-test-unreceive-title-pane
           defaultWidth="fill"
           dismissible
           footer={paneFooter}
