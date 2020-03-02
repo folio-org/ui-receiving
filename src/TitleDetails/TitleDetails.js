@@ -104,26 +104,28 @@ const TitleDetails = ({
     [onAddPiece, toggleAddPieceModal],
   );
 
+  const hasReceive = Boolean(expectedPieces.length);
   const expectedPiecesActions = useMemo(
     () => (
       <TitleDetailsExpectedActions
         checkinItems={checkinItems}
         openModal={openModal}
         titleId={title.id}
-        hasReceive={Boolean(expectedPieces.length)}
+        hasReceive={hasReceive}
       />
     ),
-    [title.id, checkinItems, openModal, expectedPieces.length],
+    [title.id, checkinItems, openModal, hasReceive],
   );
 
+  const hasUnreceive = Boolean(receivedPieces.length);
   const receivedPiecesActions = useMemo(
     () => (
       <TitleDetailsReceivedActions
         titleId={title.id}
-        hasUnreceive={Boolean(receivedPieces.length)}
+        hasUnreceive={hasUnreceive}
       />
     ),
-    [title.id, receivedPieces.length],
+    [title.id, hasUnreceive],
   );
 
   const confirmUnreceivePiece = useCallback(
