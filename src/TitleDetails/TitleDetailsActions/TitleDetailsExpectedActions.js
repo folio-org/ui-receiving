@@ -6,15 +6,17 @@ import {
   Button,
 } from '@folio/stripes/components';
 
-export function TitleDetailsActions({ checkinItems, openModal, titleId }) {
+export function TitleDetailsExpectedActions({ checkinItems, openModal, titleId, hasReceive }) {
   return (
     <>
-      <Button
-        data-test-title-receive-button
-        to={`/receiving/receive/${titleId}`}
-      >
-        <FormattedMessage id="ui-receiving.title.details.button.receive" />
-      </Button>
+      {hasReceive && (
+        <Button
+          data-test-title-receive-button
+          to={`/receiving/receive/${titleId}`}
+        >
+          <FormattedMessage id="ui-receiving.title.details.button.receive" />
+        </Button>
+      )}
       {checkinItems && (
         <Button
           data-test-add-piece-button
@@ -27,8 +29,9 @@ export function TitleDetailsActions({ checkinItems, openModal, titleId }) {
   );
 }
 
-TitleDetailsActions.propTypes = {
-  openModal: PropTypes.func.isRequired,
+TitleDetailsExpectedActions.propTypes = {
   checkinItems: PropTypes.bool.isRequired,
+  hasReceive: PropTypes.bool.isRequired,
+  openModal: PropTypes.func.isRequired,
   titleId: PropTypes.string.isRequired,
 };

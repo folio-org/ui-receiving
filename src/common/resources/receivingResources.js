@@ -39,8 +39,8 @@ export const receivingResource = {
   ...baseManifest,
   accumulate: true,
   clientGeneratePk: false,
+  fetch: false,
   path: RECEIVE_API,
-  records: 'toBeReceived',
 };
 
 export const itemsResource = {

@@ -39,7 +39,10 @@ import {
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
-import { TitleDetailsActions } from './TitleDetailsActions';
+import {
+  TitleDetailsExpectedActions,
+  TitleDetailsReceivedActions,
+} from './TitleDetailsActions';
 
 const TitleDetails = ({
   locations,
@@ -103,13 +106,24 @@ const TitleDetails = ({
 
   const expectedPiecesActions = useMemo(
     () => (
-      <TitleDetailsActions
+      <TitleDetailsExpectedActions
         checkinItems={checkinItems}
         openModal={openModal}
         titleId={title.id}
+        hasReceive={Boolean(expectedPieces.length)}
       />
     ),
-    [title.id, checkinItems, openModal],
+    [title.id, checkinItems, openModal, expectedPieces.length],
+  );
+
+  const receivedPiecesActions = useMemo(
+    () => (
+      <TitleDetailsReceivedActions
+        titleId={title.id}
+        hasUnreceive={Boolean(receivedPieces.length)}
+      />
+    ),
+    [title.id, receivedPieces.length],
   );
 
   const confirmUnreceivePiece = useCallback(
@@ -208,6 +222,8 @@ const TitleDetails = ({
         </Accordion>
 
         <Accordion
+          displayWhenClosed={receivedPiecesActions}
+          displayWhenOpen={receivedPiecesActions}
           id={TITLE_ACCORDION.received}
           label={TITLE_ACCORDION_LABELS.received}
         >

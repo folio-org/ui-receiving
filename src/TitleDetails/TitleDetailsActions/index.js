@@ -1,1 +1,2 @@
-export * from './TitleDetailsActions';
+export * from './TitleDetailsExpectedActions';
+export * from './TitleDetailsReceivedActions';
