@@ -54,7 +54,6 @@ const TitleUnreceive = ({
             name={FIELD_NAME}
             props={{
               pieceLocationMap,
-              selectLocation: form.mutators.setLocationValue,
               toggleCheckedAll: form.mutators.toggleCheckedAll,
             }}
           />
@@ -79,12 +78,6 @@ export default stripesFinalForm({
   navigationCheck: true,
   subscription: { values: true },
   mutators: {
-    setLocationValue: (args, state, tools) => {
-      const id = args[0];
-      const fieldName = args[1];
-
-      tools.changeValue(state, fieldName, () => id);
-    },
     toggleCheckedAll: (args, state, tools) => {
       const isChecked = !!args[0];
 

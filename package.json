@@ -77,8 +77,10 @@
         "displayName": "Receiving: View",
         "visible": true,
         "subPermissions": [
-          "ui-receiving.basic.view",
-          "settings.receiving.enabled"
+          "orders.check-in.collection.post",
+          "orders.receiving.collection.post",
+          "settings.receiving.enabled",
+          "ui-receiving.basic.view"
         ]
       },
       {
