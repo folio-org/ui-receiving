@@ -58,7 +58,9 @@
           "inventory-storage.material-types.collection.get",
           "inventory.items.collection.get",
           "orders-storage.pieces.collection.get",
-          "orders.po-lines.item.get"
+          "orders.po-lines.item.get",
+          "orders.titles.all",
+          "orders.pieces.all"
         ]
       },
       {
@@ -108,17 +110,6 @@
         "subPermissions": [
           "orders.titles.item.delete",
           "ui-receiving.edit"
-        ]
-      },
-      {
-        "permissionName": "ui-receiving.all",
-        "displayName": "Receiving: View, edit, delete, create",
-        "visible": true,
-        "subPermissions": [
-          "module.receiving.enabled",
-          "orders.titles.all",
-          "orders.pieces.all",
-          "ui-receiving.third-party-services"
         ]
       },
       {
