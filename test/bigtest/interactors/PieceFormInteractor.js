@@ -9,7 +9,6 @@ import {
 import { ButtonInteractor } from '@folio/stripes-acq-components/test/bigtest/interactors';
 
 import {
-  MODAL_SELECTOR,
   TIMEOUT,
 } from './consts';
 
@@ -28,7 +27,7 @@ export default @interactor class PieceFormInteractor {
   receiveButton = new ButtonInteractor('[data-test-add-piece-check-in]');
   addItemButton = new ButtonInteractor('[data-test-add-item]');
 
-  isLoaded = isPresent(MODAL_SELECTOR);
+  isLoaded = isPresent('#add-piece-modal-content');
   whenLoaded() {
     return this.timeout(TIMEOUT).when(() => this.isLoaded);
   }

@@ -111,6 +111,17 @@
         ]
       },
       {
+        "permissionName": "ui-receiving.all",
+        "displayName": "Receiving: View, edit, delete, create",
+        "visible": true,
+        "subPermissions": [
+          "module.receiving.enabled",
+          "orders.titles.all",
+          "orders.pieces.all",
+          "ui-receiving.third-party-services"
+        ]
+      },
+      {
         "permissionName": "ui-receiving.settings",
         "displayName": "Settings (Receiving): Can view and edit settings",
         "visible": true,

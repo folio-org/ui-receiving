@@ -50,7 +50,6 @@ const TitleDetails = ({
   onCheckIn,
   onClose,
   onEdit,
-  onUnreceivePiece,
   pieces,
   poLine,
   title,
@@ -58,9 +57,7 @@ const TitleDetails = ({
   const [expandAll, sections, toggleSection] = useAccordionToggle();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
-  const [isUnreceiveConfirmation, toggleUnreceiveConfirmation] = useModalToggle();
   const [pieceValues, setPieceValues] = useState({});
-  const [pieceToUnreceive, setPieceToUnreceive] = useState();
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
 
@@ -126,22 +123,6 @@ const TitleDetails = ({
       />
     ),
     [title.id, hasUnreceive],
-  );
-
-  const confirmUnreceivePiece = useCallback(
-    () => {
-      onUnreceivePiece(pieceToUnreceive);
-      toggleUnreceiveConfirmation();
-    },
-    [pieceToUnreceive, onUnreceivePiece, toggleUnreceiveConfirmation],
-  );
-
-  const mountUnreceivePieceConfirmation = useCallback(
-    (piece) => {
-      setPieceToUnreceive(piece);
-      toggleUnreceiveConfirmation();
-    },
-    [toggleUnreceiveConfirmation, setPieceToUnreceive],
   );
 
   const onEditPiece = useCallback(
@@ -218,7 +199,7 @@ const TitleDetails = ({
           label={TITLE_ACCORDION_LABELS.expected}
         >
           <ExpectedPiecesList
-            onEditPiece={onEditPiece}
+            selectPiece={onEditPiece}
             pieces={expectedPieces}
           />
         </Accordion>
@@ -230,7 +211,6 @@ const TitleDetails = ({
           label={TITLE_ACCORDION_LABELS.received}
         >
           <ReceivedPiecesList
-            onUnreceivePiece={mountUnreceivePieceConfirmation}
             pieces={receivedPieces}
           />
         </Accordion>
@@ -263,18 +243,6 @@ const TitleDetails = ({
           pieceFormatOptions={pieceFormatOptions}
         />
       )}
-
-      {isUnreceiveConfirmation && (
-        <ConfirmationModal
-          confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.unreceive.confirm" />}
-          heading={<FormattedMessage id="ui-receiving.piece.actions.unreceive.heading" />}
-          id="unreceive-piece-confirmation"
-          message={<FormattedMessage id="ui-receiving.piece.actions.unreceive.message" />}
-          onCancel={toggleUnreceiveConfirmation}
-          onConfirm={confirmUnreceivePiece}
-          open
-        />
-      )}
     </Pane>
   );
 };
@@ -285,7 +253,6 @@ TitleDetails.propTypes = {
   onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  onUnreceivePiece: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,

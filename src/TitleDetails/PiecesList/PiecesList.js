@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -19,44 +19,46 @@ const columnMapping = {
   receiptDate: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
   receivedDate: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
   request: <FormattedMessage id="ui-receiving.piece.request" />,
-  actions: null,
+  selection: null,
 };
 
-const PiecesList = ({ pieces, id, visibleColumns, renderActions }) => {
-  const formatter = {
-    format: piece => (
-      <span>
-        {PIECE_FORMAT_LABELS[piece.format]}
-        {
-          Boolean(piece.comment) && (
-            <Tooltip
-              id={`piece-comment-${piece.id}`}
-              text={piece.comment}
-            >
-              {({ ref, ariaIds }) => (
-                <Icon
-                  ref={ref}
-                  size="small"
-                  icon="comment"
-                  ariaLabel={ariaIds.text}
-                  iconClassName={styles.pieceComment}
-                />
-              )}
-            </Tooltip>
-          )
-        }
-      </span>
-    ),
-    receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
-    receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
-    barcode: piece => piece.barcode || '-',
-    request: piece => (
-      piece.request
-        ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-        : '-'
-    ),
-    actions: renderActions,
-  };
+const formatter = {
+  format: piece => (
+    <span>
+      {PIECE_FORMAT_LABELS[piece.format]}
+      {
+        Boolean(piece.comment) && (
+          <Tooltip
+            id={`piece-comment-${piece.id}`}
+            text={piece.comment}
+          >
+            {({ ref, ariaIds }) => (
+              <Icon
+                ref={ref}
+                size="small"
+                icon="comment"
+                ariaLabel={ariaIds.text}
+                iconClassName={styles.pieceComment}
+              />
+            )}
+          </Tooltip>
+        )
+      }
+    </span>
+  ),
+  receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
+  receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
+  barcode: piece => piece.barcode || '-',
+  request: piece => (
+    piece.request
+      ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
+      : '-'
+  ),
+  selection: () => <Icon icon="caret-right" />,
+};
+
+const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
+  const onRowClick = useCallback((e, piece) => selectPiece && selectPiece(piece), [selectPiece]);
 
   return (
     <MultiColumnList
@@ -66,6 +68,7 @@ const PiecesList = ({ pieces, id, visibleColumns, renderActions }) => {
       id={id}
       interactive={false}
       visibleColumns={visibleColumns}
+      onRowClick={selectPiece ? onRowClick : undefined}
     />
   );
 };
@@ -73,7 +76,7 @@ const PiecesList = ({ pieces, id, visibleColumns, renderActions }) => {
 PiecesList.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
   id: PropTypes.string,
-  renderActions: PropTypes.func.isRequired,
+  selectPiece: PropTypes.func,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 

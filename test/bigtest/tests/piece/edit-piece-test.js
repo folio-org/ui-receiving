@@ -31,31 +31,23 @@ describe('Edit piece', () => {
 
     this.visit(`/receiving/${title.id}/view`);
     await titleDetails.whenLoaded();
-    await titleDetails.expectedPiecesAccordion.pieces(0).actions.click();
+
+    await titleDetails.expectedPiecesAccordion.pieces(0).click();
+    await pieceForm.whenLoaded();
   });
 
-  it('edit button is visible', function () {
-    expect(titleDetails.expectedPiecesAccordion.editButton.isButton).to.be.true;
+  it('should open piece details modal', function () {
+    expect(pieceForm.isPresent).to.be.true;
   });
 
-  describe('click edit button', function () {
+  describe('after change caption and save piece', function () {
     beforeEach(async function () {
-      await titleDetails.expectedPiecesAccordion.editButton.click();
+      await pieceForm.caption.fill('Test caption');
+      await pieceForm.saveButton.click();
     });
 
-    it('piece details modal is visible', function () {
-      expect(pieceForm.isPresent).to.be.true;
-    });
-
-    describe('change caption and save piece', function () {
-      beforeEach(async function () {
-        await pieceForm.caption.fill('Test caption');
-        await pieceForm.saveButton.click();
-      });
-
-      it('piece details modal is not visible', function () {
-        expect(pieceForm.isPresent).to.be.false;
-      });
+    it('should close piece details modal', function () {
+      expect(pieceForm.isPresent).to.be.false;
     });
   });
 });

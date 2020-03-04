@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   interactor,
+  Interactor,
   isPresent,
   clickable,
   collection,
@@ -13,21 +14,16 @@ import { TIMEOUT } from './consts';
 
 @interactor class ExpectedPiecesAccordion {
   static defaultScope = `#${TITLE_ACCORDION.expected}`;
-  clickAddPiece = clickable('[data-test-add-piece-button]');
-  pieces = collection('[class*=mclRow---]', {
-    actions: new ButtonInteractor('#expected-piece-action-menu'),
-  });
 
-  editButton = new ButtonInteractor('[data-test-button-edit-piece]');
+  clickAddPiece = clickable('[data-test-add-piece-button]');
+  pieces = collection(`#${TITLE_ACCORDION.expected} [class*=mclRow---]`, ButtonInteractor);
 }
 
 @interactor class ReceivedPiecesAccordion {
   static defaultScope = `#${TITLE_ACCORDION.received}`;
-  pieces = collection('[class*=mclRow---]', {
-    actions: new ButtonInteractor('#received-piece-action-menu'),
-  });
+  pieces = collection('[class*=mclRow---]');
 
-  unreceiveButton = new ButtonInteractor('[data-test-button-unreceive-piece]');
+  unreceiveButton = new Interactor('[data-test-title-unreceive-button]');
 }
 
 export default @interactor class TitleDetailsInteractor {

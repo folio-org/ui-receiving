@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
@@ -18,12 +18,12 @@ const pieces = [{
   },
 }];
 
-const renderPiecesList = () => (render(
+const renderPiecesList = (selectPiece) => (render(
   <IntlProvider locale="en">
     <PiecesList
       pieces={pieces}
-      visibleColumns={['barcode', 'caption', 'format', 'receiptDate', 'receivedDate', 'request', 'actions']}
-      renderActions={() => 'Actions'}
+      visibleColumns={['barcode', 'caption', 'format', 'receiptDate', 'receivedDate', 'request', 'selection']}
+      selectPiece={selectPiece}
     />
   </IntlProvider>,
 ));
@@ -49,6 +49,17 @@ describe('Given Pieces List', () => {
     expect(getByText(pieces[0].receiptDate)).toBeDefined();
     expect(getByText(pieces[0].receivedDate)).toBeDefined();
     expect(getByText('ui-receiving.piece.request.isOpened')).toBeDefined();
-    expect(getByText('Actions')).toBeDefined();
+  });
+
+  it('Than it should invoke selectPiece cb when row is clicked', () => {
+    const selectPiece = jest.fn();
+    const { getByText } = renderPiecesList(selectPiece);
+
+    fireEvent(getByText(pieces[0].barcode), new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+    }));
+
+    expect(selectPiece).toHaveBeenCalled();
   });
 });

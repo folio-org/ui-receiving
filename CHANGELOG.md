@@ -3,6 +3,7 @@
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (in progress)
 
 ### Stories
+* [UIREC-56](https://issues.folio.org/browse/UIREC-56) Edit piece from clicking table row
 * [UIREC-54](https://issues.folio.org/browse/UIREC-54) Update "Unreceive" piece to full screen
 * [UIREC-53](https://issues.folio.org/browse/UIREC-53) Update "receive" piece Modal to full screen
 * [UIREC-52](https://issues.folio.org/browse/UIREC-52) Update title record Expected and Received accordion columns

@@ -24,12 +24,10 @@ import {
 } from '../common/resources';
 import {
   checkInItems,
+  getDehydratedPiece,
   getHydratedPieces,
 } from '../common/utils';
 import TitleDetails from './TitleDetails';
-import {
-  unreceivePiece,
-} from './utils';
 
 const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const titleId = match.params.id;
@@ -118,17 +116,19 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       const mutatorMethod = values.id ? 'PUT' : 'POST';
       const actionType = values.id ? 'updatePiece' : 'addPiece';
 
-      mutator.orderPieces[mutatorMethod](values)
+      const piece = getDehydratedPiece(values);
+
+      mutator.orderPieces[mutatorMethod](piece)
         .then(() => showCallout({
           messageId: `ui-receiving.piece.actions.${actionType}.success`,
           type: 'success',
-          values: { caption: values.caption },
+          values: { caption: piece.caption },
         }))
         .catch(() => {
           showCallout({
             messageId: `ui-receiving.piece.actions.${actionType}.error`,
             type: 'error',
-            values: { caption: values.caption },
+            values: { caption: piece.caption },
           });
         })
         .finally(() => fetchReceivingResources(poLine.id));
@@ -141,7 +141,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     (values) => {
       const mutatorMethod = values.id ? 'PUT' : 'POST';
 
-      mutator.orderPieces[mutatorMethod](values)
+      mutator.orderPieces[mutatorMethod](getDehydratedPiece(values))
         .then(piece => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.addPiece.success',
@@ -152,40 +152,22 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
           return checkInItems(
             [{
               ...piece,
+              checked: true,
               itemStatus: ITEM_STATUS.inProcess,
             }],
             mutator.checkIn,
           );
         })
-        .then(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.success', type: 'success' }))
+        .then(() => showCallout({
+          messageId: 'ui-receiving.piece.actions.checkInItem.success',
+          type: 'success',
+          values: { caption: values.caption },
+        }))
         .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [fetchReceivingResources],
-  );
-
-  const onUnreceivePiece = useCallback(
-    (piece) => {
-      unreceivePiece(piece, mutator.receive)
-        .then(() => {
-          showCallout({
-            messageId: 'ui-receiving.piece.actions.unreceivePiece.success',
-            type: 'success',
-            values: { caption: piece.caption },
-          });
-        })
-        .catch(() => {
-          showCallout({
-            messageId: 'ui-receiving.piece.actions.unreceivePiece.error',
-            type: 'error',
-            values: { caption: piece.caption },
-          });
-        })
-        .finally(() => fetchReceivingResources(poLine.id));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, poLine.id],
   );
 
   if (isLoading || !(locations && pieces)) {
@@ -199,7 +181,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onCheckIn={onCheckIn}
       onClose={onClose}
       onEdit={onEdit}
-      onUnreceivePiece={onUnreceivePiece}
       pieces={pieces}
       poLine={poLine}
       title={title}

@@ -12,29 +12,26 @@ const pieces = [{
   receiptDate: '2020-02-06',
 }];
 
-const renderPiecesList = (onEditPiece, onReceivePiece) => (render(
+const renderPiecesList = (onEditPiece) => (render(
   <IntlProvider locale="en">
     <ExpectedPiecesList
       pieces={pieces}
-      onEditPiece={onEditPiece}
-      onReceivePiece={onReceivePiece}
+      selectPiece={onEditPiece}
     />
   </IntlProvider>,
 ));
 
 describe('Given Expected Pieces List', () => {
   let onEditPiece;
-  let onReceivePiece;
 
   beforeEach(() => {
     onEditPiece = jest.fn();
-    onReceivePiece = jest.fn();
   });
 
   afterEach(cleanup);
 
   it('Than it should display correct table', () => {
-    const { getByText, getByTestId } = renderPiecesList(onEditPiece, onReceivePiece);
+    const { getByText } = renderPiecesList(onEditPiece);
 
     // header is rendered
     expect(getByText('ui-receiving.piece.caption')).toBeDefined();
@@ -46,14 +43,13 @@ describe('Given Expected Pieces List', () => {
     expect(getByText(pieces[0].caption)).toBeDefined();
     expect(getByText('ui-receiving.piece.pieceFormat.physical')).toBeDefined();
     expect(getByText(pieces[0].receiptDate)).toBeDefined();
-    expect(getByTestId('expectedPieceActionMenu')).toBeDefined();
   });
 
   describe('When edit piece is pressed', () => {
     it('Than passed callback should be called', () => {
-      const { getByTestId } = renderPiecesList(onEditPiece, onReceivePiece);
+      const { getByText } = renderPiecesList(onEditPiece);
 
-      fireEvent(getByTestId('editPiece'), new MouseEvent('click', {
+      fireEvent(getByText(pieces[0].caption), new MouseEvent('click', {
         bubbles: true,
         cancelable: true,
       }));

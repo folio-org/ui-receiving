@@ -10,7 +10,7 @@ import {
 } from '../../interactors';
 import { PIECE_FORMAT } from '../../../../src/common/constants';
 
-describe('Edit piece', () => {
+describe('Receive piece', () => {
   const titleDetails = new TitleDetailsInteractor();
   const titleReceive = new TitleReceiveInteractor();
 
