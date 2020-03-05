@@ -26,6 +26,7 @@ import {
   getHydratedPieces,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
+import OpenedRequestsModal from './OpenedRequestsModal';
 
 function TitleReceiveContainer({ history, location, match, mutator }) {
   const showCallout = useShowCallout();
@@ -94,6 +95,14 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     },
     [history, titleId, location.search],
   );
+  const [receivedPiecesWithRequests, setReceivedPiecesWithRequests] = useState([]);
+  const closeOpenedRequestsModal = useCallback(
+    () => {
+      setReceivedPiecesWithRequests([]);
+      setTimeout(onCancel);
+    },
+    [onCancel],
+  );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
     ({ receivedItems }) => {
@@ -103,7 +112,13 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
             messageId: 'ui-receiving.title.actions.receive.success',
             type: 'success',
           });
-          setTimeout(onCancel);
+          const receivedItemsWithRequests = receivedItems.filter(({ request }) => Boolean(request));
+
+          if (receivedItemsWithRequests.length) {
+            setReceivedPiecesWithRequests(receivedItemsWithRequests);
+          } else {
+            setTimeout(onCancel);
+          }
         })
         .catch(() => {
           showCallout({ messageId: 'ui-receiving.title.actions.receive.error', type: 'error' });
@@ -118,13 +133,21 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
 
   return (
-    <TitleReceive
-      initialValues={initialValues}
-      locationOptions={locationOptions}
-      onCancel={onCancel}
-      onSubmit={onSubmit}
-      paneTitle={paneTitle}
-    />
+    <>
+      <TitleReceive
+        initialValues={initialValues}
+        locationOptions={locationOptions}
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        paneTitle={paneTitle}
+      />
+      {receivedPiecesWithRequests.length && (
+        <OpenedRequestsModal
+          closeModal={closeOpenedRequestsModal}
+          pieces={receivedPiecesWithRequests}
+        />
+      )}
+    </>
   );
 }
 

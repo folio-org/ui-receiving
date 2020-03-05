@@ -112,5 +112,13 @@
   "piece.request": "Request",
   "piece.request.isOpened": "Yes",
   "piece.supplement": "Supplement",
-  "piece.title": "Title"
+  "piece.title": "Title",
+
+  "requests.title.single": "An item has an open request",
+  "requests.title.multiple": "Multiple items have open requests",
+  "requests.message.single": "The following item has an open request",
+  "requests.message.multiple": "The following items have open requests",
+  "requests.message.barcode": "Barcode ({barcode})",
+  "requests.message.itemId": "Item ({itemId})",
+  "requests.footer.close": "Close"
 }

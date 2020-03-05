@@ -17,6 +17,7 @@ describe('Receive piece', () => {
   setupApplication();
 
   beforeEach(async function () {
+    const item = this.server.create('item');
     const line = this.server.create('line', {
       orderFormat: ORDER_FORMATS.physicalResource,
     });
@@ -24,9 +25,11 @@ describe('Receive piece', () => {
       poLineId: line.id,
     });
 
+    this.server.create('request', { itemId: item.id });
     this.server.create('piece', {
       poLineId: line.id,
       format: PIECE_FORMAT.physical,
+      itemId: item.id,
     });
 
     this.visit(`/receiving/receive/${title.id}`);
@@ -53,11 +56,21 @@ describe('Receive piece', () => {
     beforeEach(async function () {
       await titleReceive.pieces(0).checked.clickAndBlur();
       await titleReceive.receiveButton.click();
-      await titleDetails.whenLoaded();
     });
 
-    it('returns to Title details pane', function () {
-      expect(titleDetails.isPresent).to.be.true;
+    it('shows Opened Requests modal', function () {
+      expect(titleReceive.openedRequestModal.isPresent).to.be.true;
+    });
+
+    describe('close Opened Request modal', function () {
+      beforeEach(async function () {
+        await titleReceive.openedRequestModal.closeButton.click();
+        await titleDetails.whenLoaded();
+      });
+
+      it('returns to Title details pane', function () {
+        expect(titleDetails.isPresent).to.be.true;
+      });
     });
   });
 });

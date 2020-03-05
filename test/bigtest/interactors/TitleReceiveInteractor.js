@@ -11,6 +11,10 @@ import {
 
 import { TIMEOUT } from './consts';
 
+@interactor class OpenedRequestModal {
+  closeButton = new ButtonInteractor('[data-test-close-opened-requests-modal-button]');
+}
+
 export default @interactor class TitleReceiveInteractor {
   static defaultScope = '#pane-title-receive-list';
 
@@ -20,6 +24,7 @@ export default @interactor class TitleReceiveInteractor {
     checked: new CheckboxInteractor('[data-test-title-receive-checked]'),
   });
 
+  openedRequestModal = new OpenedRequestModal('#data-test-opened-requests-modal');
   isLoaded = isPresent('#title-receive-list');
   whenLoaded() {
     return this.timeout(TIMEOUT).when(() => this.isLoaded);

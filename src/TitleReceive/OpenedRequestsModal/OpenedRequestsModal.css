@@ -1,0 +1,9 @@
+.openedRequestsModalBody {
+  list-style: none;
+}
+
+.openedRequestsModalItem {
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 3px;
+}
