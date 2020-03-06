@@ -38,9 +38,9 @@
   "title.actions.save.success": "The title <b>{title}</b> has been successfully added for <b>PO line {poLineNumber}</b>",
   "title.actions.save.error": "The title <b>{title}</b> has not been added for <b>PO line {poLineNumber}</b>",
   "title.actions.receive.error": "Receive error",
-  "title.actions.receive.success": "Receive success",
+  "title.actions.receive.success": "Receiving successful",
   "title.actions.unreceive.error": "Unreceive error",
-  "title.actions.unreceive.success": "Unreceive success",
+  "title.actions.unreceive.success": "Unreceiving successful",
 
   "title.contributors.add": "Add contributor",
   "title.contributors.contributor": "Contributor",
