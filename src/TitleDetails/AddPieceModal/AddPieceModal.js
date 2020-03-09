@@ -83,6 +83,7 @@ const AddPieceModal = ({
         disabled={isAddItemButtonDisabled}
         instanceId={instanceId}
         locationId={locationId}
+        marginBottom0
         searchButtonStyle="default"
         searchLabel={<FormattedMessage id="ui-receiving.piece.actions.addItem" />}
         type="create-item"
@@ -151,6 +152,7 @@ const AddPieceModal = ({
           <Col xs>
             <FieldSelectFinal
               dataOptions={locations}
+              disabled
               fullWidth
               label={<FormattedMessage id="ui-receiving.piece.location" />}
               name="locationId"
