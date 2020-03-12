@@ -91,7 +91,7 @@ const ReceivingListFilter = ({
 
       <LocationFilterContainer
         id={FILTERS.LOCATION}
-        activeFilters={activeFilters[FILTERS.LOCATION]}
+        activeFilter={activeFilters[FILTERS.LOCATION] && activeFilters[FILTERS.LOCATION][0]}
         labelId="ui-receiving.filter.location"
         name={FILTERS.LOCATION}
         onChange={adaptedApplyFilters}
