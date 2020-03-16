@@ -4,6 +4,9 @@
 
 ### Stories
 
+### Bug fixes
+* [UIREC-61](https://issues.folio.org/browse/UIREC-61) Caption not displayed when receiving or undeceiving pieces
+
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (2020-03-13)
 
 ### Stories

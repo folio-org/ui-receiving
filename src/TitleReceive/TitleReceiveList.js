@@ -17,13 +17,31 @@ import {
 
 import { PIECE_FORMAT_LABELS } from '../common/constants';
 
-const visibleColumns = ['checked', 'barcode', 'format', 'hasRequest', 'comments', 'location', 'itemStatus', 'callNumber'];
+const visibleColumns = [
+  'checked',
+  'caption',
+  'barcode',
+  'format',
+  'hasRequest',
+  'comments',
+  'location',
+  'itemStatus',
+  'callNumber',
+];
 
 export const TitleReceiveList = ({ fields, props: { locationOptions, selectLocation, toggleCheckedAll } }) => {
   const field = fields.name;
   const cellFormatters = useMemo(
     () => {
       return {
+        caption: record => (
+          <Field
+            name={`${field}[${record.rowIndex}].caption`}
+            component={TextField}
+            marginBottom0
+            fullWidth
+          />
+        ),
         barcode: record => (
           <Field
             name={`${field}[${record.rowIndex}].barcode`}
@@ -99,6 +117,7 @@ export const TitleReceiveList = ({ fields, props: { locationOptions, selectLocat
           onChange={toggleAll}
         />
       ),
+      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,

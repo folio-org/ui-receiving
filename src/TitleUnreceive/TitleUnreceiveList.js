@@ -11,7 +11,16 @@ import {
 
 import { PIECE_FORMAT_LABELS } from '../common/constants';
 
-const visibleColumns = ['checked', 'barcode', 'format', 'hasRequest', 'comments', 'location', 'callNumber'];
+const visibleColumns = [
+  'checked',
+  'barcode',
+  'caption',
+  'format',
+  'hasRequest',
+  'comments',
+  'location',
+  'callNumber',
+];
 
 export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCheckedAll } }) => {
   const field = fields.name;
@@ -65,6 +74,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
         />
       ),
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
+      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,
       comments: <FormattedMessage id="ui-receiving.piece.comment" />,
