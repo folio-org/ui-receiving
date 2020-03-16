@@ -18,12 +18,10 @@ import {
   TextArea,
   TextField,
 } from '@folio/stripes/components';
-import {
-  LocationLookup,
-} from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
+  FieldLocationFinal,
   FieldSelectFinal,
   validateRequired,
 } from '@folio/stripes-acq-components';
@@ -38,12 +36,10 @@ const AddPieceModal = ({
   form,
   handleSubmit,
   instanceId,
-  locations,
   onCheckIn,
   pieceFormatOptions,
 }) => {
   const addItem = form.mutators.setItemValue;
-  const selectLocation = form.mutators.setLocationValue;
   const formValues = get(form.getState(), 'values', {});
   const { format, id, itemId, locationId } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
@@ -150,15 +146,13 @@ const AddPieceModal = ({
         </Row>
         <Row>
           <Col xs>
-            <FieldSelectFinal
-              dataOptions={locations}
-              disabled
-              fullWidth
-              label={<FormattedMessage id="ui-receiving.piece.location" />}
+            <FieldLocationFinal
+              locationId={locationId}
+              onChange={form.mutators.setLocationValue}
+              labelId="ui-receiving.piece.location"
               name="locationId"
               required={isLocationRequired}
             />
-            <LocationLookup onLocationSelected={selectLocation} />
           </Col>
           <Col xs>
             <Field
@@ -180,10 +174,6 @@ AddPieceModal.propTypes = {
   close: PropTypes.func.isRequired,
   createInventoryValues: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  locations: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-  })),
   form: PropTypes.object,
   instanceId: PropTypes.string,
   onCheckIn: PropTypes.func.isRequired,
@@ -194,7 +184,6 @@ AddPieceModal.propTypes = {
 };
 
 AddPieceModal.defaultProps = {
-  locations: [],
   pieceFormatOptions: [],
 };
 

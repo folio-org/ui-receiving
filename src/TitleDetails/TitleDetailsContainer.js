@@ -14,7 +14,6 @@ import {
 import { PO_LINES_API } from '../common/constants';
 import {
   checkInResource,
-  locationsResource,
   orderPiecesResource,
   pieceResource,
   receivingResource,
@@ -36,7 +35,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
   const [pieces, setPieces] = useState();
-  const [locations, setLocations] = useState();
 
   const fetchReceivingResources = useCallback(
     (lineId) => {
@@ -82,12 +80,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .finally(() => {
           setIsLoading(false);
         });
-
-      if (!locations) {
-        mutator.locations.GET()
-          .then(setLocations)
-          .catch(() => setLocations([]));
-      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [titleId],
@@ -170,13 +162,12 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     [fetchReceivingResources],
   );
 
-  if (isLoading || !(locations && pieces)) {
+  if (isLoading || !pieces) {
     return (<LoadingPane onClose={onClose} />);
   }
 
   return (
     <TitleDetails
-      locations={locations}
       onAddPiece={onAddPiece}
       onCheckIn={onCheckIn}
       onClose={onClose}
@@ -201,10 +192,6 @@ TitleDetailsContainer.manifest = Object.freeze({
   },
   orderPieces: orderPiecesResource,
   pieces: pieceResource,
-  locations: {
-    ...locationsResource,
-    fetch: false,
-  },
   checkIn: checkInResource,
   receive: receivingResource,
   items: itemsResource,

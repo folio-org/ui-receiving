@@ -20,7 +20,6 @@ import {
 import { IfPermission } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
-  getLocationOptions,
   ORDER_FORMATS,
   useAccordionToggle,
   useModalToggle,
@@ -45,7 +44,6 @@ import {
 } from './TitleDetailsActions';
 
 const TitleDetails = ({
-  locations,
   onAddPiece,
   onCheckIn,
   onClose,
@@ -238,7 +236,6 @@ const TitleDetails = ({
           createInventoryValues={getCreateInventoryValues()}
           initialValues={initialValuesPiece}
           instanceId={title.instanceId}
-          locations={getLocationOptions(locations)}
           onCheckIn={onCheckIn}
           onSubmit={onSave}
           pieceFormatOptions={pieceFormatOptions}
@@ -249,7 +246,6 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
-  locations: PropTypes.arrayOf(PropTypes.object),
   onAddPiece: PropTypes.func.isRequired,
   onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -260,7 +256,6 @@ TitleDetails.propTypes = {
 };
 
 TitleDetails.defaultProps = {
-  locations: [],
   pieces: [],
 };
 

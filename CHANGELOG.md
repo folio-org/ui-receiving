@@ -6,6 +6,7 @@
 
 ### Bug fixes
 * [UIREC-62](https://issues.folio.org/browse/UIREC-62) Hotlink POL number in receiving to POL in orders
+* [UIREC-59](https://issues.folio.org/browse/UIREC-59) Improve Select location dropdown to use only select Location plugin
 * [UIREC-61](https://issues.folio.org/browse/UIREC-61) Caption not displayed when receiving or undeceiving pieces
 
 ## [1.0.0](https://github.com/folio-org/ui-receiving/tree/v1.0.0) (2020-03-13)

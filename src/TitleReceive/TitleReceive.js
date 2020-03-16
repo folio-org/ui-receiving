@@ -19,7 +19,6 @@ const FIELD_NAME = 'receivedItems';
 const TitleReceive = ({
   form,
   handleSubmit,
-  locationOptions,
   onCancel,
   paneTitle,
   pristine,
@@ -53,7 +52,6 @@ const TitleReceive = ({
             id="receivedItems"
             name={FIELD_NAME}
             props={{
-              locationOptions,
               selectLocation: form.mutators.setLocationValue,
               toggleCheckedAll: form.mutators.toggleCheckedAll,
             }}
@@ -67,7 +65,6 @@ const TitleReceive = ({
 TitleReceive.propTypes = {
   form: PropTypes.object,  // form object to get initialValues
   handleSubmit: PropTypes.func.isRequired,
-  locationOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,

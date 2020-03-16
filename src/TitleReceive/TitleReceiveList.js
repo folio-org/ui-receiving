@@ -9,9 +9,8 @@ import {
   TextArea,
   TextField,
 } from '@folio/stripes/components';
-import { LocationLookup } from '@folio/stripes/smart-components';
 import {
-  FieldSelectFinal,
+  FieldLocationFinal,
   getItemStatusLabel,
 } from '@folio/stripes-acq-components';
 
@@ -29,7 +28,7 @@ const visibleColumns = [
   'callNumber',
 ];
 
-export const TitleReceiveList = ({ fields, props: { locationOptions, selectLocation, toggleCheckedAll } }) => {
+export const TitleReceiveList = ({ fields, props: { selectLocation, toggleCheckedAll } }) => {
   const field = fields.name;
   const cellFormatters = useMemo(
     () => {
@@ -75,18 +74,11 @@ export const TitleReceiveList = ({ fields, props: { locationOptions, selectLocat
           />
         ),
         location: record => (
-          <div>
-            <FieldSelectFinal
-              dataOptions={locationOptions}
-              fullWidth
-              name={`${field}[${record.rowIndex}].locationId`}
-              marginBottom0
-            />
-            <LocationLookup
-              marginBottom0
-              onLocationSelected={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
-            />
-          </div>
+          <FieldLocationFinal
+            locationId={fields.value[record.rowIndex]?.locationId}
+            onChange={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
+            name={`${field}[${record.rowIndex}].locationId`}
+          />
         ),
         hasRequest: record => (
           record.request
@@ -97,7 +89,7 @@ export const TitleReceiveList = ({ fields, props: { locationOptions, selectLocat
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [locationOptions],
+    [],
   );
 
   const isAllChecked = fields.value.every(({ checked }) => !!checked);
@@ -145,7 +137,6 @@ export const TitleReceiveList = ({ fields, props: { locationOptions, selectLocat
 TitleReceiveList.propTypes = {
   fields: PropTypes.object.isRequired,
   props: PropTypes.shape({
-    locationOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
     selectLocation: PropTypes.func.isRequired,
     toggleCheckedAll: PropTypes.func.isRequired,
   }).isRequired,

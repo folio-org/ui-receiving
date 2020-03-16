@@ -5,7 +5,6 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
-  getLocationOptions,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -16,7 +15,6 @@ import {
 import {
   checkInResource,
   itemsResource,
-  locationsResource,
   pieceResource,
   requestsResource,
   titleResource,
@@ -34,20 +32,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const [pieces, setPieces] = useState();
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
-  const [locationOptions, setLocationOptions] = useState();
   const poLineId = title?.poLineId;
-
-  useEffect(
-    () => {
-      mutator.locations.GET()
-        .then((locationsResponse) => {
-          setLocationOptions(getLocationOptions(locationsResponse));
-        })
-        .catch(() => setLocationOptions([]));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
 
   useEffect(
     () => {
@@ -128,7 +113,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     [onCancel, poLine],
   );
 
-  if (!(pieces && poLine && title && locationOptions)) return null;
+  if (!(pieces && poLine && title)) return null;
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
 
@@ -136,7 +121,6 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     <>
       <TitleReceive
         initialValues={initialValues}
-        locationOptions={locationOptions}
         onCancel={onCancel}
         onSubmit={onSubmit}
         paneTitle={paneTitle}
@@ -165,10 +149,6 @@ TitleReceiveContainer.manifest = Object.freeze({
   },
   items: itemsResource,
   requests: requestsResource,
-  locations: {
-    ...locationsResource,
-    fetch: false,
-  },
   receive: checkInResource,
 });
 
