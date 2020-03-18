@@ -19,6 +19,7 @@ const TitleInformation = ({
   contributors,
   edition,
   instanceId,
+  poLineId,
   poLineNumber,
   productIds,
   publishedDate,
@@ -40,6 +41,18 @@ const TitleInformation = ({
       </Link>
     )
     : title;
+
+  const poLineNumberValue = (
+    <Link
+      data-testid="titlePOLineLink"
+      to={{
+        pathname: `/orders/lines/view/${poLineId}`,
+        search: `?qindex=poLineNumber&query=${poLineNumber}`,
+      }}
+    >
+      {poLineNumber}
+    </Link>
+  );
 
   return (
     <Fragment>
@@ -143,7 +156,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.polNumber" />}
-            value={poLineNumber}
+            value={poLineNumberValue}
           />
         </Col>
         <Col
@@ -175,6 +188,7 @@ TitleInformation.propTypes = {
   contributors: PropTypes.arrayOf(PropTypes.object),
   edition: PropTypes.string,
   instanceId: PropTypes.string,
+  poLineId: PropTypes.string,
   poLineNumber: PropTypes.string,
   productIds: PropTypes.arrayOf(PropTypes.object),
   publishedDate: PropTypes.string,

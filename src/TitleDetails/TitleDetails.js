@@ -153,7 +153,7 @@ const TitleDetails = ({
       defaultWidth="fill"
       dismissible
       paneTitle={title.title}
-      paneSub={poLine.poLineNumber}
+      paneSub={poLineNumber}
       onClose={onClose}
       lastMenu={lastMenu}
     >
@@ -179,6 +179,7 @@ const TitleDetails = ({
             contributors={title.contributors}
             edition={title.edition}
             instanceId={title.instanceId}
+            poLineId={poLineId}
             poLineNumber={poLineNumber}
             productIds={title.productIds}
             publishedDate={title.publishedDate}

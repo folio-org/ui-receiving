@@ -14,6 +14,7 @@ const renderTitleInformation = (titleProp) => (render(
         contributors={titleProp.contributors}
         edition={titleProp.edition}
         instanceId={titleProp.instanceId}
+        poLineId={titleProp.poLineId}
         poLineNumber={titleProp.poLineNumber}
         productIds={titleProp.productIds}
         publishedDate={titleProp.publishedDate}
@@ -33,6 +34,7 @@ const title = {
   contributors: [],
   edition: 'First edition',
   instanceId: '123',
+  poLineId: '001',
   poLineNumber: 'POL-123',
   productIds: [],
   publishedDate: '1915',
@@ -63,11 +65,12 @@ describe('Given Title information', () => {
     expect(getByText(title.title)).toBeDefined();
   });
 
-  describe('When title is connected with instance', () => {
+  describe('When title is connected with instance and poLine', () => {
     it('Than it should display title value as a link', () => {
       const { queryByTestId } = renderTitleInformation(title);
 
       expect(queryByTestId('titleInstanceLink')).not.toEqual(null);
+      expect(queryByTestId('titlePOLineLink')).not.toEqual(null);
     });
   });
 
