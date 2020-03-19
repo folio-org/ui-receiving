@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import {
   get,
   sortBy,
@@ -36,6 +37,7 @@ import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
+  EXPECTED_PIECES_BUTTONS,
   ORDER_FORMAT_TO_PIECE_FORMAT,
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
@@ -48,6 +50,8 @@ import Title from './Title';
 import POLDetails from './POLDetails';
 
 const TitleDetails = ({
+  history,
+  location,
   onAddPiece,
   onCheckIn,
   onClose,
@@ -61,6 +65,7 @@ const TitleDetails = ({
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
   const [pieceValues, setPieceValues] = useState({});
+  const [clickedButton, setClickedButton] = useState('');
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
 
@@ -80,6 +85,8 @@ const TitleDetails = ({
 
   const openModal = useCallback(
     () => {
+      setClickedButton(EXPECTED_PIECES_BUTTONS.addPiece);
+
       return (
         title.isAcknowledged
           ? toggleAcknowledgeNote()
@@ -87,6 +94,22 @@ const TitleDetails = ({
       );
     },
     [title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModal],
+  );
+
+  const goToReceiveList = useCallback(
+    () => {
+      setClickedButton(EXPECTED_PIECES_BUTTONS.receivePiece);
+
+      return (
+        title.isAcknowledged
+          ? toggleAcknowledgeNote()
+          : history.push({
+            pathname: `/receiving/receive/${title.id}`,
+            search: location.search,
+          })
+      );
+    },
+    [title.isAcknowledged, title.id, toggleAcknowledgeNote, history, location.search],
   );
 
   const getCreateInventoryValues = useCallback(
@@ -110,12 +133,13 @@ const TitleDetails = ({
     () => (
       <TitleDetailsExpectedActions
         checkinItems={checkinItems}
+        goToReceiveList={goToReceiveList}
+        hasReceive={hasReceive}
         openModal={openModal}
         titleId={title.id}
-        hasReceive={hasReceive}
       />
     ),
-    [title.id, checkinItems, openModal, hasReceive],
+    [title.id, checkinItems, openModal, hasReceive, goToReceiveList],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
@@ -254,7 +278,15 @@ const TitleDetails = ({
           onCancel={toggleAcknowledgeNote}
           onConfirm={() => {
             toggleAcknowledgeNote();
-            toggleAddPieceModal();
+
+            if (clickedButton === EXPECTED_PIECES_BUTTONS.addPiece) {
+              toggleAddPieceModal();
+            } else {
+              history.push({
+                pathname: `/receiving/receive/${title.id}`,
+                search: location.search,
+              });
+            }
           }}
           open
         />
@@ -276,6 +308,8 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
+  history: ReactRouterPropTypes.history.isRequired,
+  location: ReactRouterPropTypes.location.isRequired,
   onAddPiece: PropTypes.func.isRequired,
   onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

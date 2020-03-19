@@ -183,6 +183,8 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   return (
     <TitleDetails
+      history={history}
+      location={location}
       onAddPiece={onAddPiece}
       onCheckIn={onCheckIn}
       onClose={onClose}
