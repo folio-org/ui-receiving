@@ -32,6 +32,9 @@ export default @interactor class TitleDetailsInteractor {
   expectedPiecesAccordion = new ExpectedPiecesAccordion();
   receivedPiecesAccordion = new ReceivedPiecesAccordion();
   receiveButton = new ButtonInteractor('[data-test-title-receive-button]');
+  closingReasonMessage = isPresent('[data-test-message-banner]');
+  instanceLink = clickable('[data-testid="titleInstanceLink"]');
+  poLineLink = clickable('[data-testid="titlePOLineLink"]');
 
   isLoaded = isPresent('#accordion-toggle-button-information');
   whenLoaded() {

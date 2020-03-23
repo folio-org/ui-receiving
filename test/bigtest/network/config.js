@@ -7,6 +7,7 @@ import {
   configLocations,
   configMaterialTypes,
   configLines,
+  configOrders,
 } from '@folio/stripes-acq-components/test/bigtest/network';
 
 import {
@@ -31,4 +32,5 @@ export default function config() {
   configRequests(this);
   configLines(this);
   configTitleReceive(this);
+  configOrders(this);
 }

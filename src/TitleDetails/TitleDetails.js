@@ -13,6 +13,7 @@ import {
   Col,
   ConfirmationModal,
   ExpandAllButton,
+  MessageBanner,
   Pane,
   PaneMenu,
   Row,
@@ -21,6 +22,7 @@ import { IfPermission } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   ORDER_FORMATS,
+  ORDER_STATUSES,
   useAccordionToggle,
   useModalToggle,
 } from '@folio/stripes-acq-components';
@@ -42,12 +44,15 @@ import {
   TitleDetailsExpectedActions,
   TitleDetailsReceivedActions,
 } from './TitleDetailsActions';
+import Title from './Title';
+import POLDetails from './POLDetails';
 
 const TitleDetails = ({
   onAddPiece,
   onCheckIn,
   onClose,
   onEdit,
+  order,
   pieces,
   poLine,
   title,
@@ -64,6 +69,7 @@ const TitleDetails = ({
   ), 'receivedDate');
   const { orderFormat, id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate, poLineId, ...pieceValues };
+  const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
 
   let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
 
@@ -156,7 +162,18 @@ const TitleDetails = ({
       lastMenu={lastMenu}
     >
       <Row end="xs">
-        <Col xs={12}>
+        <Col xs={10}>
+          {isOrderClosed && (
+            <MessageBanner type="warning">
+              <FormattedMessage
+                id="ui-receiving.title.closedOrderMessage"
+                values={{ reason: order.closeReason?.reason }}
+              />
+            </MessageBanner>
+          )}
+        </Col>
+
+        <Col xs={2}>
           <ExpandAllButton
             accordionStatus={sections}
             onToggle={expandAll}
@@ -164,11 +181,18 @@ const TitleDetails = ({
         </Col>
       </Row>
 
+      <hr />
+      <Title
+        title={title.title}
+        instanceId={title.instanceId}
+      />
+
       <AccordionSet
         accordionStatus={sections}
         onToggle={toggleSection}
       >
         <Accordion
+          closedByDefault
           id={TITLE_ACCORDION.information}
           label={TITLE_ACCORDION_LABELS.information}
         >
@@ -176,18 +200,24 @@ const TitleDetails = ({
           <TitleInformation
             contributors={title.contributors}
             edition={title.edition}
-            instanceId={title.instanceId}
-            poLineId={poLineId}
-            poLineNumber={poLineNumber}
             productIds={title.productIds}
             publishedDate={title.publishedDate}
             publisher={title.publisher}
-            receiptDate={receiptDate}
-            receivingNote={receivingNote}
             subscriptionFrom={title.subscriptionFrom}
             subscriptionInterval={title.subscriptionInterval}
             subscriptionTo={title.subscriptionTo}
-            title={title.title}
+          />
+        </Accordion>
+
+        <Accordion
+          id={TITLE_ACCORDION.polDetails}
+          label={TITLE_ACCORDION_LABELS.polDetails}
+        >
+          <POLDetails
+            poLineId={poLineId}
+            poLineNumber={poLineNumber}
+            receiptDate={receiptDate}
+            receivingNote={receivingNote}
           />
         </Accordion>
 
@@ -250,6 +280,7 @@ TitleDetails.propTypes = {
   onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  order: PropTypes.object.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,

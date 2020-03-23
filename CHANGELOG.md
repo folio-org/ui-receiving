@@ -5,6 +5,7 @@
 ### Stories
 
 ### Bug fixes
+* [UIREC-66](https://issues.folio.org/browse/UIREC-66) POL details displaying under Title information accordion
 * [UIREC-62](https://issues.folio.org/browse/UIREC-62) Hotlink POL number in receiving to POL in orders
 * [UIREC-59](https://issues.folio.org/browse/UIREC-59) Improve Select location dropdown to use only select Location plugin
 * [UIREC-61](https://issues.folio.org/browse/UIREC-61) Caption not displayed when receiving or undeceiving pieces

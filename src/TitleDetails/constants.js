@@ -7,12 +7,14 @@ import { PIECE_FORMAT } from '../common/constants';
 
 export const TITLE_ACCORDION = {
   information: 'information',
+  polDetails: 'polDetails',
   expected: 'expected',
   received: 'received',
 };
 
 export const TITLE_ACCORDION_LABELS = {
   [TITLE_ACCORDION.information]: <FormattedMessage id="ui-receiving.title.information" />,
+  [TITLE_ACCORDION.polDetails]: <FormattedMessage id="ui-receiving.title.polDetails" />,
   [TITLE_ACCORDION.expected]: <FormattedMessage id="ui-receiving.title.expected" />,
   [TITLE_ACCORDION.received]: <FormattedMessage id="ui-receiving.title.received" />,
 };

@@ -8,3 +8,4 @@ export const CHECKIN_API = 'orders/check-in';
 export const RECEIVE_API = 'orders/receive';
 export const ITEMS_API = 'inventory/items';
 export const REQUESTS_API = 'circulation/requests';
+export const ORDERS_API = 'orders/composite-orders';

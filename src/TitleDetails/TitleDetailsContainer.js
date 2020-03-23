@@ -11,7 +11,10 @@ import {
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import { PO_LINES_API } from '../common/constants';
+import {
+  ORDERS_API,
+  PO_LINES_API,
+} from '../common/constants';
 import {
   checkInResource,
   orderPiecesResource,
@@ -35,6 +38,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
   const [pieces, setPieces] = useState();
+  const [order, setOrder] = useState({});
 
   const fetchReceivingResources = useCallback(
     (lineId) => {
@@ -60,6 +64,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       setIsLoading(true);
       setTitle({});
       setPoLine({});
+      setOrder({});
 
       mutator.title.GET()
         .then(response => {
@@ -72,8 +77,13 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .then(line => {
           setPoLine(line);
 
-          return fetchReceivingResources(line.id);
+          const orderPromise = mutator.purchaseOrder.GET({
+            path: `${ORDERS_API}/${line.purchaseOrderId}`,
+          });
+
+          return Promise.all([orderPromise, fetchReceivingResources(line.id)]);
         })
+        .then(([orderResp]) => setOrder(orderResp))
         .catch(() => {
           showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' });
         })
@@ -172,6 +182,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onCheckIn={onCheckIn}
       onClose={onClose}
       onEdit={onEdit}
+      order={order}
       pieces={pieces}
       poLine={poLine}
       title={title}
@@ -186,6 +197,11 @@ TitleDetailsContainer.manifest = Object.freeze({
     fetch: false,
   },
   poLine: {
+    ...baseManifest,
+    accumulate: true,
+    fetch: false,
+  },
+  purchaseOrder: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
