@@ -79,7 +79,7 @@
   "piece.actions.confirm": "Continue",
   "piece.actions.edit":"Edit",
   "piece.actions.load.error": "Failed to load pieces",
-  "piece.actions.receive":"Receive",
+  "piece.actions.quickReceive":"Quick receive",
   "piece.actions.save":"Save & close",
   "piece.actions.unreceive.confirm": "Confirm",
   "piece.actions.unreceive.heading":"Unreceiving piece",

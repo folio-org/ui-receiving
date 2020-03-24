@@ -141,15 +141,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   const onCheckIn = useCallback(
     (values) => {
-      const mutatorMethod = values.id ? 'PUT' : 'POST';
+      const dehydratedPiece = getDehydratedPiece(values);
+      const savePromise = values.id
+        ? Promise.resolve(dehydratedPiece)
+        : mutator.orderPieces.POST(dehydratedPiece);
 
-      mutator.orderPieces[mutatorMethod](getDehydratedPiece(values))
+      return savePromise
         .then(piece => {
-          showCallout({
-            messageId: 'ui-receiving.piece.actions.addPiece.success',
-            type: 'success',
-            values: { caption: values.caption },
-          });
+          if (!values.id) {
+            showCallout({
+              messageId: 'ui-receiving.piece.actions.addPiece.success',
+              type: 'success',
+              values: { caption: values.caption },
+            });
+          }
 
           return checkInItems(
             [{

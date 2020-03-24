@@ -13,7 +13,6 @@ import {
   Checkbox,
   Col,
   Modal,
-  ModalFooter,
   Row,
   TextArea,
   TextField,
@@ -23,7 +22,7 @@ import {
   FieldDatepickerFinal,
   FieldLocationFinal,
   FieldSelectFinal,
-  validateRequired,
+  ModalFooter,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -58,21 +57,17 @@ const AddPieceModal = ({
     [formValues, onCheckIn],
   );
 
-  const footer = (
-    <ModalFooter>
-      <Button
-        buttonStyle="primary"
-        data-test-add-piece-save
-        onClick={handleSubmit}
-      >
-        <FormattedMessage id="ui-receiving.piece.actions.save" />
-      </Button>
-      <Button
-        data-test-add-piece-check-in
-        onClick={receive}
-      >
-        <FormattedMessage id="ui-receiving.piece.actions.receive" />
-      </Button>
+  const start = (
+    <Button
+      data-test-add-piece-cancel
+      marginBottom0
+      onClick={close}
+    >
+      <FormattedMessage id="ui-receiving.piece.actions.cancel" />
+    </Button>
+  );
+  const end = (
+    <>
       <Pluggable
         addItem={addItem}
         aria-haspopup="true"
@@ -88,12 +83,28 @@ const AddPieceModal = ({
         <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
       </Pluggable>
       <Button
-        data-test-add-piece-cancel
-        onClick={close}
+        data-test-add-piece-check-in
+        marginBottom0
+        onClick={receive}
       >
-        <FormattedMessage id="ui-receiving.piece.actions.cancel" />
+        <FormattedMessage id="ui-receiving.piece.actions.quickReceive" />
       </Button>
-    </ModalFooter>
+      <Button
+        buttonStyle="primary"
+        data-test-add-piece-save
+        marginBottom0
+        onClick={handleSubmit}
+      >
+        <FormattedMessage id="ui-receiving.piece.actions.save" />
+      </Button>
+    </>
+  );
+
+  const footer = (
+    <ModalFooter
+      renderStart={start}
+      renderEnd={end}
+    />
   );
 
   return (
@@ -112,9 +123,7 @@ const AddPieceModal = ({
               fullWidth
               label={<FormattedMessage id="ui-receiving.piece.caption" />}
               name="caption"
-              required
               type="text"
-              validate={validateRequired}
             />
           </Col>
           <Col xs>
@@ -131,8 +140,6 @@ const AddPieceModal = ({
             <FieldDatepickerFinal
               labelId="ui-receiving.piece.receiptDate"
               name="receiptDate"
-              required
-              validate={validateRequired}
             />
           </Col>
           <Col xs>
