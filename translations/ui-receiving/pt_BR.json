@@ -112,7 +112,7 @@
     "requests.message.barcode": "Código de barras ({barcode})",
     "requests.message.itemId": "Item ({itemId})",
     "requests.footer.close": "Fechar",
-    "title.closedOrderMessage": "Purchase order is closed - {reason}",
-    "title.polDetails": "POL details",
+    "title.closedOrderMessage": "Pedido de compra fechado - {reason}",
+    "title.polDetails": "Detalhes da linha de pedido",
     "piece.actions.quickReceive": "Quick receive"
 }
