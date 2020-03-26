@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import {
   get,
@@ -37,7 +38,6 @@ import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
-  EXPECTED_PIECES_BUTTONS,
   ORDER_FORMAT_TO_PIECE_FORMAT,
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
@@ -65,7 +65,7 @@ const TitleDetails = ({
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
   const [pieceValues, setPieceValues] = useState({});
-  const [clickedButton, setClickedButton] = useState('');
+  const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
 
@@ -83,9 +83,9 @@ const TitleDetails = ({
     pieceFormatOptions = PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValuesPiece.format);
   }
 
-  const openModal = useCallback(
+  const openAddPieceModal = useCallback(
     () => {
-      setClickedButton(EXPECTED_PIECES_BUTTONS.addPiece);
+      setConfirmAcknowledgeNote(() => toggleAddPieceModal);
 
       return (
         title.isAcknowledged
@@ -98,18 +98,25 @@ const TitleDetails = ({
 
   const goToReceiveList = useCallback(
     () => {
-      setClickedButton(EXPECTED_PIECES_BUTTONS.receivePiece);
+      history.push({
+        pathname: `/receiving/receive/${title.id}`,
+        search: location.search,
+      });
+    },
+    [title.id, history, location.search],
+  );
+
+  const openReceiveList = useCallback(
+    () => {
+      setConfirmAcknowledgeNote(() => goToReceiveList);
 
       return (
         title.isAcknowledged
           ? toggleAcknowledgeNote()
-          : history.push({
-            pathname: `/receiving/receive/${title.id}`,
-            search: location.search,
-          })
+          : goToReceiveList()
       );
     },
-    [title.isAcknowledged, title.id, toggleAcknowledgeNote, history, location.search],
+    [title.isAcknowledged, toggleAcknowledgeNote, goToReceiveList],
   );
 
   const getCreateInventoryValues = useCallback(
@@ -133,13 +140,13 @@ const TitleDetails = ({
     () => (
       <TitleDetailsExpectedActions
         checkinItems={checkinItems}
-        goToReceiveList={goToReceiveList}
         hasReceive={hasReceive}
-        openModal={openModal}
+        openAddPieceModal={openAddPieceModal}
+        openReceiveList={openReceiveList}
         titleId={title.id}
       />
     ),
-    [title.id, checkinItems, openModal, hasReceive, goToReceiveList],
+    [title.id, checkinItems, openAddPieceModal, hasReceive, openReceiveList],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
@@ -156,9 +163,9 @@ const TitleDetails = ({
   const onEditPiece = useCallback(
     (piece) => {
       setPieceValues(piece);
-      openModal();
+      openAddPieceModal();
     },
-    [openModal, setPieceValues],
+    [openAddPieceModal, setPieceValues],
   );
 
   const lastMenu = (
@@ -278,15 +285,7 @@ const TitleDetails = ({
           onCancel={toggleAcknowledgeNote}
           onConfirm={() => {
             toggleAcknowledgeNote();
-
-            if (clickedButton === EXPECTED_PIECES_BUTTONS.addPiece) {
-              toggleAddPieceModal();
-            } else {
-              history.push({
-                pathname: `/receiving/receive/${title.id}`,
-                search: location.search,
-              });
-            }
+            confirmAcknowledgeNote();
           }}
           open
         />
@@ -324,4 +323,4 @@ TitleDetails.defaultProps = {
   pieces: [],
 };
 
-export default TitleDetails;
+export default withRouter(TitleDetails);

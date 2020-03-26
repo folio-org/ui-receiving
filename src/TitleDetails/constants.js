@@ -31,8 +31,3 @@ export const INVENTORY_RECORDS_TYPE = {
   instanceAndHolding: 'Instance, Holding',
   none: 'None',
 };
-
-export const EXPECTED_PIECES_BUTTONS = {
-  addPiece: 'addPiece',
-  receivePiece: 'receivePiece',
-};
