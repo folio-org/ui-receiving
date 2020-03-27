@@ -6,6 +6,7 @@
 ### Bug fixes
 
 ## [1.0.1](https://github.com/folio-org/ui-receiving/tree/v1.0.1) (2020-03-27)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.0...v1.0.1)
 
 ### Bug fixes
 * [UIREC-66](https://issues.folio.org/browse/UIREC-66) POL details displaying under Title information accordion
