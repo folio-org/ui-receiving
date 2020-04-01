@@ -4,6 +4,7 @@
 
 ### Stories
 ### Bug fixes
+* [UIOR-537](https://issues.folio.org/browse/UIOR-537) add missed Location lookup permissions
 
 ## [1.0.1](https://github.com/folio-org/ui-receiving/tree/v1.0.1) (2020-03-27)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.0...v1.0.1)
