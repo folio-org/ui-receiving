@@ -29,21 +29,34 @@ describe('Titles list', () => {
     await listPage.whenLoaded();
   });
 
-  it('renders row for each title from response', () => {
-    expect(listPage.isPresent).to.equal(true);
-    expect(listPage.rows().length).to.be.equal(LIST_COUNT);
+  it('is no results message label present', () => {
+    expect(listPage.isNoResultsMessageLabelPresent).to.be.true;
     expect(listPage.hasNewButton).to.be.true;
   });
 
-  describe('clicking on the first title row', () => {
-    beforeEach(async () => {
-      await listPage.rows(0).click();
-      await titleDetails.whenLoaded();
+  describe('search by poNumber', function () {
+    beforeEach(async function () {
+      await listPage.fillSearchField('test');
+      await listPage.clickSearch();
+      await listPage.whenListLoaded();
     });
 
-    it('stays calm and shows details', () => {
+    it('renders row for each title from response', () => {
       expect(listPage.isPresent).to.equal(true);
-      expect(titleDetails.isPresent).to.equal(true);
+      expect(listPage.rows().length).to.be.equal(LIST_COUNT);
+      expect(listPage.hasNewButton).to.be.true;
+    });
+
+    describe('clicking on the first title row', () => {
+      beforeEach(async () => {
+        await listPage.rows(0).click();
+        await titleDetails.whenLoaded();
+      });
+
+      it('stays calm and shows details', () => {
+        expect(listPage.isPresent).to.equal(true);
+        expect(titleDetails.isPresent).to.equal(true);
+      });
     });
   });
 });
