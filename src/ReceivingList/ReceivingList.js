@@ -15,8 +15,9 @@ import {
 import {
   FiltersPane,
   FolioFormattedDate,
-  ResultsPane,
   ResetButton,
+  ResultsPane,
+  ResultStatusMessage,
   SingleSearchForm,
   useLocationFilters,
   useLocationSorting,
@@ -96,6 +97,8 @@ const ReceivingList = ({
     [history, location.search],
   );
 
+  const resultsStatusMessage = <ResultStatusMessage {...({ filters, isFiltersOpened, isLoading, toggleFilters })} />;
+
   return (
     <Paneset data-test-titles-list>
       {isFiltersOpened && (
@@ -145,6 +148,7 @@ const ReceivingList = ({
           sortOrder={sortingField}
           sortDirection={sortingDirection}
           onHeaderClick={changeSorting}
+          isEmptyMessage={resultsStatusMessage}
         />
       </ResultsPane>
 

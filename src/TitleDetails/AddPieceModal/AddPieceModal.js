@@ -49,7 +49,6 @@ const AddPieceModal = ({
     isAddItemButtonDisabled = false;
   }
 
-  const disabledButtonProps = isAddItemButtonDisabled ? { disabled: isAddItemButtonDisabled } : {};
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
 
   const receive = useCallback(
@@ -78,7 +77,6 @@ const AddPieceModal = ({
         searchButtonStyle="default"
         searchLabel={<FormattedMessage id="ui-receiving.piece.actions.addItem" />}
         type="create-item"
-        {...disabledButtonProps}
       >
         <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
       </Pluggable>
