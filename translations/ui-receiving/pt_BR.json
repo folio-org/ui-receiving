@@ -114,5 +114,5 @@
     "requests.footer.close": "Fechar",
     "title.closedOrderMessage": "Pedido de compra fechado - {reason}",
     "title.polDetails": "Detalhes da linha de pedido",
-    "piece.actions.quickReceive": "Quick receive"
+    "piece.actions.quickReceive": "Recebimento rápido"
 }
