@@ -66,7 +66,8 @@
           "orders-storage.pieces.collection.get",
           "orders.pieces.all",
           "orders.po-lines.item.get",
-          "orders.titles.all"
+          "orders.titles.all",
+          "tags.collection.get"
         ]
       },
       {
