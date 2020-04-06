@@ -1,8 +1,12 @@
 # Change history for ui-receiving
 
 ## (IN PROGRESS)
-
 ### Stories
+### Bug fixes
+
+## [1.0.2](https://github.com/folio-org/ui-receiving/tree/v1.0.2) (2020-04-06)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.1...v1.0.2)
+
 ### Bug fixes
 * [UIOR-537](https://issues.folio.org/browse/UIOR-537) add missed Location lookup permissions
 
