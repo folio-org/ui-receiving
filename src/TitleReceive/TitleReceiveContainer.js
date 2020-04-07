@@ -124,6 +124,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
         onCancel={onCancel}
         onSubmit={onSubmit}
         paneTitle={paneTitle}
+        receivingNote={poLine?.details?.receivingNote}
       />
       {receivedPiecesWithRequests.length && (
         <OpenedRequestsModal

@@ -5,6 +5,7 @@ import { FieldArray } from 'react-final-form-arrays';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
+  MessageBanner,
   Pane,
   Paneset,
 } from '@folio/stripes/components';
@@ -22,6 +23,7 @@ const TitleReceive = ({
   onCancel,
   paneTitle,
   pristine,
+  receivingNote,
   submitting,
   values,
 }) => {
@@ -47,6 +49,11 @@ const TitleReceive = ({
           onClose={onCancel}
           paneTitle={paneTitle}
         >
+          {receivingNote && (
+            <MessageBanner>
+              {receivingNote}
+            </MessageBanner>
+          )}
           <FieldArray
             component={TitleReceiveList}
             id="receivedItems"
@@ -68,6 +75,7 @@ TitleReceive.propTypes = {
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,
+  receivingNote: PropTypes.string,
   submitting: PropTypes.bool.isRequired,
   values: PropTypes.object.isRequired,  // current form values
 };

@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 ### Stories
+* [UIREC-70](https://issues.folio.org/browse/UIREC-70) Display receiving note in multi-piece receiving view
+
 ### Bug fixes
 
 ## [1.0.2](https://github.com/folio-org/ui-receiving/tree/v1.0.2) (2020-04-06)
