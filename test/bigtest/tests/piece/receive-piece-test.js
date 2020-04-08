@@ -39,6 +39,7 @@ describe('Receive piece', () => {
   it('receiving screen is visible', function () {
     expect(titleReceive.isPresent).to.be.true;
     expect(titleReceive.receiveButton.isDisabled).to.be.true;
+    expect(titleReceive.receivingNote).to.be.false;
   });
 
   describe('click Cancel button', function () {

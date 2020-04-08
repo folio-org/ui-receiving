@@ -29,6 +29,9 @@ describe('Title details', () => {
     const line = this.server.create('line', {
       orderFormat: ORDER_FORMATS.physicalResource,
       purchaseOrderId: order.id,
+      details: {
+        receivingNote: 'Receiving note',
+      },
     });
     const title = this.server.create('title', {
       poLineId: line.id,
@@ -58,8 +61,9 @@ describe('Title details', () => {
       await titleReceive.whenLoaded();
     });
 
-    it('shows Title receive screen', function () {
+    it('shows Title receive screen with receiving note banner', function () {
       expect(titleReceive.isPresent).to.be.true;
+      expect(titleReceive.receivingNote).to.be.true;
     });
   });
 
