@@ -8,8 +8,8 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 
 import TitleReceive from './TitleReceive';
 
-const paneTitle = 'The American Journal of Medicine'
-const receivingNote = 'Test receiving note';
+const title = 'The American Journal of Medicine';
+const note = 'Test receiving note';
 const initialValues = {
   receivedItems: [{
     barcode: '10001',
@@ -36,16 +36,16 @@ describe('Receiving title', () => {
   afterEach(cleanup);
 
   it('should display title', () => {
-    const { getByText } = renderTitleReceive({ paneTitle });
+    const { getByText } = renderTitleReceive({ paneTitle: title });
 
-    expect(getByText(paneTitle)).toBeDefined();
+    expect(getByText(title)).toBeDefined();
   });
 
   describe('When there is receiving note - banner is presented', () => {
     it('it should display receiving note banner', () => {
-    const { getByText } = renderTitleReceive({ receivingNote });
+      const { getByText } = renderTitleReceive({ receivingNote: note });
 
-    expect(getByText(receivingNote)).toBeDefined();
+      expect(getByText(note)).toBeDefined();
     });
   });
 
@@ -53,7 +53,7 @@ describe('Receiving title', () => {
     it('Receiving note banner is not presented', () => {
       const { queryByText } = renderTitleReceive({ receivingNote: null });
 
-      expect(queryByText(receivingNote)).toBeNull();
+      expect(queryByText(note)).toBeNull();
     });
   });
 });
