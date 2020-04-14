@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -59,10 +59,11 @@ const formatter = {
   ),
   selection: () => <Icon icon="caret-right" />,
 };
-const rowProps = { alignLastColToEnd: true };
 
 const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
   const onRowClick = useCallback((e, piece) => selectPiece && selectPiece(piece), [selectPiece]);
+  const hasRowClick = Boolean(selectPiece);
+  const rowProps = useMemo(() => ({ alignLastColToEnd: hasRowClick }), [hasRowClick]);
 
   return (
     <MultiColumnList
