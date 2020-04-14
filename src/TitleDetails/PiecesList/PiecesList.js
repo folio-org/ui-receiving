@@ -7,7 +7,10 @@ import {
   MultiColumnList,
   Tooltip,
 } from '@folio/stripes/components';
-import { FolioFormattedDate } from '@folio/stripes-acq-components';
+import {
+  acqRowFormatter,
+  FolioFormattedDate,
+} from '@folio/stripes-acq-components';
 
 import { PIECE_FORMAT_LABELS } from '../../common/constants';
 import styles from './PiecesList.css';
@@ -56,6 +59,7 @@ const formatter = {
   ),
   selection: () => <Icon icon="caret-right" />,
 };
+const rowProps = { alignLastColToEnd: true };
 
 const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
   const onRowClick = useCallback((e, piece) => selectPiece && selectPiece(piece), [selectPiece]);
@@ -67,6 +71,8 @@ const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
       formatter={formatter}
       id={id}
       interactive={false}
+      rowFormatter={acqRowFormatter}
+      rowProps={rowProps}
       visibleColumns={visibleColumns}
       onRowClick={selectPiece ? onRowClick : undefined}
     />
