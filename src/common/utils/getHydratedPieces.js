@@ -6,7 +6,7 @@ import {
 const getPieceStatusFromItem = (item) => {
   const itemStatus = item?.status?.name || ITEM_STATUS.undefined;
 
-  return itemStatus === ITEM_STATUS.onOrder
+  return itemStatus === ITEM_STATUS.onOrder || itemStatus === ITEM_STATUS.orderClosed
     ? ITEM_STATUS.inProcess
     : itemStatus;
 };
