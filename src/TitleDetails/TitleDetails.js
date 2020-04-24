@@ -300,6 +300,7 @@ const TitleDetails = ({
           onCheckIn={onCheckIn}
           onSubmit={onSave}
           pieceFormatOptions={pieceFormatOptions}
+          purchaseOrderLineIdentifier={poLineId}
         />
       )}
     </Pane>
