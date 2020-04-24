@@ -37,6 +37,7 @@ const AddPieceModal = ({
   instanceId,
   onCheckIn,
   pieceFormatOptions,
+  purchaseOrderLineIdentifier,
 }) => {
   const addItem = form.mutators.setItemValue;
   const formValues = get(form.getState(), 'values', {});
@@ -44,6 +45,9 @@ const AddPieceModal = ({
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isAddItemRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
   let isAddItemButtonDisabled = true;
+  const itemToSave = {
+    purchaseOrderLineIdentifier,
+  };
 
   if (!itemId && locationId && isAddItemRequired) {
     isAddItemButtonDisabled = false;
@@ -72,6 +76,7 @@ const AddPieceModal = ({
         aria-haspopup="true"
         disabled={isAddItemButtonDisabled}
         instanceId={instanceId}
+        itemToSave={itemToSave}
         locationId={locationId}
         marginBottom0
         searchButtonStyle="default"
@@ -186,6 +191,7 @@ AddPieceModal.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
+  purchaseOrderLineIdentifier: PropTypes.string.isRequired,
 };
 
 AddPieceModal.defaultProps = {
