@@ -2,6 +2,10 @@
 
 ## (IN PROGRESS)
 ### Stories
+
+## [1.0.3](https://github.com/folio-org/ui-receiving/tree/v1.0.3) (2020-04-25)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.2...v1.0.3)
+
 ### Bug fixes
 * [UIREC-78](https://issues.folio.org/browse/UIREC-78) Fill PO Line id on create Item request from Add Item modal
 
