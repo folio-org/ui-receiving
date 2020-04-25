@@ -5,6 +5,9 @@
 * [UIREC-70](https://issues.folio.org/browse/UIREC-70) Display receiving note in multi-piece receiving view
 * [UINV-138](https://issues.folio.org/browse/UINV-138) Align actions icons in table to right hand side of view pane(s)
 
+## [1.0.3](https://github.com/folio-org/ui-receiving/tree/v1.0.3) (2020-04-25)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.2...v1.0.3)
+
 ### Bug fixes
 * [UIREC-78](https://issues.folio.org/browse/UIREC-78) Fill PO Line id on create Item request from Add Item modal
 
