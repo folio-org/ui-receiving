@@ -5,11 +5,13 @@
 * [UIREC-70](https://issues.folio.org/browse/UIREC-70) Display receiving note in multi-piece receiving view
 * [UINV-138](https://issues.folio.org/browse/UINV-138) Align actions icons in table to right hand side of view pane(s)
 
+### Bug fixes
+* [UIORGS-151](https://issues.folio.org/browse/UIORGS-151) Organizations is not using the same Expand/Collapse as implemented in Q4 2019
+
 ## [1.0.3](https://github.com/folio-org/ui-receiving/tree/v1.0.3) (2020-04-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.2...v1.0.3)
 
 ### Bug fixes
-* [UIORGS-151](https://issues.folio.org/browse/UIORGS-151) Organizations is not using the same Expand/Collapse as implemented in Q4 2019
 * [UIREC-78](https://issues.folio.org/browse/UIREC-78) Fill PO Line id on create Item request from Add Item modal
 
 ## [1.0.2](https://github.com/folio-org/ui-receiving/tree/v1.0.2) (2020-04-06)
