@@ -17,7 +17,7 @@ import {
   FolioFormattedDate,
   ResetButton,
   ResultsPane,
-  ResultStatusMessage,
+  NoResultsMessage,
   SingleSearchForm,
   useLocationFilters,
   useLocationSorting,
@@ -97,12 +97,19 @@ const ReceivingList = ({
     [history, location.search],
   );
 
-  const resultsStatusMessage = <ResultStatusMessage {...({ filters, isFiltersOpened, isLoading, toggleFilters })} />;
+  const resultsStatusMessage = (
+    <NoResultsMessage
+      isLoading={isLoading}
+      filters={filters}
+      isFiltersOpened={isFiltersOpened}
+      toggleFilters={toggleFilters}
+    />
+  );
 
   return (
     <Paneset data-test-titles-list>
       {isFiltersOpened && (
-        <FiltersPane>
+        <FiltersPane toggleFilters={toggleFilters}>
           <SingleSearchForm
             applySearch={applySearch}
             changeSearch={changeSearch}
@@ -132,6 +139,8 @@ const ReceivingList = ({
         count={titlesCount}
         renderLastMenu={renderLastMenu}
         toggleFiltersPane={toggleFilters}
+        filters={filters}
+        isFiltersOpened={isFiltersOpened}
       >
         <MultiColumnList
           id="receivings-list"
@@ -149,6 +158,8 @@ const ReceivingList = ({
           sortDirection={sortingDirection}
           onHeaderClick={changeSorting}
           isEmptyMessage={resultsStatusMessage}
+          hasMargin
+          pagingType="click"
         />
       </ResultsPane>
 

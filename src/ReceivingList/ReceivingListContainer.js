@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useEffect,
   useState,
 } from 'react';
@@ -106,18 +105,14 @@ const ReceivingListContainer = ({ mutator, location }) => {
     return loadRecordsPromise.finally(() => setIsLoading(false));
   };
 
-  const onNeedMoreData = useCallback(
-    () => {
-      const newOffset = titlesOffset + RESULT_COUNT_INCREMENT;
+  const onNeedMoreData = () => {
+    const newOffset = titlesOffset + RESULT_COUNT_INCREMENT;
 
-      loadTitles(newOffset)
-        .then(() => {
-          setTitlesOffset(newOffset);
-        });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titlesOffset],
-  );
+    loadTitles(newOffset)
+      .then(() => {
+        setTitlesOffset(newOffset);
+      });
+  };
 
   useEffect(
     () => {

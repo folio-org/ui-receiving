@@ -9,6 +9,7 @@
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.2...v1.0.3)
 
 ### Bug fixes
+* [UIORGS-151](https://issues.folio.org/browse/UIORGS-151) Organizations is not using the same Expand/Collapse as implemented in Q4 2019
 * [UIREC-78](https://issues.folio.org/browse/UIREC-78) Fill PO Line id on create Item request from Add Item modal
 
 ## [1.0.2](https://github.com/folio-org/ui-receiving/tree/v1.0.2) (2020-04-06)
