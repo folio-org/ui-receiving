@@ -21,9 +21,9 @@
       "location-units": "2.0",
       "locations": "3.0",
       "order-lines": "1.0",
-      "orders-storage.pieces": "3.2",
+      "orders-storage.pieces": "3.2 4.0",
       "orders": "10.0",
-      "pieces": "1.0",
+      "pieces": "1.0 2.0",
       "receiving": "1.0"
     },
     "queryResource": "query",
