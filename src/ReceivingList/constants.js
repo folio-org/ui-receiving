@@ -10,6 +10,8 @@ export const FILTERS = {
   ORDER_FORMAT: 'poLine.orderFormat',
   LOCATION: 'poLine.locations',
   MATERIAL_TYPE: 'materialType',
+  ACQUISITIONS_UNIT: 'purchaseOrder.acqUnitIds',
+  RECEIVING_STATUS: 'pieces.receivingStatus',
 };
 
 export const ORDER_FORMAT_MATERIAL_TYPE_MAP = {

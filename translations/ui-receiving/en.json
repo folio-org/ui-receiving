@@ -9,12 +9,14 @@
   "search.poLine.poLineNumber": "POL number",
   "search.barcode": "Barcode",
 
+  "filter.acqUnits": "Acquisition units",
   "filter.orderStatus": "Order status",
   "filter.vendor": "Vendor",
   "filter.orderType": "Order type",
   "filter.materialType": "Material type",
   "filter.orderFormat": "Order format",
   "filter.location": "Location",
+  "filter.receivingStatus": "Receiving status",
 
 
   "titles.search": "Search",
@@ -113,6 +115,8 @@
   "piece.receivingNoteModal.title": "Receiving note",
   "piece.request": "Request",
   "piece.request.isOpened": "Yes",
+  "piece.pieceStatus.expected": "Expected",
+  "piece.pieceStatus.received": "Received",
   "piece.supplement": "Supplement",
   "piece.title": "Title",
 

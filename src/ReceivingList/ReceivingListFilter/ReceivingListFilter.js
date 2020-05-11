@@ -8,6 +8,7 @@ import {
 import {
   AcqCheckboxFilter,
   AcqTagsFilter,
+  AcqUnitFilter,
   LocationFilterContainer,
   MaterialTypeFilterContainer,
   ORDER_FORMAT_OPTIONS,
@@ -16,15 +17,8 @@ import {
   PluggableOrganizationFilter,
 } from '@folio/stripes-acq-components';
 
-const FILTERS = {
-  ORDER_STATUS: 'purchaseOrder.workflowStatus',
-  ORDER_ORGANIZATION: 'purchaseOrder.vendor',
-  POL_TAGS: 'poLine.tags.tagList',
-  ORDER_TYPE: 'purchaseOrder.orderType',
-  ORDER_FORMAT: 'poLine.orderFormat',
-  LOCATION: 'poLine.locations',
-  MATERIAL_TYPE: 'materialType',
-};
+import { PIECE_STATUS_OPTIONS } from '../../common/constants';
+import { FILTERS } from '../constants';
 
 const applyFiltersAdapter = (applyFilters) => ({ name, values }) => applyFilters(name, values);
 
@@ -94,6 +88,22 @@ const ReceivingListFilter = ({
         activeFilter={activeFilters[FILTERS.LOCATION] && activeFilters[FILTERS.LOCATION][0]}
         labelId="ui-receiving.filter.location"
         name={FILTERS.LOCATION}
+        onChange={adaptedApplyFilters}
+      />
+
+      <AcqCheckboxFilter
+        activeFilters={activeFilters[FILTERS.RECEIVING_STATUS]}
+        labelId="ui-receiving.filter.receivingStatus"
+        name={FILTERS.RECEIVING_STATUS}
+        onChange={adaptedApplyFilters}
+        options={PIECE_STATUS_OPTIONS}
+      />
+
+      <AcqUnitFilter
+        id={FILTERS.ACQUISITIONS_UNIT}
+        activeFilters={activeFilters[FILTERS.ACQUISITIONS_UNIT]}
+        labelId="ui-receiving.filter.acqUnits"
+        name={FILTERS.ACQUISITIONS_UNIT}
         onChange={adaptedApplyFilters}
       />
     </AccordionSet>

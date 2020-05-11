@@ -16,6 +16,7 @@
     "route": "/receiving",
     "home": "/receiving",
     "okapiInterfaces": {
+      "acquisitions-units": "1.1",
       "circulation": "9.0",
       "inventory": "10.0",
       "location-units": "2.0",
@@ -52,6 +53,8 @@
         "displayName": "Receiving: Permissions required to call services",
         "visible": false,
         "subPermissions": [
+          "acquisitions-units.memberships.collection.get",
+          "acquisitions-units.units.collection.get",
           "circulation.requests.collection.get",
           "configuration.entries.collection.get",
           "inventory-storage.contributor-name-types.collection.get",

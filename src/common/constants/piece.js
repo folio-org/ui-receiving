@@ -22,3 +22,8 @@ export const PIECE_FORMAT_OPTIONS = [
   { labelId: 'ui-receiving.piece.pieceFormat.electronic', value: PIECE_FORMAT.electronic },
   { labelId: 'ui-receiving.piece.pieceFormat.physical', value: PIECE_FORMAT.physical },
 ];
+
+export const PIECE_STATUS_OPTIONS = Object.keys(PIECE_STATUS).map(status => ({
+  value: PIECE_STATUS[status],
+  label: <FormattedMessage id={`ui-receiving.piece.pieceStatus.${status}`} />,
+}));
