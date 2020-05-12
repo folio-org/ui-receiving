@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 ### Stories
+* [UIREC-80](https://issues.folio.org/browse/UIREC-80) Receiving app: Update to Stripes v4
 * [UIREC-47](https://issues.folio.org/browse/UIREC-47) Create/lookup instance from receiving Title when not using instance lookup
 * [UIREC-42](https://issues.folio.org/browse/UIREC-42) Filter Titles by piece status and Acq unit
 * [UIREC-70](https://issues.folio.org/browse/UIREC-70) Display receiving note in multi-piece receiving view
