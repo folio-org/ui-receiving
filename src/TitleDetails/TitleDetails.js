@@ -73,7 +73,8 @@ const TitleDetails = ({
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
   const { orderFormat, id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
-  const initialValuesPiece = { receiptDate, poLineId, ...pieceValues };
+  const titleId = title.id;
+  const initialValuesPiece = { receiptDate, poLineId, titleId, ...pieceValues };
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
 
   let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
@@ -99,11 +100,11 @@ const TitleDetails = ({
   const goToReceiveList = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/receive/${title.id}`,
+        pathname: `/receiving/receive/${titleId}`,
         search: location.search,
       });
     },
-    [title.id, history, location.search],
+    [titleId, history, location.search],
   );
 
   const openReceiveList = useCallback(
@@ -143,21 +144,21 @@ const TitleDetails = ({
         hasReceive={hasReceive}
         openAddPieceModal={openAddPieceModal}
         openReceiveList={openReceiveList}
-        titleId={title.id}
+        titleId={titleId}
       />
     ),
-    [title.id, checkinItems, openAddPieceModal, hasReceive, openReceiveList],
+    [titleId, checkinItems, openAddPieceModal, hasReceive, openReceiveList],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
   const receivedPiecesActions = useMemo(
     () => (
       <TitleDetailsReceivedActions
-        titleId={title.id}
+        titleId={titleId}
         hasUnreceive={hasUnreceive}
       />
     ),
-    [title.id, hasUnreceive],
+    [titleId, hasUnreceive],
   );
 
   const onEditPiece = useCallback(

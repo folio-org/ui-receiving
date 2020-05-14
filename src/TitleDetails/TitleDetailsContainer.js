@@ -120,7 +120,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
       const piece = getDehydratedPiece(values);
 
-      mutator.orderPieces[mutatorMethod]({ ...piece, titleId })
+      mutator.orderPieces[mutatorMethod](piece)
         .then(() => showCallout({
           messageId: `ui-receiving.piece.actions.${actionType}.success`,
           type: 'success',
@@ -136,15 +136,15 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, titleId],
+    [fetchReceivingResources],
   );
 
   const onCheckIn = useCallback(
     (values) => {
       const dehydratedPiece = getDehydratedPiece(values);
       const savePromise = values.id
-        ? Promise.resolve({ ...dehydratedPiece, titleId })
-        : mutator.orderPieces.POST({ ...dehydratedPiece, titleId });
+        ? Promise.resolve(dehydratedPiece)
+        : mutator.orderPieces.POST(dehydratedPiece);
 
       return savePromise
         .then(piece => {
@@ -174,7 +174,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, titleId],
+    [fetchReceivingResources],
   );
 
   if (isLoading || !pieces) {
