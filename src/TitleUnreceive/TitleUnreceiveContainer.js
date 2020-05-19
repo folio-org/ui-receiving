@@ -6,19 +6,19 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   batchFetch,
+  itemsResource,
+  PIECE_STATUS,
+  piecesResource,
+  requestsResource,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import {
-  PIECE_STATUS,
   PO_LINES_API,
 } from '../common/constants';
 import {
   receivingResource,
-  itemsResource,
   locationsResource,
-  pieceResource,
-  requestsResource,
   titleResource,
 } from '../common/resources';
 import {
@@ -138,7 +138,7 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     accumulate: true,
     fetch: false,
   },
-  pieces: pieceResource,
+  pieces: piecesResource,
   poLine: {
     ...baseManifest,
     accumulate: true,

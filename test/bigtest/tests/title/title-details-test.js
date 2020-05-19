@@ -4,9 +4,9 @@ import { expect } from 'chai';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
+  PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_FORMAT } from '../../../../src/common/constants';
 import setupApplication from '../../helpers/setup-application';
 import {
   TitleDetailsInteractor,

@@ -25,14 +25,12 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
+  PIECE_FORMAT_OPTIONS,
+  PIECE_STATUS,
   useAccordionToggle,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import {
-  PIECE_FORMAT_OPTIONS,
-  PIECE_STATUS,
-} from '../common/constants';
 import TitleInformation from './TitleInformation';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';

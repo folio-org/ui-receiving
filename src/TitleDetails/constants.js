@@ -1,9 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ORDER_FORMATS } from '@folio/stripes-acq-components';
-
-import { PIECE_FORMAT } from '../common/constants';
+import {
+  ORDER_FORMATS,
+  PIECE_FORMAT,
+} from '@folio/stripes-acq-components';
 
 export const TITLE_ACCORDION = {
   information: 'information',

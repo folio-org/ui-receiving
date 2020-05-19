@@ -8,13 +8,13 @@ import {
   configMaterialTypes,
   configLines,
   configOrders,
+  configPieces,
+  configItems,
+  configRequests,
 } from '@folio/stripes-acq-components/test/bigtest/network';
 
 import {
   configTitles,
-  configItems,
-  configPieces,
-  configRequests,
   configTitleReceive,
 } from './configs';
 

@@ -5,18 +5,18 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  itemsResource,
+  PIECE_STATUS,
+  piecesResource,
+  requestsResource,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import {
-  PIECE_STATUS,
   PO_LINES_API,
 } from '../common/constants';
 import {
   checkInResource,
-  itemsResource,
-  pieceResource,
-  requestsResource,
   titleResource,
 } from '../common/resources';
 import {
@@ -142,7 +142,7 @@ TitleReceiveContainer.manifest = Object.freeze({
     accumulate: true,
     fetch: false,
   },
-  pieces: pieceResource,
+  pieces: piecesResource,
   poLine: {
     ...baseManifest,
     accumulate: true,

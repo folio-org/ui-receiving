@@ -35,7 +35,7 @@ describe('Given Received Pieces List', () => {
 
     // piece item is rendered
     expect(getByText(pieces[0].caption)).toBeDefined();
-    expect(getByText('ui-receiving.piece.pieceFormat.electronic')).toBeDefined();
+    expect(getByText('stripes-acq-components.piece.pieceFormat.electronic')).toBeDefined();
     expect(getByText(pieces[0].receivedDate)).toBeDefined();
   });
 });

@@ -12,9 +12,8 @@ import {
 import {
   FieldLocationFinal,
   getItemStatusLabel,
+  PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
-
-import { PIECE_FORMAT_LABELS } from '../common/constants';
 
 const visibleColumns = [
   'checked',

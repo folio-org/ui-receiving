@@ -7,7 +7,11 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   ITEM_STATUS,
+  itemsResource,
   LoadingPane,
+  pieceResource,
+  piecesResource,
+  requestsResource,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -17,12 +21,8 @@ import {
 } from '../common/constants';
 import {
   checkInResource,
-  orderPiecesResource,
-  pieceResource,
   receivingResource,
   titleResource,
-  itemsResource,
-  requestsResource,
 } from '../common/resources';
 import {
   checkInItems,
@@ -211,8 +211,8 @@ TitleDetailsContainer.manifest = Object.freeze({
     accumulate: true,
     fetch: false,
   },
-  orderPieces: orderPiecesResource,
-  pieces: pieceResource,
+  orderPieces: pieceResource,
+  pieces: piecesResource,
   checkIn: checkInResource,
   receive: receivingResource,
   items: itemsResource,

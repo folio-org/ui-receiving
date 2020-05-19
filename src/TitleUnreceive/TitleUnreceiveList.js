@@ -9,7 +9,7 @@ import {
   TextArea,
 } from '@folio/stripes/components';
 
-import { PIECE_FORMAT_LABELS } from '../common/constants';
+import { PIECE_FORMAT_LABELS } from '@folio/stripes-acq-components';
 
 const visibleColumns = [
   'checked',

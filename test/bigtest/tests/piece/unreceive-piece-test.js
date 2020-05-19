@@ -1,14 +1,14 @@
 import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
-import { ORDER_FORMATS } from '@folio/stripes-acq-components';
+import {
+  ORDER_FORMATS,
+  PIECE_FORMAT,
+  PIECE_STATUS,
+} from '@folio/stripes-acq-components';
 
 import setupApplication from '../../helpers/setup-application';
 import { TitleDetailsInteractor } from '../../interactors';
-import {
-  PIECE_FORMAT,
-  PIECE_STATUS,
-} from '../../../../src/common/constants';
 
 describe('Unreceive piece', () => {
   const titleDetails = new TitleDetailsInteractor();

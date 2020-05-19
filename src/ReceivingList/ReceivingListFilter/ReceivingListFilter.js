@@ -14,10 +14,10 @@ import {
   ORDER_FORMAT_OPTIONS,
   ORDER_STATUS_OPTIONS,
   ORDER_TYPE_OPTIONS,
+  PIECE_STATUS_OPTIONS,
   PluggableOrganizationFilter,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_STATUS_OPTIONS } from '../../common/constants';
 import { FILTERS } from '../constants';
 
 const applyFiltersAdapter = (applyFilters) => ({ name, values }) => applyFilters(name, values);

@@ -4,29 +4,8 @@ import {
 
 import {
   CHECKIN_API,
-  ORDER_PIECES_API,
-  PIECES_API,
   RECEIVE_API,
-  ITEMS_API,
-  REQUESTS_API,
 } from '../constants';
-
-export const pieceResource = {
-  ...baseManifest,
-  accumulate: true,
-  clientGeneratePk: false,
-  fetch: false,
-  path: PIECES_API,
-  records: 'pieces',
-};
-
-export const orderPiecesResource = {
-  ...baseManifest,
-  accumulate: true,
-  clientGeneratePk: false,
-  path: ORDER_PIECES_API,
-  records: 'checkInItems',
-};
 
 export const checkInResource = {
   ...baseManifest,
@@ -41,20 +20,4 @@ export const receivingResource = {
   clientGeneratePk: false,
   fetch: false,
   path: RECEIVE_API,
-};
-
-export const itemsResource = {
-  ...baseManifest,
-  fetch: false,
-  accumulate: true,
-  path: ITEMS_API,
-  records: 'items',
-};
-
-export const requestsResource = {
-  ...baseManifest,
-  fetch: false,
-  accumulate: true,
-  path: REQUESTS_API,
-  records: 'requests',
 };

@@ -10,9 +10,9 @@ import {
 import {
   acqRowFormatter,
   FolioFormattedDate,
+  PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_FORMAT_LABELS } from '../../common/constants';
 import styles from './PiecesList.css';
 
 const columnMapping = {
