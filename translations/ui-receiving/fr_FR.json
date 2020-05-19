@@ -112,11 +112,11 @@
     "requests.message.barcode": "Code-barres ( {barcode} )",
     "requests.message.itemId": "Élément ( {itemId} )",
     "requests.footer.close": "Fermer",
-    "title.closedOrderMessage": "Purchase order is closed - {reason}",
+    "title.closedOrderMessage": "Le bon de commande est clôturé - {reason}",
     "title.polDetails": "POL details",
     "piece.actions.quickReceive": "Quick receive",
-    "filter.acqUnits": "Acquisition units",
-    "filter.receivingStatus": "Receiving status",
-    "piece.pieceStatus.expected": "Expected",
-    "piece.pieceStatus.received": "Received"
+    "filter.acqUnits": "Unités d'acquisition",
+    "filter.receivingStatus": "Statut de réception",
+    "piece.pieceStatus.expected": "Attendu",
+    "piece.pieceStatus.received": "Reçu(e)"
 }
