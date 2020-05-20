@@ -227,7 +227,7 @@ const TitleForm = ({
                         searchLabel={<FormattedMessage id="ui-receiving.title.lineLookUp" />}
                         type="find-po-line"
                       >
-                        <FormattedMessage id="ui-invoice.find-po-line-plugin-unavailable" />
+                        <FormattedMessage id="ui-receiving.find-po-line-plugin-unavailable" />
                       </Pluggable>
                     </Col>
                     <Col xs={3}>

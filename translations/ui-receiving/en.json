@@ -115,6 +115,8 @@
   "piece.supplement": "Supplement",
   "piece.title": "Title",
 
+  "find-po-line-plugin-unavailable": "Find PO line plugin is not available",
+
   "requests.title.single": "An item has an open request",
   "requests.title.multiple": "Multiple items have open requests",
   "requests.message.single": "The following item has an open request",
