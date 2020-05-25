@@ -6,11 +6,11 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   contributorNameTypesManifest,
   identifierTypesManifest,
+  handleErrorResponse,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import { titlesResource } from '../common/resources';
-import { handleSaveTitleErrorResponse } from '../common/utils';
 import TitleForm from './TitleForm';
 
 function TitleFormContainer({ history, location, match, mutator }) {
@@ -54,7 +54,7 @@ function TitleFormContainer({ history, location, match, mutator }) {
           }));
         })
         .catch(async (response) => {
-          const errorCode = await handleSaveTitleErrorResponse(response);
+          const errorCode = await handleErrorResponse(response);
 
           showCallout({
             messageId: `ui-receiving.title.actions.save.error.${errorCode}`,

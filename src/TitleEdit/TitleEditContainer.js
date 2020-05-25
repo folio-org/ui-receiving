@@ -7,12 +7,12 @@ import {
   baseManifest,
   contributorNameTypesManifest,
   identifierTypesManifest,
+  handleErrorResponse,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import { PO_LINES_API } from '../common/constants';
 import { titleResource } from '../common/resources';
-import { handleSaveTitleErrorResponse } from '../common/utils';
 import TitleForm from '../TitleForm/TitleForm';
 
 function TitleEditContainer({ history, location, match, mutator }) {
@@ -71,7 +71,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
           setTimeout(onCancel);
         })
         .catch(async (response) => {
-          const errorCode = await handleSaveTitleErrorResponse(response);
+          const errorCode = await handleErrorResponse(response);
 
           showCallout({
             messageId: `ui-receiving.title.actions.save.error.${errorCode}`,
