@@ -64,7 +64,7 @@ const TitleForm = ({
 
   const addInstance = form.mutators.setTitleValue;
   const addLines = form.mutators.setPOLine;
-  const { details, physical, isPackage } = get(values, 'poLine', {});
+  const { details, physical } = get(values, 'poLine', {});
 
   return (
     <form>
@@ -107,7 +107,6 @@ const TitleForm = ({
                     >
                       <Field
                         component={TextField}
-                        disabled={!isPackage}
                         label={<FormattedMessage id="ui-receiving.titles.title" />}
                         name="title"
                         required

@@ -10,6 +10,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titlesResource } from '../common/resources';
+import { handleSaveTitleErrorResponse } from '../common/utils';
 import TitleForm from './TitleForm';
 
 function TitleFormContainer({ history, location, match, mutator }) {
@@ -52,14 +53,18 @@ function TitleFormContainer({ history, location, match, mutator }) {
             search: location.search,
           }));
         })
-        .catch(() => showCallout({
-          messageId: 'ui-receiving.title.actions.save.error',
-          type: 'error',
-          values: {
-            title: newTitle.title,
-            poLineNumber: poLine.poLineNumber,
-          },
-        }));
+        .catch(async (response) => {
+          const errorCode = await handleSaveTitleErrorResponse(response);
+
+          showCallout({
+            messageId: `ui-receiving.title.actions.save.error.${errorCode}`,
+            type: 'error',
+            values: {
+              title: newTitle.title,
+              poLineNumber: poLine.poLineNumber,
+            },
+          });
+        });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [history, showCallout, titleId, location.search],

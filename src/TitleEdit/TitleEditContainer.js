@@ -12,6 +12,7 @@ import {
 
 import { PO_LINES_API } from '../common/constants';
 import { titleResource } from '../common/resources';
+import { handleSaveTitleErrorResponse } from '../common/utils';
 import TitleForm from '../TitleForm/TitleForm';
 
 function TitleEditContainer({ history, location, match, mutator }) {
@@ -69,14 +70,18 @@ function TitleEditContainer({ history, location, match, mutator }) {
           });
           setTimeout(onCancel);
         })
-        .catch(() => showCallout({
-          messageId: 'ui-receiving.title.actions.save.error',
-          type: 'error',
-          values: {
-            title: newTitle.title,
-            poLineNumber: line.poLineNumber,
-          },
-        }));
+        .catch(async (response) => {
+          const errorCode = await handleSaveTitleErrorResponse(response);
+
+          showCallout({
+            messageId: `ui-receiving.title.actions.save.error.${errorCode}`,
+            type: 'error',
+            values: {
+              title: newTitle.title,
+              poLineNumber: line.poLineNumber,
+            },
+          });
+        });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [onCancel, titleId],
