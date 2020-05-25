@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   contributorNameTypesManifest,
+  ERROR_CODE_GENERIC,
+  getErrorCodeFromResponse,
   identifierTypesManifest,
-  handleErrorResponse,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -22,6 +27,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
   const [poLine, setPoLine] = useState();
   const [identifierTypes, setIdentifierTypes] = useState();
   const [contributorNameTypes, setContributorNameTypes] = useState();
+  const intl = useIntl();
 
   useEffect(() => {
     mutator.identifierTypes.GET()
@@ -71,20 +77,27 @@ function TitleEditContainer({ history, location, match, mutator }) {
           setTimeout(onCancel);
         })
         .catch(async (response) => {
-          const errorCode = await handleErrorResponse(response);
+          const errorCode = await getErrorCodeFromResponse(response);
+          const values = {
+            title: <b>{newTitle.title}</b>,
+            poLineNumber: <b>{line.poLineNumber}</b>,
+          };
+          const message = (
+            <FormattedMessage
+              id={`ui-receiving.title.actions.save.error.${errorCode}`}
+              defaultMessage={intl.formatMessage({ id: `ui-receiving.title.actions.save.error.${ERROR_CODE_GENERIC}` }, values)}
+              values={values}
+            />
+          );
 
           showCallout({
-            messageId: `ui-receiving.title.actions.save.error.${errorCode}`,
+            message,
             type: 'error',
-            values: {
-              title: newTitle.title,
-              poLineNumber: line.poLineNumber,
-            },
           });
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onCancel, titleId],
+    [onCancel, titleId, intl],
   );
 
   if (!(title && poLine && identifierTypes && contributorNameTypes)) {

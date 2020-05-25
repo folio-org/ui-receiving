@@ -1,12 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
   contributorNameTypesManifest,
+  ERROR_CODE_GENERIC,
+  getErrorCodeFromResponse,
   identifierTypesManifest,
-  handleErrorResponse,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -18,6 +23,7 @@ function TitleFormContainer({ history, location, match, mutator }) {
   const [identifierTypes, setIdentifierTypes] = useState();
   const [contributorNameTypes, setContributorNameTypes] = useState();
   const showCallout = useShowCallout();
+  const intl = useIntl();
 
   useEffect(() => {
     mutator.identifierTypes.GET()
@@ -54,20 +60,27 @@ function TitleFormContainer({ history, location, match, mutator }) {
           }));
         })
         .catch(async (response) => {
-          const errorCode = await handleErrorResponse(response);
+          const errorCode = await getErrorCodeFromResponse(response);
+          const values = {
+            title: <b>{newTitle.title}</b>,
+            poLineNumber: <b>{poLine.poLineNumber}</b>,
+          };
+          const message = (
+            <FormattedMessage
+              id={`ui-receiving.title.actions.save.error.${errorCode}`}
+              defaultMessage={intl.formatMessage({ id: `ui-receiving.title.actions.save.error.${ERROR_CODE_GENERIC}` }, values)}
+              values={values}
+            />
+          );
 
           showCallout({
-            messageId: `ui-receiving.title.actions.save.error.${errorCode}`,
+            message,
             type: 'error',
-            values: {
-              title: newTitle.title,
-              poLineNumber: poLine.poLineNumber,
-            },
           });
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [history, showCallout, titleId, location.search],
+    [history, showCallout, titleId, location.search, intl],
   );
 
   if (!identifierTypes || !contributorNameTypes) {
