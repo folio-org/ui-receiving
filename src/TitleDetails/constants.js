@@ -25,3 +25,10 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
   [ORDER_FORMATS.physicalResource]: PIECE_FORMAT.physical,
   [ORDER_FORMATS.other]: PIECE_FORMAT.other,
 };
+
+export const INVENTORY_RECORDS_TYPE = {
+  all: 'Instance, Holding, Item',
+  instance: 'Instance',
+  instanceAndHolding: 'Instance, Holding',
+  none: 'None',
+};
