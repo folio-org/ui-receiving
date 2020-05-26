@@ -61,7 +61,6 @@ const formatter = {
 };
 
 const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
-  const onRowClick = useCallback((e, piece) => selectPiece && selectPiece(piece), [selectPiece]);
   const hasRowClick = Boolean(selectPiece);
   const rowProps = useMemo(() => ({ alignLastColToEnd: hasRowClick }), [hasRowClick]);
 
@@ -75,7 +74,7 @@ const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
       rowFormatter={acqRowFormatter}
       rowProps={rowProps}
       visibleColumns={visibleColumns}
-      onRowClick={selectPiece ? onRowClick : undefined}
+      onRowClick={selectPiece}
     />
   );
 };

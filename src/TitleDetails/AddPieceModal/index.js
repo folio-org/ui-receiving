@@ -1,1 +1,1 @@
-export { default } from './AddPieceModal';
+export { default } from './AddPieceModalContainer';

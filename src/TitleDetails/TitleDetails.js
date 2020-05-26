@@ -25,7 +25,6 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
-  PIECE_FORMAT_OPTIONS,
   PIECE_STATUS,
   useAccordionToggle,
   useModalToggle,
@@ -46,6 +45,17 @@ import {
 } from './TitleDetailsActions';
 import Title from './Title';
 import POLDetails from './POLDetails';
+
+function getNewPieceValues(titleId, poLine) {
+  const { orderFormat, id: poLineId, receiptDate } = poLine;
+  const initialValuesPiece = { receiptDate, poLineId, titleId };
+
+  if (orderFormat !== ORDER_FORMATS.PEMix) {
+    initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
+  }
+
+  return initialValuesPiece;
+}
 
 const TitleDetails = ({
   history,
@@ -70,20 +80,13 @@ const TitleDetails = ({
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
-  const { orderFormat, id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
+  const { id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
   const titleId = title.id;
-  const initialValuesPiece = { receiptDate, poLineId, titleId, ...pieceValues };
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
 
-  let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
-
-  if (orderFormat !== ORDER_FORMATS.PEMix) {
-    initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
-    pieceFormatOptions = PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValuesPiece.format);
-  }
-
   const openAddPieceModal = useCallback(
-    () => {
+    (e, piece) => {
+      setPieceValues(piece || getNewPieceValues(title.id, poLine));
       setConfirmAcknowledgeNote(() => toggleAddPieceModal);
 
       return (
@@ -92,7 +95,7 @@ const TitleDetails = ({
           : toggleAddPieceModal()
       );
     },
-    [title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModal],
+    [poLine, title.id, title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModal],
   );
 
   const goToReceiveList = useCallback(
@@ -116,14 +119,6 @@ const TitleDetails = ({
       );
     },
     [title.isAcknowledged, toggleAcknowledgeNote, goToReceiveList],
-  );
-
-  const getCreateInventoryValues = useCallback(
-    () => ({
-      'Physical': get(poLine, 'physical.createInventory'),
-      'Electronic': get(poLine, 'eresource.createInventory'),
-    }),
-    [poLine],
   );
 
   const onSave = useCallback(
@@ -157,14 +152,6 @@ const TitleDetails = ({
       />
     ),
     [titleId, hasUnreceive],
-  );
-
-  const onEditPiece = useCallback(
-    (piece) => {
-      setPieceValues(piece);
-      openAddPieceModal();
-    },
-    [openAddPieceModal, setPieceValues],
   );
 
   const lastMenu = (
@@ -258,7 +245,7 @@ const TitleDetails = ({
           label={TITLE_ACCORDION_LABELS.expected}
         >
           <ExpectedPiecesList
-            selectPiece={onEditPiece}
+            selectPiece={openAddPieceModal}
             pieces={expectedPieces}
           />
         </Accordion>
@@ -293,13 +280,11 @@ const TitleDetails = ({
       {isAddPieceModalOpened && (
         <AddPieceModal
           close={toggleAddPieceModal}
-          createInventoryValues={getCreateInventoryValues()}
-          initialValues={initialValuesPiece}
+          initialValues={pieceValues}
           instanceId={title.instanceId}
           onCheckIn={onCheckIn}
           onSubmit={onSave}
-          pieceFormatOptions={pieceFormatOptions}
-          purchaseOrderLineIdentifier={poLineId}
+          poLine={poLine}
         />
       )}
     </Pane>
