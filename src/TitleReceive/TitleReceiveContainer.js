@@ -5,6 +5,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  LIMIT_MAX,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -60,6 +61,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
       if (poLineId) {
         mutator.pieces.GET({
           params: {
+            limit: `${LIMIT_MAX}`,
             query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.expected} sortby locationId`,
           },
         })
