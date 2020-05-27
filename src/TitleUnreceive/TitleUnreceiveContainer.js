@@ -7,6 +7,7 @@ import {
   baseManifest,
   batchFetch,
   itemsResource,
+  LIMIT_MAX,
   PIECE_STATUS,
   piecesResource,
   requestsResource,
@@ -62,6 +63,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
       if (poLineId) {
         mutator.pieces.GET({
           params: {
+            limit: `${LIMIT_MAX}`,
             query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.received} sortby locationId`,
           },
         })
