@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
@@ -7,6 +7,7 @@ import {
   baseManifest,
   itemsResource,
   PIECE_STATUS,
+  pieceResource,
   piecesResource,
   requestsResource,
   useShowCallout,
@@ -17,10 +18,11 @@ import {
 } from '../common/constants';
 import {
   checkInResource,
+  holdingsResource,
   titleResource,
 } from '../common/resources';
 import {
-  checkInItems,
+  checkIn,
   getHydratedPieces,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
@@ -91,7 +93,14 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
     ({ receivedItems }) => {
-      return checkInItems(receivedItems, mutator.receive)
+      return checkIn(
+        receivedItems.filter(({ checked }) => checked === true),
+        mutator.piece,
+        mutator.receive,
+        mutator.holdings,
+        mutator.items,
+        title.instanceId,
+      )
         .then(() => {
           showCallout({
             messageId: 'ui-receiving.title.actions.receive.success',
@@ -113,6 +122,14 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     [onCancel, poLine],
   );
 
+  const createInventoryValues = useMemo(
+    () => ({
+      'Physical': poLine?.physical?.createInventory,
+      'Electronic': poLine?.eresource?.createInventory,
+    }),
+    [poLine],
+  );
+
   if (!(pieces && poLine && title)) return null;
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
@@ -120,7 +137,9 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   return (
     <>
       <TitleReceive
+        createInventoryValues={createInventoryValues}
         initialValues={initialValues}
+        instanceId={title.instanceId}
         onCancel={onCancel}
         onSubmit={onSubmit}
         paneTitle={paneTitle}
@@ -151,6 +170,8 @@ TitleReceiveContainer.manifest = Object.freeze({
   items: itemsResource,
   requests: requestsResource,
   receive: checkInResource,
+  holdings: holdingsResource,
+  piece: pieceResource,
 });
 
 TitleReceiveContainer.propTypes = {

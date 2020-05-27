@@ -40,7 +40,6 @@ const AddPieceModalContainer = ({
       onCheckIn={onCheckIn}
       onSubmit={onSubmit}
       pieceFormatOptions={pieceFormatOptions}
-      purchaseOrderLineIdentifier={poLine.id}
     />
   );
 };

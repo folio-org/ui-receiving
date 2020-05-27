@@ -15,6 +15,8 @@ import {
   PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
 
+import { CreateItemField } from '../common/components';
+
 const visibleColumns = [
   'checked',
   'caption',
@@ -25,9 +27,13 @@ const visibleColumns = [
   'location',
   'itemStatus',
   'callNumber',
+  'isCreateItem',
 ];
 
-export const TitleReceiveList = ({ fields, props: { selectLocation, toggleCheckedAll } }) => {
+export const TitleReceiveList = ({
+  fields,
+  props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll },
+}) => {
   const field = fields.name;
   const cellFormatters = useMemo(
     () => {
@@ -85,6 +91,13 @@ export const TitleReceiveList = ({ fields, props: { selectLocation, toggleChecke
             : '-'
         ),
         format: ({ format }) => PIECE_FORMAT_LABELS[format],
+        isCreateItem: piece => (
+          <CreateItemField
+            createInventoryValues={createInventoryValues}
+            instanceId={instanceId}
+            piece={piece}
+          />
+        ),
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,6 +129,7 @@ export const TitleReceiveList = ({ fields, props: { selectLocation, toggleChecke
       location: <FormattedMessage id="ui-receiving.piece.location" />,
       itemStatus: <FormattedMessage id="ui-receiving.piece.itemStatus" />,
       callNumber: <FormattedMessage id="ui-receiving.piece.callNumber" />,
+      isCreateItem: <FormattedMessage id="ui-receiving.piece.createItem" />,
     }),
     [isAllChecked, toggleAll],
   );
@@ -136,6 +150,8 @@ export const TitleReceiveList = ({ fields, props: { selectLocation, toggleChecke
 TitleReceiveList.propTypes = {
   fields: PropTypes.object.isRequired,
   props: PropTypes.shape({
+    createInventoryValues: PropTypes.object.isRequired,
+    instanceId: PropTypes.string.isRequired,
     selectLocation: PropTypes.func.isRequired,
     toggleCheckedAll: PropTypes.func.isRequired,
   }).isRequired,

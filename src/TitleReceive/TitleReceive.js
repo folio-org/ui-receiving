@@ -18,8 +18,10 @@ import { TitleReceiveList } from './TitleReceiveList';
 const FIELD_NAME = 'receivedItems';
 
 const TitleReceive = ({
+  createInventoryValues,
   form,
   handleSubmit,
+  instanceId,
   onCancel,
   paneTitle,
   pristine,
@@ -59,6 +61,8 @@ const TitleReceive = ({
             id="receivedItems"
             name={FIELD_NAME}
             props={{
+              createInventoryValues,
+              instanceId,
               selectLocation: form.mutators.setLocationValue,
               toggleCheckedAll: form.mutators.toggleCheckedAll,
             }}
@@ -70,8 +74,10 @@ const TitleReceive = ({
 };
 
 TitleReceive.propTypes = {
+  createInventoryValues: PropTypes.object.isRequired,
   form: PropTypes.object,  // form object to get initialValues
   handleSubmit: PropTypes.func.isRequired,
+  instanceId: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,

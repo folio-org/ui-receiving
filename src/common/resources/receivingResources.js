@@ -4,6 +4,7 @@ import {
 
 import {
   CHECKIN_API,
+  HOLDINGS_API,
   RECEIVE_API,
 } from '../constants';
 
@@ -20,4 +21,12 @@ export const receivingResource = {
   clientGeneratePk: false,
   fetch: false,
   path: RECEIVE_API,
+};
+
+export const holdingsResource = {
+  ...baseManifest,
+  accumulate: true,
+  clientGeneratePk: false,
+  path: HOLDINGS_API,
+  records: 'holdingsRecords',
 };

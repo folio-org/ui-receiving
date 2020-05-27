@@ -7,7 +7,6 @@ import {
   includes,
 } from 'lodash';
 
-import { Pluggable } from '@folio/stripes/core';
 import {
   Button,
   Checkbox,
@@ -22,12 +21,11 @@ import {
   FieldDatepickerFinal,
   FieldLocationFinal,
   FieldSelectFinal,
+  INVENTORY_RECORDS_TYPE,
   ModalFooter,
 } from '@folio/stripes-acq-components';
 
-import {
-  INVENTORY_RECORDS_TYPE,
-} from '../constants';
+import { CreateItemField } from '../../common/components';
 
 const AddPieceModal = ({
   close,
@@ -37,21 +35,10 @@ const AddPieceModal = ({
   instanceId,
   onCheckIn,
   pieceFormatOptions,
-  purchaseOrderLineIdentifier,
+  values: formValues,
 }) => {
-  const addItem = form.mutators.setItemValue;
-  const formValues = get(form.getState(), 'values', {});
-  const { format, id, itemId, locationId } = formValues;
+  const { format, id, locationId } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
-  const isAddItemRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
-  let isAddItemButtonDisabled = true;
-  const itemToSave = {
-    purchaseOrderLineIdentifier,
-  };
-
-  if (!itemId && locationId && isAddItemRequired) {
-    isAddItemButtonDisabled = false;
-  }
 
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
 
@@ -71,20 +58,6 @@ const AddPieceModal = ({
   );
   const end = (
     <>
-      <Pluggable
-        addItem={addItem}
-        aria-haspopup="true"
-        disabled={isAddItemButtonDisabled}
-        instanceId={instanceId}
-        itemToSave={itemToSave}
-        locationId={locationId}
-        marginBottom0
-        searchButtonStyle="default"
-        searchLabel={<FormattedMessage id="ui-receiving.piece.actions.addItem" />}
-        type="create-item"
-      >
-        <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
-      </Pluggable>
       <Button
         data-test-add-piece-check-in
         marginBottom0
@@ -155,13 +128,21 @@ const AddPieceModal = ({
           </Col>
         </Row>
         <Row>
-          <Col xs>
+          <Col xs={6}>
             <FieldLocationFinal
               locationId={locationId}
               onChange={form.mutators.setLocationValue}
               labelId="ui-receiving.piece.location"
               name="locationId"
               required={isLocationRequired}
+            />
+          </Col>
+          <Col xs>
+            <CreateItemField
+              createInventoryValues={createInventoryValues}
+              instanceId={instanceId}
+              label={<FormattedMessage id="ui-receiving.piece.createItem" />}
+              piece={formValues}
             />
           </Col>
           <Col xs>
@@ -185,13 +166,13 @@ AddPieceModal.propTypes = {
   createInventoryValues: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   form: PropTypes.object,
+  values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   onCheckIn: PropTypes.func.isRequired,
   pieceFormatOptions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
   })),
-  purchaseOrderLineIdentifier: PropTypes.string.isRequired,
 };
 
 AddPieceModal.defaultProps = {
@@ -202,11 +183,6 @@ export default stripesFinalForm({
   navigationCheck: true,
   subscription: { values: true },
   mutators: {
-    setItemValue: (args, state, tools) => {
-      const { id } = get(args, '0', {});
-
-      tools.changeValue(state, 'itemId', () => id);
-    },
     setLocationValue: (args, state, tools) => {
       const { id } = get(args, '0', {});
 

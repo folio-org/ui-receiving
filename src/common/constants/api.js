@@ -5,3 +5,4 @@ export const LOCATIONS_API = 'locations';
 export const CHECKIN_API = 'orders/check-in';
 export const RECEIVE_API = 'orders/receive';
 export const ORDERS_API = 'orders/composite-orders';
+export const HOLDINGS_API = 'holdings-storage/holdings';

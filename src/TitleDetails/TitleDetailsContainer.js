@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
-  ITEM_STATUS,
   itemsResource,
   LoadingPane,
   pieceResource,
@@ -21,13 +20,13 @@ import {
 } from '../common/constants';
 import {
   checkInResource,
-  receivingResource,
+  holdingsResource,
   titleResource,
 } from '../common/resources';
 import {
-  checkInItems,
-  getDehydratedPiece,
   getHydratedPieces,
+  quickReceive,
+  savePiece,
 } from '../common/utils';
 import TitleDetails from './TitleDetails';
 
@@ -56,7 +55,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [poLine.id],
+    [],
   );
 
   useEffect(
@@ -92,7 +91,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titleId],
+    [fetchReceivingResources, showCallout, titleId],
   );
 
   const onClose = useCallback(
@@ -115,39 +114,37 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   const onAddPiece = useCallback(
     (values) => {
-      const mutatorMethod = values.id ? 'PUT' : 'POST';
       const actionType = values.id ? 'updatePiece' : 'addPiece';
 
-      const piece = getDehydratedPiece(values);
-
-      mutator.orderPieces[mutatorMethod](piece)
+      return savePiece(mutator.orderPieces, mutator.holdings, mutator.items, values, title.instanceId)
         .then(() => showCallout({
           messageId: `ui-receiving.piece.actions.${actionType}.success`,
           type: 'success',
-          values: { caption: piece.caption },
-        }))
-        .catch(() => {
+          values: { caption: values.caption },
+        }), () => {
           showCallout({
             messageId: `ui-receiving.piece.actions.${actionType}.error`,
             type: 'error',
-            values: { caption: piece.caption },
+            values: { caption: values.caption },
           });
         })
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources],
+    [fetchReceivingResources, poLine.id, showCallout, title.instanceId],
   );
 
   const onCheckIn = useCallback(
     (values) => {
-      const dehydratedPiece = getDehydratedPiece(values);
-      const savePromise = values.id
-        ? Promise.resolve(dehydratedPiece)
-        : mutator.orderPieces.POST(dehydratedPiece);
-
-      return savePromise
-        .then(piece => {
+      return quickReceive(
+        mutator.checkIn,
+        mutator.orderPieces,
+        mutator.holdings,
+        mutator.items,
+        values,
+        title.instanceId,
+      )
+        .then(() => {
           if (!values.id) {
             showCallout({
               messageId: 'ui-receiving.piece.actions.addPiece.success',
@@ -155,26 +152,17 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
               values: { caption: values.caption },
             });
           }
-
-          return checkInItems(
-            [{
-              ...piece,
-              checked: true,
-              itemStatus: ITEM_STATUS.inProcess,
-            }],
-            mutator.checkIn,
-          );
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.checkInItem.success',
+            type: 'success',
+            values: { caption: values.caption },
+          });
         })
-        .then(() => showCallout({
-          messageId: 'ui-receiving.piece.actions.checkInItem.success',
-          type: 'success',
-          values: { caption: values.caption },
-        }))
         .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources],
+    [fetchReceivingResources, poLine.id, showCallout, title.instanceId],
   );
 
   if (isLoading || !pieces) {
@@ -214,9 +202,9 @@ TitleDetailsContainer.manifest = Object.freeze({
   orderPieces: pieceResource,
   pieces: piecesResource,
   checkIn: checkInResource,
-  receive: receivingResource,
   items: itemsResource,
   requests: requestsResource,
+  holdings: holdingsResource,
 });
 
 TitleDetailsContainer.propTypes = {

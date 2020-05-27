@@ -99,6 +99,8 @@
   "piece.callNumber": "Call number",
   "piece.caption": "Caption",
   "piece.comment": "Comment",
+  "piece.connectedItem": "Connected",
+  "piece.createItem": "Create item",
   "piece.format": "Piece format",
   "piece.itemStatus.Available": "Available",
   "piece.itemStatus.In process": "In process",
