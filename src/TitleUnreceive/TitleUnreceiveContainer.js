@@ -6,6 +6,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   batchFetch,
+  LIMIT_MAX,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -62,6 +63,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
       if (poLineId) {
         mutator.pieces.GET({
           params: {
+            limit: `${LIMIT_MAX}`,
             query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.received} sortby locationId`,
           },
         })

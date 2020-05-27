@@ -7,6 +7,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   ITEM_STATUS,
+  LIMIT_MAX,
   LoadingPane,
   useShowCallout,
 } from '@folio/stripes-acq-components';
@@ -46,6 +47,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
       return mutator.pieces.GET({
         params: {
+          limit: `${LIMIT_MAX}`,
           query: `poLineId==${lineId} sortby receiptDate`,
         },
       })
