@@ -6,6 +6,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   itemsResource,
+  LIMIT_MAX,
   PIECE_STATUS,
   piecesResource,
   requestsResource,
@@ -60,6 +61,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
       if (poLineId) {
         mutator.pieces.GET({
           params: {
+            limit: `${LIMIT_MAX}`,
             query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.expected} sortby locationId`,
           },
         })
