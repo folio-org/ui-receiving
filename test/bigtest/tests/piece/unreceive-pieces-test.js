@@ -9,7 +9,7 @@ import {
   TitleDetailsInteractor,
 } from '../../interactors';
 
-describe('Edit piece', () => {
+describe('Unreceive pieces', () => {
   const titleDetails = new TitleDetailsInteractor();
   const titleUnreceive = new TitleUnreceiveInteractor();
 
