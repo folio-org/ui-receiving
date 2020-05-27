@@ -11,7 +11,7 @@ import { TIMEOUT } from './consts';
 export default @interactor class TitlesListInteractor {
   static defaultScope = '[data-test-titles-list]';
   hasNewButton = isPresent('#clickable-new-title');
-  rows = collection('[role=rowgroup] [role=row]');
+  rows = collection('[data-row-inner]');
   isLoaded = isPresent('[data-test-results-pane]');
   isNoResultsMessageLabelPresent = isPresent('[class*=noResultsMessage---]');
   fillSearchField = fillable('#input-record-search');
