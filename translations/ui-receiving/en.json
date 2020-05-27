@@ -111,6 +111,7 @@
   "piece.itemStatus.Undefined": "Undefined",
   "piece.itemStatus": "Item status",
   "piece.location": "Select location",
+  "piece.locationLookup": "Assign a different location",
   "piece.receiptDate": "Expected receipt date",
   "piece.receivedDate": "Received date",
   "piece.receivingNoteModal.title": "Receiving note",

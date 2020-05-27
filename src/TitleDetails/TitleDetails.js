@@ -47,11 +47,15 @@ import Title from './Title';
 import POLDetails from './POLDetails';
 
 function getNewPieceValues(titleId, poLine) {
-  const { orderFormat, id: poLineId, receiptDate } = poLine;
+  const { orderFormat, id: poLineId, receiptDate, locations } = poLine;
   const initialValuesPiece = { receiptDate, poLineId, titleId };
 
   if (orderFormat !== ORDER_FORMATS.PEMix) {
     initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
+  }
+
+  if (locations.length === 1) {
+    initialValuesPiece.locationId = locations[0].locationId;
   }
 
   return initialValuesPiece;

@@ -37,7 +37,7 @@ describe('AddPieceModalContainer', () => {
   afterEach(cleanup);
 
   it('should display Edit Piece form', () => {
-    const poLine = { id: 'poLineId', physical: { createInventory: 'None' } };
+    const poLine = { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] };
     const initialValues = { caption: 'testcaption', format: 'Physical', id: 'id', poLineId: 'poLineId', titleId: 'titleId' };
     const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer(close, onSubmit, initialValues, 'instanceId', onCheckIn, poLine);
 

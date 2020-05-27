@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { uniqBy } from 'lodash';
 
 import {
   ORDER_FORMATS,
@@ -32,12 +33,17 @@ const AddPieceModalContainer = ({
     ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
     : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
 
+  const pieceLocation = initialValues.locationId;
+  const poLineLocations = poLine.locations.map(({ locationId }) => locationId);
+  const locationIds = pieceLocation ? uniqBy([...poLineLocations, pieceLocation]) : poLineLocations;
+
   return (
     <AddPieceModal
       close={close}
       createInventoryValues={createInventoryValues}
       initialValues={initialValues}
       instanceId={instanceId}
+      locationIds={locationIds}
       onCheckIn={onCheckIn}
       onSubmit={onSubmit}
       pieceFormatOptions={pieceFormatOptions}

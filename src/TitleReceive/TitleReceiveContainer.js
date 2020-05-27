@@ -162,8 +162,10 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   );
 
   if (!(pieces && poLine && title)) return null;
+
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
+  const poLineLocationIds = poLine.locations.map(({ locationId }) => locationId);
 
   return (
     <>
@@ -175,6 +177,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         onSubmit={onSubmit}
         paneTitle={paneTitle}
         receivingNote={poLine?.details?.receivingNote}
+        poLineLocationIds={poLineLocationIds}
       />
       {receivedPiecesWithRequests.length && (
         <OpenedRequestsModal

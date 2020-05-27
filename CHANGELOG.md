@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 ### Stories
+* [UIREC-90](https://issues.folio.org/browse/UIREC-90) Update select location workflow for Piece creation/edit
 * [UIREC-91](https://issues.folio.org/browse/UIREC-91) Update Create Item workflow for Piece creation/edit
 * [UIREC-83](https://issues.folio.org/browse/UIREC-83) Suppot back-end changes in related story
 * [UIREC-80](https://issues.folio.org/browse/UIREC-80) Receiving app: Update to Stripes v4

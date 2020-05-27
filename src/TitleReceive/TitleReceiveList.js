@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
+import { uniqBy } from 'lodash';
 
 import {
   Checkbox,
@@ -30,9 +31,13 @@ const visibleColumns = [
   'isCreateItem',
 ];
 
+const columnWidths = {
+  location: '250px',
+};
+
 export const TitleReceiveList = ({
   fields,
-  props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll },
+  props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll, poLineLocationIds },
 }) => {
   const field = fields.name;
   const cellFormatters = useMemo(
@@ -80,13 +85,19 @@ export const TitleReceiveList = ({
             fullWidth
           />
         ),
-        location: record => (
-          <FieldLocationFinal
-            locationId={fields.value[record.rowIndex]?.locationId}
-            onChange={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
-            name={`${field}[${record.rowIndex}].locationId`}
-          />
-        ),
+        location: record => {
+          const locationId = fields.value[record.rowIndex]?.locationId;
+          const locationIds = locationId ? uniqBy([...poLineLocationIds, locationId]) : poLineLocationIds;
+
+          return (
+            <FieldLocationFinal
+              locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
+              locationIds={locationIds}
+              name={`${field}[${record.rowIndex}].locationId`}
+              onChange={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
+            />
+          );
+        },
         hasRequest: record => (
           record.request
             ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
@@ -104,7 +115,7 @@ export const TitleReceiveList = ({
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [poLineLocationIds],
   );
 
   const isAllChecked = fields.value.every(({ checked }) => !!checked);
@@ -140,6 +151,7 @@ export const TitleReceiveList = ({
   return (
     <MultiColumnList
       columnMapping={columnMapping}
+      columnWidths={columnWidths}
       contentData={fields.value}
       formatter={cellFormatters}
       id="title-receive-list"
@@ -157,5 +169,6 @@ TitleReceiveList.propTypes = {
     instanceId: PropTypes.string.isRequired,
     selectLocation: PropTypes.func.isRequired,
     toggleCheckedAll: PropTypes.func.isRequired,
+    poLineLocationIds: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
 };
