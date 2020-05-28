@@ -97,6 +97,7 @@ const AddPieceModal = ({
             <Field
               component={TextField}
               fullWidth
+              id="caption"
               label={<FormattedMessage id="ui-receiving.piece.caption" />}
               name="caption"
               type="text"
