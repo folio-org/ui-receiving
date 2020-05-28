@@ -86,9 +86,6 @@ export const quickReceive = (mutatorCheckIn, mutatorPiece, mutatorHoldings, muta
         itemStatus: ITEM_STATUS.inProcess,
       }],
       mutatorCheckIn,
-      mutatorHoldings,
-      mutatorItems,
-      instanceId,
     ));
 };
 
