@@ -21,6 +21,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece }) {
       <KeyValue label={label}>
         <Link
           data-test-connected-link
+          data-testid="connected-link"
           to={`/inventory/view/${instanceId}`}
         >
           <FormattedMessage id="ui-receiving.piece.connectedItem" />
@@ -35,6 +36,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece }) {
     return (
       <Field
         component={Checkbox}
+        data-testid="isCreateItem"
         fullWidth
         label={label}
         name="isCreateItem"
