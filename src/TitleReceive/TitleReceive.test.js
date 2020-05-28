@@ -22,7 +22,9 @@ const renderTitleReceive = ({ receivingNote, paneTitle }) => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
       <TitleReceive
+        createInventoryValues={{}}
         initialValues={initialValues}
+        instanceId="instanceId"
         onCancel={noop}
         onSubmit={noop}
         paneTitle={paneTitle}
