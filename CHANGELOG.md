@@ -14,6 +14,12 @@
 * [UIREC-92](https://issues.folio.org/browse/UIREC-92) Add Piece modal keeps values from previously edited piece
 * [UIORGS-151](https://issues.folio.org/browse/UIORGS-151) Organizations is not using the same Expand/Collapse as implemented in Q4 2019
 
+## [1.0.4](https://github.com/folio-org/ui-receiving/tree/v1.0.4) (2020-05-27)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.3...v1.0.4)
+
+### Bug fixes
+* [UIREC-93](https://issues.folio.org/browse/UIREC-93) Only see 10 pieces per POL in Receiving
+
 ## [1.0.3](https://github.com/folio-org/ui-receiving/tree/v1.0.3) (2020-04-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.2...v1.0.3)
 
