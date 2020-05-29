@@ -6,9 +6,11 @@ import { withRouter } from 'react-router-dom';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
   LoadingPane,
+  LOAN_TYPES,
   pieceResource,
   piecesResource,
   requestsResource,
@@ -31,7 +33,7 @@ import {
 } from '../common/utils';
 import TitleDetails from './TitleDetails';
 
-const TitleDetailsContainer = ({ location, history, mutator, match }) => {
+const TitleDetailsContainer = ({ location, history, mutator, match, resources }) => {
   const titleId = match.params.id;
   const showCallout = useShowCallout();
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +41,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const [poLine, setPoLine] = useState({});
   const [pieces, setPieces] = useState();
   const [order, setOrder] = useState({});
+  const [loanTypeId, setLoanTypeId] = useState();
+  const configLoanTypeName = resources?.configLoanType?.records?.[0]?.value;
+
+  useEffect(() => {
+    if (configLoanTypeName) {
+      mutator.loanTypes.GET({ params: {
+        query: `name='${configLoanTypeName}'`,
+      } })
+        .then(loanTypes => {
+          setLoanTypeId(loanTypes?.[0]?.id);
+        });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configLoanTypeName]);
 
   const fetchReceivingResources = useCallback(
     (lineId) => {
@@ -118,7 +134,15 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     (values) => {
       const actionType = values.id ? 'updatePiece' : 'addPiece';
 
-      return savePiece(mutator.orderPieces, mutator.holdings, mutator.items, values, title.instanceId)
+      return savePiece(
+        mutator.orderPieces,
+        mutator.holdings,
+        mutator.items,
+        values,
+        title.instanceId,
+        loanTypeId,
+        poLine,
+      )
         .then(() => showCallout({
           messageId: `ui-receiving.piece.actions.${actionType}.success`,
           type: 'success',
@@ -133,7 +157,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, poLine.id, showCallout, title.instanceId],
+    [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
   );
 
   const onCheckIn = useCallback(
@@ -145,6 +169,8 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         mutator.items,
         values,
         title.instanceId,
+        loanTypeId,
+        poLine,
       )
         .then(() => {
           if (!values.id) {
@@ -164,7 +190,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, poLine.id, showCallout, title.instanceId],
+    [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
   );
 
   if (isLoading || !pieces) {
@@ -207,6 +233,12 @@ TitleDetailsContainer.manifest = Object.freeze({
   items: itemsResource,
   requests: requestsResource,
   holdings: holdingsResource,
+  configLoanType: configLoanTypeResource,
+  loanTypes: {
+    ...LOAN_TYPES,
+    accumulate: true,
+    fetch: false,
+  },
 });
 
 TitleDetailsContainer.propTypes = {
@@ -214,6 +246,7 @@ TitleDetailsContainer.propTypes = {
   match: ReactRouterPropTypes.match.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   mutator: PropTypes.object.isRequired,
+  resources: PropTypes.object.isRequired,
 };
 
 export default withRouter(stripesConnect(TitleDetailsContainer));

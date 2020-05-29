@@ -1,15 +1,15 @@
 import { some } from 'lodash';
 
-import { ITEM_STATUS } from '@folio/stripes-acq-components';
+import { ITEM_STATUS, PIECE_FORMAT } from '@folio/stripes-acq-components';
 
 import { getDehydratedPiece } from './getDehydratedPiece';
 
-const createItem = (mutatorHoldings, mutatorItems, values, instanceId) => {
+const createItem = (mutatorHoldings, mutatorItems, values, instanceId, loanTypeId, materialTypeId) => {
   const isCreateItem = Boolean(values.isCreateItem);
   const { locationId: permanentLocationId, poLineId } = values;
   const item = {
-    materialType: { id: '615b8413-82d5-4203-aa6e-e37984cb5ac3' },
-    permanentLoanType: { id: '2b94c631-fca9-4892-a730-03ee529ffe27' },
+    materialType: { id: materialTypeId },
+    permanentLoanType: { id: loanTypeId },
     purchaseOrderLineIdentifier: poLineId,
     status: { name: ITEM_STATUS.onOrder },
   };
@@ -56,19 +56,36 @@ export const checkInItems = (pieces, mutator) => {
   });
 };
 
-export const savePiece = (mutatorPiece, mutatorHoldings, mutatorItems, values, instanceId) => {
+export const savePiece = (mutatorPiece, mutatorHoldings, mutatorItems, values, instanceId, loanTypeId, poLine) => {
   const mutatorMethod = values.id ? 'PUT' : 'POST';
   const piece = getDehydratedPiece(values);
+  const materialTypeId = piece.format === PIECE_FORMAT.electronic
+    ? poLine?.eresource?.materialType
+    : poLine?.physical?.materialType;
 
-  return createItem(mutatorHoldings, mutatorItems, values, instanceId)
+  return createItem(mutatorHoldings, mutatorItems, values, instanceId, loanTypeId, materialTypeId)
     .then((item) => mutatorPiece[mutatorMethod]({ ...piece, itemId: piece.itemId || item?.id }));
 };
 
-export const checkIn = (pieces, mutatorPiece, mutatorCheckIn, mutatorHoldings, mutatorItems, instanceId) => {
+export const checkIn = (
+  pieces,
+  mutatorPiece,
+  mutatorCheckIn,
+  mutatorHoldings,
+  mutatorItems,
+  instanceId,
+  loanTypeId,
+  poLine,
+) => {
   const createItemsPromises = pieces.filter(({ isCreateItem }) => isCreateItem)
-    .map((piece) => savePiece(mutatorPiece, mutatorHoldings, mutatorItems, piece, instanceId));
+    .map((piece) => savePiece(mutatorPiece, mutatorHoldings, mutatorItems, piece, instanceId, loanTypeId, poLine));
 
-  return Promise.all(createItemsPromises).then(() => checkInItems(pieces, mutatorCheckIn)
+  return Promise.all(createItemsPromises).then(() => checkInItems(pieces.map((piece) => ({
+    ...piece,
+    itemStatus: piece.itemStatus === ITEM_STATUS.undefined
+      ? ITEM_STATUS.inProcess
+      : piece.itemStatus,
+  })), mutatorCheckIn)
     .then(({ receivingResults }) => {
       if (some(receivingResults, ({ processedWithError }) => processedWithError > 0)) {
         return Promise.reject(receivingResults);
@@ -78,8 +95,17 @@ export const checkIn = (pieces, mutatorPiece, mutatorCheckIn, mutatorHoldings, m
     }));
 };
 
-export const quickReceive = (mutatorCheckIn, mutatorPiece, mutatorHoldings, mutatorItems, values, instanceId) => {
-  return savePiece(mutatorPiece, mutatorHoldings, mutatorItems, values, instanceId)
+export const quickReceive = (
+  mutatorCheckIn,
+  mutatorPiece,
+  mutatorHoldings,
+  mutatorItems,
+  values,
+  instanceId,
+  loanTypeId,
+  poLine,
+) => {
+  return savePiece(mutatorPiece, mutatorHoldings, mutatorItems, values, instanceId, loanTypeId, poLine)
     .then(piece => checkInItems(
       [{
         ...piece,

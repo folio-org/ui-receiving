@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   ORDER_FORMATS,
   PIECE_FORMAT_OPTIONS,
+  PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
 import AddPieceModal from './AddPieceModal';
@@ -18,18 +19,18 @@ const AddPieceModalContainer = ({
 }) => {
   const createInventoryValues = useMemo(
     () => ({
-      'Physical': poLine?.physical?.createInventory,
-      'Electronic': poLine?.eresource?.createInventory,
+      [PIECE_FORMAT.physical]: poLine?.physical?.createInventory,
+      [PIECE_FORMAT.electronic]: poLine?.eresource?.createInventory,
+      [PIECE_FORMAT.other]: poLine?.physical?.createInventory,
     }),
     [poLine],
   );
 
-  let pieceFormatOptions = PIECE_FORMAT_OPTIONS;
   const orderFormat = poLine?.orderFormat;
 
-  if (orderFormat !== ORDER_FORMATS.PEMix) {
-    pieceFormatOptions = PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
-  }
+  const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
+    ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
+    : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
 
   return (
     <AddPieceModal

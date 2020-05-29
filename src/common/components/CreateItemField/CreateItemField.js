@@ -12,7 +12,7 @@ import {
 } from '@folio/stripes/components';
 import { INVENTORY_RECORDS_TYPE } from '@folio/stripes-acq-components';
 
-function CreateItemField({ createInventoryValues, instanceId, label, piece }) {
+function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
   const { format, itemId } = piece;
   const isAddItemAvailable = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
 
@@ -39,7 +39,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece }) {
         data-testid="isCreateItem"
         fullWidth
         label={label}
-        name="isCreateItem"
+        name={name}
         type="checkbox"
         vertical
       />
@@ -51,7 +51,12 @@ CreateItemField.propTypes = {
   createInventoryValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   label: PropTypes.node,
+  name: PropTypes.string,
   piece: PropTypes.object.isRequired,
+};
+
+CreateItemField.defaultProps = {
+  name: 'isCreateItem',
 };
 
 export default CreateItemField;

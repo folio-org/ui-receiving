@@ -5,8 +5,11 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
+  LOAN_TYPES,
+  PIECE_FORMAT,
   PIECE_STATUS,
   pieceResource,
   piecesResource,
@@ -29,7 +32,7 @@ import {
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
 
-function TitleReceiveContainer({ history, location, match, mutator }) {
+function TitleReceiveContainer({ history, location, match, mutator, resources }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
   const [pieces, setPieces] = useState();
@@ -92,6 +95,22 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     },
     [onCancel],
   );
+
+  const [loanTypeId, setLoanTypeId] = useState();
+  const configLoanTypeName = resources?.configLoanType?.records?.[0]?.value;
+
+  useEffect(() => {
+    if (configLoanTypeName) {
+      mutator.loanTypes.GET({ params: {
+        query: `name='${configLoanTypeName}'`,
+      } })
+        .then(loanTypes => {
+          setLoanTypeId(loanTypes?.[0]?.id);
+        });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configLoanTypeName]);
+
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
     ({ receivedItems }) => {
@@ -102,6 +121,8 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
         mutator.holdings,
         mutator.items,
         title.instanceId,
+        loanTypeId,
+        poLine,
       )
         .then(() => {
           showCallout({
@@ -121,13 +142,14 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onCancel, poLine],
+    [onCancel, poLine, loanTypeId],
   );
 
   const createInventoryValues = useMemo(
     () => ({
-      'Physical': poLine?.physical?.createInventory,
-      'Electronic': poLine?.eresource?.createInventory,
+      [PIECE_FORMAT.physical]: poLine?.physical?.createInventory,
+      [PIECE_FORMAT.electronic]: poLine?.eresource?.createInventory,
+      [PIECE_FORMAT.other]: poLine?.physical?.createInventory,
     }),
     [poLine],
   );
@@ -174,6 +196,12 @@ TitleReceiveContainer.manifest = Object.freeze({
   receive: checkInResource,
   holdings: holdingsResource,
   piece: pieceResource,
+  configLoanType: configLoanTypeResource,
+  loanTypes: {
+    ...LOAN_TYPES,
+    accumulate: true,
+    fetch: false,
+  },
 });
 
 TitleReceiveContainer.propTypes = {
@@ -181,6 +209,7 @@ TitleReceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  resources: PropTypes.object.isRequired,
 };
 
 export default stripesConnect(TitleReceiveContainer);

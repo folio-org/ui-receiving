@@ -95,6 +95,7 @@ export const TitleReceiveList = ({
           <CreateItemField
             createInventoryValues={createInventoryValues}
             instanceId={instanceId}
+            name={`${field}[${piece.rowIndex}].isCreateItem`}
             piece={piece}
           />
         ),
