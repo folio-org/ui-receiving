@@ -28,6 +28,7 @@ import {
 } from '../common/resources';
 import {
   getHydratedPieces,
+  ifMissingPermanentLoanTypeId,
   quickReceive,
   savePiece,
 } from '../common/utils';
@@ -150,14 +151,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             values: { caption: values.caption },
           });
         }, async response => {
-          let parsed;
-
-          try {
-            parsed = await response.json();
-          // eslint-disable-next-line no-empty
-          } catch (parsingException) {
-          }
-          const isMissingPermanentLoanTypeId = parsed?.errors?.some(({ parameters }) => parameters?.some(({ key }) => key === 'permanentLoanTypeId'));
+          const isMissingPermanentLoanTypeId = await ifMissingPermanentLoanTypeId(response);
 
           if (isMissingPermanentLoanTypeId) {
             showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
@@ -201,15 +195,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             values: { caption: values.caption },
           });
         }, async response => {
-          let parsed;
-
-          try {
-            parsed = await response.json();
-          // eslint-disable-next-line no-empty
-          } catch (parsingException) {
-          }
-
-          const isMissingPermanentLoanTypeId = parsed?.errors?.some(({ parameters }) => parameters?.some(({ key }) => key === 'permanentLoanTypeId'));
+          const isMissingPermanentLoanTypeId = await ifMissingPermanentLoanTypeId(response);
 
           if (isMissingPermanentLoanTypeId) {
             showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });

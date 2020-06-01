@@ -28,6 +28,7 @@ import {
 import {
   checkIn,
   getHydratedPieces,
+  ifMissingPermanentLoanTypeId,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
@@ -137,15 +138,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
             setTimeout(onCancel);
           }
         }, async response => {
-          let parsed;
-
-          try {
-            parsed = await response.json();
-          // eslint-disable-next-line no-empty
-          } catch (parsingException) {
-          }
-
-          const isMissingPermanentLoanTypeId = parsed?.errors?.some(({ parameters }) => parameters?.some(({ key }) => key === 'permanentLoanTypeId'));
+          const isMissingPermanentLoanTypeId = await ifMissingPermanentLoanTypeId(response);
 
           if (isMissingPermanentLoanTypeId) {
             showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
