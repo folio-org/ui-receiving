@@ -50,6 +50,7 @@ export const TitleReceiveList = ({
           <Field
             name={`${field}[${record.rowIndex}].barcode`}
             component={TextField}
+            disabled={!record.itemId && !record.isCreateItem}
             marginBottom0
             fullWidth
           />
@@ -74,6 +75,7 @@ export const TitleReceiveList = ({
           <Field
             name={`${field}[${record.rowIndex}].callNumber`}
             component={TextField}
+            disabled={!record.itemId && !record.isCreateItem}
             marginBottom0
             fullWidth
           />
