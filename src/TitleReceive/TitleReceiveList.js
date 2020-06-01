@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
-import { uniqBy } from 'lodash';
 
 import {
   Checkbox,
@@ -37,7 +36,7 @@ const columnWidths = {
 
 export const TitleReceiveList = ({
   fields,
-  props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll, poLineLocationIds },
+  props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll, locations, poLineLocationIds },
 }) => {
   const field = fields.name;
   const cellFormatters = useMemo(
@@ -87,12 +86,13 @@ export const TitleReceiveList = ({
         ),
         location: record => {
           const locationId = fields.value[record.rowIndex]?.locationId;
-          const locationIds = locationId ? uniqBy([...poLineLocationIds, locationId]) : poLineLocationIds;
+          const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
 
           return (
             <FieldLocationFinal
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
               locationIds={locationIds}
+              locations={locations}
               name={`${field}[${record.rowIndex}].locationId`}
               onChange={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
             />
@@ -170,5 +170,6 @@ TitleReceiveList.propTypes = {
     selectLocation: PropTypes.func.isRequired,
     toggleCheckedAll: PropTypes.func.isRequired,
     poLineLocationIds: PropTypes.arrayOf(PropTypes.string),
+    locations: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };

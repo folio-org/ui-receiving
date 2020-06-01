@@ -5,10 +5,12 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  batchFetch,
   configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
   LOAN_TYPES,
+  locationsManifest,
   PIECE_FORMAT,
   PIECE_STATUS,
   pieceResource,
@@ -39,6 +41,9 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   const [pieces, setPieces] = useState();
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
+  const [poLineLocations, setPoLineLocations] = useState();
+  const [pieceLocations, setPieceLocations] = useState();
+  const [poLineLocationIds, setPoLineLocationIds] = useState();
   const poLineId = title?.poLineId;
   const instanceId = title?.instanceId;
 
@@ -56,7 +61,15 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
       if (poLineId) {
         mutator.poLine.GET({
           path: `${PO_LINES_API}/${poLineId}`,
-        }).then(setPoLine);
+        }).then(poLineResponse => {
+          setPoLine(poLineResponse);
+
+          const lineLocationIds = poLineResponse?.locations?.map(({ locationId }) => locationId);
+
+          setPoLineLocationIds(lineLocationIds);
+
+          return batchFetch(mutator.pieceLocations, lineLocationIds);
+        }).then(setPoLineLocations, () => setPoLineLocations([]));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +86,14 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
           },
         })
           .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
-          .then(setPieces);
+          .then(hydratedPieces => {
+            setPieces(hydratedPieces);
+
+            const pieceLocationIds = [...new Set(hydratedPieces.map(piece => piece.locationId))];
+
+            return batchFetch(mutator.pieceLocations, pieceLocationIds);
+          })
+          .then(setPieceLocations, () => setPieceLocations([]));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,11 +181,11 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     [poLine],
   );
 
-  if (!(pieces && poLine && title)) return null;
+  if (!(pieces && poLine && title && pieceLocations && poLineLocationIds && poLineLocations)) return null;
 
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
-  const poLineLocationIds = poLine.locations.map(({ locationId }) => locationId);
+  const locations = [...new Set([...poLineLocations, ...pieceLocations])];
 
   return (
     <>
@@ -177,6 +197,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         onSubmit={onSubmit}
         paneTitle={paneTitle}
         receivingNote={poLine?.details?.receivingNote}
+        locations={locations}
         poLineLocationIds={poLineLocationIds}
       />
       {receivedPiecesWithRequests.length && (
@@ -210,6 +231,10 @@ TitleReceiveContainer.manifest = Object.freeze({
   loanTypes: {
     ...LOAN_TYPES,
     accumulate: true,
+    fetch: false,
+  },
+  pieceLocations: {
+    ...locationsManifest,
     fetch: false,
   },
 });

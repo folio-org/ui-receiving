@@ -36,6 +36,7 @@ const AddPieceModal = ({
   hasValidationErrors,
   instanceId,
   locationIds,
+  locations,
   onCheckIn,
   pieceFormatOptions,
   values: formValues,
@@ -143,6 +144,7 @@ const AddPieceModal = ({
               labelId="ui-receiving.piece.location"
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
               locationIds={locationIds}
+              locations={locations}
               name="locationId"
               onChange={form.mutators.setLocationValue}
               required={isLocationRequired}
@@ -186,6 +188,7 @@ AddPieceModal.propTypes = {
   })),
   hasValidationErrors: PropTypes.bool.isRequired,
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object),
 };
 
 AddPieceModal.defaultProps = {

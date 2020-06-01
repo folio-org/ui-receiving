@@ -29,6 +29,7 @@ const TitleReceive = ({
   submitting,
   values,
   poLineLocationIds,
+  locations,
 }) => {
   const paneFooter = (
     <FormFooter
@@ -66,6 +67,7 @@ const TitleReceive = ({
               instanceId,
               selectLocation: form.mutators.setLocationValue,
               toggleCheckedAll: form.mutators.toggleCheckedAll,
+              locations,
               poLineLocationIds,
             }}
           />
@@ -87,6 +89,7 @@ TitleReceive.propTypes = {
   submitting: PropTypes.bool.isRequired,
   values: PropTypes.object.isRequired,  // current form values
   poLineLocationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default stripesFinalForm({
