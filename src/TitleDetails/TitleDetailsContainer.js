@@ -143,16 +143,31 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
         loanTypeId,
         poLine,
       )
-        .then(() => showCallout({
-          messageId: `ui-receiving.piece.actions.${actionType}.success`,
-          type: 'success',
-          values: { caption: values.caption },
-        }), () => {
+        .then(() => {
           showCallout({
-            messageId: `ui-receiving.piece.actions.${actionType}.error`,
-            type: 'error',
+            messageId: `ui-receiving.piece.actions.${actionType}.success`,
+            type: 'success',
             values: { caption: values.caption },
           });
+        }, async response => {
+          let parsed;
+
+          try {
+            parsed = await response.json();
+          // eslint-disable-next-line no-empty
+          } catch (parsingException) {
+          }
+          const isMissingPermanentLoanTypeId = parsed?.errors?.some(({ parameters }) => parameters?.some(({ key }) => key === 'permanentLoanTypeId'));
+
+          if (isMissingPermanentLoanTypeId) {
+            showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
+          } else {
+            showCallout({
+              messageId: `ui-receiving.piece.actions.${actionType}.error`,
+              type: 'error',
+              values: { caption: values.caption },
+            });
+          }
         })
         .finally(() => fetchReceivingResources(poLine.id));
     },
@@ -185,8 +200,23 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             type: 'success',
             values: { caption: values.caption },
           });
+        }, async response => {
+          let parsed;
+
+          try {
+            parsed = await response.json();
+          // eslint-disable-next-line no-empty
+          } catch (parsingException) {
+          }
+
+          const isMissingPermanentLoanTypeId = parsed?.errors?.some(({ parameters }) => parameters?.some(({ key }) => key === 'permanentLoanTypeId'));
+
+          if (isMissingPermanentLoanTypeId) {
+            showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
+          } else {
+            showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' });
+          }
         })
-        .catch(() => showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' }))
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

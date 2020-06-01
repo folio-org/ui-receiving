@@ -33,6 +33,7 @@ export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {
         callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
         itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
         request: requestsMap[piece.itemId],
+        holdingsRecordId: itemsMap[piece.itemId]?.holdingsRecordId,
       }));
     });
 }

@@ -13,7 +13,7 @@ import {
 import { INVENTORY_RECORDS_TYPE } from '@folio/stripes-acq-components';
 
 function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
-  const { format, itemId, locationId } = piece;
+  const { format, itemId, holdingsRecordId } = piece;
   const isAddItemAvailable = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
 
   if (itemId) {
@@ -22,7 +22,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
         <Link
           data-test-connected-link
           data-testid="connected-link"
-          to={`/inventory/view/${instanceId}/${locationId}/${itemId}`}
+          to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}
         >
           <FormattedMessage id="ui-receiving.piece.connectedItem" />
           <Icon

@@ -136,9 +136,22 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
           } else {
             setTimeout(onCancel);
           }
-        })
-        .catch(() => {
-          showCallout({ messageId: 'ui-receiving.title.actions.receive.error', type: 'error' });
+        }, async response => {
+          let parsed;
+
+          try {
+            parsed = await response.json();
+          // eslint-disable-next-line no-empty
+          } catch (parsingException) {
+          }
+
+          const isMissingPermanentLoanTypeId = parsed?.errors?.some(({ parameters }) => parameters?.some(({ key }) => key === 'permanentLoanTypeId'));
+
+          if (isMissingPermanentLoanTypeId) {
+            showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
+          } else {
+            showCallout({ messageId: 'ui-receiving.title.actions.receive.error', type: 'error' });
+          }
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
