@@ -83,7 +83,7 @@ export const buildTitlesQuery = (queryParams) => {
   });
 
   const filterQuery = compact([queryParamsFilterQuery, materialTypeFilterQuery]).join(' and ') || 'cql.allRecords=1';
-  const sortingQuery = buildSortingQuery(queryParams) || 'sortby title/sort.ascending';
+  const sortingQuery = buildSortingQuery(queryParams, { 'poLine.poLineNumber': 'poLineNumber' }) || 'sortby title/sort.ascending';
 
   return connectQuery(filterQuery, sortingQuery);
 };
