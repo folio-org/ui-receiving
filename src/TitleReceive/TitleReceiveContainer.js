@@ -41,9 +41,9 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   const [pieces, setPieces] = useState();
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
-  const [poLineLocations, setPoLineLocations] = useState();
-  const [pieceLocations, setPieceLocations] = useState();
+  const [locations, setLocations] = useState();
   const [poLineLocationIds, setPoLineLocationIds] = useState();
+  const [pieceLocationIds, setPieceLocationIds] = useState();
   const poLineId = title?.poLineId;
   const instanceId = title?.instanceId;
 
@@ -67,9 +67,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
           const lineLocationIds = poLineResponse?.locations?.map(({ locationId }) => locationId);
 
           setPoLineLocationIds(lineLocationIds);
-
-          return batchFetch(mutator.pieceLocations, lineLocationIds);
-        }).then(setPoLineLocations, () => setPoLineLocations([]));
+        });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,15 +87,36 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
           .then(hydratedPieces => {
             setPieces(hydratedPieces);
 
-            const pieceLocationIds = [...new Set(hydratedPieces.map(piece => piece.locationId))];
+            const piecesLocationIds = [...new Set(hydratedPieces.map(piece => piece.locationId))];
 
-            return batchFetch(mutator.pieceLocations, pieceLocationIds);
-          })
-          .then(setPieceLocations, () => setPieceLocations([]));
+            setPieceLocationIds(piecesLocationIds);
+          });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [poLineId],
+  );
+
+  useEffect(
+    () => {
+      if (pieceLocationIds && poLineLocationIds) {
+        const locationIds = [...new Set([...poLineLocationIds, ...pieceLocationIds])];
+
+        const fetchLocations = async () => {
+          try {
+            const locationsResponse = await batchFetch(mutator.locations, locationIds);
+
+            setLocations(locationsResponse);
+          } catch {
+            setLocations([]);
+          }
+        };
+
+        fetchLocations();
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pieceLocationIds, poLineLocationIds],
   );
 
   const onCancel = useCallback(
@@ -181,11 +200,10 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     [poLine],
   );
 
-  if (!(pieces && poLine && title && pieceLocations && poLineLocationIds && poLineLocations)) return null;
+  if (!(pieces && poLine && title && locations && poLineLocationIds)) return null;
 
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
-  const locations = [...new Set([...poLineLocations, ...pieceLocations])];
 
   return (
     <>
@@ -197,8 +215,8 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         onSubmit={onSubmit}
         paneTitle={paneTitle}
         receivingNote={poLine?.details?.receivingNote}
-        locations={locations}
         poLineLocationIds={poLineLocationIds}
+        locations={locations}
       />
       {receivedPiecesWithRequests.length && (
         <OpenedRequestsModal
@@ -233,7 +251,7 @@ TitleReceiveContainer.manifest = Object.freeze({
     accumulate: true,
     fetch: false,
   },
-  pieceLocations: {
+  locations: {
     ...locationsManifest,
     fetch: false,
   },

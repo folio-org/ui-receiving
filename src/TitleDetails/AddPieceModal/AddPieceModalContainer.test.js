@@ -43,7 +43,7 @@ describe('AddPieceModalContainer', () => {
     onSubmit = jest.fn();
     onCheckIn = jest.fn();
     mutator = {
-      pieceLocations: {
+      locations: {
         GET: jest.fn(),
         reset: jest.fn(),
       },
@@ -57,11 +57,11 @@ describe('AddPieceModalContainer', () => {
     const initialValues = { caption: 'testcaption', format: 'Physical', id: 'id', poLineId: 'poLineId', titleId: 'titleId', locationId: '001' };
     const pieceLocations = [{ name: 'Location', id: '001' }];
 
-    mutator.pieceLocations.GET.mockReturnValue(Promise.resolve(pieceLocations));
+    mutator.locations.GET.mockReturnValue(Promise.resolve(pieceLocations));
 
     const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer(close, onSubmit, initialValues, 'instanceId', onCheckIn, poLine, mutator);
 
-    expect(mutator.pieceLocations.GET).toHaveBeenCalled();
+    expect(mutator.locations.GET).toHaveBeenCalled();
     // header is rendered
     wait(() => expect(getByText('ui-receiving.piece.caption')).toBeDefined());
     wait(() => expect(getByLabelText('ui-receiving.piece.caption')).toBeDefined());
@@ -85,7 +85,7 @@ describe('AddPieceModalContainer', () => {
     };
     const pieceLocations = [{ name: 'Location', id: '001' }];
 
-    mutator.pieceLocations.GET.mockReturnValue(Promise.resolve(pieceLocations));
+    mutator.locations.GET.mockReturnValue(Promise.resolve(pieceLocations));
 
     const { getByLabelText, queryByText } = renderAddPieceModalContainer(close, onSubmit, piece, 'instanceId', onCheckIn, poLine, mutator);
 

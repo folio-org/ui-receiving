@@ -81,7 +81,7 @@ TitleReceive.propTypes = {
   createInventoryValues: PropTypes.object.isRequired,
   form: PropTypes.object,  // form object to get initialValues
   handleSubmit: PropTypes.func.isRequired,
-  instanceId: PropTypes.string.isRequired,
+  instanceId: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,

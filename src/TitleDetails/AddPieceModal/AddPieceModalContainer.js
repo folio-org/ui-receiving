@@ -22,14 +22,14 @@ const AddPieceModalContainer = ({
   poLine,
 }) => {
   const [locations, setLocations] = useState();
-  const pieceLocation = initialValues.locationId;
-  const poLineLocations = poLine?.locations?.map(({ locationId }) => locationId) || [];
-  const locationIds = pieceLocation ? [...new Set([...poLineLocations, pieceLocation])] : poLineLocations;
+  const pieceLocationId = initialValues.locationId;
+  const poLineLocationIds = poLine?.locations?.map(({ locationId }) => locationId) || [];
+  const locationIds = pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds;
 
   useEffect(() => {
     setLocations();
 
-    batchFetch(mutator.pieceLocations, locationIds)
+    batchFetch(mutator.locations, locationIds)
       .then(setLocations)
       .catch(() => setLocations([]));
   },
@@ -69,7 +69,7 @@ const AddPieceModalContainer = ({
 };
 
 AddPieceModalContainer.manifest = Object.freeze({
-  pieceLocations: {
+  locations: {
     ...locationsManifest,
     fetch: false,
   },

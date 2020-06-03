@@ -143,10 +143,10 @@ const AddPieceModal = ({
               isDisabled={!isNotReceived}
               labelId="ui-receiving.piece.location"
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-              locationIds={locationIds}
-              locations={locations}
+              locationsForDict={locations}
               name="locationId"
               onChange={form.mutators.setLocationValue}
+              prepopulatedLocationsIds={locationIds}
               required={isLocationRequired}
             />
           </Col>

@@ -91,8 +91,8 @@ export const TitleReceiveList = ({
           return (
             <FieldLocationFinal
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-              locationIds={locationIds}
-              locations={locations}
+              prepopulatedLocationsIds={locationIds}
+              locationsForDict={locations}
               name={`${field}[${record.rowIndex}].locationId`}
               onChange={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
             />
@@ -115,7 +115,7 @@ export const TitleReceiveList = ({
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [poLineLocationIds],
+    [locations, poLineLocationIds],
   );
 
   const isAllChecked = fields.value.every(({ checked }) => !!checked);
@@ -166,7 +166,7 @@ TitleReceiveList.propTypes = {
   fields: PropTypes.object.isRequired,
   props: PropTypes.shape({
     createInventoryValues: PropTypes.object.isRequired,
-    instanceId: PropTypes.string.isRequired,
+    instanceId: PropTypes.string,
     selectLocation: PropTypes.func.isRequired,
     toggleCheckedAll: PropTypes.func.isRequired,
     poLineLocationIds: PropTypes.arrayOf(PropTypes.string),

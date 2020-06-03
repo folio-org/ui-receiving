@@ -34,7 +34,15 @@ describe('TitleReceiveContainer', () => {
       poLine: {
         GET: jest.fn(),
       },
-      pieceLocations: {
+      locations: {
+        GET: jest.fn(),
+        reset: jest.fn(),
+      },
+      requests: {
+        GET: jest.fn(),
+        reset: jest.fn(),
+      },
+      items: {
         GET: jest.fn(),
         reset: jest.fn(),
       },
@@ -55,7 +63,9 @@ describe('TitleReceiveContainer', () => {
     expect(mutator.title.GET).toHaveBeenCalled();
     expect(mutator.pieces.GET).not.toHaveBeenCalled();
     expect(mutator.poLine.GET).not.toHaveBeenCalled();
-    expect(mutator.pieceLocations.GET).not.toHaveBeenCalled();
+    expect(mutator.locations.GET).not.toHaveBeenCalled();
+    expect(mutator.requests.GET).not.toHaveBeenCalled();
+    expect(mutator.items.GET).not.toHaveBeenCalled();
   });
 
   it('should load all data', async () => {
@@ -67,7 +77,7 @@ describe('TitleReceiveContainer', () => {
     mutator.title.GET.mockReturnValue(Promise.resolve(title));
     mutator.poLine.GET.mockReturnValue(Promise.resolve(poLine));
     mutator.pieces.GET.mockReturnValue(Promise.resolve(pieces));
-    mutator.pieceLocations.GET.mockReturnValue(Promise.resolve(locations));
+    mutator.locations.GET.mockReturnValue(Promise.resolve(locations));
 
     await act(async () => {
       renderTitleReceiveContainer(mutator);
@@ -76,6 +86,6 @@ describe('TitleReceiveContainer', () => {
     expect(mutator.title.GET).toHaveBeenCalled();
     expect(mutator.pieces.GET).toHaveBeenCalled();
     expect(mutator.poLine.GET).toHaveBeenCalled();
-    expect(mutator.pieceLocations.GET).toHaveBeenCalled();
+    expect(mutator.locations.GET).toHaveBeenCalled();
   });
 });
