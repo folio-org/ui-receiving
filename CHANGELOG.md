@@ -11,6 +11,7 @@
 * [UINV-138](https://issues.folio.org/browse/UINV-138) Align actions icons in table to right hand side of view pane(s)
 
 ### Bug fixes
+* [UIREC-94](https://issues.folio.org/browse/UIREC-94) Ability to edit unreceived pieces
 * [UIREC-92](https://issues.folio.org/browse/UIREC-92) Add Piece modal keeps values from previously edited piece
 * [UIORGS-151](https://issues.folio.org/browse/UIORGS-151) Organizations is not using the same Expand/Collapse as implemented in Q4 2019
 

@@ -98,6 +98,14 @@ const TitleDetails = ({
     [poLine, title.id, title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModal],
   );
 
+  const openEditReceivedPieceModal = useCallback(
+    (e, piece) => {
+      setPieceValues(piece);
+      toggleAddPieceModal();
+    },
+    [toggleAddPieceModal],
+  );
+
   const goToReceiveList = useCallback(
     () => {
       history.push({
@@ -258,6 +266,7 @@ const TitleDetails = ({
         >
           <ReceivedPiecesList
             pieces={receivedPieces}
+            selectPiece={openEditReceivedPieceModal}
           />
         </Accordion>
       </AccordionSet>

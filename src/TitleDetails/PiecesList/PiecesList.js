@@ -64,6 +64,8 @@ const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
   const hasRowClick = Boolean(selectPiece);
   const rowProps = useMemo(() => ({ alignLastColToEnd: hasRowClick }), [hasRowClick]);
 
+  if (!pieces) return null;
+
   return (
     <MultiColumnList
       columnMapping={columnMapping}
@@ -84,10 +86,6 @@ PiecesList.propTypes = {
   id: PropTypes.string,
   selectPiece: PropTypes.func,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
-
-PiecesList.defaultProps = {
-  pieces: [],
 };
 
 export default PiecesList;

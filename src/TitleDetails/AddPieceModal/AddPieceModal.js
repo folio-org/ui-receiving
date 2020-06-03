@@ -23,6 +23,7 @@ import {
   FieldSelectFinal,
   INVENTORY_RECORDS_TYPE,
   ModalFooter,
+  PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
 import { CreateItemField } from '../../common/components';
@@ -37,9 +38,9 @@ const AddPieceModal = ({
   pieceFormatOptions,
   values: formValues,
 }) => {
-  const { format, id, locationId } = formValues;
+  const { format, id, locationId, receivingStatus } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
-
+  const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
 
   const receive = useCallback(
@@ -58,13 +59,15 @@ const AddPieceModal = ({
   );
   const end = (
     <>
-      <Button
-        data-test-add-piece-check-in
-        marginBottom0
-        onClick={receive}
-      >
-        <FormattedMessage id="ui-receiving.piece.actions.quickReceive" />
-      </Button>
+      {isNotReceived && (
+        <Button
+          data-test-add-piece-check-in
+          marginBottom0
+          onClick={receive}
+        >
+          <FormattedMessage id="ui-receiving.piece.actions.quickReceive" />
+        </Button>
+      )}
       <Button
         buttonStyle="primary"
         data-test-add-piece-save
@@ -106,6 +109,7 @@ const AddPieceModal = ({
           <Col xs>
             <FieldSelectFinal
               dataOptions={pieceFormatOptions}
+              disabled={!isNotReceived}
               label={<FormattedMessage id="ui-receiving.piece.format" />}
               name="format"
               required
@@ -131,6 +135,7 @@ const AddPieceModal = ({
         <Row>
           <Col xs={6}>
             <FieldLocationFinal
+              isDisabled={!isNotReceived}
               locationId={locationId}
               onChange={form.mutators.setLocationValue}
               labelId="ui-receiving.piece.location"

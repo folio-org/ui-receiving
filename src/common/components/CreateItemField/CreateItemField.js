@@ -10,11 +10,15 @@ import {
   Icon,
   KeyValue,
 } from '@folio/stripes/components';
-import { INVENTORY_RECORDS_TYPE } from '@folio/stripes-acq-components';
+import {
+  INVENTORY_RECORDS_TYPE,
+  PIECE_STATUS,
+} from '@folio/stripes-acq-components';
 
 function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
-  const { format, itemId, holdingsRecordId } = piece;
+  const { format, itemId, holdingsRecordId, receivingStatus } = piece;
   const isAddItemAvailable = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
+  const isReceived = receivingStatus === PIECE_STATUS.received;
 
   if (itemId) {
     return (
@@ -37,6 +41,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
       <Field
         component={Checkbox}
         data-testid="isCreateItem"
+        disabled={isReceived}
         fullWidth
         label={label}
         name={name}

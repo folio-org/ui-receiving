@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 
 import PiecesList from '../PiecesList';
 
-const visibleColumns = ['barcode', 'caption', 'format', 'receivedDate', 'request'];
+const visibleColumns = ['barcode', 'caption', 'format', 'receivedDate', 'request', 'selection'];
 
-const ReceivedPiecesList = ({ pieces }) => {
+const ReceivedPiecesList = ({ pieces, selectPiece }) => {
   return (
     <PiecesList
       pieces={pieces}
+      selectPiece={selectPiece}
       visibleColumns={visibleColumns}
     />
   );
@@ -16,10 +17,7 @@ const ReceivedPiecesList = ({ pieces }) => {
 
 ReceivedPiecesList.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
-};
-
-ReceivedPiecesList.defaultProps = {
-  pieces: [],
+  selectPiece: PropTypes.func.isRequired,
 };
 
 export default ReceivedPiecesList;
