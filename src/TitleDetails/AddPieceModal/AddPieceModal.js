@@ -33,6 +33,7 @@ const AddPieceModal = ({
   createInventoryValues,
   form,
   handleSubmit,
+  hasValidationErrors,
   instanceId,
   onCheckIn,
   pieceFormatOptions,
@@ -62,6 +63,7 @@ const AddPieceModal = ({
       {isNotReceived && (
         <Button
           data-test-add-piece-check-in
+          disabled={hasValidationErrors}
           marginBottom0
           onClick={receive}
         >
@@ -71,6 +73,7 @@ const AddPieceModal = ({
       <Button
         buttonStyle="primary"
         data-test-add-piece-save
+        disabled={hasValidationErrors}
         marginBottom0
         onClick={handleSubmit}
       >
@@ -179,6 +182,7 @@ AddPieceModal.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
+  hasValidationErrors: PropTypes.bool.isRequired,
 };
 
 AddPieceModal.defaultProps = {
@@ -187,7 +191,7 @@ AddPieceModal.defaultProps = {
 
 export default stripesFinalForm({
   navigationCheck: true,
-  subscription: { values: true },
+  subscription: { hasValidationErrors: true, values: true },
   mutators: {
     setLocationValue: (args, state, tools) => {
       const { id } = get(args, '0', {});
