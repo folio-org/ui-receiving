@@ -40,6 +40,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
   const poLineId = title?.poLineId;
+  const instanceId = title?.instanceId;
 
   useEffect(
     () => {
@@ -121,7 +122,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         mutator.receive,
         mutator.holdings,
         mutator.items,
-        title.instanceId,
+        instanceId,
         loanTypeId,
         poLine,
       )
@@ -148,7 +149,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [title.instanceId, loanTypeId, poLine, showCallout, onCancel],
+    [instanceId, loanTypeId, poLine, showCallout, onCancel],
   );
 
   const createInventoryValues = useMemo(
@@ -169,7 +170,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
       <TitleReceive
         createInventoryValues={createInventoryValues}
         initialValues={initialValues}
-        instanceId={title.instanceId}
+        instanceId={instanceId}
         onCancel={onCancel}
         onSubmit={onSubmit}
         paneTitle={paneTitle}
