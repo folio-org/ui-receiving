@@ -28,8 +28,8 @@ import {
 } from '../common/resources';
 import {
   checkIn,
+  fetchLocations,
   getHydratedPieces,
-  getLocations,
   ifMissingPermanentLoanTypeId,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
@@ -86,9 +86,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   useEffect(
     () => {
       if (pieces && poLine) {
-        getLocations(mutator.locations, pieces, poLine)
-          .then(setLocations)
-          .catch(() => setLocations([]));
+        fetchLocations(mutator.locations, pieces, poLine).then(setLocations);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -175,12 +173,12 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     }),
     [poLine],
   );
+  const poLineLocationIds = useMemo(() => poLine?.locations?.map(({ locationId }) => locationId), [poLine]);
 
   if (!(pieces && poLine && title && locations)) return null;
 
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
-  const poLineLocationIds = poLine?.locations?.map(({ locationId }) => locationId);
 
   return (
     <>

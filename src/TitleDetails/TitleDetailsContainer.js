@@ -29,7 +29,7 @@ import {
 } from '../common/resources';
 import {
   getHydratedPieces,
-  getLocations,
+  fetchLocations,
   ifMissingPermanentLoanTypeId,
   quickReceive,
   savePiece,
@@ -120,9 +120,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
     setLocations();
 
     if (pieces && poLine.id) {
-      getLocations(mutator.locations, pieces, poLine)
-        .then(setLocations)
-        .catch(() => setLocations([]));
+      fetchLocations(mutator.locations, pieces, poLine).then(setLocations);
     }
   },
   // eslint-disable-next-line react-hooks/exhaustive-deps

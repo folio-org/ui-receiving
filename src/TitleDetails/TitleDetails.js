@@ -89,8 +89,10 @@ const TitleDetails = ({
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
-  const poLineLocationIds = poLine?.locations?.map(({ locationId }) => locationId);
-  const locationIds = pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds;
+  const poLineLocationIds = useMemo(() => poLine?.locations?.map(({ locationId }) => locationId), [poLine]);
+  const locationIds = useMemo(() => (
+    pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
+  ), [poLineLocationIds, pieceLocationId]);
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
