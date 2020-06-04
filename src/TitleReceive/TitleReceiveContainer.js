@@ -5,7 +5,6 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
-  batchFetch,
   configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
@@ -30,6 +29,7 @@ import {
 import {
   checkIn,
   getHydratedPieces,
+  getLocations,
   ifMissingPermanentLoanTypeId,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
@@ -42,8 +42,6 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
   const [locations, setLocations] = useState();
-  const [poLineLocationIds, setPoLineLocationIds] = useState();
-  const [pieceLocationIds, setPieceLocationIds] = useState();
   const poLineId = title?.poLineId;
   const instanceId = title?.instanceId;
 
@@ -61,13 +59,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
       if (poLineId) {
         mutator.poLine.GET({
           path: `${PO_LINES_API}/${poLineId}`,
-        }).then(poLineResponse => {
-          setPoLine(poLineResponse);
-
-          const lineLocationIds = poLineResponse?.locations?.map(({ locationId }) => locationId);
-
-          setPoLineLocationIds(lineLocationIds);
-        });
+        }).then(setPoLine);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,13 +76,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
           },
         })
           .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
-          .then(hydratedPieces => {
-            setPieces(hydratedPieces);
-
-            const piecesLocationIds = [...new Set(hydratedPieces.map(piece => piece.locationId))];
-
-            setPieceLocationIds(piecesLocationIds);
-          });
+          .then(setPieces);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,24 +85,14 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
 
   useEffect(
     () => {
-      if (pieceLocationIds && poLineLocationIds) {
-        const locationIds = [...new Set([...poLineLocationIds, ...pieceLocationIds])];
-
-        const fetchLocations = async () => {
-          try {
-            const locationsResponse = await batchFetch(mutator.locations, locationIds);
-
-            setLocations(locationsResponse);
-          } catch {
-            setLocations([]);
-          }
-        };
-
-        fetchLocations();
+      if (pieces && poLine) {
+        getLocations(mutator.locations, pieces, poLine)
+          .then(setLocations)
+          .catch(() => setLocations([]));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pieceLocationIds, poLineLocationIds],
+    [pieces, poLine],
   );
 
   const onCancel = useCallback(
@@ -200,10 +176,11 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     [poLine],
   );
 
-  if (!(pieces && poLine && title && locations && poLineLocationIds)) return null;
+  if (!(pieces && poLine && title && locations)) return null;
 
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
+  const poLineLocationIds = poLine?.locations?.map(({ locationId }) => locationId);
 
   return (
     <>

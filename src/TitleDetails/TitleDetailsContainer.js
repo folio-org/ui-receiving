@@ -11,6 +11,7 @@ import {
   LIMIT_MAX,
   LoadingPane,
   LOAN_TYPES,
+  locationsManifest,
   pieceResource,
   piecesResource,
   requestsResource,
@@ -28,6 +29,7 @@ import {
 } from '../common/resources';
 import {
   getHydratedPieces,
+  getLocations,
   ifMissingPermanentLoanTypeId,
   quickReceive,
   savePiece,
@@ -43,6 +45,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
   const [pieces, setPieces] = useState();
   const [order, setOrder] = useState({});
   const [loanTypeId, setLoanTypeId] = useState();
+  const [locations, setLocations] = useState();
   const configLoanTypeName = resources?.configLoanType?.records?.[0]?.value;
 
   useEffect(() => {
@@ -112,6 +115,18 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [fetchReceivingResources, showCallout, titleId],
   );
+
+  useEffect(() => {
+    setLocations();
+
+    if (pieces && poLine.id) {
+      getLocations(mutator.locations, pieces, poLine)
+        .then(setLocations)
+        .catch(() => setLocations([]));
+    }
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [pieces, poLine]);
 
   const onClose = useCallback(
     () => {
@@ -209,12 +224,13 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
     [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
   );
 
-  if (isLoading || !pieces) {
+  if (isLoading || !(pieces || locations)) {
     return (<LoadingPane onClose={onClose} />);
   }
 
   return (
     <TitleDetails
+      locations={locations}
       onAddPiece={onAddPiece}
       onCheckIn={onCheckIn}
       onClose={onClose}
@@ -253,6 +269,10 @@ TitleDetailsContainer.manifest = Object.freeze({
   loanTypes: {
     ...LOAN_TYPES,
     accumulate: true,
+    fetch: false,
+  },
+  locations: {
+    ...locationsManifest,
     fetch: false,
   },
 });

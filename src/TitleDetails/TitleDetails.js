@@ -64,6 +64,7 @@ function getNewPieceValues(titleId, poLine) {
 const TitleDetails = ({
   history,
   location,
+  locations,
   onAddPiece,
   onCheckIn,
   onClose,
@@ -87,6 +88,9 @@ const TitleDetails = ({
   const { id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
+  const pieceLocationId = pieceValues.locationId;
+  const poLineLocationIds = poLine?.locations?.map(({ locationId }) => locationId);
+  const locationIds = pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds;
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
@@ -295,6 +299,8 @@ const TitleDetails = ({
           close={toggleAddPieceModal}
           initialValues={pieceValues}
           instanceId={title.instanceId}
+          locations={locations}
+          locationIds={locationIds}
           onCheckIn={onCheckIn}
           onSubmit={onSave}
           poLine={poLine}
@@ -307,6 +313,7 @@ const TitleDetails = ({
 TitleDetails.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object),
   onAddPiece: PropTypes.func.isRequired,
   onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

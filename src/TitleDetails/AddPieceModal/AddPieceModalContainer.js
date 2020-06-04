@@ -1,10 +1,7 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { stripesConnect } from '@folio/stripes/core';
 import {
-  batchFetch,
-  locationsManifest,
   ORDER_FORMATS,
   PIECE_FORMAT_OPTIONS,
   PIECE_FORMAT,
@@ -16,26 +13,12 @@ const AddPieceModalContainer = ({
   close,
   initialValues,
   instanceId,
-  mutator,
+  locations,
+  locationIds,
   onCheckIn,
   onSubmit,
   poLine,
 }) => {
-  const [locations, setLocations] = useState();
-  const pieceLocationId = initialValues.locationId;
-  const poLineLocationIds = poLine?.locations?.map(({ locationId }) => locationId) || [];
-  const locationIds = pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds;
-
-  useEffect(() => {
-    setLocations();
-
-    batchFetch(mutator.locations, locationIds)
-      .then(setLocations)
-      .catch(() => setLocations([]));
-  },
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  [poLine, initialValues.locationId]);
-
   const createInventoryValues = useMemo(
     () => ({
       [PIECE_FORMAT.physical]: poLine?.physical?.createInventory,
@@ -50,8 +33,6 @@ const AddPieceModalContainer = ({
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
     ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
     : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
-
-  if (!locations) return null;
 
   return (
     <AddPieceModal
@@ -68,21 +49,15 @@ const AddPieceModalContainer = ({
   );
 };
 
-AddPieceModalContainer.manifest = Object.freeze({
-  locations: {
-    ...locationsManifest,
-    fetch: false,
-  },
-});
-
 AddPieceModalContainer.propTypes = {
   close: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
-  mutator: PropTypes.object.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object),
+  locationIds: PropTypes.arrayOf(PropTypes.string),
   onCheckIn: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
 };
 
-export default stripesConnect(AddPieceModalContainer);
+export default AddPieceModalContainer;

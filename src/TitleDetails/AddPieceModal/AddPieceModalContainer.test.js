@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent, wait } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -15,7 +15,8 @@ const renderAddPieceModalContainer = (
   instanceId,
   onCheckIn,
   poLine,
-  mutator,
+  locations,
+  locationsIds,
 ) => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
@@ -23,10 +24,11 @@ const renderAddPieceModalContainer = (
         close={close}
         initialValues={initialValues}
         instanceId={instanceId}
+        locations={locations}
+        locationsIds={locationsIds}
         onCheckIn={onCheckIn}
         onSubmit={onSubmit}
         poLine={poLine}
-        mutator={mutator}
       />
     </MemoryRouter>
   </IntlProvider>,
@@ -36,18 +38,11 @@ describe('AddPieceModalContainer', () => {
   let close;
   let onSubmit;
   let onCheckIn;
-  let mutator;
 
   beforeEach(() => {
     close = jest.fn();
     onSubmit = jest.fn();
     onCheckIn = jest.fn();
-    mutator = {
-      locations: {
-        GET: jest.fn(),
-        reset: jest.fn(),
-      },
-    };
   });
 
   afterEach(cleanup);
@@ -55,21 +50,19 @@ describe('AddPieceModalContainer', () => {
   it('should display Edit Piece form', () => {
     const poLine = { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] };
     const initialValues = { caption: 'testcaption', format: 'Physical', id: 'id', poLineId: 'poLineId', titleId: 'titleId', locationId: '001' };
-    const pieceLocations = [{ name: 'Location', id: '001' }];
+    const locations = [{ name: 'Location', code: 'code', id: '001' }];
+    const locationIds = ['001'];
 
-    mutator.locations.GET.mockReturnValue(Promise.resolve(pieceLocations));
+    const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer(close, onSubmit, initialValues, 'instanceId', onCheckIn, poLine, locations, locationIds);
 
-    const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer(close, onSubmit, initialValues, 'instanceId', onCheckIn, poLine, mutator);
-
-    expect(mutator.locations.GET).toHaveBeenCalled();
     // header is rendered
-    wait(() => expect(getByText('ui-receiving.piece.caption')).toBeDefined());
-    wait(() => expect(getByLabelText('ui-receiving.piece.caption')).toBeDefined());
-    wait(() => expect(getByText('ui-receiving.piece.format')).toBeDefined());
-    wait(() => expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined());
-    wait(() => expect(getByText(pieceLocations[0].name)).toBeDefined());
-    wait(() => expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeTruthy());
-    wait(() => fireEvent.input(getByLabelText('ui-receiving.piece.caption')));
+    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByLabelText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.format')).toBeDefined();
+    expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
+    expect(getByText('ui-receiving.piece.location')).toBeDefined();
+    expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeTruthy();
+    fireEvent.input(getByLabelText('ui-receiving.piece.caption'));
   });
 
   it('should display Edit Received Piece form', () => {
@@ -83,16 +76,15 @@ describe('AddPieceModalContainer', () => {
       titleId: 'titleId',
       receivingStatus: PIECE_STATUS.received,
     };
-    const pieceLocations = [{ name: 'Location', id: '001' }];
+    const locations = [{ name: 'Location', id: '001' }];
+    const locationIds = ['001'];
 
-    mutator.locations.GET.mockReturnValue(Promise.resolve(pieceLocations));
+    const { getByLabelText, queryByText } = renderAddPieceModalContainer(close, onSubmit, piece, 'instanceId', onCheckIn, poLine, locations, locationIds);
 
-    const { getByLabelText, queryByText } = renderAddPieceModalContainer(close, onSubmit, piece, 'instanceId', onCheckIn, poLine, mutator);
-
-    wait(() => expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy());
-    wait(() => expect(getByLabelText('ui-receiving.piece.format').disabled).toBeTruthy());
-    wait(() => expect(getByLabelText('ui-receiving.piece.receiptDate').disabled).toBeFalsy());
-    wait(() => expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeFalsy());
-    wait(() => expect(getByLabelText('ui-receiving.piece.location').disabled).toBeTruthy());
+    expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy();
+    expect(getByLabelText('ui-receiving.piece.format').disabled).toBeTruthy();
+    expect(getByLabelText('ui-receiving.piece.receiptDate').disabled).toBeFalsy();
+    expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeFalsy();
+    expect(getByLabelText('ui-receiving.piece.location').disabled).toBeTruthy();
   });
 });
