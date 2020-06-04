@@ -116,7 +116,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onCancel, poLine],
+    [onCancel, showCallout],
   );
 
   if (!(pieces && poLine && title && pieceLocationMap)) return null;

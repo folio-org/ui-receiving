@@ -97,7 +97,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onCancel, titleId, intl],
+    [showCallout, onCancel, intl],
   );
 
   if (!(title && poLine && identifierTypes && contributorNameTypes)) {

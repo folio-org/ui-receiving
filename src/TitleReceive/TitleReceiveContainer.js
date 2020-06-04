@@ -148,7 +148,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onCancel, poLine, loanTypeId],
+    [title.instanceId, loanTypeId, poLine, showCallout, onCancel],
   );
 
   const createInventoryValues = useMemo(
