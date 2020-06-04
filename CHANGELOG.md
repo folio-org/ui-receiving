@@ -11,6 +11,7 @@
 * [UINV-138](https://issues.folio.org/browse/UINV-138) Align actions icons in table to right hand side of view pane(s)
 
 ### Bug fixes
+* [UIREC-49](https://issues.folio.org/browse/UIREC-49) Save & close button should be disabled until all required fields have values entered
 * [UIREC-46](https://issues.folio.org/browse/UIREC-46) Action buttons are not aligning to the right and are displaying states incorrectly
 * [UIREC-94](https://issues.folio.org/browse/UIREC-94) Ability to edit unreceived pieces
 * [UIREC-92](https://issues.folio.org/browse/UIREC-92) Add Piece modal keeps values from previously edited piece
