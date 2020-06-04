@@ -37,6 +37,7 @@ const ALLOWED_YEAR_LENGTH = 4;
 
 const TitleForm = ({
   handleSubmit,
+  hasValidationErrors,
   form,
   onCancel,
   pristine,
@@ -54,6 +55,7 @@ const TitleForm = ({
       pristine={pristine}
       submitting={submitting}
       onCancel={onCancel}
+      isSubmitDisabled={hasValidationErrors}
     />
   );
 
@@ -277,11 +279,12 @@ TitleForm.propTypes = {
   values: PropTypes.object.isRequired,  // current form values
   identifierTypes: PropTypes.arrayOf(PropTypes.object),
   contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
+  hasValidationErrors: PropTypes.bool.isRequired,
 };
 
 export default stripesFinalForm({
   navigationCheck: true,
-  subscription: { values: true },
+  subscription: { hasValidationErrors: true, values: true },
   mutators: {
     setTitleValue: (args, state, tools) => {
       const { contributors, editions, publication, title, identifiers, id } = get(args, '0', {});
