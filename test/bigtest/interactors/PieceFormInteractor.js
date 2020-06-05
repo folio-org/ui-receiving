@@ -6,7 +6,10 @@ import {
   value,
 } from '@bigtest/interactor';
 
-import { ButtonInteractor } from '@folio/stripes-acq-components/test/bigtest/interactors';
+import {
+  ButtonInteractor,
+  OptionListInteractor,
+} from '@folio/stripes-acq-components/test/bigtest/interactors';
 
 import {
   TIMEOUT,
@@ -18,10 +21,15 @@ import {
   value = value();
 }
 
+@interactor class LocationInteractor {
+  options = new OptionListInteractor('#sl-field-locationId');
+}
+
 export default @interactor class PieceFormInteractor {
   static defaultScope = '#add-piece-modal';
 
   caption = new CaptionInput();
+  location = new LocationInteractor();
   cancelButton = new ButtonInteractor('[data-test-add-piece-cancel]');
   saveButton = new ButtonInteractor('[data-test-add-piece-save]');
   receiveButton = new ButtonInteractor('[data-test-add-piece-check-in]');

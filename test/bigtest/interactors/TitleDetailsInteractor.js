@@ -15,7 +15,7 @@ import { TIMEOUT } from './consts';
 @interactor class ExpectedPiecesAccordion {
   static defaultScope = `#${TITLE_ACCORDION.expected}`;
 
-  clickAddPiece = clickable('[data-test-add-piece-button]');
+  addPiece = new ButtonInteractor('[data-test-add-piece-button]');
   pieces = collection(`#${TITLE_ACCORDION.expected} [class*=mclRow---]`, ButtonInteractor);
 }
 
