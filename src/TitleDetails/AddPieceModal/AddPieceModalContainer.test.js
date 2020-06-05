@@ -16,7 +16,7 @@ const renderAddPieceModalContainer = (
   onCheckIn,
   poLine,
   locations,
-  locationsIds,
+  locationIds,
 ) => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
@@ -25,7 +25,7 @@ const renderAddPieceModalContainer = (
         initialValues={initialValues}
         instanceId={instanceId}
         locations={locations}
-        locationsIds={locationsIds}
+        locationIds={locationIds}
         onCheckIn={onCheckIn}
         onSubmit={onSubmit}
         poLine={poLine}
@@ -66,7 +66,7 @@ describe('AddPieceModalContainer', () => {
   });
 
   it('should display Edit Received Piece form', () => {
-    const poLine = { id: 'poLineId', physical: { createInventory: 'None' } };
+    const poLine = { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] };
     const piece = {
       caption: 'testcaption',
       format: 'Physical',

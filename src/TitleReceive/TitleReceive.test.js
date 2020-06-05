@@ -17,6 +17,8 @@ const initialValues = {
     id: '0001',
   }],
 };
+const poLineLocationIds = ['001'];
+const locations = [{ id: '001' }];
 
 const renderTitleReceive = ({ receivingNote, paneTitle }) => (render(
   <IntlProvider locale="en">
@@ -25,6 +27,8 @@ const renderTitleReceive = ({ receivingNote, paneTitle }) => (render(
         createInventoryValues={{}}
         initialValues={initialValues}
         instanceId="instanceId"
+        locations={locations}
+        poLineLocationIds={poLineLocationIds}
         onCancel={noop}
         onSubmit={noop}
         paneTitle={paneTitle}
