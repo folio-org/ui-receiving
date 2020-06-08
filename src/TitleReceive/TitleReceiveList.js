@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import {
-  FieldLocationFinal,
+  FieldLocation,
   getItemStatusLabel,
   PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
@@ -89,7 +89,7 @@ export const TitleReceiveList = ({
           const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
 
           return (
-            <FieldLocationFinal
+            <FieldLocation
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
               prepopulatedLocationsIds={locationIds}
               locationsForDict={locations}

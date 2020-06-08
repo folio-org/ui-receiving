@@ -19,7 +19,7 @@ import {
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
-  FieldLocationFinal,
+  FieldLocation,
   FieldSelectFinal,
   INVENTORY_RECORDS_TYPE,
   ModalFooter,
@@ -139,7 +139,7 @@ const AddPieceModal = ({
         </Row>
         <Row>
           <Col xs={6}>
-            <FieldLocationFinal
+            <FieldLocation
               isDisabled={!isNotReceived}
               labelId="ui-receiving.piece.location"
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
