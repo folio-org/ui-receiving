@@ -205,6 +205,9 @@
     "@folio/plugin-find-po-line": "*",
     "@folio/plugin-find-organization": "*"
   },
+  "stripesDeps": [
+    "@folio/stripes-acq-components"
+  ],
   "peerDependencies": {
     "@folio/stripes": "^4.0.0",
     "react": "*",

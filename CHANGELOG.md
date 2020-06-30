@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+### Stories
+* [UISACQCOMP-3](https://issues.folio.org/browse/UISACQCOMP-3) Handle import of stripes-acq-components to modules and platform
+
 ## [1.1.0](https://github.com/folio-org/ui-receiving/tree/v1.1.0) (2020-06-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.0.4...v1.1.0)
 
