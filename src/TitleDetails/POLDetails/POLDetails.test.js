@@ -8,28 +8,43 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 import POLDetails from './POLDetails';
 
 const renderPOLDetails = ({
+  accessProvider,
+  materialSupplier,
+  orderFormat,
+  orderType,
   poLineId,
   poLineNumber,
   receiptDate,
   receivingNote,
+  vendor,
 }) => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
       <POLDetails
+        accessProvider={accessProvider}
+        materialSupplier={materialSupplier}
+        orderFormat={orderFormat}
+        orderType={orderType}
         poLineId={poLineId}
         poLineNumber={poLineNumber}
         receiptDate={receiptDate}
         receivingNote={receivingNote}
+        vendor={vendor}
       />
     </MemoryRouter>
   </IntlProvider>,
 ));
 
 const polDetails = {
+  accessProvider: 'Access provider',
+  materialSupplier: 'Material supplier',
+  orderFormat: 'P/E Mix',
+  orderType: 'Ongoing',
   poLineId: '001',
   poLineNumber: 'POL-001',
   receiptDate: '2021-02-06',
   receivingNote: 'critical',
+  vendor: 'Vendor',
 };
 
 describe('Given POL details', () => {
@@ -41,6 +56,10 @@ describe('Given POL details', () => {
     expect(getByText(polDetails.poLineNumber)).toBeDefined();
     expect(getByText(polDetails.receiptDate)).toBeDefined();
     expect(getByText(polDetails.receivingNote)).toBeDefined();
+    expect(getByText(polDetails.accessProvider)).toBeDefined();
+    expect(getByText(polDetails.materialSupplier)).toBeDefined();
+    expect(getByText(polDetails.orderType)).toBeDefined();
+    expect(getByText(polDetails.vendor)).toBeDefined();
   });
 
   describe('When title is connected with poLine', () => {

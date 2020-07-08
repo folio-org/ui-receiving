@@ -6,12 +6,14 @@ import { withRouter } from 'react-router-dom';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
+  batchFetch,
   configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
   LoadingPane,
   LOAN_TYPES,
   locationsManifest,
+  organizationsManifest,
   pieceResource,
   piecesResource,
   requestsResource,
@@ -46,6 +48,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
   const [order, setOrder] = useState({});
   const [loanTypeId, setLoanTypeId] = useState();
   const [locations, setLocations] = useState();
+  const [vendorsMap, setVendorsMap] = useState();
   const configLoanTypeName = resources?.configLoanType?.records?.[0]?.value;
 
   useEffect(() => {
@@ -86,6 +89,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
       setTitle({});
       setPoLine({});
       setOrder({});
+      setVendorsMap();
 
       mutator.title.GET()
         .then(response => {
@@ -102,9 +106,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             path: `${ORDERS_API}/${line.purchaseOrderId}`,
           });
 
-          return Promise.all([orderPromise, fetchReceivingResources(line.id)]);
+          return Promise.all([orderPromise, line, fetchReceivingResources(line.id)]);
         })
-        .then(([orderResp]) => setOrder(orderResp))
+        .then(([orderResp, line]) => {
+          setOrder(orderResp);
+
+          const vendorsIds = [...new Set(
+            [orderResp.vendor, line?.physical?.materialSupplier, line?.eresource?.accessProvider].filter(Boolean),
+          )];
+
+          return batchFetch(mutator.vendors, vendorsIds);
+        })
+        .then(vendorsResp => {
+          setVendorsMap(vendorsResp.reduce((acc, v) => ({ ...acc, [v.id]: v.name }), {}));
+        })
         .catch(() => {
           showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' });
         })
@@ -222,7 +237,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
     [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
   );
 
-  if (isLoading || !(pieces || locations)) {
+  if (isLoading || !(pieces || locations || vendorsMap)) {
     return (<LoadingPane onClose={onClose} />);
   }
 
@@ -237,6 +252,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
       pieces={pieces}
       poLine={poLine}
       title={title}
+      vendorsMap={vendorsMap}
     />
   );
 };
@@ -272,6 +288,11 @@ TitleDetailsContainer.manifest = Object.freeze({
   locations: {
     ...locationsManifest,
     fetch: false,
+  },
+  vendors: {
+    ...organizationsManifest,
+    fetch: false,
+    accumulate: true,
   },
 });
 

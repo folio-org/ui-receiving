@@ -16,11 +16,19 @@ describe('Add piece', () => {
   setupApplication();
 
   beforeEach(async function () {
+    const vendor = this.server.create('vendor');
+    const order = this.server.create('order', {
+      vendor: vendor.id,
+    });
     const location = this.server.create('location', { name: 'Test' });
     const line = this.server.create('line', {
       orderFormat: ORDER_FORMATS.physicalResource,
       locations: [{ locationId: location.id, quantity: 1, quantityPhysical: 1 }],
       checkinItems: true,
+      purchaseOrderId: order.id,
+      physical: {
+        materialSupplier: vendor.id,
+      },
     });
     const title = this.server.create('title', {
       poLineId: line.id,

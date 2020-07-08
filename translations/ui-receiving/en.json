@@ -46,6 +46,7 @@
   "title.actions.unreceive.error": "Unreceive error",
   "title.actions.unreceive.success": "Unreceiving successful",
 
+  "title.accessProvider": "Access provider",
   "title.closedOrderMessage": "Purchase order is closed - {reason}",
   "title.contributors.add": "Add contributor",
   "title.contributors.contributor": "Contributor",
@@ -57,6 +58,10 @@
   "title.information": "Title information",
   "title.isAcknowledged": "Must acknowledge receiving note",
   "title.locations": "Locations",
+  "title.materialSupplier": "Material supplier",
+  "title.orderType.One-Time": "One-time",
+  "title.orderType.Ongoing": "Ongoing",
+  "title.orderType": "Order type",
   "title.package": "Package",
   "title.polDetails": "POL details",
   "title.polNumber": "POL number",
@@ -73,6 +78,7 @@
   "title.subscriptionInterval": "Subscription interval",
   "title.subscriptionTo": "Subscription to",
   "title.title": "Title",
+  "title.vendor": "Vendor",
 
   "piece.actions.addItem":"Add item",
   "piece.actions.addPiece.error": "The piece <b>{caption}</b> was not added",

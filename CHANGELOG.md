@@ -3,6 +3,7 @@
 ## (IN PROGRESS)
 
 ### Stories
+* [UIREC-95](https://issues.folio.org/browse/UIREC-95) Display 'Vendor', 'Material supplier', 'Access provider' and 'Order type' in title view pane
 * [UISACQCOMP-3](https://issues.folio.org/browse/UISACQCOMP-3) Handle import of stripes-acq-components to modules and platform
 
 ## [1.1.0](https://github.com/folio-org/ui-receiving/tree/v1.1.0) (2020-06-12)

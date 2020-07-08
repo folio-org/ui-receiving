@@ -16,9 +16,17 @@ describe('Receive piece', () => {
   setupApplication();
 
   beforeEach(async function () {
+    const vendor = this.server.create('vendor');
+    const order = this.server.create('order', {
+      vendor: vendor.id,
+    });
     const item = this.server.create('item');
     const line = this.server.create('line', {
       orderFormat: ORDER_FORMATS.physicalResource,
+      purchaseOrderId: order.id,
+      physical: {
+        materialSupplier: vendor.id,
+      },
     });
     const title = this.server.create('title', {
       poLineId: line.id,

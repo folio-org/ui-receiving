@@ -73,6 +73,7 @@ const TitleDetails = ({
   pieces,
   poLine,
   title,
+  vendorsMap,
 }) => {
   const [expandAll, sections, toggleSection] = useAccordionToggle();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
@@ -85,7 +86,7 @@ const TitleDetails = ({
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
-  const { id: poLineId, receiptDate, poLineNumber, checkinItems } = poLine;
+  const { id: poLineId, receiptDate, poLineNumber, checkinItems, orderFormat } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
@@ -94,6 +95,9 @@ const TitleDetails = ({
   const locationIds = useMemo(() => (
     pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
   ), [poLineLocationIds, pieceLocationId]);
+  const vendor = vendorsMap[order.vendor];
+  const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
+  const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
@@ -250,10 +254,15 @@ const TitleDetails = ({
           label={TITLE_ACCORDION_LABELS.polDetails}
         >
           <POLDetails
+            accessProvider={accessProvider}
+            materialSupplier={materialSupplier}
+            orderFormat={orderFormat}
+            orderType={order.orderType}
             poLineId={poLineId}
             poLineNumber={poLineNumber}
             receiptDate={receiptDate}
             receivingNote={receivingNote}
+            vendor={vendor}
           />
         </Accordion>
 
@@ -325,6 +334,7 @@ TitleDetails.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,
+  vendorsMap: PropTypes.object.isRequired,
 };
 
 TitleDetails.defaultProps = {

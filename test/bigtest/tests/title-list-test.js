@@ -18,8 +18,16 @@ describe('Titles list', () => {
   setupApplication();
 
   beforeEach(async function () {
+    const vendor = this.server.create('vendor');
+    const order = this.server.create('order', {
+      vendor: vendor.id,
+    });
     const line = this.server.create('line', {
       orderFormat: ORDER_FORMATS.physicalResource,
+      purchaseOrderId: order.id,
+      physical: {
+        materialSupplier: vendor.id,
+      },
     });
 
     this.server.createList('title', LIST_COUNT, {
