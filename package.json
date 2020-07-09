@@ -28,6 +28,7 @@
       "order-lines": "1.0",
       "orders-storage.pieces": "4.0",
       "orders": "10.0",
+      "organizations.organizations": "1.0",
       "pieces": "2.0",
       "receiving": "1.0",
       "tags": "1.0",
@@ -81,6 +82,7 @@
           "orders.pieces.all",
           "orders.po-lines.item.get",
           "orders.titles.all",
+          "organizations.organizations.collection.get",
           "tags.collection.get"
         ]
       },
