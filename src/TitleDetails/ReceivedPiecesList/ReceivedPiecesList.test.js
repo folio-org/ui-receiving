@@ -16,6 +16,7 @@ const renderPiecesList = () => (render(
   <IntlProvider locale="en">
     <ReceivedPiecesList
       pieces={pieces}
+      selectPiece={jest.fn}
     />
   </IntlProvider>,
 ));
