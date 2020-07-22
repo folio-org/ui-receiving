@@ -1,6 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import { Field } from 'react-final-form';
 
 import {
@@ -23,6 +26,8 @@ const visibleColumns = [
 ];
 
 export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCheckedAll } }) => {
+  const intl = useIntl();
+
   const field = fields.name;
   const cellFormatters = useMemo(
     () => {
@@ -31,6 +36,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
           <Field
             name={`${field}[${record.rowIndex}].comment`}
             component={TextArea}
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.comment' })}
             fullWidth
           />
         ),
@@ -40,6 +46,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
             name={`${field}[${record.rowIndex}].checked`}
             component={Checkbox}
             type="checkbox"
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
           />
         ),
         location: ({ locationId }) => pieceLocationMap[locationId],
@@ -71,6 +78,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
           checked={isAllChecked}
           data-test-unreceive-title-checked
           onChange={toggleAll}
+          aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
         />
       ),
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
@@ -81,6 +89,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
       location: <FormattedMessage id="ui-receiving.piece.location" />,
       callNumber: <FormattedMessage id="ui-receiving.piece.callNumber" />,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isAllChecked, toggleAll],
   );
 

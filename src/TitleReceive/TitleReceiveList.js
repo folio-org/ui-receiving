@@ -1,6 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import { Field } from 'react-final-form';
 
 import {
@@ -38,6 +41,8 @@ export const TitleReceiveList = ({
   fields,
   props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll, locations, poLineLocationIds },
 }) => {
+  const intl = useIntl();
+
   const field = fields.name;
   const cellFormatters = useMemo(
     () => {
@@ -48,6 +53,7 @@ export const TitleReceiveList = ({
             component={TextField}
             marginBottom0
             fullWidth
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.caption' })}
           />
         ),
         barcode: record => (
@@ -56,6 +62,7 @@ export const TitleReceiveList = ({
             component={TextField}
             disabled={!record.itemId && !record.isCreateItem}
             marginBottom0
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.barcode' })}
             fullWidth
           />
         ),
@@ -63,6 +70,7 @@ export const TitleReceiveList = ({
           <Field
             name={`${field}[${record.rowIndex}].comment`}
             component={TextArea}
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.comment' })}
             fullWidth
           />
         ),
@@ -72,6 +80,7 @@ export const TitleReceiveList = ({
             name={`${field}[${record.rowIndex}].checked`}
             component={Checkbox}
             type="checkbox"
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
           />
         ),
         itemStatus: ({ itemStatus }) => getItemStatusLabel(itemStatus),
@@ -81,6 +90,7 @@ export const TitleReceiveList = ({
             component={TextField}
             disabled={!record.itemId && !record.isCreateItem}
             marginBottom0
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.callNumber' })}
             fullWidth
           />
         ),
@@ -133,6 +143,7 @@ export const TitleReceiveList = ({
         <Checkbox
           checked={isAllChecked}
           onChange={toggleAll}
+          aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
         />
       ),
       caption: <FormattedMessage id="ui-receiving.piece.caption" />,
@@ -145,6 +156,7 @@ export const TitleReceiveList = ({
       callNumber: <FormattedMessage id="ui-receiving.piece.callNumber" />,
       isCreateItem: <FormattedMessage id="ui-receiving.piece.createItem" />,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isAllChecked, toggleAll],
   );
 

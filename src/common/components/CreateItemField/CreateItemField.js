@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import { includes } from 'lodash';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +22,8 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
   const { format, itemId, holdingsRecordId, receivingStatus } = piece;
   const isAddItemAvailable = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
   const isReceived = receivingStatus === PIECE_STATUS.received;
+
+  const intl = useIntl();
 
   if (itemId) {
     return (
@@ -47,6 +52,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
         name={name}
         type="checkbox"
         vertical
+        aria-label={intl.formatMessage({ id: 'ui-receiving.piece.createItem' })}
       />
     );
   } else return null;
