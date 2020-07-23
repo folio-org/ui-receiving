@@ -125,5 +125,7 @@
     "title.orderType.One-Time": "Uma vez",
     "title.orderType.Ongoing": "Em curso",
     "title.orderType": "Tipo de pedido",
-    "title.vendor": "Fornecedor"
+    "title.vendor": "Fornecedor",
+    "piece.actions.selectAll": "Selecionar todas as peças",
+    "piece.actions.select": "Selecionar peça"
 }

@@ -125,5 +125,7 @@
     "title.orderType.One-Time": "لمرة واحدة",
     "title.orderType.Ongoing": "جاري",
     "title.orderType": "نوع الطلبية",
-    "title.vendor": "مورّد"
+    "title.vendor": "مورّد",
+    "piece.actions.selectAll": "تحديد كل القطع",
+    "piece.actions.select": "اختر قطعة"
 }

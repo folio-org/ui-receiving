@@ -125,5 +125,7 @@
     "title.orderType.One-Time": "一次性",
     "title.orderType.Ongoing": "进行中",
     "title.orderType": "订购类型",
-    "title.vendor": "供应商"
+    "title.vendor": "供应商",
+    "piece.actions.selectAll": "Select all pieces",
+    "piece.actions.select": "Select piece"
 }
