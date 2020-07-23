@@ -125,5 +125,7 @@
     "title.orderType.One-Time": "One-time",
     "title.orderType.Ongoing": "Ongoing",
     "title.orderType": "Order type",
-    "title.vendor": "Vendor"
+    "title.vendor": "Vendor",
+    "piece.actions.selectAll": "Select all pieces",
+    "piece.actions.select": "Select piece"
 }

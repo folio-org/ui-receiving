@@ -125,5 +125,7 @@
     "title.orderType.One-Time": "Une seule fois",
     "title.orderType.Ongoing": "Continu",
     "title.orderType": "Type de commande",
-    "title.vendor": "Fournisseur"
+    "title.vendor": "Fournisseur",
+    "piece.actions.selectAll": "Sélectionnez toutes les pièces",
+    "piece.actions.select": "Supprimer la pièce"
 }

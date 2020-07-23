@@ -111,7 +111,7 @@
     "title.closedOrderMessage": "Purchase order is closed - {reason}",
     "title.polDetails": "POL details",
     "piece.actions.quickReceive": "Quick receive",
-    "filter.acqUnits": "Устройства поиска",
+    "filter.acqUnits": "Единицы комплектования",
     "filter.receivingStatus": "Статус получения",
     "find-po-line-plugin-unavailable": "Поиск плагина строки заказа не доступен",
     "title.actions.save.error.genericError": "Название {title} не было добавлено для строки заказа {poLineNumber}",
@@ -125,5 +125,7 @@
     "title.orderType.One-Time": "One-time",
     "title.orderType.Ongoing": "Ongoing",
     "title.orderType": "Тип заказа",
-    "title.vendor": "Vendor"
+    "title.vendor": "Vendor",
+    "piece.actions.selectAll": "Выбрать все части",
+    "piece.actions.select": "Выбрать часть"
 }
