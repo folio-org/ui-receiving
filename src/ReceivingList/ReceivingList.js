@@ -124,12 +124,13 @@ const ReceivingList = ({
           <ResetButton
             id="reset-receiving-filters"
             reset={resetFilters}
-            disabled={!location.search}
+            disabled={!location.search || isLoading}
           />
 
           <ReceivingListFilter
             activeFilters={filters}
             applyFilters={applyFilters}
+            disabled={isLoading}
           />
         </FiltersPane>
       )}

@@ -25,6 +25,7 @@ const applyFiltersAdapter = (applyFilters) => ({ name, values }) => applyFilters
 const ReceivingListFilter = ({
   activeFilters,
   applyFilters,
+  disabled,
 }) => {
   const adaptedApplyFilters = useCallback(
     applyFiltersAdapter(applyFilters),
@@ -36,6 +37,7 @@ const ReceivingListFilter = ({
       <AcqCheckboxFilter
         id={`filter-${FILTERS.ORDER_STATUS}`}
         activeFilters={activeFilters[FILTERS.ORDER_STATUS]}
+        disabled={disabled}
         labelId="ui-receiving.filter.orderStatus"
         name={FILTERS.ORDER_STATUS}
         onChange={adaptedApplyFilters}
@@ -45,6 +47,7 @@ const ReceivingListFilter = ({
       <PluggableOrganizationFilter
         id={`filter-${FILTERS.ORDER_ORGANIZATION}`}
         activeFilters={activeFilters[FILTERS.ORDER_ORGANIZATION]}
+        disabled={disabled}
         labelId="ui-receiving.filter.vendor"
         name={FILTERS.ORDER_ORGANIZATION}
         onChange={adaptedApplyFilters}
@@ -53,6 +56,7 @@ const ReceivingListFilter = ({
       <AcqCheckboxFilter
         id={`filter-${FILTERS.ORDER_TYPE}`}
         activeFilters={activeFilters[FILTERS.ORDER_TYPE]}
+        disabled={disabled}
         labelId="ui-receiving.filter.orderType"
         name={FILTERS.ORDER_TYPE}
         onChange={adaptedApplyFilters}
@@ -62,6 +66,7 @@ const ReceivingListFilter = ({
       <MaterialTypeFilterContainer
         id={`filter-${FILTERS.MATERIAL_TYPE}`}
         activeFilters={activeFilters[FILTERS.MATERIAL_TYPE]}
+        disabled={disabled}
         labelId="ui-receiving.filter.materialType"
         name={FILTERS.MATERIAL_TYPE}
         onChange={adaptedApplyFilters}
@@ -70,6 +75,7 @@ const ReceivingListFilter = ({
       <AcqCheckboxFilter
         id={`filter-${FILTERS.ORDER_FORMAT}`}
         activeFilters={activeFilters[FILTERS.ORDER_FORMAT]}
+        disabled={disabled}
         labelId="ui-receiving.filter.orderFormat"
         name={FILTERS.ORDER_FORMAT}
         onChange={adaptedApplyFilters}
@@ -79,6 +85,7 @@ const ReceivingListFilter = ({
       <AcqTagsFilter
         id={`filter-${FILTERS.POL_TAGS}`}
         activeFilters={activeFilters[FILTERS.POL_TAGS]}
+        disabled={disabled}
         name={FILTERS.POL_TAGS}
         onChange={adaptedApplyFilters}
       />
@@ -86,6 +93,7 @@ const ReceivingListFilter = ({
       <LocationFilterContainer
         id={`filter-${FILTERS.LOCATION}`}
         activeFilter={activeFilters[FILTERS.LOCATION] && activeFilters[FILTERS.LOCATION][0]}
+        disabled={disabled}
         labelId="ui-receiving.filter.location"
         name={FILTERS.LOCATION}
         onChange={adaptedApplyFilters}
@@ -94,6 +102,7 @@ const ReceivingListFilter = ({
       <AcqCheckboxFilter
         id={`filter-${FILTERS.RECEIVING_STATUS}`}
         activeFilters={activeFilters[FILTERS.RECEIVING_STATUS]}
+        disabled={disabled}
         labelId="ui-receiving.filter.receivingStatus"
         name={FILTERS.RECEIVING_STATUS}
         onChange={adaptedApplyFilters}
@@ -103,6 +112,7 @@ const ReceivingListFilter = ({
       <AcqUnitFilter
         id={`filter-${FILTERS.ACQUISITIONS_UNIT}`}
         activeFilters={activeFilters[FILTERS.ACQUISITIONS_UNIT]}
+        disabled={disabled}
         labelId="ui-receiving.filter.acqUnits"
         name={FILTERS.ACQUISITIONS_UNIT}
         onChange={adaptedApplyFilters}
@@ -114,6 +124,7 @@ const ReceivingListFilter = ({
 ReceivingListFilter.propTypes = {
   activeFilters: PropTypes.object.isRequired,
   applyFilters: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default ReceivingListFilter;

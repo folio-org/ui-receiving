@@ -1,5 +1,5 @@
 import React, {
-  useEffect,
+  useCallback,
   useState,
 } from 'react';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import queryString from 'query-string';
 
 import { stripesConnect } from '@folio/stripes/core';
-import { getFilterParams } from '@folio/stripes-acq-components';
+import { useList } from '@folio/stripes-acq-components';
 
 import {
   titlesResource,
@@ -30,99 +30,75 @@ const RESULT_COUNT_INCREMENT = 30;
 const resetData = () => {};
 
 const ReceivingListContainer = ({ mutator, location }) => {
-  const [titles, setTitles] = useState([]);
   const [orderLinesMap, setOrderLinesMap] = useState({});
   const [locationsMap, setLocationsMap] = useState({});
-  const [titlesCount, setTitlesCount] = useState(0);
-  const [titlesOffset, setTitlesOffset] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const loadTitles = (offset) => {
-    setIsLoading(true);
-    const queryParams = queryString.parse(location.search);
-    const filterParams = getFilterParams(queryParams);
-    const hasToCallAPI = Object.keys(filterParams).length > 0;
+  const loadTitles = useCallback((offset) => {
+    return mutator.receivingListTitles.GET({
+      params: {
+        limit: RESULT_COUNT_INCREMENT,
+        offset,
+        query: buildTitlesQuery(queryString.parse(location.search)),
+      },
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
-    const loadRecordsPromise = hasToCallAPI
-      ? mutator.receivingListTitles.GET({
-        params: {
-          limit: RESULT_COUNT_INCREMENT,
-          offset,
-          query: buildTitlesQuery(queryParams),
-        },
+  const loadTitlesCB = useCallback((setTitles, titlesResponse) => {
+    const orderLinesPromise = fetchTitleOrderLines(
+      mutator.receivingListOrderLines, titlesResponse.titles, orderLinesMap,
+    );
+
+    return orderLinesPromise
+      .then((orderLinesResponse) => {
+        const locationsPromise = fetchOrderLineLocations(
+          mutator.receivingListLocations, orderLinesResponse, locationsMap,
+        );
+
+        return Promise.all([orderLinesResponse, locationsPromise]);
       })
-        .then(titlesResponse => {
-          const orderLinesPromise = fetchTitleOrderLines(
-            mutator.receivingListOrderLines, titlesResponse.titles, orderLinesMap,
-          );
+      .then(([orderLinesResponse, locationsResponse]) => {
+        const newLocationsMap = {
+          ...locationsMap,
+          ...locationsResponse.reduce((acc, locationItem) => {
+            acc[locationItem.id] = locationItem;
 
-          return Promise.all([titlesResponse, orderLinesPromise]);
-        })
-        .then(([titlesResponse, orderLinesResponse]) => {
-          const locationsPromise = fetchOrderLineLocations(
-            mutator.receivingListLocations, orderLinesResponse, locationsMap,
-          );
+            return acc;
+          }, {}),
+        };
 
-          return Promise.all([titlesResponse, orderLinesResponse, locationsPromise]);
-        })
-        .then(([titlesResponse, orderLinesResponse, locationsResponse]) => {
-          if (!offset) setTitlesCount(titlesResponse.totalRecords);
+        const newOrderLinesMap = {
+          ...orderLinesMap,
+          ...orderLinesResponse.reduce((acc, orderLine) => {
+            acc[orderLine.id] = {
+              ...orderLine,
+              locations: orderLine.locations.map(({ locationId }) => newLocationsMap[locationId].name),
+            };
 
-          const newLocationsMap = {
-            ...locationsMap,
-            ...locationsResponse.reduce((acc, locationItem) => {
-              acc[locationItem.id] = locationItem;
+            return acc;
+          }, {}),
+        };
 
-              return acc;
-            }, {}),
-          };
+        setOrderLinesMap(newOrderLinesMap);
+        setLocationsMap(newLocationsMap);
 
-          const newOrderLinesMap = {
-            ...orderLinesMap,
-            ...orderLinesResponse.reduce((acc, orderLine) => {
-              acc[orderLine.id] = {
-                ...orderLine,
-                locations: orderLine.locations.map(({ locationId }) => newLocationsMap[locationId].name),
-              };
-
-              return acc;
-            }, {}),
-          };
-
-          setOrderLinesMap(newOrderLinesMap);
-          setLocationsMap(newLocationsMap);
-
-          setTitles((prev) => [
-            ...prev,
-            ...titlesResponse.titles.map(title => ({
-              ...title,
-              poLine: newOrderLinesMap[title.poLineId],
-            })),
-          ]);
-        })
-      : Promise.resolve();
-
-    return loadRecordsPromise.finally(() => setIsLoading(false));
-  };
-
-  const onNeedMoreData = () => {
-    const newOffset = titlesOffset + RESULT_COUNT_INCREMENT;
-
-    loadTitles(newOffset)
-      .then(() => {
-        setTitlesOffset(newOffset);
+        setTitles((prev) => [
+          ...prev,
+          ...titlesResponse.titles.map(title => ({
+            ...title,
+            poLine: newOrderLinesMap[title.poLineId],
+          })),
+        ]);
       });
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locationsMap, orderLinesMap]);
 
-  useEffect(
-    () => {
-      setTitles([]);
-      setTitlesOffset(0);
-      loadTitles(0);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [location.search],
-  );
+  const {
+    records: titles,
+    recordsCount: titlesCount,
+    isLoading,
+    onNeedMoreData,
+  } = useList(false, loadTitles, loadTitlesCB, RESULT_COUNT_INCREMENT);
 
   return (
     <ReceivingList

@@ -47,8 +47,11 @@ const AddPieceModal = ({
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
 
   const receive = useCallback(
-    () => onCheckIn(formValues),
-    [formValues, onCheckIn],
+    () => {
+      onCheckIn(formValues);
+      close();
+    },
+    [close, formValues, onCheckIn],
   );
 
   const start = (
