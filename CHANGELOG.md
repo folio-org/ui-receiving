@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Update subheading of the Receiving landing page Search results pane. Refs UIREC-96
+
 ### Stories
 * [UIREC-95](https://issues.folio.org/browse/UIREC-95) Display 'Vendor', 'Material supplier', 'Access provider' and 'Order type' in title view pane
 * [UISACQCOMP-3](https://issues.folio.org/browse/UISACQCOMP-3) Handle import of stripes-acq-components to modules and platform
