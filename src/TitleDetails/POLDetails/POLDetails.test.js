@@ -58,7 +58,7 @@ describe('Given POL details', () => {
     expect(getByText(polDetails.receivingNote)).toBeDefined();
     expect(getByText(polDetails.accessProvider)).toBeDefined();
     expect(getByText(polDetails.materialSupplier)).toBeDefined();
-    expect(getByText(polDetails.orderType)).toBeDefined();
+    expect(getByText('ui-receiving.title.orderType.Ongoing')).toBeDefined();
     expect(getByText(polDetails.vendor)).toBeDefined();
   });
 

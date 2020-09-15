@@ -12,6 +12,7 @@ import {
   Col,
   ExpandAllButton,
   KeyValue,
+  NoValue,
   Pane,
   Paneset,
   Row,
@@ -245,7 +246,7 @@ const TitleForm = ({
                           overflowWrap: 'break-word',
                         }}
                         >
-                          {get(details, 'receivingNote')}
+                          {details?.receivingNote || <NoValue />}
                         </span>
                       </KeyValue>
                     </Col>

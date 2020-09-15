@@ -12,6 +12,7 @@ import {
   Checkbox,
   Icon,
   KeyValue,
+  NoValue,
 } from '@folio/stripes/components';
 import {
   INVENTORY_RECORDS_TYPE,
@@ -55,7 +56,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
         aria-label={intl.formatMessage({ id: 'ui-receiving.piece.createItem' })}
       />
     );
-  } else return null;
+  } else return <NoValue />;
 }
 
 CreateItemField.propTypes = {

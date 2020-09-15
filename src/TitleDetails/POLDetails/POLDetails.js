@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import {
   Col,
   KeyValue,
+  NoValue,
   Row,
 } from '@folio/stripes/components';
 
@@ -69,7 +70,7 @@ const POLDetails = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.receivingNote" />}
-            value={receivingNote}
+            value={receivingNote || <NoValue />}
           />
         </Col>
         <Col
@@ -117,7 +118,7 @@ const POLDetails = ({
           >
             <KeyValue
               label={<FormattedMessage id="ui-receiving.title.materialSupplier" />}
-              value={materialSupplier}
+              value={materialSupplier || <NoValue />}
             />
           </Col>
         )}

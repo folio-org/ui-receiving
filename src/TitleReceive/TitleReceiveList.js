@@ -9,6 +9,7 @@ import { Field } from 'react-final-form';
 import {
   Checkbox,
   MultiColumnList,
+  NoValue,
   TextArea,
   TextField,
 } from '@folio/stripes/components';
@@ -111,7 +112,7 @@ export const TitleReceiveList = ({
         hasRequest: record => (
           record.request
             ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-            : '-'
+            : <NoValue />
         ),
         format: ({ format }) => PIECE_FORMAT_LABELS[format],
         isCreateItem: piece => (

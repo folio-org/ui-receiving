@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {
   Col,
   KeyValue,
+  NoValue,
   Row,
 } from '@folio/stripes/components';
 
@@ -34,7 +35,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.publisher" />}
-            value={publisher}
+            value={publisher || <NoValue />}
           />
         </Col>
         <Col
@@ -44,7 +45,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.publicationDate" />}
-            value={publishedDate}
+            value={publishedDate || <NoValue />}
           />
         </Col>
         <Col
@@ -54,7 +55,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.edition" />}
-            value={edition}
+            value={edition || <NoValue />}
           />
         </Col>
         <Col
@@ -84,7 +85,7 @@ const TitleInformation = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.subscriptionInterval" />}
-            value={subscriptionInterval}
+            value={subscriptionInterval ?? <NoValue />}
           />
         </Col>
       </Row>
@@ -121,17 +122,6 @@ TitleInformation.propTypes = {
   subscriptionFrom: PropTypes.string,
   subscriptionInterval: PropTypes.number,
   subscriptionTo: PropTypes.string,
-};
-
-TitleInformation.defaultProps = {
-  contributors: [],
-  edition: '',
-  productIds: [],
-  publishedDate: '',
-  publisher: '',
-  subscriptionFrom: '',
-  subscriptionInterval: 0,
-  subscriptionTo: '',
 };
 
 export default TitleInformation;

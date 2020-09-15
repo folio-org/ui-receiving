@@ -9,6 +9,7 @@ import { Field } from 'react-final-form';
 import {
   Checkbox,
   MultiColumnList,
+  NoValue,
   TextArea,
 } from '@folio/stripes/components';
 
@@ -53,9 +54,11 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
         hasRequest: record => (
           record.request
             ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-            : '-'
+            : <NoValue />
         ),
         format: ({ format }) => PIECE_FORMAT_LABELS[format],
+        callNumber: ({ callNumber }) => callNumber || <NoValue />,
+        barcode: ({ barcode }) => barcode || <NoValue />,
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

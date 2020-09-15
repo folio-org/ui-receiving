@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 
+* Update view pane to display null as hyphen - Receving. Refs UIREC-98
 * Update subheading of the Receiving landing page Search results pane. Refs UIREC-96
 
 ### Stories

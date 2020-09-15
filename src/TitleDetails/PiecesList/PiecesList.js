@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   Icon,
   MultiColumnList,
+  NoValue,
   Tooltip,
 } from '@folio/stripes/components';
 import {
@@ -26,6 +27,7 @@ const columnMapping = {
 };
 
 const formatter = {
+  caption: piece => piece.caption || <NoValue />,
   format: piece => (
     <span>
       {PIECE_FORMAT_LABELS[piece.format]}
@@ -51,11 +53,11 @@ const formatter = {
   ),
   receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
   receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
-  barcode: piece => piece.barcode || '-',
+  barcode: piece => piece.barcode || <NoValue />,
   request: piece => (
     piece.request
       ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-      : '-'
+      : <NoValue />
   ),
   selection: () => <Icon icon="caret-right" />,
 };

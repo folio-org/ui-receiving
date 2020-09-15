@@ -11,6 +11,7 @@ import { get } from 'lodash';
 import {
   Paneset,
   MultiColumnList,
+  NoValue,
 } from '@folio/stripes/components';
 import {
   FiltersPane,
@@ -52,9 +53,9 @@ const columnMapping = {
 };
 const resultsFormatter = {
   'poLine.physical.expectedReceiptDate': data => <FolioFormattedDate value={get(data, 'poLine.physical.expectedReceiptDate')} />,
-  'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : ''),
+  'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : <NoValue />),
   'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
-  'poLine.receivingNote': data => get(data, 'poLine.details.receivingNote'),
+  'poLine.receivingNote': data => get(data, 'poLine.details.receivingNote') || <NoValue />,
   'locations': data => get(data, 'poLine.locations', []).join(', '),
 };
 
