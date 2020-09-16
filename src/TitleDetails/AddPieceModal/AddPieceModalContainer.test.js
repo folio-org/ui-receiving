@@ -79,10 +79,10 @@ describe('AddPieceModalContainer', () => {
     const locations = [{ name: 'Location', id: '001' }];
     const locationIds = ['001'];
 
-    const { getByLabelText, queryByText } = renderAddPieceModalContainer(close, onSubmit, piece, 'instanceId', onCheckIn, poLine, locations, locationIds);
+    const { getByLabelText, queryByText, getByText } = renderAddPieceModalContainer(close, onSubmit, piece, 'instanceId', onCheckIn, poLine, locations, locationIds);
 
     expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy();
-    expect(getByLabelText('ui-receiving.piece.format').disabled).toBeTruthy();
+    expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.receiptDate').disabled).toBeFalsy();
     expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeFalsy();
     expect(getByLabelText('ui-receiving.piece.location').disabled).toBeTruthy();
