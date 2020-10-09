@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -45,8 +45,6 @@ describe('AddPieceModalContainer', () => {
     onCheckIn = jest.fn();
   });
 
-  afterEach(cleanup);
-
   it('should display Edit Piece form', () => {
     const poLine = { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] };
     const initialValues = { caption: 'testcaption', format: 'Physical', id: 'id', poLineId: 'poLineId', titleId: 'titleId', locationId: '001' };
@@ -61,6 +59,7 @@ describe('AddPieceModalContainer', () => {
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
     expect(getByText('ui-receiving.piece.location')).toBeDefined();
+    expect(getByLabelText('ui-receiving.piece.location')).toBeDefined();
     expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeTruthy();
     fireEvent.input(getByLabelText('ui-receiving.piece.caption'));
   });
@@ -79,12 +78,21 @@ describe('AddPieceModalContainer', () => {
     const locations = [{ name: 'Location', id: '001' }];
     const locationIds = ['001'];
 
-    const { getByLabelText, queryByText, getByText } = renderAddPieceModalContainer(close, onSubmit, piece, 'instanceId', onCheckIn, poLine, locations, locationIds);
+    const { getByLabelText, queryByText, queryByLabelText, getByText } = renderAddPieceModalContainer(
+      close,
+      onSubmit,
+      piece,
+      'instanceId',
+      onCheckIn,
+      poLine,
+      locations,
+      locationIds,
+    );
 
     expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.receiptDate').disabled).toBeFalsy();
     expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeFalsy();
-    expect(getByLabelText('ui-receiving.piece.location').disabled).toBeTruthy();
+    expect(queryByLabelText('ui-receiving.piece.location')).toBeFalsy();
   });
 });
