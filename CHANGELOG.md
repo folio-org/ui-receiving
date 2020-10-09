@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [1.2.0](https://github.com/folio-org/ui-receiving/tree/v1.2.0) (2020-10-09)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.1.0...v1.2.0)
+
 * Update view pane to display null as hyphen - Receving. Refs UIREC-98
 * Update subheading of the Receiving landing page Search results pane. Refs UIREC-96
 
