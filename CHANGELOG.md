@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Display warning modal when user trying to receive against a closed Order. Refs UIREC-101.
+
 ## [1.2.0](https://github.com/folio-org/ui-receiving/tree/v1.2.0) (2020-10-09)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.1.0...v1.2.0)
 

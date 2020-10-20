@@ -7,6 +7,10 @@ import {
   PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
+import {
+  ConfirmationInteractor,
+} from '@folio/stripes-acq-components/test/bigtest/interactors';
+
 import setupApplication from '../../helpers/setup-application';
 import {
   TitleDetailsInteractor,
@@ -16,6 +20,7 @@ import {
 describe('Title details', () => {
   const titleDetails = new TitleDetailsInteractor();
   const titleReceive = new TitleReceiveInteractor();
+  const receivingConfirmation = new ConfirmationInteractor('#confirm-receiving');
 
   setupApplication();
 
@@ -63,12 +68,23 @@ describe('Title details', () => {
   describe('click receive button', function () {
     beforeEach(async function () {
       await titleDetails.receiveButton.click();
-      await titleReceive.whenLoaded();
     });
 
-    it('shows Title receive screen with receiving note banner', function () {
-      expect(titleReceive.isPresent).to.be.true;
-      expect(titleReceive.receivingNote).to.be.true;
+    it('shows receiving confirmation modal', function () {
+      expect(receivingConfirmation.isPresent).to.be.true;
+    });
+
+    describe('confirm receiving', function () {
+      beforeEach(async function () {
+        await receivingConfirmation.confirm();
+        await titleReceive.whenLoaded();
+      });
+
+      it('shows Title receive screen with receiving note banner', function () {
+        expect(titleReceive.isPresent).to.be.true;
+        expect(titleReceive.receivingNote).to.be.true;
+        expect(receivingConfirmation.isPresent).to.be.false;
+      });
     });
   });
 

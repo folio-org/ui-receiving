@@ -108,6 +108,8 @@
   "piece.callNumber": "Call number",
   "piece.caption": "Caption",
   "piece.comment": "Comment",
+  "piece.confirmReceiving.title": "Order closed",
+  "piece.confirmReceiving.message": "The order linked to this Title is closed. Are you sure you want to receive this piece(s)?",
   "piece.connectedItem": "Connected",
   "piece.createItem": "Create item",
   "piece.format": "Piece format",
