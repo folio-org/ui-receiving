@@ -145,9 +145,14 @@ const TitleDetails = ({
     [title.isAcknowledged, toggleAcknowledgeNote, goToReceiveList],
   );
 
-  const onConfirmReceiving = useCallback(() => (
+  const onReceivePieces = useCallback(() => (
     isOrderClosed ? toggleConfirmReceiving() : openReceiveList()
   ), [isOrderClosed, toggleConfirmReceiving, openReceiveList]);
+
+  const onConfirmReceiving = useCallback(() => {
+    toggleConfirmReceiving();
+    openReceiveList();
+  }, [toggleConfirmReceiving, openReceiveList]);
 
   const onSave = useCallback(
     (values) => {
@@ -164,11 +169,11 @@ const TitleDetails = ({
         checkinItems={checkinItems}
         hasReceive={hasReceive}
         openAddPieceModal={openAddPieceModal}
-        openReceiveList={onConfirmReceiving}
+        openReceiveList={onReceivePieces}
         titleId={titleId}
       />
     ),
-    [titleId, checkinItems, openAddPieceModal, hasReceive, onConfirmReceiving],
+    [titleId, checkinItems, openAddPieceModal, hasReceive, onReceivePieces],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
@@ -331,10 +336,7 @@ const TitleDetails = ({
           id="confirm-receiving"
           message={<FormattedMessage id="ui-receiving.piece.confirmReceiving.message" />}
           onCancel={toggleConfirmReceiving}
-          onConfirm={() => {
-            toggleConfirmReceiving();
-            openReceiveList();
-          }}
+          onConfirm={onConfirmReceiving}
           open
         />
       )}
