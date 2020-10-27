@@ -29,6 +29,7 @@
   "title.lineLookUp": "POL number look-up",
   "title.titleLookUpNoPlugin": "[no instance-selection plugin]",
   "titles.title": "Title",
+  "titles.orderWorkflow": "Order workflow",
 
   "title.modalLabel.edit": "Add title",
   "title.edit.save": "Save & close",

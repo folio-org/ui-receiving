@@ -15,14 +15,16 @@ import { useList } from '@folio/stripes-acq-components';
 import {
   titlesResource,
   orderLinesResource,
+  ordersResource,
   locationsResource,
 } from '../common/resources';
 import ReceivingList from './ReceivingList';
 
 import {
+  buildTitlesQuery,
+  fetchLinesOrders,
   fetchOrderLineLocations,
   fetchTitleOrderLines,
-  buildTitlesQuery,
 } from './utils';
 
 const RESULT_COUNT_INCREMENT = 30;
@@ -32,6 +34,7 @@ const resetData = () => {};
 const ReceivingListContainer = ({ mutator, location }) => {
   const [orderLinesMap, setOrderLinesMap] = useState({});
   const [locationsMap, setLocationsMap] = useState({});
+  const [ordersMap, setOrdersMap] = useState({});
 
   const loadTitles = useCallback((offset) => {
     return mutator.receivingListTitles.GET({
@@ -54,14 +57,24 @@ const ReceivingListContainer = ({ mutator, location }) => {
         const locationsPromise = fetchOrderLineLocations(
           mutator.receivingListLocations, orderLinesResponse, locationsMap,
         );
+        const linesOrdersPromise = fetchLinesOrders(mutator.lineOrders, orderLinesResponse, ordersMap);
 
-        return Promise.all([orderLinesResponse, locationsPromise]);
+        return Promise.all([orderLinesResponse, locationsPromise, linesOrdersPromise]);
       })
-      .then(([orderLinesResponse, locationsResponse]) => {
+      .then(([orderLinesResponse, locationsResponse, ordersResponse]) => {
         const newLocationsMap = {
           ...locationsMap,
           ...locationsResponse.reduce((acc, locationItem) => {
             acc[locationItem.id] = locationItem;
+
+            return acc;
+          }, {}),
+        };
+
+        const newOrdersMap = {
+          ...ordersMap,
+          ...ordersResponse.reduce((acc, d) => {
+            acc[d.id] = d;
 
             return acc;
           }, {}),
@@ -73,6 +86,7 @@ const ReceivingListContainer = ({ mutator, location }) => {
             acc[orderLine.id] = {
               ...orderLine,
               locations: orderLine.locations.map(({ locationId }) => newLocationsMap[locationId].name),
+              orderWorkflow: newOrdersMap[orderLine.purchaseOrderId]?.workflowStatus,
             };
 
             return acc;
@@ -81,6 +95,7 @@ const ReceivingListContainer = ({ mutator, location }) => {
 
         setOrderLinesMap(newOrderLinesMap);
         setLocationsMap(newLocationsMap);
+        setOrdersMap(newOrdersMap);
 
         setTitles((prev) => [
           ...prev,
@@ -91,7 +106,7 @@ const ReceivingListContainer = ({ mutator, location }) => {
         ]);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationsMap, orderLinesMap]);
+  }, [locationsMap, orderLinesMap, ordersMap]);
 
   const {
     records: titles,
@@ -115,6 +130,7 @@ ReceivingListContainer.manifest = Object.freeze({
   receivingListTitles: titlesResource,
   receivingListOrderLines: orderLinesResource,
   receivingListLocations: locationsResource,
+  lineOrders: ordersResource,
 });
 
 ReceivingListContainer.propTypes = {

@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 
+* Orders and receiving - want to see that an order is closed in search result list. Refs UIOR-620
 * Display warning modal when user trying to receive against a closed Order. Refs UIREC-101.
 
 ## [1.2.0](https://github.com/folio-org/ui-receiving/tree/v1.2.0) (2020-10-09)

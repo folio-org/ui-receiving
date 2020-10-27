@@ -16,9 +16,10 @@ import {
 import {
   FiltersPane,
   FolioFormattedDate,
+  NoResultsMessage,
+  ORDER_STATUS_LABEL,
   ResetButton,
   ResultsPane,
-  NoResultsMessage,
   SingleSearchForm,
   useLocationFilters,
   useLocationSorting,
@@ -36,7 +37,7 @@ const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
 const visibleColumns = [
   'title', 'poLine.physical.expectedReceiptDate',
   'poLine.titleOrPackage', 'poLine.poLineNumber',
-  'poLine.receivingNote', 'locations',
+  'poLine.receivingNote', 'locations', 'orderWorkflow',
 ];
 const sortableFields = [
   'title', 'poLine.receiptDate',
@@ -50,6 +51,7 @@ const columnMapping = {
   'poLine.poLineNumber': <FormattedMessage id="ui-receiving.title.polNumber" />,
   'poLine.receivingNote': <FormattedMessage id="ui-receiving.title.receivingNote" />,
   'locations': <FormattedMessage id="ui-receiving.title.locations" />,
+  'orderWorkflow': <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
 };
 const resultsFormatter = {
   'poLine.physical.expectedReceiptDate': data => <FolioFormattedDate value={get(data, 'poLine.physical.expectedReceiptDate')} />,
@@ -57,6 +59,7 @@ const resultsFormatter = {
   'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
   'poLine.receivingNote': data => get(data, 'poLine.details.receivingNote') || <NoValue />,
   'locations': data => get(data, 'poLine.locations', []).join(', '),
+  'orderWorkflow': title => ORDER_STATUS_LABEL[title.poLine?.orderWorkflow],
 };
 
 const ReceivingList = ({

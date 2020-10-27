@@ -1,14 +1,20 @@
 import {
   baseManifest,
+  LINES_API,
+  ORDERS_API,
 } from '@folio/stripes-acq-components';
-
-import {
-  PO_LINES_API,
-} from '../constants';
 
 export const orderLinesResource = {
   ...baseManifest,
-  path: PO_LINES_API,
+  path: LINES_API,
   accumulate: true,
   records: 'poLines',
+};
+
+export const ordersResource = {
+  ...baseManifest,
+  accumulate: true,
+  fetch: false,
+  path: ORDERS_API,
+  records: 'purchaseOrders',
 };
