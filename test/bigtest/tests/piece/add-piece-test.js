@@ -1,7 +1,11 @@
 import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
-import { ORDER_FORMATS } from '@folio/stripes-acq-components';
+import { ORDER_FORMATS, ORDER_STATUSES } from '@folio/stripes-acq-components';
+
+import {
+  ConfirmationInteractor,
+} from '@folio/stripes-acq-components/test/bigtest/interactors';
 
 import setupApplication from '../../helpers/setup-application';
 import {
@@ -12,6 +16,7 @@ import {
 describe('Add piece', () => {
   const titleDetails = new TitleDetailsInteractor();
   const pieceForm = new PieceFormInteractor();
+  const receivingConfirmation = new ConfirmationInteractor('#confirm-receiving');
 
   setupApplication();
 
@@ -19,6 +24,7 @@ describe('Add piece', () => {
     const vendor = this.server.create('vendor');
     const order = this.server.create('order', {
       vendor: vendor.id,
+      workflowStatus: ORDER_STATUSES.closed,
     });
     const location = this.server.create('location', { name: 'Test' });
     const line = this.server.create('line', {
@@ -60,6 +66,28 @@ describe('Add piece', () => {
 
       it('piece location should not be selected', () => {
         expect(pieceForm.location.options.list(0).text).to.be.equal('');
+      });
+    });
+
+    describe('click quick receive button', () => {
+      beforeEach(async () => {
+        await pieceForm.receiveButton.click();
+      });
+
+      it('shows receiving confirmation modal', function () {
+        expect(receivingConfirmation.isPresent).to.be.true;
+      });
+
+      describe('confirm receiving', function () {
+        beforeEach(async function () {
+          await receivingConfirmation.confirm();
+          await titleDetails.whenLoaded();
+        });
+
+        it('shows Title details screen', function () {
+          expect(pieceForm.isPresent).to.be.false;
+          expect(receivingConfirmation.isPresent).to.be.false;
+        });
       });
     });
   });
