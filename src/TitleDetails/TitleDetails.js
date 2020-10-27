@@ -81,6 +81,8 @@ const TitleDetails = ({
   const [pieceValues, setPieceValues] = useState({});
   const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
+  const [confirmReceiving, setConfirmReceiving] = useState();
+  const [checkInPieceValues, setCheckInPieceValues] = useState();
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
 
@@ -145,14 +147,16 @@ const TitleDetails = ({
     [title.isAcknowledged, toggleAcknowledgeNote, goToReceiveList],
   );
 
-  const onReceivePieces = useCallback(() => (
-    isOrderClosed ? toggleConfirmReceiving() : openReceiveList()
-  ), [isOrderClosed, toggleConfirmReceiving, openReceiveList]);
+  const onReceivePieces = useCallback(() => {
+    setConfirmReceiving(() => openReceiveList);
+
+    return isOrderClosed ? toggleConfirmReceiving() : openReceiveList();
+  }, [isOrderClosed, toggleConfirmReceiving, openReceiveList]);
 
   const onConfirmReceiving = useCallback(() => {
     toggleConfirmReceiving();
-    openReceiveList();
-  }, [toggleConfirmReceiving, openReceiveList]);
+    confirmReceiving(checkInPieceValues);
+  }, [toggleConfirmReceiving, confirmReceiving, checkInPieceValues]);
 
   const onSave = useCallback(
     (values) => {
@@ -161,6 +165,13 @@ const TitleDetails = ({
     },
     [onAddPiece, toggleAddPieceModal],
   );
+
+  const onQuickReceive = useCallback(values => {
+    setConfirmReceiving(() => onCheckIn);
+    setCheckInPieceValues(values);
+
+    return isOrderClosed ? toggleConfirmReceiving() : onCheckIn(values);
+  }, [isOrderClosed, toggleConfirmReceiving, onCheckIn]);
 
   const hasReceive = Boolean(expectedPieces.length);
   const expectedPiecesActions = useMemo(
@@ -323,7 +334,7 @@ const TitleDetails = ({
           instanceId={title.instanceId}
           locations={locations}
           locationIds={locationIds}
-          onCheckIn={onCheckIn}
+          onCheckIn={onQuickReceive}
           onSubmit={onSave}
           poLine={poLine}
         />
