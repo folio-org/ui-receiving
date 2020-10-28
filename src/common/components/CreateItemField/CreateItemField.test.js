@@ -35,7 +35,7 @@ describe('CreateItemField', () => {
   afterEach(cleanup);
 
   it('should display link to item', () => {
-    const { getByTestId } = renderCreateItemField({ itemId: 'itemId' });
+    const { getByTestId } = renderCreateItemField({ itemId: 'itemId', holdingsRecordId: 'holdingsRecordId' });
 
     expect(getByTestId('connected-link')).toBeDefined();
   });
