@@ -26,7 +26,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
 
   const intl = useIntl();
 
-  if (itemId) {
+  if (itemId && holdingsRecordId) {
     return (
       <KeyValue label={label}>
         <Link

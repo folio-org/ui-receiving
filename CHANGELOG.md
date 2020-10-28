@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 
+* Fix Piece displays as connected to an item when connected item record has been deleted. Refs UIREC-102
 * Orders and receiving - want to see that an order is closed in search result list. Refs UIOR-620
 * Display warning modal when user trying to receive against a closed Order. Refs UIREC-101.
 
