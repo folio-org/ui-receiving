@@ -2,7 +2,7 @@
 
 ## (IN PROGRESS)
 
-## [1.2.1](https://github.com/folio-org/ui-receiving/tree/v1.2.0) (2020-11-10)
+## [1.2.1](https://github.com/folio-org/ui-receiving/tree/v1.2.1) (2020-11-10)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.2.0...v1.2.1)
 
 * Fix Piece displays as connected to an item when connected item record has been deleted. Refs UIREC-102
