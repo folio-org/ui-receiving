@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Add personal data disclosure form. Refs UIREC-110.
+
 ## [1.2.1](https://github.com/folio-org/ui-receiving/tree/v1.2.1) (2020-11-10)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.2.0...v1.2.1)
 
