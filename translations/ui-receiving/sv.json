@@ -46,7 +46,7 @@
     "piece.actions.checkInItem.error": "Receiving error",
     "piece.actions.confirm": "Continue",
     "piece.actions.load.error": "Failed to load pieces",
-    "piece.actions.save": "Gem & luk",
+    "piece.actions.save": "Save & close",
     "piece.addPieceModal.editTitle": "Edit piece",
     "piece.addPieceModal.title": "Add piece",
     "piece.button.addPiece": "Add piece",
