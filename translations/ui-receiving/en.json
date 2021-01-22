@@ -88,6 +88,9 @@
   "piece.actions.checkInItem.error": "Receiving error",
   "piece.actions.checkInItem.success": "The piece <b>{caption}</b> was successfully <b>received</b>",
   "piece.actions.confirm": "Continue",
+  "piece.actions.delete":"Delete",
+  "piece.actions.delete.success": "The piece <b>{caption}</b> was successfully <b>deleted</b>",
+  "piece.actions.delete.error": "The piece <b>{caption}</b> was not deleted",
   "piece.actions.edit":"Edit",
   "piece.actions.load.error": "Failed to load pieces",
   "piece.actions.quickReceive":"Quick receive",
@@ -130,6 +133,9 @@
   "piece.request.isOpened": "Yes",
   "piece.supplement": "Supplement",
   "piece.title": "Title",
+  "piece.delete.confirm": "Confirm",
+  "piece.delete.heading": "Delete piece",
+  "piece.delete.message": "Are you sure you want to delete piece?",
 
   "find-po-line-plugin-unavailable": "Find PO line plugin is not available",
 

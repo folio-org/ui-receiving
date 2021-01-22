@@ -237,12 +237,34 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
     [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
   );
 
+  const deletePiece = useCallback((piece) => {
+    const apiCall = piece?.id ? mutator.orderPieces.DELETE({ id: piece.id }) : Promise.resolve();
+
+    apiCall.then(
+      () => {
+        showCallout({
+          messageId: 'ui-receiving.piece.actions.delete.success',
+          type: 'success',
+          values: { caption: piece?.caption },
+        });
+      },
+      () => {
+        showCallout({
+          messageId: 'ui-receiving.piece.actions.delete.error',
+          type: 'error',
+          values: { caption: piece?.caption },
+        });
+      },
+    ).finally(() => fetchReceivingResources(poLine.id));
+  }, [fetchReceivingResources, poLine.id, showCallout]);
+
   if (isLoading || !(pieces || locations || vendorsMap)) {
     return (<LoadingPane onClose={onClose} />);
   }
 
   return (
     <TitleDetails
+      deletePiece={deletePiece}
       locations={locations}
       onAddPiece={onAddPiece}
       onCheckIn={onCheckIn}

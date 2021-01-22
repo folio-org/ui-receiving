@@ -62,6 +62,7 @@ function getNewPieceValues(titleId, poLine) {
 }
 
 const TitleDetails = ({
+  deletePiece,
   history,
   location,
   locations,
@@ -330,6 +331,7 @@ const TitleDetails = ({
       {isAddPieceModalOpened && (
         <AddPieceModal
           close={toggleAddPieceModal}
+          deletePiece={deletePiece}
           initialValues={pieceValues}
           instanceId={title.instanceId}
           locations={locations}
@@ -356,6 +358,7 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
+  deletePiece: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),

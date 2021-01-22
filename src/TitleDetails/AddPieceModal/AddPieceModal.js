@@ -11,6 +11,7 @@ import {
   Button,
   Checkbox,
   Col,
+  ConfirmationModal,
   Modal,
   Row,
   TextArea,
@@ -24,6 +25,7 @@ import {
   INVENTORY_RECORDS_TYPE,
   ModalFooter,
   PIECE_STATUS,
+  useModalToggle,
 } from '@folio/stripes-acq-components';
 
 import { CreateItemField } from '../../common/components';
@@ -31,6 +33,7 @@ import { CreateItemField } from '../../common/components';
 const AddPieceModal = ({
   close,
   createInventoryValues,
+  deletePiece,
   form,
   handleSubmit,
   hasValidationErrors,
@@ -41,10 +44,11 @@ const AddPieceModal = ({
   pieceFormatOptions,
   values: formValues,
 }) => {
-  const { format, id, receivingStatus } = formValues;
+  const { caption, format, id, receivingStatus } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
+  const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
 
   const receive = useCallback(
     () => {
@@ -53,6 +57,11 @@ const AddPieceModal = ({
     },
     [close, formValues, onCheckIn],
   );
+
+  const onDelete = useCallback(() => {
+    close();
+    deletePiece({ id, caption });
+  }, [caption, close, deletePiece, id]);
 
   const start = (
     <Button
@@ -65,6 +74,13 @@ const AddPieceModal = ({
   );
   const end = (
     <>
+      <Button
+        disabled={hasValidationErrors}
+        marginBottom0
+        onClick={toggleDeleteConfirmation}
+      >
+        <FormattedMessage id="ui-receiving.piece.actions.delete" />
+      </Button>
       {isNotReceived && (
         <Button
           data-test-add-piece-check-in
@@ -173,6 +189,17 @@ const AddPieceModal = ({
           </Col>
         </Row>
       </form>
+      {isDeleteConfirmation && (
+        <ConfirmationModal
+          id="delete-piece-confirmation"
+          confirmLabel={<FormattedMessage id="ui-receiving.piece.delete.confirm" />}
+          heading={<FormattedMessage id="ui-receiving.piece.delete.heading" />}
+          message={<FormattedMessage id="ui-receiving.piece.delete.message" />}
+          onCancel={toggleDeleteConfirmation}
+          onConfirm={onDelete}
+          open
+        />
+      )}
     </Modal>
   );
 };
@@ -180,6 +207,7 @@ const AddPieceModal = ({
 AddPieceModal.propTypes = {
   close: PropTypes.func.isRequired,
   createInventoryValues: PropTypes.object.isRequired,
+  deletePiece: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
