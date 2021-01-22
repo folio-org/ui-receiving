@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 
+* No longer have delete option for Piece. Refs UIREC-113.
 * Add personal data disclosure form. Refs UIREC-110.
 
 ## [1.2.1](https://github.com/folio-org/ui-receiving/tree/v1.2.1) (2020-11-10)
