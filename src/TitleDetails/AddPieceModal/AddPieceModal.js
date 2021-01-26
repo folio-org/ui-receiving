@@ -38,6 +38,7 @@ const AddPieceModal = ({
   handleSubmit,
   hasValidationErrors,
   instanceId,
+  isManuallyAddPieces,
   locationIds,
   locations,
   onCheckIn,
@@ -74,13 +75,14 @@ const AddPieceModal = ({
   );
   const end = (
     <>
-      <Button
-        disabled={hasValidationErrors}
-        marginBottom0
-        onClick={toggleDeleteConfirmation}
-      >
-        <FormattedMessage id="ui-receiving.piece.actions.delete" />
-      </Button>
+      {isManuallyAddPieces && (
+        <Button
+          marginBottom0
+          onClick={toggleDeleteConfirmation}
+        >
+          <FormattedMessage id="ui-receiving.piece.actions.delete" />
+        </Button>
+      )}
       {isNotReceived && (
         <Button
           data-test-add-piece-check-in
@@ -212,6 +214,7 @@ AddPieceModal.propTypes = {
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
+  isManuallyAddPieces: PropTypes.bool,
   onCheckIn: PropTypes.func.isRequired,
   pieceFormatOptions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
@@ -223,6 +226,7 @@ AddPieceModal.propTypes = {
 };
 
 AddPieceModal.defaultProps = {
+  isManuallyAddPieces: false,
   pieceFormatOptions: [],
 };
 
