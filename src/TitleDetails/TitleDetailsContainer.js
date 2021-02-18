@@ -30,9 +30,10 @@ import {
   titleResource,
 } from '../common/resources';
 import {
-  getHydratedPieces,
   fetchLocations,
-  ifMissingPermanentLoanTypeId,
+  getHydratedPieces,
+  handleCommonErrors,
+  handleReceiveErrorResponse,
   quickReceive,
   savePiece,
 } from '../common/utils';
@@ -179,11 +180,9 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             values: { caption: values.caption },
           });
         }, async response => {
-          const isMissingPermanentLoanTypeId = await ifMissingPermanentLoanTypeId(response);
+          const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
-          if (isMissingPermanentLoanTypeId) {
-            showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
-          } else {
+          if (!hasCommonErrors) {
             showCallout({
               messageId: `ui-receiving.piece.actions.${actionType}.error`,
               type: 'error',
@@ -222,15 +221,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             type: 'success',
             values: { caption: values.caption },
           });
-        }, async response => {
-          const isMissingPermanentLoanTypeId = await ifMissingPermanentLoanTypeId(response);
-
-          if (isMissingPermanentLoanTypeId) {
-            showCallout({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error', type: 'error' });
-          } else {
-            showCallout({ messageId: 'ui-receiving.piece.actions.checkInItem.error', type: 'error' });
-          }
-        })
+        }, response => handleReceiveErrorResponse(showCallout, response))
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

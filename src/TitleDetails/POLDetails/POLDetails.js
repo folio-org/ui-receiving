@@ -130,13 +130,13 @@ const POLDetails = ({
 POLDetails.propTypes = {
   accessProvider: PropTypes.string,
   materialSupplier: PropTypes.string,
-  orderFormat: PropTypes.string.isRequired,
-  orderType: PropTypes.string.isRequired,
-  poLineId: PropTypes.string.isRequired,
-  poLineNumber: PropTypes.string.isRequired,
+  orderFormat: PropTypes.string,
+  orderType: PropTypes.string,
+  poLineId: PropTypes.string,
+  poLineNumber: PropTypes.string,
   receiptDate: PropTypes.string,
   receivingNote: PropTypes.string,
-  vendor: PropTypes.string.isRequired,
+  vendor: PropTypes.string,
 };
 
 POLDetails.defaultProps = {

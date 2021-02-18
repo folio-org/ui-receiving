@@ -1,6 +1,9 @@
 {
   "meta.title": "Receiving",
 
+  "errors.itemUpdateFailed": "Piece <b>{caption}</b> was not received. The item record failed to be updated",
+  "errors.instanceId": "Piece was not received. Instance record could not be found.",
+
   "search.keyword": "Keyword",
   "search.title": "Title (Receiving titles)",
   "search.poLine.titleOrPackage": "Package (POL Package name)",

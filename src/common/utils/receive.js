@@ -48,8 +48,23 @@ export const checkInItems = (pieces, mutator) => {
   };
 
   return mutator.POST(postData).then(({ receivingResults }) => {
-    if (some(receivingResults, ({ processedWithError }) => processedWithError > 0)) {
-      return Promise.reject(receivingResults);
+    const errorPieces = receivingResults.filter(({ processedWithError }) => processedWithError > 0).reduce(
+      (acc, { receivingItemResults }) => {
+        const errorResults = receivingItemResults
+          .filter(({ processingStatus }) => processingStatus.type === 'failure')
+          .map((d) => ({
+            ...d,
+            caption: pieces.find(({ id }) => id === d.pieceId)?.caption,
+          }));
+
+        return [...acc, ...errorResults];
+      },
+      [],
+    );
+
+    if (errorPieces?.length > 0) {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return Promise.reject({ errorPieces });
     }
 
     return receivingResults;

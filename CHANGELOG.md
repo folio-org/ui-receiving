@@ -2,6 +2,7 @@
 
 ## (IN PROGRESS)
 
+* Fix receiving transaction results in unexpected error message. Refs UIREC-112.
 * No longer have delete option for Piece. Refs UIREC-113.
 * Add personal data disclosure form. Refs UIREC-110.
 
