@@ -133,7 +133,7 @@
     "titles.orderWorkflow": "Status do pedido",
     "piece.actions.delete": "Excluir",
     "piece.actions.delete.success": "A peça <b>{caption}</b> foi <b>deletada</b> com sucesso",
-    "piece.actions.delete.error": "The piece <b>{caption}</b> was not deleted",
+    "piece.actions.delete.error": "A peça <b>{caption}</b> não foi excluída",
     "piece.delete.confirm": "Confirmar",
     "piece.delete.heading": "Deletar peça",
     "piece.delete.message": "Tem certeza que deseja deletar a peça?",

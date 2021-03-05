@@ -86,7 +86,7 @@
     "piece.actions.updatePiece.success": "تم <b>تحديث</b> القطعة <b>{caption}</b> بنجاح",
     "piece.barcode": "الباركود",
     "piece.callNumber": "رقم الاستدعاء",
-    "piece.itemStatus.Available": "متاح",
+    "piece.itemStatus.Available": "متاحة",
     "piece.itemStatus.In process": "في المعالجة",
     "piece.itemStatus.In transit": "في النقل",
     "piece.itemStatus.On order": "في الطلب",
