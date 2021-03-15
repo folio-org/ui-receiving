@@ -2,6 +2,10 @@
 
 ## (IN PROGRESS)
 
+## [1.3.0](https://github.com/folio-org/ui-receiving/tree/v1.3.0) (2021-03-15)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.2.1...v1.3.0)
+
+* Upgrade to stripes v6.
 * Fix receiving transaction results in unexpected error message. Refs UIREC-112.
 * No longer have delete option for Piece. Refs UIREC-113.
 * Add personal data disclosure form. Refs UIREC-110.
