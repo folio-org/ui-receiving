@@ -147,6 +147,7 @@ const AddPieceModal = ({
             <FieldDatepickerFinal
               labelId="ui-receiving.piece.receiptDate"
               name="receiptDate"
+              usePortal
             />
           </Col>
           <Col xs>
