@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [1.3.1](https://github.com/folio-org/ui-receiving/tree/v1.3.1) (2021-04-06)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.0...v1.3.1)
+
 * Calendar widget cutoff by modal when editing pieces. Refs UIREC-118.
 
 ## [1.3.0](https://github.com/folio-org/ui-receiving/tree/v1.3.0) (2021-03-15)
