@@ -10,6 +10,7 @@
   "search.productIds": "Product ID (For the specific title or the package)",
   "search.purchaseOrder.poNumber": "PO number",
   "search.poLine.poLineNumber": "POL number",
+  "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number",
   "search.barcode": "Barcode",
 
   "filter.acqUnits": "Acquisition units",

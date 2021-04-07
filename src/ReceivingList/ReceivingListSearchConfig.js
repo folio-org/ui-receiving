@@ -4,6 +4,7 @@ const indexes = [
   'productIds',
   'purchaseOrder.poNumber',
   'poLine.poLineNumber',
+  'poLine.vendorDetail.referenceNumbers',
 ];
 
 export const searchableIndexes = [
@@ -17,9 +18,9 @@ export const searchableIndexes = [
 export const getKeywordQuery = query => indexes.reduce(
   (acc, sIndex) => {
     if (acc) {
-      return `${acc} or ${sIndex}="${query}*"`;
+      return `${acc} or ${sIndex}=="*${query}*"`;
     } else {
-      return `${sIndex}="${query}*"`;
+      return `${sIndex}=="*${query}*"`;
     }
   },
   '',

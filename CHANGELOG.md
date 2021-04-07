@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Add option to search by Vendor reference number. Refs UIREC-119.
+
 ## [1.3.1](https://github.com/folio-org/ui-receiving/tree/v1.3.1) (2021-04-06)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.0...v1.3.1)
 
