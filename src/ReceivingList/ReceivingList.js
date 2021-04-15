@@ -9,10 +9,10 @@ import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
 
 import {
-  Paneset,
   MultiColumnList,
   NoValue,
 } from '@folio/stripes/components';
+import { PersistedPaneset } from '@folio/stripes/smart-components';
 import {
   FiltersPane,
   FolioFormattedDate,
@@ -21,9 +21,9 @@ import {
   ResetButton,
   ResultsPane,
   SingleSearchForm,
+  useFiltersToogle,
   useLocationFilters,
   useLocationSorting,
-  useToggle,
 } from '@folio/stripes-acq-components';
 
 import TitleDetailsContainer from '../TitleDetails';
@@ -87,7 +87,7 @@ const ReceivingList = ({
     sortingDirection,
     changeSorting,
   ] = useLocationSorting(location, history, resetData, sortableFields);
-  const [isFiltersOpened, toggleFilters] = useToggle(true);
+  const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
 
   const renderLastMenu = useCallback(() => renderNewButton(location.search), [location.search]);
 
@@ -111,9 +111,16 @@ const ReceivingList = ({
   );
 
   return (
-    <Paneset data-test-titles-list>
+    <PersistedPaneset
+      appId="ui-receiving"
+      id="receiving-paneset"
+      data-test-titles-list
+    >
       {isFiltersOpened && (
-        <FiltersPane toggleFilters={toggleFilters}>
+        <FiltersPane
+          id="receiving-filters-pane"
+          toggleFilters={toggleFilters}
+        >
           <SingleSearchForm
             applySearch={applySearch}
             changeSearch={changeSearch}
@@ -140,6 +147,7 @@ const ReceivingList = ({
       )}
 
       <ResultsPane
+        id="receiving-results-pane"
         title={resultsPaneTitle}
         count={titlesCount}
         renderLastMenu={renderLastMenu}
@@ -172,7 +180,7 @@ const ReceivingList = ({
         path={`${match.path}/:id/view`}
         component={TitleDetailsContainer}
       />
-    </Paneset>
+    </PersistedPaneset>
   );
 };
 

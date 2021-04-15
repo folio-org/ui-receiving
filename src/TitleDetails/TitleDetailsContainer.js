@@ -250,7 +250,12 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
   }, [fetchReceivingResources, poLine.id, showCallout]);
 
   if (isLoading || !(pieces || locations || vendorsMap)) {
-    return (<LoadingPane onClose={onClose} />);
+    return (
+      <LoadingPane
+        id="pane-title-details"
+        onClose={onClose}
+      />
+    );
   }
 
   return (
