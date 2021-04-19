@@ -91,6 +91,7 @@
         "visible": false,
         "subPermissions": [
           "module.receiving.enabled",
+          "orders.collection.get",
           "orders.item.get",
           "orders.pieces.item.delete",
           "orders.pieces.item.post",
