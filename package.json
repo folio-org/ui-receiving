@@ -19,8 +19,10 @@
       "acquisitions-units": "1.1",
       "circulation": "9.0",
       "configuration": "2.0",
+      "contributor-types": "2.0",
       "holdings-storage": "4.2",
       "identifier-types": "1.2",
+      "instance-types": "2.0",
       "inventory": "10.0",
       "location-units": "2.0",
       "locations": "3.0",
@@ -118,7 +120,10 @@
         "visible": true,
         "subPermissions": [
           "orders.titles.item.put",
-          "ui-receiving.view"
+          "ui-receiving.view",
+          "inventory.instances.collection.get",
+          "inventory-storage.contributor-types.collection.get",
+          "inventory-storage.instance-types.collection.get"
         ]
       },
       {
