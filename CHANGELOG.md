@@ -2,6 +2,12 @@
 
 ## (IN PROGRESS)
 
+## [1.3.3](https://github.com/folio-org/ui-receiving/tree/v1.3.3) (2021-04-21)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.2...v1.3.3)
+
+* Permissions for select instance plugin. Refs UIREC-130.
+* Add missed permissions. Refs UIREC-129.
+
 ## [1.3.2](https://github.com/folio-org/ui-receiving/tree/v1.3.2) (2021-04-13)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.1...v1.3.2)
 
