@@ -41,7 +41,10 @@ describe('Add piece', () => {
     });
 
     this.visit(`/receiving/${title.id}/view`);
-    await titleDetails.whenLoaded();
+
+    const loadedPromise = await titleDetails.whenLoaded();
+
+    return loadedPromise;
   });
 
   it('should render title details pane', function () {
