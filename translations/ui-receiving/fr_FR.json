@@ -102,7 +102,7 @@
     "title.actions.unreceive.error": "Non-réception: erreur",
     "title.actions.unreceive.success": "Non-réception : succès",
     "requests.title.single": "Un article a une demande en cours",
-    "requests.title.multiple": "Plusieurs articles ont des demandes en cours",
+    "requests.title.multiple": "Plusieurs exemplaires ont des demandes/réservations en cours",
     "requests.message.single": "L'article suivant a une demande en cours",
     "requests.message.multiple": "Les articles suivants ont des réservations en cours",
     "requests.message.barcode": "Code-barres ( {barcode} )",
