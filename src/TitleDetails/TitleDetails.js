@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -10,23 +10,30 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   Accordion,
+  AccordionStatus,
   AccordionSet,
   Button,
+  checkScope,
   Col,
+  collapseAllSections,
   ConfirmationModal,
   ExpandAllButton,
+  expandAllSections,
+  HasCommand,
   MessageBanner,
   Pane,
   PaneMenu,
   Row,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  useStripes,
+} from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
-  useAccordionToggle,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
@@ -76,7 +83,7 @@ const TitleDetails = ({
   title,
   vendorsMap,
 }) => {
-  const [expandAll, sections, toggleSection] = useAccordionToggle();
+  const stripes = useStripes();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
   const [pieceValues, setPieceValues] = useState({});
@@ -84,6 +91,7 @@ const TitleDetails = ({
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
   const [confirmReceiving, setConfirmReceiving] = useState();
   const [checkInPieceValues, setCheckInPieceValues] = useState();
+  const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
 
@@ -102,6 +110,31 @@ const TitleDetails = ({
   const vendor = vendorsMap[order.vendor];
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
+
+  const shortcuts = [
+    {
+      name: 'new',
+      handler: () => {
+        if (stripes.hasPerm('ui-receiving.create')) {
+          history.push('/receiving/create');
+        }
+      },
+    },
+    {
+      name: 'edit',
+      handler: () => {
+        if (stripes.hasPerm('ui-receiving.edit')) onEdit();
+      },
+    },
+    {
+      name: 'expandAllSections',
+      handler: (e) => expandAllSections(e, accordionStatusRef),
+    },
+    {
+      name: 'collapseAllSections',
+      handler: (e) => collapseAllSections(e, accordionStatusRef),
+    },
+  ];
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
@@ -214,146 +247,148 @@ const TitleDetails = ({
   );
 
   return (
-    <Pane
-      id="pane-title-details"
-      defaultWidth="fill"
-      dismissible
-      paneTitle={title.title}
-      paneSub={poLineNumber}
-      onClose={onClose}
-      lastMenu={lastMenu}
+    <HasCommand
+      commands={shortcuts}
+      isWithinScope={checkScope}
+      scope={document.body}
     >
-      <Row end="xs">
-        <Col xs={10}>
-          {isOrderClosed && (
-            <MessageBanner type="warning">
-              <FormattedMessage
-                id="ui-receiving.title.closedOrderMessage"
-                values={{ reason: order.closeReason?.reason }}
-              />
-            </MessageBanner>
-          )}
-        </Col>
-
-        <Col xs={2}>
-          <ExpandAllButton
-            accordionStatus={sections}
-            onToggle={expandAll}
-          />
-        </Col>
-      </Row>
-
-      <hr />
-      <Title
-        title={title.title}
-        instanceId={title.instanceId}
-      />
-
-      <AccordionSet
-        accordionStatus={sections}
-        onToggle={toggleSection}
+      <Pane
+        id="pane-title-details"
+        defaultWidth="fill"
+        dismissible
+        paneTitle={title.title}
+        paneSub={poLineNumber}
+        onClose={onClose}
+        lastMenu={lastMenu}
       >
-        <Accordion
-          closedByDefault
-          id={TITLE_ACCORDION.information}
-          label={TITLE_ACCORDION_LABELS.information}
-        >
-          <ViewMetaData metadata={title.metadata} />
-          <TitleInformation
-            contributors={title.contributors}
-            edition={title.edition}
-            productIds={title.productIds}
-            publishedDate={title.publishedDate}
-            publisher={title.publisher}
-            subscriptionFrom={title.subscriptionFrom}
-            subscriptionInterval={title.subscriptionInterval}
-            subscriptionTo={title.subscriptionTo}
+        <AccordionStatus ref={accordionStatusRef}>
+          <Row end="xs">
+            <Col xs={10}>
+              {isOrderClosed && (
+                <MessageBanner type="warning">
+                  <FormattedMessage
+                    id="ui-receiving.title.closedOrderMessage"
+                    values={{ reason: order.closeReason?.reason }}
+                  />
+                </MessageBanner>
+              )}
+            </Col>
+
+            <Col xs={2}>
+              <ExpandAllButton />
+            </Col>
+          </Row>
+
+          <hr />
+          <Title
+            title={title.title}
+            instanceId={title.instanceId}
           />
-        </Accordion>
 
-        <Accordion
-          id={TITLE_ACCORDION.polDetails}
-          label={TITLE_ACCORDION_LABELS.polDetails}
-        >
-          <POLDetails
-            accessProvider={accessProvider}
-            materialSupplier={materialSupplier}
-            orderFormat={orderFormat}
-            orderType={order.orderType}
-            poLineId={poLineId}
-            poLineNumber={poLineNumber}
-            receiptDate={receiptDate}
-            receivingNote={receivingNote}
-            vendor={vendor}
+          <AccordionSet>
+            <Accordion
+              closedByDefault
+              id={TITLE_ACCORDION.information}
+              label={TITLE_ACCORDION_LABELS.information}
+            >
+              <ViewMetaData metadata={title.metadata} />
+              <TitleInformation
+                contributors={title.contributors}
+                edition={title.edition}
+                productIds={title.productIds}
+                publishedDate={title.publishedDate}
+                publisher={title.publisher}
+                subscriptionFrom={title.subscriptionFrom}
+                subscriptionInterval={title.subscriptionInterval}
+                subscriptionTo={title.subscriptionTo}
+              />
+            </Accordion>
+
+            <Accordion
+              id={TITLE_ACCORDION.polDetails}
+              label={TITLE_ACCORDION_LABELS.polDetails}
+            >
+              <POLDetails
+                accessProvider={accessProvider}
+                materialSupplier={materialSupplier}
+                orderFormat={orderFormat}
+                orderType={order.orderType}
+                poLineId={poLineId}
+                poLineNumber={poLineNumber}
+                receiptDate={receiptDate}
+                receivingNote={receivingNote}
+                vendor={vendor}
+              />
+            </Accordion>
+
+            <Accordion
+              displayWhenClosed={expectedPiecesActions}
+              displayWhenOpen={expectedPiecesActions}
+              id={TITLE_ACCORDION.expected}
+              label={TITLE_ACCORDION_LABELS.expected}
+            >
+              <ExpectedPiecesList
+                selectPiece={openAddPieceModal}
+                pieces={expectedPieces}
+              />
+            </Accordion>
+
+            <Accordion
+              displayWhenClosed={receivedPiecesActions}
+              displayWhenOpen={receivedPiecesActions}
+              id={TITLE_ACCORDION.received}
+              label={TITLE_ACCORDION_LABELS.received}
+            >
+              <ReceivedPiecesList
+                pieces={receivedPieces}
+                selectPiece={openEditReceivedPieceModal}
+              />
+            </Accordion>
+          </AccordionSet>
+        </AccordionStatus>
+
+        {isAcknowledgeNote && (
+          <ConfirmationModal
+            confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
+            heading={<FormattedMessage id="ui-receiving.piece.receivingNoteModal.title" />}
+            id="acknowledge-receiving-note"
+            message={receivingNote}
+            onCancel={toggleAcknowledgeNote}
+            onConfirm={() => {
+              toggleAcknowledgeNote();
+              confirmAcknowledgeNote();
+            }}
+            open
           />
-        </Accordion>
+        )}
 
-        <Accordion
-          displayWhenClosed={expectedPiecesActions}
-          displayWhenOpen={expectedPiecesActions}
-          id={TITLE_ACCORDION.expected}
-          label={TITLE_ACCORDION_LABELS.expected}
-        >
-          <ExpectedPiecesList
-            selectPiece={openAddPieceModal}
-            pieces={expectedPieces}
+        {isAddPieceModalOpened && (
+          <AddPieceModal
+            close={toggleAddPieceModal}
+            deletePiece={deletePiece}
+            initialValues={pieceValues}
+            instanceId={title.instanceId}
+            locations={locations}
+            locationIds={locationIds}
+            onCheckIn={onQuickReceive}
+            onSubmit={onSave}
+            poLine={poLine}
           />
-        </Accordion>
+        )}
 
-        <Accordion
-          displayWhenClosed={receivedPiecesActions}
-          displayWhenOpen={receivedPiecesActions}
-          id={TITLE_ACCORDION.received}
-          label={TITLE_ACCORDION_LABELS.received}
-        >
-          <ReceivedPiecesList
-            pieces={receivedPieces}
-            selectPiece={openEditReceivedPieceModal}
+        {isConfirmReceiving && (
+          <ConfirmationModal
+            confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
+            heading={<FormattedMessage id="ui-receiving.piece.confirmReceiving.title" />}
+            id="confirm-receiving"
+            message={<FormattedMessage id="ui-receiving.piece.confirmReceiving.message" />}
+            onCancel={toggleConfirmReceiving}
+            onConfirm={onConfirmReceiving}
+            open
           />
-        </Accordion>
-      </AccordionSet>
-
-      {isAcknowledgeNote && (
-        <ConfirmationModal
-          confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
-          heading={<FormattedMessage id="ui-receiving.piece.receivingNoteModal.title" />}
-          id="acknowledge-receiving-note"
-          message={receivingNote}
-          onCancel={toggleAcknowledgeNote}
-          onConfirm={() => {
-            toggleAcknowledgeNote();
-            confirmAcknowledgeNote();
-          }}
-          open
-        />
-      )}
-
-      {isAddPieceModalOpened && (
-        <AddPieceModal
-          close={toggleAddPieceModal}
-          deletePiece={deletePiece}
-          initialValues={pieceValues}
-          instanceId={title.instanceId}
-          locations={locations}
-          locationIds={locationIds}
-          onCheckIn={onQuickReceive}
-          onSubmit={onSave}
-          poLine={poLine}
-        />
-      )}
-
-      {isConfirmReceiving && (
-        <ConfirmationModal
-          confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
-          heading={<FormattedMessage id="ui-receiving.piece.confirmReceiving.title" />}
-          id="confirm-receiving"
-          message={<FormattedMessage id="ui-receiving.piece.confirmReceiving.message" />}
-          onCancel={toggleConfirmReceiving}
-          onConfirm={onConfirmReceiving}
-          open
-        />
-      )}
-    </Pane>
+        )}
+      </Pane>
+    </HasCommand>
   );
 };
 

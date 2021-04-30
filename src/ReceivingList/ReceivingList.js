@@ -9,9 +9,12 @@ import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
 
 import {
+  checkScope,
+  HasCommand,
   MultiColumnList,
   NoValue,
 } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
 import { PersistedPaneset } from '@folio/stripes/smart-components';
 import {
   FiltersPane,
@@ -72,6 +75,7 @@ const ReceivingList = ({
   titles,
   titlesCount,
 }) => {
+  const stripes = useStripes();
   const [
     filters,
     searchQuery,
@@ -110,77 +114,94 @@ const ReceivingList = ({
     />
   );
 
+  const shortcuts = [
+    {
+      name: 'new',
+      handler: () => {
+        if (stripes.hasPerm('ui-receiving.create')) {
+          history.push('/receiving/create');
+        }
+      },
+    },
+  ];
+
   return (
-    <PersistedPaneset
-      appId="ui-receiving"
-      id="receiving-paneset"
-      data-test-titles-list
+    <HasCommand
+      commands={shortcuts}
+      isWithinScope={checkScope}
+      scope={document.body}
     >
-      {isFiltersOpened && (
-        <FiltersPane
-          id="receiving-filters-pane"
-          toggleFilters={toggleFilters}
-        >
-          <SingleSearchForm
-            applySearch={applySearch}
-            changeSearch={changeSearch}
-            searchQuery={searchQuery}
-            isLoading={isLoading}
-            ariaLabelId="ui-receiving.titles.search"
-            searchableIndexes={searchableIndexes}
-            changeSearchIndex={changeIndex}
-            selectedIndex={searchIndex}
-          />
-
-          <ResetButton
-            id="reset-receiving-filters"
-            reset={resetFilters}
-            disabled={!location.search || isLoading}
-          />
-
-          <ReceivingListFilter
-            activeFilters={filters}
-            applyFilters={applyFilters}
-            disabled={isLoading}
-          />
-        </FiltersPane>
-      )}
-
-      <ResultsPane
-        id="receiving-results-pane"
-        title={resultsPaneTitle}
-        count={titlesCount}
-        renderLastMenu={renderLastMenu}
-        toggleFiltersPane={toggleFilters}
-        filters={filters}
-        isFiltersOpened={isFiltersOpened}
+      <PersistedPaneset
+        appId="ui-receiving"
+        id="receiving-paneset"
+        data-test-titles-list
       >
-        <MultiColumnList
-          id="receivings-list"
-          totalCount={titlesCount}
-          contentData={titles}
-          visibleColumns={visibleColumns}
-          columnMapping={columnMapping}
-          formatter={resultsFormatter}
-          loading={isLoading}
-          autosize
-          virtualize
-          onNeedMoreData={onNeedMoreData}
-          onRowClick={selectedTitle}
-          sortOrder={sortingField}
-          sortDirection={sortingDirection}
-          onHeaderClick={changeSorting}
-          isEmptyMessage={resultsStatusMessage}
-          hasMargin
-          pagingType="click"
-        />
-      </ResultsPane>
+        {isFiltersOpened && (
+          <FiltersPane
+            id="receiving-filters-pane"
+            toggleFilters={toggleFilters}
+          >
+            <SingleSearchForm
+              applySearch={applySearch}
+              changeSearch={changeSearch}
+              searchQuery={searchQuery}
+              isLoading={isLoading}
+              ariaLabelId="ui-receiving.titles.search"
+              searchableIndexes={searchableIndexes}
+              changeSearchIndex={changeIndex}
+              selectedIndex={searchIndex}
+            />
 
-      <Route
-        path={`${match.path}/:id/view`}
-        component={TitleDetailsContainer}
-      />
-    </PersistedPaneset>
+            <ResetButton
+              id="reset-receiving-filters"
+              reset={resetFilters}
+              disabled={!location.search || isLoading}
+            />
+
+            <ReceivingListFilter
+              activeFilters={filters}
+              applyFilters={applyFilters}
+              disabled={isLoading}
+            />
+          </FiltersPane>
+        )}
+
+        <ResultsPane
+          id="receiving-results-pane"
+          title={resultsPaneTitle}
+          count={titlesCount}
+          renderLastMenu={renderLastMenu}
+          toggleFiltersPane={toggleFilters}
+          filters={filters}
+          isFiltersOpened={isFiltersOpened}
+        >
+          <MultiColumnList
+            id="receivings-list"
+            totalCount={titlesCount}
+            contentData={titles}
+            visibleColumns={visibleColumns}
+            columnMapping={columnMapping}
+            formatter={resultsFormatter}
+            loading={isLoading}
+            autosize
+            virtualize
+            onNeedMoreData={onNeedMoreData}
+            onRowClick={selectedTitle}
+            sortOrder={sortingField}
+            sortDirection={sortingDirection}
+            onHeaderClick={changeSorting}
+            isEmptyMessage={resultsStatusMessage}
+            hasMargin
+            pagingType="click"
+          />
+        </ResultsPane>
+
+        <Route
+          path={`${match.path}/:id/view`}
+          component={TitleDetailsContainer}
+        />
+      </PersistedPaneset>
+    </HasCommand>
   );
 };
 

@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { get } from 'lodash';
+import { useHistory } from 'react-router';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Accordion,
   AccordionSet,
+  AccordionStatus,
   Checkbox,
+  checkScope,
   Col,
+  collapseAllSections,
   ExpandAllButton,
+  expandAllSections,
+  HasCommand,
   KeyValue,
   NoValue,
   Pane,
@@ -24,7 +30,6 @@ import {
   FieldDatepickerFinal,
   FolioFormattedDate,
   FormFooter,
-  useAccordionToggle,
   validateRequired,
 } from '@folio/stripes-acq-components';
 
@@ -47,7 +52,8 @@ const TitleForm = ({
   identifierTypes,
   contributorNameTypes,
 }) => {
-  const [expandAll, sections, toggleSection] = useAccordionToggle();
+  const history = useHistory();
+  const accordionStatusRef = useRef();
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata } = initialValues;
   const paneFooter = (
@@ -69,204 +75,230 @@ const TitleForm = ({
   const addLines = form.mutators.setPOLine;
   const { details, physical, isPackage } = get(values, 'poLine', {});
 
+  const shortcuts = [
+    {
+      name: 'cancel',
+      shortcut: 'esc',
+      handler: onCancel,
+    },
+    {
+      name: 'save',
+      handler: handleSubmit,
+    },
+    {
+      name: 'expandAllSections',
+      handler: (e) => expandAllSections(e, accordionStatusRef),
+    },
+    {
+      name: 'collapseAllSections',
+      handler: (e) => collapseAllSections(e, accordionStatusRef),
+    },
+    {
+      name: 'search',
+      handler: () => history.push('/receiving'),
+    },
+  ];
+
   return (
     <form>
-      <Paneset>
-        <Pane
-          defaultWidth="fill"
-          dismissible
-          id="pane-title-form"
-          onClose={onCancel}
-          paneTitle={paneTitle}
-          footer={paneFooter}
-        >
-          <Row>
-            <Col
-              xs={12}
-              md={8}
-              mdOffset={2}
-            >
-              <Row end="xs">
-                <Col xs={12}>
-                  <ExpandAllButton
-                    accordionStatus={sections}
-                    onToggle={expandAll}
-                  />
-                </Col>
-              </Row>
-              <AccordionSet
-                accordionStatus={sections}
-                onToggle={toggleSection}
+      <HasCommand
+        commands={shortcuts}
+        isWithinScope={checkScope}
+        scope={document.body}
+      >
+        <Paneset>
+          <Pane
+            defaultWidth="fill"
+            dismissible
+            id="pane-title-form"
+            onClose={onCancel}
+            paneTitle={paneTitle}
+            footer={paneFooter}
+          >
+            <Row>
+              <Col
+                xs={12}
+                md={8}
+                mdOffset={2}
               >
-                <Accordion
-                  id={SECTIONS.itemDetails}
-                  label={<FormattedMessage id="ui-receiving.title.section.itemDetails" />}
-                >
-                  {metadata && <ViewMetaData metadata={metadata} />}
-                  <Row>
-                    <Col
-                      data-test-col-title-title
-                      xs={3}
-                    >
-                      <Field
-                        component={TextField}
-                        disabled={!isPackage}
-                        label={<FormattedMessage id="ui-receiving.titles.title" />}
-                        name="title"
-                        required
-                        type="text"
-                        validate={validateRequired}
-                      />
-                      <Pluggable
-                        aria-haspopup="true"
-                        dataKey="instances"
-                        searchButtonStyle="link"
-                        searchLabel={<FormattedMessage id="ui-receiving.title.titleLookUp" />}
-                        selectInstance={addInstance}
-                        type="find-instance"
-                      >
-                        <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
-                      </Pluggable>
-                    </Col>
-                    <Col
-                      data-test-col-title-publisher
-                      xs={3}
-                    >
-                      <Field
-                        component={TextField}
-                        label={<FormattedMessage id="ui-receiving.title.publisher" />}
-                        name="publisher"
-                        type="text"
-                      />
-                    </Col>
-                    <Col
-                      data-test-col-title-published-date
-                      xs={3}
-                    >
-                      <Field
-                        component={TextField}
-                        label={<FormattedMessage id="ui-receiving.title.publicationDate" />}
-                        name="publishedDate"
-                        type="text"
-                      />
-                    </Col>
-                    <Col
-                      data-test-col-title-edition
-                      xs={3}
-                    >
-                      <Field
-                        component={TextField}
-                        label={<FormattedMessage id="ui-receiving.title.edition" />}
-                        name="edition"
-                        type="text"
-                      />
-                    </Col>
-                    <Col
-                      data-test-col-title-subscription-from
-                      xs={3}
-                    >
-                      <FieldDatepickerFinal
-                        label={<FormattedMessage id="ui-receiving.title.subscriptionFrom" />}
-                        name="subscriptionFrom"
-                      />
-                    </Col>
-                    <Col
-                      data-test-col-title-subscription-to
-                      xs={3}
-                    >
-                      <FieldDatepickerFinal
-                        label={<FormattedMessage id="ui-receiving.title.subscriptionTo" />}
-                        name="subscriptionTo"
-                      />
-                    </Col>
-                    <Col
-                      data-test-col-title-subscription-interval
-                      xs={3}
-                    >
-                      <Field
-                        component={TextField}
-                        fullWidth
-                        label={<FormattedMessage id="ui-receiving.title.subscriptionInterval" />}
-                        name="subscriptionInterval"
-                        type="number"
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
+                <AccordionStatus ref={accordionStatusRef}>
+                  <Row end="xs">
                     <Col xs={12}>
-                      <ContributorsForm contributorNameTypes={contributorNameTypes} />
+                      <ExpandAllButton />
                     </Col>
                   </Row>
-                  <Row>
-                    <Col xs={12}>
-                      <ProductIdDetailsForm identifierTypes={identifierTypes} />
-                    </Col>
-                  </Row>
-                </Accordion>
-                <Accordion
-                  id={SECTIONS.lineDetails}
-                  label={<FormattedMessage id="ui-receiving.title.section.lineDetails" />}
-                >
-                  <Row>
-                    <Col
-                      data-test-col-title-line-number
-                      xs={3}
+                  <AccordionSet>
+                    <Accordion
+                      id={SECTIONS.itemDetails}
+                      label={<FormattedMessage id="ui-receiving.title.section.itemDetails" />}
                     >
-                      <Field
-                        component={TextField}
-                        disabled
-                        label={<FormattedMessage id="ui-receiving.titles.lineNumber" />}
-                        name="poLine.poLineNumber"
-                        required
-                        type="text"
-                        validate={validateRequired}
-                      />
-                      <Pluggable
-                        addLines={addLines}
-                        aria-haspopup="true"
-                        dataKey="find-po-line"
-                        isSingleSelect
-                        searchButtonStyle="link"
-                        searchLabel={<FormattedMessage id="ui-receiving.title.lineLookUp" />}
-                        type="find-po-line"
-                      >
-                        <FormattedMessage id="ui-receiving.find-po-line-plugin-unavailable" />
-                      </Pluggable>
-                    </Col>
-                    <Col xs={3}>
-                      <KeyValue
-                        label={<FormattedMessage id="ui-receiving.title.expectedReceiptDate" />}
-                        value={<FolioFormattedDate value={get(physical, 'expectedReceiptDate')} />}
-                      />
-                    </Col>
-                    <Col xs={3}>
-                      <KeyValue label={<FormattedMessage id="ui-receiving.title.receivingNote" />}>
-                        <span style={{
-                          whiteSpace: 'pre-line',
-                          overflowWrap: 'break-word',
-                        }}
+                      {metadata && <ViewMetaData metadata={metadata} />}
+                      <Row>
+                        <Col
+                          data-test-col-title-title
+                          xs={3}
                         >
-                          {details?.receivingNote || <NoValue />}
-                        </span>
-                      </KeyValue>
-                    </Col>
-                    <Col xs={3}>
-                      <Field
-                        component={Checkbox}
-                        fullWidth
-                        label={<FormattedMessage id="ui-receiving.title.isAcknowledged" />}
-                        name="isAcknowledged"
-                        type="checkbox"
-                        vertical
-                      />
-                    </Col>
-                  </Row>
-                </Accordion>
-              </AccordionSet>
-            </Col>
-          </Row>
-        </Pane>
-      </Paneset>
+                          <Field
+                            component={TextField}
+                            disabled={!isPackage}
+                            label={<FormattedMessage id="ui-receiving.titles.title" />}
+                            name="title"
+                            required
+                            type="text"
+                            validate={validateRequired}
+                          />
+                          <Pluggable
+                            aria-haspopup="true"
+                            dataKey="instances"
+                            searchButtonStyle="link"
+                            searchLabel={<FormattedMessage id="ui-receiving.title.titleLookUp" />}
+                            selectInstance={addInstance}
+                            type="find-instance"
+                          >
+                            <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
+                          </Pluggable>
+                        </Col>
+                        <Col
+                          data-test-col-title-publisher
+                          xs={3}
+                        >
+                          <Field
+                            component={TextField}
+                            label={<FormattedMessage id="ui-receiving.title.publisher" />}
+                            name="publisher"
+                            type="text"
+                          />
+                        </Col>
+                        <Col
+                          data-test-col-title-published-date
+                          xs={3}
+                        >
+                          <Field
+                            component={TextField}
+                            label={<FormattedMessage id="ui-receiving.title.publicationDate" />}
+                            name="publishedDate"
+                            type="text"
+                          />
+                        </Col>
+                        <Col
+                          data-test-col-title-edition
+                          xs={3}
+                        >
+                          <Field
+                            component={TextField}
+                            label={<FormattedMessage id="ui-receiving.title.edition" />}
+                            name="edition"
+                            type="text"
+                          />
+                        </Col>
+                        <Col
+                          data-test-col-title-subscription-from
+                          xs={3}
+                        >
+                          <FieldDatepickerFinal
+                            label={<FormattedMessage id="ui-receiving.title.subscriptionFrom" />}
+                            name="subscriptionFrom"
+                          />
+                        </Col>
+                        <Col
+                          data-test-col-title-subscription-to
+                          xs={3}
+                        >
+                          <FieldDatepickerFinal
+                            label={<FormattedMessage id="ui-receiving.title.subscriptionTo" />}
+                            name="subscriptionTo"
+                          />
+                        </Col>
+                        <Col
+                          data-test-col-title-subscription-interval
+                          xs={3}
+                        >
+                          <Field
+                            component={TextField}
+                            fullWidth
+                            label={<FormattedMessage id="ui-receiving.title.subscriptionInterval" />}
+                            name="subscriptionInterval"
+                            type="number"
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col xs={12}>
+                          <ContributorsForm contributorNameTypes={contributorNameTypes} />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col xs={12}>
+                          <ProductIdDetailsForm identifierTypes={identifierTypes} />
+                        </Col>
+                      </Row>
+                    </Accordion>
+                    <Accordion
+                      id={SECTIONS.lineDetails}
+                      label={<FormattedMessage id="ui-receiving.title.section.lineDetails" />}
+                    >
+                      <Row>
+                        <Col
+                          data-test-col-title-line-number
+                          xs={3}
+                        >
+                          <Field
+                            component={TextField}
+                            disabled
+                            label={<FormattedMessage id="ui-receiving.titles.lineNumber" />}
+                            name="poLine.poLineNumber"
+                            required
+                            type="text"
+                            validate={validateRequired}
+                          />
+                          <Pluggable
+                            addLines={addLines}
+                            aria-haspopup="true"
+                            dataKey="find-po-line"
+                            isSingleSelect
+                            searchButtonStyle="link"
+                            searchLabel={<FormattedMessage id="ui-receiving.title.lineLookUp" />}
+                            type="find-po-line"
+                          >
+                            <FormattedMessage id="ui-receiving.find-po-line-plugin-unavailable" />
+                          </Pluggable>
+                        </Col>
+                        <Col xs={3}>
+                          <KeyValue
+                            label={<FormattedMessage id="ui-receiving.title.expectedReceiptDate" />}
+                            value={<FolioFormattedDate value={get(physical, 'expectedReceiptDate')} />}
+                          />
+                        </Col>
+                        <Col xs={3}>
+                          <KeyValue label={<FormattedMessage id="ui-receiving.title.receivingNote" />}>
+                            <span style={{
+                              whiteSpace: 'pre-line',
+                              overflowWrap: 'break-word',
+                            }}
+                            >
+                              {details?.receivingNote || <NoValue />}
+                            </span>
+                          </KeyValue>
+                        </Col>
+                        <Col xs={3}>
+                          <Field
+                            component={Checkbox}
+                            fullWidth
+                            label={<FormattedMessage id="ui-receiving.title.isAcknowledged" />}
+                            name="isAcknowledged"
+                            type="checkbox"
+                            vertical
+                          />
+                        </Col>
+                      </Row>
+                    </Accordion>
+                  </AccordionSet>
+                </AccordionStatus>
+              </Col>
+            </Row>
+          </Pane>
+        </Paneset>
+      </HasCommand>
     </form>
   );
 };
