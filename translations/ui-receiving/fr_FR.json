@@ -4,7 +4,7 @@
     "titles.orderStatus": "Statut de la commande",
     "titles.title": "Titre",
     "title.paneTitle.create": "Nouveau titre",
-    "title.section.itemDetails": "Détails de l'élément/l'article",
+    "title.section.itemDetails": "Détails de l'exemplaire",
     "title.section.lineDetails": "Détails de la ligne de commande",
     "titles.lineNumber": "Numéro de ligne de commande",
     "title.titleLookUp": "Recherche de titre",
@@ -102,7 +102,7 @@
     "title.actions.unreceive.error": "Non-réception: erreur",
     "title.actions.unreceive.success": "Non-réception : succès",
     "requests.title.single": "Un article a une demande en cours",
-    "requests.title.multiple": "Plusieurs articles ont des demandes en cours",
+    "requests.title.multiple": "Plusieurs exemplaires ont des demandes/réservations en cours",
     "requests.message.single": "L'article suivant a une demande en cours",
     "requests.message.multiple": "Les articles suivants ont des réservations en cours",
     "requests.message.barcode": "Code-barres ( {barcode} )",
@@ -137,7 +137,7 @@
     "piece.delete.confirm": "Confirmer",
     "piece.delete.heading": "Supprimer la pièce",
     "piece.delete.message": "Êtes-vous sûr.e de vouloir supprimer la pièce ?",
-    "errors.itemUpdateFailed": "La pièce <b> {caption} </b> n'a pas été réceptionnée. L'enregistrement de l'élément n'a pas pu être mis à jour",
+    "errors.itemUpdateFailed": "La pièce <b> {caption} </b> n'a pas été réceptionnée. L'enregistrement de l'exemplaire n'a pas pu être mis à jour",
     "errors.instanceId": "Piece was not received. Instance record could not be found.",
     "search.poLine.vendorDetail.referenceNumbers": "Numéro de référence du fournisseur"
 }

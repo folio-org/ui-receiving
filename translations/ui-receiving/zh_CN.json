@@ -139,5 +139,5 @@
     "piece.delete.message": "确定要删除件吗？",
     "errors.itemUpdateFailed": "未收到件<b> {caption} </b>。单件记录无法更新",
     "errors.instanceId": "未收到件。找不到实例记录。",
-    "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number"
+    "search.poLine.vendorDetail.referenceNumbers": "供应商参考号"
 }

@@ -112,7 +112,7 @@
     "title.polDetails": "Bestellpostendetails",
     "piece.actions.quickReceive": "Kurz inventarisieren",
     "filter.acqUnits": "Erwerbungsteam",
-    "filter.receivingStatus": "Inventarisierungsstatus",
+    "filter.receivingStatus": "In­ven­ta­ri­sie­rungs­sta­tus",
     "find-po-line-plugin-unavailable": "Find PO line Plugin ist nicht verfügbar",
     "title.actions.save.error.genericError": "Titel {title} für Bestellposten {poLineNumber} wurde nicht hinzugefügt",
     "title.actions.save.error.titleExist": "Titel {title} für Bestellposten {poLineNumber} existiert bereits",
