@@ -4,6 +4,10 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
+  LoadingPane,
+  Paneset,
+} from '@folio/stripes/components';
+import {
   baseManifest,
   batchFetch,
   itemsResource,
@@ -119,7 +123,14 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
     [onCancel, showCallout],
   );
 
-  if (!(pieces && poLine && title && pieceLocationMap)) return null;
+  if (!(pieces && poLine && title && pieceLocationMap)) {
+    return (
+      <Paneset>
+        <LoadingPane />
+      </Paneset>
+    );
+  }
+
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;
 

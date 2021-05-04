@@ -15,14 +15,17 @@ import setupApplication from '../../helpers/setup-application';
 import {
   TitleDetailsInteractor,
   TitleReceiveInteractor,
+  TIMEOUT,
 } from '../../interactors';
 
-describe('Title details', () => {
+describe('Title details', function () {
   const titleDetails = new TitleDetailsInteractor();
   const titleReceive = new TitleReceiveInteractor();
   const receivingConfirmation = new ConfirmationInteractor('#confirm-receiving');
 
   setupApplication();
+
+  this.timeout(TIMEOUT);
 
   beforeEach(async function () {
     const vendor = this.server.create('vendor');
@@ -53,7 +56,10 @@ describe('Title details', () => {
     });
 
     this.visit(`/receiving/${title.id}/view`);
-    await titleDetails.whenLoaded();
+
+    const titleDetailsLoaded = await titleDetails.whenLoaded();
+
+    return titleDetailsLoaded;
   });
 
   it('renders title details pane', () => {

@@ -8,12 +8,14 @@ import {
 } from '@folio/stripes-acq-components';
 
 import setupApplication from '../../helpers/setup-application';
-import { TitleDetailsInteractor } from '../../interactors';
+import { TitleDetailsInteractor, TIMEOUT } from '../../interactors';
 
-describe('Unreceive piece', () => {
+describe('Unreceive piece', function () {
   const titleDetails = new TitleDetailsInteractor();
 
   setupApplication();
+
+  this.timeout(TIMEOUT);
 
   beforeEach(async function () {
     const vendor = this.server.create('vendor');
@@ -38,7 +40,10 @@ describe('Unreceive piece', () => {
     });
 
     this.visit(`/receiving/${title.id}/view`);
-    await titleDetails.whenLoaded();
+
+    const titleDetailsLoaded = await titleDetails.whenLoaded();
+
+    return titleDetailsLoaded;
   });
 
   it('unreceive button is visible', function () {

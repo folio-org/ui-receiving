@@ -7,13 +7,16 @@ import setupApplication from '../../helpers/setup-application';
 import {
   TitleReceiveInteractor,
   TitleDetailsInteractor,
+  TIMEOUT,
 } from '../../interactors';
 
-describe('Receive piece', () => {
+describe('Receive piece', function () {
   const titleDetails = new TitleDetailsInteractor();
   const titleReceive = new TitleReceiveInteractor();
 
   setupApplication();
+
+  this.timeout(TIMEOUT);
 
   beforeEach(async function () {
     const vendor = this.server.create('vendor');
@@ -40,7 +43,9 @@ describe('Receive piece', () => {
     });
 
     this.visit(`/receiving/receive/${title.id}`);
-    await titleReceive.whenLoaded();
+    const titleReceiveLoaded = await titleReceive.whenLoaded();
+
+    return titleReceiveLoaded;
   });
 
   it('receiving screen is visible', function () {

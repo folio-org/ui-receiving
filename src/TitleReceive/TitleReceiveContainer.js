@@ -4,6 +4,10 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
+  LoadingPane,
+  Paneset,
+} from '@folio/stripes/components';
+import {
   baseManifest,
   configLoanTypeResource,
   itemsResource,
@@ -170,7 +174,13 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   );
   const poLineLocationIds = useMemo(() => poLine?.locations?.map(({ locationId }) => locationId), [poLine]);
 
-  if (!(pieces && poLine && title && locations)) return null;
+  if (!(pieces && poLine && title && locations)) {
+    return (
+      <Paneset>
+        <LoadingPane />
+      </Paneset>
+    );
+  }
 
   const initialValues = { receivedItems: pieces };
   const paneTitle = `${poLine.poLineNumber} - ${title.title}`;

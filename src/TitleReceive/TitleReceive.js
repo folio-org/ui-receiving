@@ -5,6 +5,8 @@ import { FieldArray } from 'react-final-form-arrays';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
+  checkScope,
+  HasCommand,
   MessageBanner,
   Pane,
   Paneset,
@@ -42,37 +44,51 @@ const TitleReceive = ({
     />
   );
 
+  const shortcuts = [
+    {
+      name: 'cancel',
+      shortcut: 'esc',
+      handler: onCancel,
+    },
+  ];
+
   return (
     <form>
-      <Paneset>
-        <Pane
-          defaultWidth="fill"
-          dismissible
-          footer={paneFooter}
-          id="pane-title-receive-list"
-          onClose={onCancel}
-          paneTitle={paneTitle}
-        >
-          {receivingNote && (
-            <MessageBanner>
-              {receivingNote}
-            </MessageBanner>
-          )}
-          <FieldArray
-            component={TitleReceiveList}
-            id="receivedItems"
-            name={FIELD_NAME}
-            props={{
-              createInventoryValues,
-              instanceId,
-              selectLocation: form.mutators.setLocationValue,
-              toggleCheckedAll: form.mutators.toggleCheckedAll,
-              locations,
-              poLineLocationIds,
-            }}
-          />
-        </Pane>
-      </Paneset>
+      <HasCommand
+        commands={shortcuts}
+        isWithinScope={checkScope}
+        scope={document.body}
+      >
+        <Paneset>
+          <Pane
+            defaultWidth="fill"
+            dismissible
+            footer={paneFooter}
+            id="pane-title-receive-list"
+            onClose={onCancel}
+            paneTitle={paneTitle}
+          >
+            {receivingNote && (
+              <MessageBanner>
+                {receivingNote}
+              </MessageBanner>
+            )}
+            <FieldArray
+              component={TitleReceiveList}
+              id="receivedItems"
+              name={FIELD_NAME}
+              props={{
+                createInventoryValues,
+                instanceId,
+                selectLocation: form.mutators.setLocationValue,
+                toggleCheckedAll: form.mutators.toggleCheckedAll,
+                locations,
+                poLineLocationIds,
+              }}
+            />
+          </Pane>
+        </Paneset>
+      </HasCommand>
     </form>
   );
 };

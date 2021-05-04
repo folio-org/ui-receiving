@@ -8,6 +8,10 @@ import {
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
+  LoadingPane,
+  Paneset,
+} from '@folio/stripes/components';
+import {
   baseManifest,
   contributorNameTypesManifest,
   ERROR_CODE_GENERIC,
@@ -101,7 +105,11 @@ function TitleEditContainer({ history, location, match, mutator }) {
   );
 
   if (!(title && poLine && identifierTypes && contributorNameTypes)) {
-    return null;
+    return (
+      <Paneset>
+        <LoadingPane />
+      </Paneset>
+    );
   }
 
   const initialValues = {

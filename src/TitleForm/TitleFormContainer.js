@@ -8,6 +8,10 @@ import {
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
+  LoadingPane,
+  Paneset,
+} from '@folio/stripes/components';
+import {
   contributorNameTypesManifest,
   ERROR_CODE_GENERIC,
   getErrorCodeFromResponse,
@@ -84,7 +88,11 @@ function TitleFormContainer({ history, location, match, mutator }) {
   );
 
   if (!identifierTypes || !contributorNameTypes) {
-    return null;
+    return (
+      <Paneset>
+        <LoadingPane />
+      </Paneset>
+    );
   }
 
   return (

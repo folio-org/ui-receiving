@@ -5,6 +5,8 @@ import { FieldArray } from 'react-final-form-arrays';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
+  checkScope,
+  HasCommand,
   Pane,
   Paneset,
 } from '@folio/stripes/components';
@@ -38,29 +40,43 @@ const TitleUnreceive = ({
     />
   );
 
+  const shortcuts = [
+    {
+      name: 'cancel',
+      shortcut: 'esc',
+      handler: onCancel,
+    },
+  ];
+
   return (
     <form>
-      <Paneset>
-        <Pane
-          data-test-unreceive-title-pane
-          defaultWidth="fill"
-          dismissible
-          footer={paneFooter}
-          id="pane-title-unreceive-list"
-          onClose={onCancel}
-          paneTitle={paneTitle}
-        >
-          <FieldArray
-            component={TitleUnreceiveList}
-            id="receivedItems"
-            name={FIELD_NAME}
-            props={{
-              pieceLocationMap,
-              toggleCheckedAll: form.mutators.toggleCheckedAll,
-            }}
-          />
-        </Pane>
-      </Paneset>
+      <HasCommand
+        commands={shortcuts}
+        isWithinScope={checkScope}
+        scope={document.body}
+      >
+        <Paneset>
+          <Pane
+            data-test-unreceive-title-pane
+            defaultWidth="fill"
+            dismissible
+            footer={paneFooter}
+            id="pane-title-unreceive-list"
+            onClose={onCancel}
+            paneTitle={paneTitle}
+          >
+            <FieldArray
+              component={TitleUnreceiveList}
+              id="receivedItems"
+              name={FIELD_NAME}
+              props={{
+                pieceLocationMap,
+                toggleCheckedAll: form.mutators.toggleCheckedAll,
+              }}
+            />
+          </Pane>
+        </Paneset>
+      </HasCommand>
     </form>
   );
 };

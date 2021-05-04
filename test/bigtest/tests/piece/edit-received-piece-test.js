@@ -7,13 +7,16 @@ import setupApplication from '../../helpers/setup-application';
 import {
   PieceFormInteractor,
   TitleDetailsInteractor,
+  TIMEOUT,
 } from '../../interactors';
 
-describe('Edit received piece', () => {
+describe('Edit received piece', function () {
   const titleDetails = new TitleDetailsInteractor();
   const pieceForm = new PieceFormInteractor();
 
   setupApplication();
+
+  this.timeout(TIMEOUT);
 
   beforeEach(async function () {
     const vendor = this.server.create('vendor');
@@ -41,7 +44,9 @@ describe('Edit received piece', () => {
     await titleDetails.whenLoaded();
 
     await titleDetails.receivedPiecesAccordion.pieces(0).click();
-    await pieceForm.whenLoaded();
+    const pieceFormLoaded = await pieceForm.whenLoaded();
+
+    return pieceFormLoaded;
   });
 
   it('should open Edit piece modal', function () {
