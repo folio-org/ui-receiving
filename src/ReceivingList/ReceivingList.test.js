@@ -11,9 +11,15 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 import ReceivingList from './ReceivingList';
 
 // TODO: move to stripes-acq-components mock
-jest.mock('@folio/stripes-core/src/components/IfPermission', () => {
-  return () => <span>IfPermission</span>;
-});
+jest.mock('@folio/stripes-acq-components/lib/AcqList/hooks/useFiltersToogle/useFiltersToogle', () => ({
+  useFiltersToogle: jest.fn().mockReturnValue({ isFiltersOpened: true, toggleFilters: jest.fn() }),
+}));
+
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
+  // eslint-disable-next-line react/prop-types
+  PersistedPaneset: (props) => <div>{props.children}</div>,
+}));
 
 jest.mock('react-virtualized-auto-sizer/dist/index.cjs', () => {
   return (props) => {
