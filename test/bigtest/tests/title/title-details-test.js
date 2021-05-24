@@ -22,8 +22,27 @@ describe('Title details', function () {
   const titleDetails = new TitleDetailsInteractor();
   const titleReceive = new TitleReceiveInteractor();
   const receivingConfirmation = new ConfirmationInteractor('#confirm-receiving');
+  const InventoryApp = () => (<div>Inventory</div>);
+  const OrdersApp = () => (<div>Orders</div>);
 
-  setupApplication();
+  setupApplication({
+    modules: [
+      {
+        type: 'app',
+        name: '@folio/inventory',
+        displayName: 'Inventory',
+        route: '/inventory',
+        module: InventoryApp,
+      },
+      {
+        type: 'app',
+        name: '@folio/orders',
+        displayName: 'Orders',
+        route: '/orders',
+        module: OrdersApp,
+      },
+    ],
+  });
 
   this.timeout(TIMEOUT);
 
