@@ -12,6 +12,9 @@ export const FILTERS = {
   MATERIAL_TYPE: 'materialType',
   ACQUISITIONS_UNIT: 'purchaseOrder.acqUnitIds',
   RECEIVING_STATUS: 'pieces.receivingStatus',
+  RECEIVED_DATE: 'pieces.receivedDate',
+  EXPECTED_RECEIPT_DATE: 'pieces.receiptDate',
+  RECEIPT_DUE: 'poLine.physical.receiptDue',
 };
 
 export const ORDER_FORMAT_MATERIAL_TYPE_MAP = {

@@ -84,6 +84,7 @@
   "title.subscriptionTo": "Subscription to",
   "title.title": "Title",
   "title.vendor": "Vendor",
+  "title.receiptDue": "Receipt due",
 
   "piece.actions.addItem":"Add item",
   "piece.actions.addPiece.error": "The piece <b>{caption}</b> was not added",

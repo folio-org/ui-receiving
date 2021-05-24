@@ -7,6 +7,7 @@ import {
 
 import {
   AcqCheckboxFilter,
+  AcqDateRangeFilter,
   AcqTagsFilter,
   AcqUnitFilter,
   LocationFilterContainer,
@@ -116,6 +117,30 @@ const ReceivingListFilter = ({
         labelId="ui-receiving.filter.acqUnits"
         name={FILTERS.ACQUISITIONS_UNIT}
         onChange={adaptedApplyFilters}
+      />
+
+      <AcqDateRangeFilter
+        activeFilters={activeFilters[FILTERS.RECEIVED_DATE]}
+        labelId="ui-receiving.piece.receivedDate"
+        name={FILTERS.RECEIVED_DATE}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <AcqDateRangeFilter
+        activeFilters={activeFilters[FILTERS.EXPECTED_RECEIPT_DATE]}
+        labelId="ui-receiving.piece.receiptDate"
+        name={FILTERS.EXPECTED_RECEIPT_DATE}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <AcqDateRangeFilter
+        activeFilters={activeFilters[FILTERS.RECEIPT_DUE]}
+        labelId="ui-receiving.title.receiptDue"
+        name={FILTERS.RECEIPT_DUE}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
       />
     </AccordionSet>
   );

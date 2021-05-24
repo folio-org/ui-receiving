@@ -3,6 +3,7 @@ import { uniq, compact, flatten } from 'lodash';
 import {
   LIMIT_MAX,
   batchFetch,
+  buildDateRangeQuery,
   buildFilterQuery,
   buildSortingQuery,
   connectQuery,
@@ -74,13 +75,21 @@ export const buildTitlesQuery = (queryParams) => {
     queryParams[FILTERS.ORDER_FORMAT] = undefined;
   }
 
-  const queryParamsFilterQuery = buildFilterQuery(queryParams, (query, qindex) => {
-    if (qindex) {
-      return `(${qindex}==*${query}*)`;
-    }
+  const queryParamsFilterQuery = buildFilterQuery(
+    queryParams,
+    (query, qindex) => {
+      if (qindex) {
+        return `(${qindex}==*${query}*)`;
+      }
 
-    return getKeywordQuery(query);
-  });
+      return getKeywordQuery(query);
+    },
+    {
+      [FILTERS.EXPECTED_RECEIPT_DATE]: buildDateRangeQuery.bind(null, [FILTERS.EXPECTED_RECEIPT_DATE]),
+      [FILTERS.RECEIVED_DATE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIVED_DATE]),
+      [FILTERS.RECEIPT_DUE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIPT_DUE]),
+    },
+  );
 
   const filterQuery = compact([queryParamsFilterQuery, materialTypeFilterQuery]).join(' and ') || 'cql.allRecords=1';
   const sortingQuery = buildSortingQuery(queryParams, { 'poLine.poLineNumber': 'poLineNumber' }) || 'sortby title/sort.ascending';
