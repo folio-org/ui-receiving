@@ -19,6 +19,7 @@ import { PersistedPaneset } from '@folio/stripes/smart-components';
 import {
   FiltersPane,
   FolioFormattedDate,
+  handleKeyCommand,
   NoResultsMessage,
   ORDER_STATUS_LABEL,
   ResetButton,
@@ -117,11 +118,11 @@ const ReceivingList = ({
   const shortcuts = [
     {
       name: 'new',
-      handler: () => {
+      handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.create')) {
           history.push('/receiving/create');
         }
-      },
+      }),
     },
   ];
 

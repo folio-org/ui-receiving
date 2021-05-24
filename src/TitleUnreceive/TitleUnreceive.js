@@ -12,6 +12,7 @@ import {
 } from '@folio/stripes/components';
 import {
   FormFooter,
+  handleKeyCommand,
 } from '@folio/stripes-acq-components';
 
 import { TitleUnreceiveList } from './TitleUnreceiveList';
@@ -44,7 +45,7 @@ const TitleUnreceive = ({
     {
       name: 'cancel',
       shortcut: 'esc',
-      handler: onCancel,
+      handler: handleKeyCommand(onCancel),
     },
   ];
 

@@ -31,6 +31,7 @@ import {
 } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
+  handleKeyCommand,
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
@@ -114,17 +115,17 @@ const TitleDetails = ({
   const shortcuts = [
     {
       name: 'new',
-      handler: () => {
+      handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.create')) {
           history.push('/receiving/create');
         }
-      },
+      }),
     },
     {
       name: 'edit',
-      handler: () => {
+      handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.edit')) onEdit();
-      },
+      }),
     },
     {
       name: 'expandAllSections',

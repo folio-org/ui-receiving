@@ -30,6 +30,7 @@ import {
   FieldDatepickerFinal,
   FolioFormattedDate,
   FormFooter,
+  handleKeyCommand,
   validateRequired,
 } from '@folio/stripes-acq-components';
 
@@ -79,11 +80,11 @@ const TitleForm = ({
     {
       name: 'cancel',
       shortcut: 'esc',
-      handler: onCancel,
+      handler: handleKeyCommand(onCancel),
     },
     {
       name: 'save',
-      handler: handleSubmit,
+      handler: handleKeyCommand(handleSubmit, { disabled: pristine || submitting }),
     },
     {
       name: 'expandAllSections',
@@ -95,7 +96,7 @@ const TitleForm = ({
     },
     {
       name: 'search',
-      handler: () => history.push('/receiving'),
+      handler: handleKeyCommand(() => history.push('/receiving')),
     },
   ];
 
