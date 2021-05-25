@@ -30,7 +30,7 @@
     "title.details.button.edit": "編集",
     "title.edit.cancel": "キャンセル",
     "title.actions.save.success": "The title <b>{title}</b> has been successfully added for <b>PO line {poLineNumber}</b>",
-    "search.keyword": "Keyword",
+    "search.keyword": "キーワード",
     "search.title": "Title (Receiving titles)",
     "search.poLine.titleOrPackage": "Package (POL Package name)",
     "search.productIds": "製品ID（特定のタイトルまたはパッケージの場合）",
