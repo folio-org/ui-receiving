@@ -4,6 +4,7 @@
 * Also support `circulation` `11.0`. Refs UIPCIR-21.
 * Receiving: Add filters for Expected receipt date and Received date. Refs UIREC-120.
 * Implement Keyboard shortcuts modal. Refs UIREC-134.
+* Compile Translation Files into AST Format. Refs UIREC-125.
 
 ## [1.3.3](https://github.com/folio-org/ui-receiving/tree/v1.3.3) (2021-04-21)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.2...v1.3.3)
