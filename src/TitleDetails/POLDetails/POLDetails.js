@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import {
+  Checkbox,
   Col,
   KeyValue,
   NoValue,
@@ -24,6 +25,8 @@ const POLDetails = ({
   poLineNumber,
   receiptDate,
   receivingNote,
+  requester,
+  rush,
   vendor,
 }) => {
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
@@ -123,6 +126,29 @@ const POLDetails = ({
           </Col>
         )}
       </Row>
+      <Row>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <KeyValue
+            label={<FormattedMessage id="ui-receiving.title.requester" />}
+            value={requester}
+          />
+        </Col>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <Checkbox
+            checked={rush}
+            disabled
+            label={<FormattedMessage id="ui-receiving.title.rush" />}
+            type="checkbox"
+            vertical
+          />
+        </Col>
+      </Row>
     </>
   );
 };
@@ -136,12 +162,15 @@ POLDetails.propTypes = {
   poLineNumber: PropTypes.string,
   receiptDate: PropTypes.string,
   receivingNote: PropTypes.string,
+  requester: PropTypes.string,
+  rush: PropTypes.bool,
   vendor: PropTypes.string,
 };
 
 POLDetails.defaultProps = {
   receiptDate: '',
   receivingNote: '',
+  rush: false,
 };
 
 export default POLDetails;

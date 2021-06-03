@@ -99,7 +99,7 @@ const TitleDetails = ({
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
-  const { id: poLineId, receiptDate, poLineNumber, checkinItems, orderFormat } = poLine;
+  const { id: poLineId, receiptDate, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
@@ -318,6 +318,8 @@ const TitleDetails = ({
                 poLineNumber={poLineNumber}
                 receiptDate={receiptDate}
                 receivingNote={receivingNote}
+                requester={requester}
+                rush={rush}
                 vendor={vendor}
               />
             </Accordion>

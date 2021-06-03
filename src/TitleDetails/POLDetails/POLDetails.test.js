@@ -16,6 +16,8 @@ const renderPOLDetails = ({
   poLineNumber,
   receiptDate,
   receivingNote,
+  requester,
+  rush,
   vendor,
 }) => (render(
   <IntlProvider locale="en">
@@ -29,6 +31,8 @@ const renderPOLDetails = ({
         poLineNumber={poLineNumber}
         receiptDate={receiptDate}
         receivingNote={receivingNote}
+        requester={requester}
+        rush={rush}
         vendor={vendor}
       />
     </MemoryRouter>
@@ -44,6 +48,8 @@ const polDetails = {
   poLineNumber: 'POL-001',
   receiptDate: '2021-02-06',
   receivingNote: 'critical',
+  requester: 'Requester',
+  rush: true,
   vendor: 'Vendor',
 };
 
@@ -60,6 +66,7 @@ describe('Given POL details', () => {
     expect(getByText(polDetails.materialSupplier)).toBeDefined();
     expect(getByText('ui-receiving.title.orderType.Ongoing')).toBeDefined();
     expect(getByText(polDetails.vendor)).toBeDefined();
+    expect(getByText(polDetails.requester)).toBeDefined();
   });
 
   describe('When title is connected with poLine', () => {
