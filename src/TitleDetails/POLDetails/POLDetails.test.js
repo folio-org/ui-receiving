@@ -9,12 +9,12 @@ import POLDetails from './POLDetails';
 
 const renderPOLDetails = ({
   accessProvider,
+  expectedReceiptDate,
   materialSupplier,
   orderFormat,
   orderType,
   poLineId,
   poLineNumber,
-  receiptDate,
   receivingNote,
   requester,
   rush,
@@ -24,12 +24,12 @@ const renderPOLDetails = ({
     <MemoryRouter>
       <POLDetails
         accessProvider={accessProvider}
+        expectedReceiptDate={expectedReceiptDate}
         materialSupplier={materialSupplier}
         orderFormat={orderFormat}
         orderType={orderType}
         poLineId={poLineId}
         poLineNumber={poLineNumber}
-        receiptDate={receiptDate}
         receivingNote={receivingNote}
         requester={requester}
         rush={rush}
@@ -46,7 +46,7 @@ const polDetails = {
   orderType: 'Ongoing',
   poLineId: '001',
   poLineNumber: 'POL-001',
-  receiptDate: '2021-02-06',
+  expectedReceiptDate: '2021-02-06',
   receivingNote: 'critical',
   requester: 'Requester',
   rush: true,
@@ -60,7 +60,7 @@ describe('Given POL details', () => {
     const { getByText } = renderPOLDetails(polDetails);
 
     expect(getByText(polDetails.poLineNumber)).toBeDefined();
-    expect(getByText(polDetails.receiptDate)).toBeDefined();
+    expect(getByText(polDetails.expectedReceiptDate)).toBeDefined();
     expect(getByText(polDetails.receivingNote)).toBeDefined();
     expect(getByText(polDetails.accessProvider)).toBeDefined();
     expect(getByText(polDetails.materialSupplier)).toBeDefined();

@@ -18,19 +18,19 @@ import {
 
 const POLDetails = ({
   accessProvider,
+  expectedReceiptDate,
   materialSupplier,
   orderFormat,
   orderType,
   poLineId,
   poLineNumber,
-  receiptDate,
   receivingNote,
   requester,
   rush,
   vendor,
 }) => {
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
-  const showMaterailSupplier = orderFormat !== ORDER_FORMATS.electronicResource;
+  const showMaterialSupplier = orderFormat !== ORDER_FORMATS.electronicResource;
   const poLineNumberValue = (
     <Link
       data-testid="titlePOLineLink"
@@ -63,7 +63,7 @@ const POLDetails = ({
         >
           <KeyValue
             label={<FormattedMessage id="ui-receiving.title.expectedReceiptDate" />}
-            value={<FolioFormattedDate value={receiptDate} />}
+            value={<FolioFormattedDate value={expectedReceiptDate} />}
           />
         </Col>
         <Col
@@ -113,7 +113,7 @@ const POLDetails = ({
             />
           </Col>
         )}
-        {showMaterailSupplier && (
+        {showMaterialSupplier && (
           <Col
             data-test-title-material-supplier
             xs={6}
@@ -155,12 +155,12 @@ const POLDetails = ({
 
 POLDetails.propTypes = {
   accessProvider: PropTypes.string,
+  expectedReceiptDate: PropTypes.string,
   materialSupplier: PropTypes.string,
   orderFormat: PropTypes.string,
   orderType: PropTypes.string,
   poLineId: PropTypes.string,
   poLineNumber: PropTypes.string,
-  receiptDate: PropTypes.string,
   receivingNote: PropTypes.string,
   requester: PropTypes.string,
   rush: PropTypes.bool,
@@ -168,7 +168,7 @@ POLDetails.propTypes = {
 };
 
 POLDetails.defaultProps = {
-  receiptDate: '',
+  expectedReceiptDate: '',
   receivingNote: '',
   rush: false,
 };

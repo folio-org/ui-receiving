@@ -55,8 +55,8 @@ import Title from './Title';
 import POLDetails from './POLDetails';
 
 function getNewPieceValues(titleId, poLine) {
-  const { orderFormat, id: poLineId, receiptDate, locations } = poLine;
-  const initialValuesPiece = { receiptDate, poLineId, titleId };
+  const { orderFormat, id: poLineId, physical, locations } = poLine;
+  const initialValuesPiece = { receiptDate: physical?.expectedReceiptDate, poLineId, titleId };
 
   if (orderFormat !== ORDER_FORMATS.PEMix) {
     initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
@@ -99,7 +99,7 @@ const TitleDetails = ({
   const receivedPieces = sortBy(pieces.filter(
     ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
   ), 'receivedDate');
-  const { id: poLineId, receiptDate, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
+  const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
@@ -316,7 +316,7 @@ const TitleDetails = ({
                 orderType={order.orderType}
                 poLineId={poLineId}
                 poLineNumber={poLineNumber}
-                receiptDate={receiptDate}
+                expectedReceiptDate={physical?.expectedReceiptDate}
                 receivingNote={receivingNote}
                 requester={requester}
                 rush={rush}
