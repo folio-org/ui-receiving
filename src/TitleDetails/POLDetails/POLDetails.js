@@ -26,7 +26,7 @@ const POLDetails = ({
   poLineNumber,
   receivingNote,
   requester,
-  rush,
+  rush = false,
   vendor,
 }) => {
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
@@ -165,12 +165,6 @@ POLDetails.propTypes = {
   requester: PropTypes.string,
   rush: PropTypes.bool,
   vendor: PropTypes.string,
-};
-
-POLDetails.defaultProps = {
-  expectedReceiptDate: '',
-  receivingNote: '',
-  rush: false,
 };
 
 export default POLDetails;
