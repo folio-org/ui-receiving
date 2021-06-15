@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import queryString from 'query-string';
+import { useIntl } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
 import { useList } from '@folio/stripes-acq-components';
@@ -32,6 +33,10 @@ const RESULT_COUNT_INCREMENT = 30;
 const resetData = () => {};
 
 const ReceivingListContainer = ({ mutator, location }) => {
+  const intl = useIntl();
+
+  const invalidReferenceMessage = intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' });
+
   const [orderLinesMap, setOrderLinesMap] = useState({});
   const [locationsMap, setLocationsMap] = useState({});
   const [ordersMap, setOrdersMap] = useState({});
@@ -85,7 +90,9 @@ const ReceivingListContainer = ({ mutator, location }) => {
           ...orderLinesResponse.reduce((acc, orderLine) => {
             acc[orderLine.id] = {
               ...orderLine,
-              locations: orderLine.locations.map(({ locationId }) => newLocationsMap[locationId].name),
+              locations: orderLine.locations.map(
+                ({ locationId }) => newLocationsMap[locationId]?.name ?? invalidReferenceMessage,
+              ),
               orderWorkflow: newOrdersMap[orderLine.purchaseOrderId]?.workflowStatus,
             };
 
