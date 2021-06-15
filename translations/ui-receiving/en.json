@@ -34,6 +34,7 @@
   "title.titleLookUpNoPlugin": "[no instance-selection plugin]",
   "titles.title": "Title",
   "titles.orderWorkflow": "Order status",
+  "titles.invalidReference": "Invalid reference",
 
   "title.modalLabel.edit": "Add title",
   "title.edit.save": "Save & close",
