@@ -91,7 +91,7 @@ const ReceivingListContainer = ({ mutator, location }) => {
             acc[orderLine.id] = {
               ...orderLine,
               locations: orderLine.locations.map(
-                ({ locationId }) => newLocationsMap[locationId]?.name || invalidReferenceMessage,
+                ({ locationId }) => newLocationsMap[locationId]?.name ?? invalidReferenceMessage,
               ),
               orderWorkflow: newOrdersMap[orderLine.purchaseOrderId]?.workflowStatus,
             };
