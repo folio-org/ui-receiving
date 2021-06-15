@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+* CANNOT receive pieces against package POL. Refs UIREC-143.
+
+
 ## [1.3.3](https://github.com/folio-org/ui-receiving/tree/v1.3.3) (2021-04-21)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.2...v1.3.3)
 

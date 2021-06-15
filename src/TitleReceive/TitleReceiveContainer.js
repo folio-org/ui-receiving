@@ -69,10 +69,12 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   useEffect(
     () => {
       if (poLineId) {
+        const filterQuery = `titleId=${titleId} and poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.expected}`;
+
         mutator.pieces.GET({
           params: {
             limit: `${LIMIT_MAX}`,
-            query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.expected} sortby locationId`,
+            query: `${filterQuery} sortby locationId`,
           },
         })
           .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
@@ -80,7 +82,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [poLineId],
+    [titleId, poLineId],
   );
 
   useEffect(
