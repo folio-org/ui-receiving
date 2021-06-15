@@ -71,7 +71,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
       return mutator.pieces.GET({
         params: {
           limit: `${LIMIT_MAX}`,
-          query: `poLineId==${lineId} sortby receiptDate`,
+          query: `titleId==${titleId} and poLineId==${lineId} sortby receiptDate`,
         },
       })
         .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
@@ -81,7 +81,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [titleId],
   );
 
   useEffect(

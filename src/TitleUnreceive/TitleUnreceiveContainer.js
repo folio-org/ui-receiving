@@ -65,10 +65,12 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
   useEffect(
     () => {
       if (poLineId) {
+        const filterQuery = `titleId=${titleId} and poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.received}`;
+
         mutator.pieces.GET({
           params: {
             limit: `${LIMIT_MAX}`,
-            query: `poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.received} sortby locationId`,
+            query: `${filterQuery} sortby locationId`,
           },
         })
           .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
@@ -92,7 +94,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [poLineId],
+    [titleId, poLineId],
   );
 
   const onCancel = useCallback(
