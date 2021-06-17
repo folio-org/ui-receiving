@@ -1,12 +1,18 @@
 # Change history for ui-receiving
 
 ## (IN PROGRESS)
+
+## [1.4.0](https://github.com/folio-org/ui-receiving/tree/v1.4.0) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.4...v1.4.0)
+
 * Also support `circulation` `11.0`. Refs UIPCIR-21.
 * Receiving: Add filters for Expected receipt date and Received date. Refs UIREC-120.
 * Implement Keyboard shortcuts modal. Refs UIREC-134.
 * Compile Translation Files into AST Format. Refs UIREC-125.
 * Display requester from POL when there is one. Refs UIREC-114.
 * "Expected receipt date" in Title POL accordion showing wrong date. Refs UIREC-137.
+* Resizable Panes - Persistence | Use PersistedPaneset smart component. Refs UIREC-127.
+* Receiving app | Apply baseline keyboard shortcuts. Refs UIREC-117.
 
 ## [1.3.4](https://github.com/folio-org/ui-receiving/tree/v1.3.4) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.3...v1.3.4)
