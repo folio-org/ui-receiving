@@ -7,6 +7,10 @@
 * Compile Translation Files into AST Format. Refs UIREC-125.
 * Display requester from POL when there is one. Refs UIREC-114.
 * "Expected receipt date" in Title POL accordion showing wrong date. Refs UIREC-137.
+
+## [1.3.4](https://github.com/folio-org/ui-receiving/tree/v1.3.4) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.3...v1.3.4)
+
 * CANNOT receive pieces against package POL. Refs UIREC-143.
 * Receiving search: 'No records found' when location is removed. Refs UIREC-142.
 
