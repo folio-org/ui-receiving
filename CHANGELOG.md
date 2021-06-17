@@ -5,7 +5,6 @@
 * CANNOT receive pieces against package POL. Refs UIREC-143.
 * Receiving search: 'No records found' when location is removed. Refs UIREC-142.
 
-
 ## [1.3.3](https://github.com/folio-org/ui-receiving/tree/v1.3.3) (2021-04-21)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.2...v1.3.3)
 

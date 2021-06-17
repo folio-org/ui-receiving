@@ -139,5 +139,6 @@
     "piece.delete.message": "Czy na pewno chcesz usunąć część?",
     "errors.itemUpdateFailed": "Część <b>{caption}</b> nie została odebrana. Nie udało sie zaktualizować rekordu egzemplarza",
     "errors.instanceId": "Część nie została odebrana. Nie można odnaleźć rekordu instancji.",
-    "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number"
+    "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number",
+    "titles.invalidReference": "Invalid reference"
 }

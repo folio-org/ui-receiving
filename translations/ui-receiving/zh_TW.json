@@ -139,5 +139,6 @@
     "piece.delete.message": "Are you sure you want to delete piece?",
     "errors.itemUpdateFailed": "Piece <b>{caption}</b> was not received. The item record failed to be updated",
     "errors.instanceId": "Piece was not received. Instance record could not be found.",
-    "search.poLine.vendorDetail.referenceNumbers": "供應商參考號"
+    "search.poLine.vendorDetail.referenceNumbers": "供應商參考號",
+    "titles.invalidReference": "Invalid reference"
 }

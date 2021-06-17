@@ -139,5 +139,6 @@
     "piece.delete.message": "هل أنت متأكد من أنك تريد حذف القطعة؟",
     "errors.itemUpdateFailed": "لم يتم استلام القطعة <b>{caption}</b>. فشل تحديث تسجيلة المادة.",
     "errors.instanceId": "لم يتم استلام القطعة. تعذر العثور على تسجيلة الوعاء.",
-    "search.poLine.vendorDetail.referenceNumbers": "رقم المورّد المرجعي"
+    "search.poLine.vendorDetail.referenceNumbers": "رقم المورّد المرجعي",
+    "titles.invalidReference": "Invalid reference"
 }

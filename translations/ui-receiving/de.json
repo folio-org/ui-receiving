@@ -139,5 +139,6 @@
     "piece.delete.message": "Teil wirklich löschen?",
     "errors.itemUpdateFailed": "Piece <b>{caption}</b> was not received. The item record failed to be updated",
     "errors.instanceId": "Piece was not received. Instance record could not be found.",
-    "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number"
+    "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number",
+    "titles.invalidReference": "Invalid reference"
 }
