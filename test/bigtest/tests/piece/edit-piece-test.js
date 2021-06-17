@@ -9,10 +9,11 @@ import {
   TitleDetailsInteractor,
 } from '../../interactors';
 
-describe('Edit piece', () => {
+describe('Edit piece', function () {
   const titleDetails = new TitleDetailsInteractor();
   const pieceForm = new PieceFormInteractor();
 
+  this.timeout(5000);
   setupApplication();
 
   beforeEach(async function () {

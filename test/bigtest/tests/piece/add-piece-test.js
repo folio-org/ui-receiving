@@ -13,11 +13,12 @@ import {
   TitleDetailsInteractor,
 } from '../../interactors';
 
-describe('Add piece', () => {
+describe('Add piece', function () {
   const titleDetails = new TitleDetailsInteractor();
   const pieceForm = new PieceFormInteractor();
   const receivingConfirmation = new ConfirmationInteractor('#confirm-receiving');
 
+  this.timeout(5000);
   setupApplication();
 
   beforeEach(async function () {
