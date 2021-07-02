@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Also support `holdings-storage` `5.0` and `inventory` `11.0`. Refs UIREC-139.
+
 ## [1.4.0](https://github.com/folio-org/ui-receiving/tree/v1.4.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.4...v1.4.0)
 
