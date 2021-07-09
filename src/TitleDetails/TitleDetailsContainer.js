@@ -30,7 +30,6 @@ import {
   titleResource,
 } from '../common/resources';
 import {
-  fetchLocations,
   getHydratedPieces,
   handleCommonErrors,
   handleReceiveErrorResponse,
@@ -135,12 +134,10 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
   useEffect(() => {
     setLocations();
 
-    if (pieces && poLine.id) {
-      fetchLocations(mutator.locations, pieces, poLine).then(setLocations);
-    }
+    mutator.locations.GET().then(setLocations);
   },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  [pieces, poLine]);
+  []);
 
   const onClose = useCallback(
     () => {

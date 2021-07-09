@@ -32,7 +32,6 @@ import {
 } from '../common/resources';
 import {
   checkIn,
-  fetchLocations,
   getHydratedPieces,
   handleReceiveErrorResponse,
 } from '../common/utils';
@@ -91,12 +90,10 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
 
   useEffect(
     () => {
-      if (pieces && poLine) {
-        fetchLocations(mutator.locations, pieces, poLine).then(setLocations);
-      }
+      mutator.locations.GET().then(setLocations);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pieces, poLine],
+    [],
   );
 
   const onCancel = useCallback(
@@ -174,7 +171,10 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     }),
     [poLine],
   );
-  const poLineLocationIds = useMemo(() => poLine?.locations?.map(({ locationId }) => locationId), [poLine]);
+  const poLineLocationIds = useMemo(
+    () => poLine?.locations?.map(({ locationId }) => locationId).filter(Boolean),
+    [poLine],
+  );
 
   if (!(pieces && poLine && title && locations)) {
     return (

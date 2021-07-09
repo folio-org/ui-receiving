@@ -35,6 +35,7 @@ export const checkInItems = (pieces, mutator) => {
       caption: piece.caption,
       supplement: piece.supplement,
       locationId: piece.locationId || null,
+      holdingId: piece.holdingId || null,
       itemStatus: piece.itemStatus,
     }));
 

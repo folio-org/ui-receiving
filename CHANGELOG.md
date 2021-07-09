@@ -13,6 +13,7 @@
 * "Expected receipt date" in Title POL accordion showing wrong date. Refs UIREC-137.
 * Resizable Panes - Persistence | Use PersistedPaneset smart component. Refs UIREC-127.
 * Receiving app | Apply baseline keyboard shortcuts. Refs UIREC-117.
+* Allow user to select holding or location at point of receipt. Refs UIREC-133.
 
 ## [1.3.4](https://github.com/folio-org/ui-receiving/tree/v1.3.4) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.3...v1.3.4)

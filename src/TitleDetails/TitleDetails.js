@@ -64,6 +64,7 @@ function getNewPieceValues(titleId, poLine) {
 
   if (locations.length === 1) {
     initialValuesPiece.locationId = locations[0].locationId;
+    initialValuesPiece.holdingId = locations[0].holdingId;
   }
 
   return initialValuesPiece;
@@ -104,7 +105,7 @@ const TitleDetails = ({
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
   const poLineLocations = poLine?.locations?.map(({ locationId }) => locationId) ?? [];
-  const poLineLocationIds = useMemo(() => poLineLocations, [poLineLocations]);
+  const poLineLocationIds = useMemo(() => poLineLocations.filter(Boolean), [poLineLocations]);
   const locationIds = useMemo(() => (
     pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
   ), [poLineLocationIds, pieceLocationId]);

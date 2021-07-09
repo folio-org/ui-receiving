@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import {
-  get,
   includes,
 } from 'lodash';
 
@@ -20,7 +19,7 @@ import {
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
-  FieldLocationFinal,
+  FieldInventory,
   FieldSelectFinal,
   INVENTORY_RECORDS_TYPE,
   ModalFooter,
@@ -161,17 +160,20 @@ const AddPieceModal = ({
         </Row>
         <Row>
           <Col xs={6}>
-            <FieldLocationFinal
-              isDisabled={!isNotReceived}
-              labelId="ui-receiving.piece.location"
-              locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-              locationsForDict={locations}
-              name="locationId"
+            <FieldInventory
+              instanceId={instanceId}
+              locationIds={locationIds}
+              locations={locations}
+
+              holdingName="holdingId"
+              locationName="locationId"
+
               onChange={form.mutators.setLocationValue}
-              prepopulatedLocationsIds={locationIds}
+              disabled={!isNotReceived}
               required={isLocationRequired}
             />
           </Col>
+
           <Col xs>
             <CreateItemField
               createInventoryValues={createInventoryValues}
@@ -236,9 +238,13 @@ export default stripesFinalForm({
   subscription: { hasValidationErrors: true, values: true },
   mutators: {
     setLocationValue: (args, state, tools) => {
-      const { id } = get(args, '0', {});
+      const [location, locationField, holdingFieldName, holdingId] = args;
 
-      tools.changeValue(state, 'locationId', () => id);
+      tools.changeValue(state, locationField, () => location?.id || location);
+
+      if (holdingFieldName) {
+        tools.changeValue(state, holdingFieldName, () => holdingId);
+      }
     },
   },
 })(AddPieceModal);
