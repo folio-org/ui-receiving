@@ -35,7 +35,7 @@ describe('TitleReceiveContainer', () => {
         GET: jest.fn(),
       },
       locations: {
-        GET: jest.fn(),
+        GET: jest.fn().mockReturnValue(Promise.resolve([])),
         reset: jest.fn(),
       },
       requests: {
@@ -63,9 +63,20 @@ describe('TitleReceiveContainer', () => {
     expect(mutator.title.GET).toHaveBeenCalled();
     expect(mutator.pieces.GET).not.toHaveBeenCalled();
     expect(mutator.poLine.GET).not.toHaveBeenCalled();
-    expect(mutator.locations.GET).not.toHaveBeenCalled();
     expect(mutator.requests.GET).not.toHaveBeenCalled();
     expect(mutator.items.GET).not.toHaveBeenCalled();
+  });
+
+  it('should load locations data after mounted', async () => {
+    const title = { name: 'Title', id: '001' };
+
+    mutator.title.GET.mockReturnValue(Promise.resolve(title));
+
+    await act(async () => {
+      renderTitleReceiveContainer(mutator);
+    });
+
+    expect(mutator.locations.GET).toHaveBeenCalled();
   });
 
   it('should load all data', async () => {

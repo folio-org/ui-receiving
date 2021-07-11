@@ -41,6 +41,7 @@ describe('Add piece', function () {
     });
     const title = this.server.create('title', {
       poLineId: line.id,
+      instanceId: null,
     });
 
     this.visit(`/receiving/${title.id}/view`);

@@ -104,6 +104,8 @@ export const TitleReceiveList = ({
               instanceId={instanceId}
               locationIds={locationIds}
               locations={locations}
+
+              labelless
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
 
               holdingName={`${field}[${record.rowIndex}].holdingId`}

@@ -4,9 +4,12 @@ import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 import { noop } from 'lodash';
 
-import '@folio/stripes-acq-components/test/jest/__mock__';
-
 import TitleReceive from './TitleReceive';
+
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  FieldInventory: jest.fn(() => 'FieldInventory'),
+}));
 
 const title = 'The American Journal of Medicine';
 const note = 'Test receiving note';
