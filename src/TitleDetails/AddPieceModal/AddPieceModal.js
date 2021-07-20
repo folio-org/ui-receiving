@@ -74,7 +74,7 @@ const AddPieceModal = ({
   );
   const end = (
     <>
-      {isManuallyAddPieces && (
+      {Boolean(isManuallyAddPieces && id) && (
         <Button
           marginBottom0
           onClick={toggleDeleteConfirmation}
