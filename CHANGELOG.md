@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* permission sets should avoid .all permissions. Refs UIREC-141.
+
 ## [1.4.0](https://github.com/folio-org/ui-receiving/tree/v1.4.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.4...v1.4.0)
 
