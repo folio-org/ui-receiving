@@ -4,6 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
+import { PIECE_COLUMNS } from '../constants';
 import PiecesList from './PiecesList';
 
 const pieces = [{
@@ -22,8 +23,9 @@ const renderPiecesList = (selectPiece) => (render(
   <IntlProvider locale="en">
     <PiecesList
       pieces={pieces}
-      visibleColumns={['barcode', 'caption', 'format', 'receiptDate', 'receivedDate', 'request', 'selection']}
+      visibleColumns={['barcode', PIECE_COLUMNS.caption, 'format', PIECE_COLUMNS.receiptDate, 'receivedDate', 'request', 'selection']}
       selectPiece={selectPiece}
+      sortedColumn={PIECE_COLUMNS.receiptDate}
     />
   </IntlProvider>,
 ));

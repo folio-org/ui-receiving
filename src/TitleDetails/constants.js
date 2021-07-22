@@ -25,3 +25,9 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
   [ORDER_FORMATS.physicalResource]: PIECE_FORMAT.physical,
   [ORDER_FORMATS.other]: PIECE_FORMAT.other,
 };
+
+export const PIECE_COLUMNS = {
+  caption: 'caption',
+  receiptDate: 'receiptDate',
+  receivedDate: 'receivedDate',
+};
