@@ -2,9 +2,13 @@
 
 ## (IN PROGRESS)
 
-* permission sets should avoid .all permissions. Refs UIREC-141.
 * The Delete button is displayed in the Add piece pop up (new pice). Refs UIREC-146.
 * Ability to sort expected pieces by other table headers. Refs UIREC-147.
+
+## [1.4.1](https://github.com/folio-org/ui-receiving/tree/v1.4.1) (2021-07-27)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.0...v1.4.1)
+
+* permission sets should avoid .all permissions. Refs UIREC-141.
 
 ## [1.4.0](https://github.com/folio-org/ui-receiving/tree/v1.4.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.4...v1.4.0)
