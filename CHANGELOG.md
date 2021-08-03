@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Location filter not returning results when expected. Refs UIREC-149.
+
 ## [1.4.1](https://github.com/folio-org/ui-receiving/tree/v1.4.1) (2021-07-27)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.0...v1.4.1)
 
