@@ -27,7 +27,7 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
 };
 
 export const PIECE_COLUMNS = {
-  caption: 'caption',
+  enumeration: 'enumeration',
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
 };

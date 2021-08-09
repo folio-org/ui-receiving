@@ -16,11 +16,11 @@ export async function handleReceiveErrorResponse(showCallout, response) {
   }
 
   if (parsed?.errorPieces?.length) {
-    parsed.errorPieces.forEach(({ caption, processingStatus }) => {
+    parsed.errorPieces.forEach(({ enumeration, processingStatus }) => {
       showCallout({
         messageId: `ui-receiving.errors.${processingStatus.error.code}`,
         type: 'error',
-        values: { caption },
+        values: { enumeration },
       });
     });
 

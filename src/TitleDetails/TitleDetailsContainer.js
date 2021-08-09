@@ -174,7 +174,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
           showCallout({
             messageId: `ui-receiving.piece.actions.${actionType}.success`,
             type: 'success',
-            values: { caption: values.caption },
+            values: { enumeration: values.enumeration },
           });
         }, async response => {
           const hasCommonErrors = await handleCommonErrors(showCallout, response);
@@ -183,7 +183,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             showCallout({
               messageId: `ui-receiving.piece.actions.${actionType}.error`,
               type: 'error',
-              values: { caption: values.caption },
+              values: { enumeration: values.enumeration },
             });
           }
         })

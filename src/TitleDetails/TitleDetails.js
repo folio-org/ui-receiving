@@ -55,7 +55,7 @@ import Title from './Title';
 import POLDetails from './POLDetails';
 
 function getNewPieceValues(titleId, poLine) {
-  const { orderFormat, id: poLineId, physical, locations } = poLine;
+  const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate: physical?.expectedReceiptDate, poLineId, titleId };
 
   if (orderFormat !== ORDER_FORMATS.PEMix) {
@@ -65,6 +65,10 @@ function getNewPieceValues(titleId, poLine) {
   if (locations.length === 1) {
     initialValuesPiece.locationId = locations[0].locationId;
     initialValuesPiece.holdingId = locations[0].holdingId;
+  }
+
+  if (checkinItems) {
+    initialValuesPiece.displayOnHolding = true;
   }
 
   return initialValuesPiece;

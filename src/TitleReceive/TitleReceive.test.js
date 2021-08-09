@@ -16,7 +16,7 @@ const note = 'Test receiving note';
 const initialValues = {
   receivedItems: [{
     barcode: '10001',
-    caption: 'The American Journal of Medicine',
+    enumeration: 'The American Journal of Medicine',
     id: '0001',
   }],
 };

@@ -7,7 +7,7 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 import ExpectedPiecesList from './ExpectedPiecesList';
 
 const pieces = [{
-  caption: 'ABA',
+  enumeration: 'v1',
   format: 'Physical',
   receiptDate: '2020-02-06',
 }];
@@ -34,13 +34,13 @@ describe('Given Expected Pieces List', () => {
     const { getByText } = renderPiecesList(onEditPiece);
 
     // header is rendered
-    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
     expect(getByText('ui-receiving.piece.request')).toBeDefined();
 
     // piece item is rendered
-    expect(getByText(pieces[0].caption)).toBeDefined();
+    expect(getByText(pieces[0].enumeration)).toBeDefined();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
     expect(getByText(pieces[0].receiptDate)).toBeDefined();
   });
@@ -49,7 +49,7 @@ describe('Given Expected Pieces List', () => {
     it('Than passed callback should be called', () => {
       const { getByText } = renderPiecesList(onEditPiece);
 
-      fireEvent(getByText(pieces[0].caption), new MouseEvent('click', {
+      fireEvent(getByText(pieces[0].enumeration), new MouseEvent('click', {
         bubbles: true,
         cancelable: true,
       }));

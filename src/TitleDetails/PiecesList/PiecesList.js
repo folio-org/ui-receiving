@@ -18,13 +18,13 @@ import { PIECE_COLUMNS } from '../constants';
 import styles from './PiecesList.css';
 
 const sorters = {
-  [PIECE_COLUMNS.caption]: ({ caption }) => caption?.toLowerCase(),
+  [PIECE_COLUMNS.enumeration]: ({ enumeration }) => enumeration?.toLowerCase(),
   [PIECE_COLUMNS.receiptDate]: ({ receiptDate }) => receiptDate,
   [PIECE_COLUMNS.receivedDate]: ({ receivedDate }) => receivedDate,
 };
 const columnMapping = {
   barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
-  [PIECE_COLUMNS.caption]: <FormattedMessage id="ui-receiving.piece.caption" />,
+  [PIECE_COLUMNS.enumeration]: <FormattedMessage id="ui-receiving.piece.enumeration" />,
   format: <FormattedMessage id="ui-receiving.piece.format" />,
   [PIECE_COLUMNS.receiptDate]: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
   [PIECE_COLUMNS.receivedDate]: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
@@ -33,7 +33,7 @@ const columnMapping = {
 };
 
 const formatter = {
-  [PIECE_COLUMNS.caption]: piece => piece.caption || <NoValue />,
+  [PIECE_COLUMNS.enumeration]: piece => piece.enumeration || <NoValue />,
   format: piece => (
     <span>
       {PIECE_FORMAT_LABELS[piece.format]}

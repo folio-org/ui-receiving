@@ -23,7 +23,7 @@ import { CreateItemField } from '../common/components';
 
 const visibleColumns = [
   'checked',
-  'caption',
+  'enumeration',
   'barcode',
   'format',
   'hasRequest',
@@ -48,13 +48,13 @@ export const TitleReceiveList = ({
   const cellFormatters = useMemo(
     () => {
       return {
-        caption: record => (
+        enumeration: record => (
           <Field
-            name={`${field}[${record.rowIndex}].caption`}
+            name={`${field}[${record.rowIndex}].enumeration`}
             component={TextField}
             marginBottom0
             fullWidth
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.caption' })}
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.enumeration' })}
           />
         ),
         barcode: record => (
@@ -153,7 +153,7 @@ export const TitleReceiveList = ({
           aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
         />
       ),
-      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
+      enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,
