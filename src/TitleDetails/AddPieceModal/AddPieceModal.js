@@ -174,14 +174,19 @@ const AddPieceModal = ({
             />
           </Col>
 
-          <Col xs>
-            <CreateItemField
-              createInventoryValues={createInventoryValues}
-              instanceId={instanceId}
-              label={<FormattedMessage id="ui-receiving.piece.createItem" />}
-              piece={formValues}
-            />
-          </Col>
+          {
+            Boolean(instanceId) && (
+              <Col xs>
+                <CreateItemField
+                  createInventoryValues={createInventoryValues}
+                  instanceId={instanceId}
+                  label={<FormattedMessage id="ui-receiving.piece.createItem" />}
+                  piece={formValues}
+                />
+              </Col>
+            )
+          }
+
           <Col xs>
             <Field
               component={Checkbox}
