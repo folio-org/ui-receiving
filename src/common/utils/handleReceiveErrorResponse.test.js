@@ -8,14 +8,14 @@ describe('test handleReceiveErrorResponse', () => {
   });
 
   it('should call showCallout with receiving error', async () => {
-    const response = { errorPieces: [{ caption: 'caption', processingStatus: { error: { code: 'code' } } }] };
+    const response = { errorPieces: [{ enumeration: 'enumeration', processingStatus: { error: { code: 'code' } } }] };
 
     await handleReceiveErrorResponse(showCallout, response);
     expect(showCallout).toHaveBeenCalledWith({
       'messageId': 'ui-receiving.errors.code',
       'type': 'error',
       'values': {
-        'caption': 'caption',
+        'enumeration': 'enumeration',
       },
     });
   });

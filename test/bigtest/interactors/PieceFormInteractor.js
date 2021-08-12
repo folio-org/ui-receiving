@@ -15,8 +15,8 @@ import {
   TIMEOUT,
 } from './consts';
 
-@interactor class CaptionInput {
-  static defaultScope = '[name="caption"]';
+@interactor class EnumerationInput {
+  static defaultScope = '[name="enumeration"]';
   isInput = is('input');
   value = value();
 }
@@ -28,7 +28,7 @@ import {
 export default @interactor class PieceFormInteractor {
   static defaultScope = '#add-piece-modal';
 
-  caption = new CaptionInput();
+  enumeration = new EnumerationInput();
   location = new LocationInteractor();
   cancelButton = new ButtonInteractor('[data-test-add-piece-cancel]');
   saveButton = new ButtonInteractor('[data-test-add-piece-save]');

@@ -33,7 +33,7 @@ const AddPieceModal = ({
   close,
   createInventoryValues,
   deletePiece,
-  form,
+  form: { mutators, change },
   handleSubmit,
   hasValidationErrors,
   instanceId,
@@ -44,7 +44,7 @@ const AddPieceModal = ({
   pieceFormatOptions,
   values: formValues,
 }) => {
-  const { caption, format, id, receivingStatus } = formValues;
+  const { enumeration, format, id, receivingStatus } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
@@ -60,8 +60,14 @@ const AddPieceModal = ({
 
   const onDelete = useCallback(() => {
     close();
-    deletePiece({ id, caption });
-  }, [caption, close, deletePiece, id]);
+    deletePiece({ id, enumeration });
+  }, [enumeration, close, deletePiece, id]);
+
+  const onChangeDisplayOnHolding = ({ target: { checked } }) => {
+    change('displayOnHolding', checked);
+
+    if (!checked) change('discoverySuppress', checked);
+  };
 
   const start = (
     <Button
@@ -125,12 +131,25 @@ const AddPieceModal = ({
             <Field
               component={TextField}
               fullWidth
-              id="caption"
-              label={<FormattedMessage id="ui-receiving.piece.caption" />}
-              name="caption"
+              id="enumeration"
+              label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
+              name="enumeration"
               type="text"
             />
           </Col>
+          <Col xs={6}>
+            <Field
+              component={TextField}
+              fullWidth
+              id="chronology"
+              label={<FormattedMessage id="ui-receiving.piece.chronology" />}
+              name="chronology"
+              type="text"
+            />
+          </Col>
+        </Row>
+
+        <Row>
           <Col xs>
             <FieldSelectFinal
               dataOptions={pieceFormatOptions}
@@ -168,7 +187,7 @@ const AddPieceModal = ({
               holdingName="holdingId"
               locationName="locationId"
 
-              onChange={form.mutators.setLocationValue}
+              onChange={mutators.setLocationValue}
               disabled={!isNotReceived}
               required={isLocationRequired}
             />
@@ -193,6 +212,31 @@ const AddPieceModal = ({
               fullWidth
               label={<FormattedMessage id="ui-receiving.piece.supplement" />}
               name="supplement"
+              type="checkbox"
+              vertical
+            />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xsOffset={6} xs={3}>
+            <Field
+              component={Checkbox}
+              fullWidth
+              label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
+              name="displayOnHolding"
+              type="checkbox"
+              vertical
+              onChange={onChangeDisplayOnHolding}
+            />
+          </Col>
+          <Col xs={3}>
+            <Field
+              component={Checkbox}
+              disabled={!formValues.displayOnHolding}
+              fullWidth
+              label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
+              name="discoverySuppress"
               type="checkbox"
               vertical
             />

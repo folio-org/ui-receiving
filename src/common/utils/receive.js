@@ -44,7 +44,7 @@ export const checkInItems = (pieces, mutator) => {
       barcode: piece.barcode,
       callNumber: piece.callNumber,
       comment: piece.comment,
-      caption: piece.caption,
+      enumeration: piece.enumeration,
       supplement: piece.supplement,
       locationId: piece.locationId || null,
       holdingId: piece.holdingId || null,
@@ -67,7 +67,7 @@ export const checkInItems = (pieces, mutator) => {
           .filter(({ processingStatus }) => processingStatus.type === 'failure')
           .map((d) => ({
             ...d,
-            caption: pieces.find(({ id }) => id === d.pieceId)?.caption,
+            enumeration: pieces.find(({ id }) => id === d.pieceId)?.enumeration,
           }));
 
         return [...acc, ...errorResults];
