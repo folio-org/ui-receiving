@@ -32,6 +32,7 @@ const renderAddPieceModalContainer = (
         onCheckIn={onCheckIn}
         onSubmit={onSubmit}
         poLine={poLine}
+        deletePiece={jest.fn}
       />
     </MemoryRouter>
   </IntlProvider>,

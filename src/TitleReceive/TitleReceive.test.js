@@ -52,7 +52,7 @@ describe('Receiving title', () => {
 
   describe('When there is receiving note - banner is presented', () => {
     it('it should display receiving note banner', () => {
-      const { getByText } = renderTitleReceive({ receivingNote: note });
+      const { getByText } = renderTitleReceive({ receivingNote: note, paneTitle: title });
 
       expect(getByText(note)).toBeDefined();
     });
@@ -60,7 +60,7 @@ describe('Receiving title', () => {
 
   describe('When there is no receiving note - banner is not presented', () => {
     it('Receiving note banner is not presented', () => {
-      const { queryByText } = renderTitleReceive({ receivingNote: null });
+      const { queryByText } = renderTitleReceive({ receivingNote: null, paneTitle: title });
 
       expect(queryByText(note)).toBeNull();
     });

@@ -200,7 +200,7 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         poLineLocationIds={poLineLocationIds}
         locations={locations}
       />
-      {receivedPiecesWithRequests.length && (
+      {!!receivedPiecesWithRequests.length && (
         <OpenedRequestsModal
           closeModal={closeOpenedRequestsModal}
           pieces={receivedPiecesWithRequests}
