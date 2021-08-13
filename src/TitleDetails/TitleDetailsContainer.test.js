@@ -1,9 +1,8 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import TitleDetailsContainer from './TitleDetailsContainer';
-import TitleDetails from './TitleDetails';
 
 jest.mock('./TitleDetails', () => jest.fn().mockReturnValue('TitleDetails'));
 
@@ -88,26 +87,4 @@ describe('TitleDetailsContainer', () => {
     expect(mutator.vendors.GET).toHaveBeenCalled();
     expect(mutator.loanTypes.GET).toHaveBeenCalled();
   });
-
-  // it('should redirect to title list when create is cancelled', async () => {
-  //   historyMock.push.mockClear();
-  //   await act(async () => renderTitleDetailsContainer());
-
-  //   TitleDetails.mock.calls[0][0].onEdit();
-
-  //   console.log(TitleDetails.mock.calls[0]);
-
-  //   expect(screen.getByText('TitleDetails')).toBeDefined();
-  //   expect(historyMock.push).toHaveBeenCalled();
-  // });
-
-  // // it('should save title', async () => {
-  // //   mutatorMock.titles.POST.mockReturnValue(Promise.resolve({}));
-
-  // //   await act(async () => renderTitleFormContainer());
-
-  // //   TitleForm.mock.calls[0][0].onSubmit({});
-
-  // //   expect(mutatorMock.titles.POST).toHaveBeenCalled();
-  // // });
 });
