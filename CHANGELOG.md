@@ -6,6 +6,7 @@
 * Ability to sort expected pieces by other table headers. Refs UIREC-147.
 * Connect items created for pieces to holdings. Refs UIREC-152.
 * Update create, edit and receive piece forms with additional fields. Refs UIREC-135.
+* Use mod-orders for piece queries. Refs UIREC-55.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)
