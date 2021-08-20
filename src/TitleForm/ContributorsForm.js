@@ -39,7 +39,6 @@ const headLabels = (
 );
 
 function ContributorsForm({ contributorNameTypes, disabled }) {
-  if (!contributorNameTypes) return null;
   const contributorNameTypesOptions = contributorNameTypes.map(({ id, name }) => ({
     value: id,
     label: name,

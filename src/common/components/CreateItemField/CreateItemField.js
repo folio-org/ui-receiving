@@ -21,7 +21,9 @@ import {
 
 function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
   const { format, itemId, holdingsRecordId, receivingStatus } = piece;
-  const isAddItemAvailable = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all);
+  const isAddItemAvailable =
+    includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
+    && Boolean(instanceId);
   const isReceived = receivingStatus === PIECE_STATUS.received;
 
   const intl = useIntl();

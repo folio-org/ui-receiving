@@ -18,7 +18,7 @@ import { PIECE_FORMAT_LABELS } from '@folio/stripes-acq-components';
 const visibleColumns = [
   'checked',
   'barcode',
-  'caption',
+  'enumeration',
   'format',
   'hasRequest',
   'comments',
@@ -85,7 +85,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
         />
       ),
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
-      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
+      enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,
       comments: <FormattedMessage id="ui-receiving.piece.comment" />,

@@ -3,6 +3,7 @@ import { uniq, compact, flatten } from 'lodash';
 import {
   LIMIT_MAX,
   batchFetch,
+  buildArrayFieldQuery,
   buildDateRangeQuery,
   buildFilterQuery,
   buildSortingQuery,
@@ -88,6 +89,9 @@ export const buildTitlesQuery = (queryParams) => {
       [FILTERS.EXPECTED_RECEIPT_DATE]: buildDateRangeQuery.bind(null, [FILTERS.EXPECTED_RECEIPT_DATE]),
       [FILTERS.RECEIVED_DATE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIVED_DATE]),
       [FILTERS.RECEIPT_DUE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIPT_DUE]),
+      [FILTERS.LOCATION]: buildArrayFieldQuery.bind(null, [FILTERS.LOCATION]),
+      [FILTERS.POL_TAGS]: buildArrayFieldQuery.bind(null, [FILTERS.POL_TAGS]),
+      [FILTERS.ACQUISITIONS_UNIT]: buildArrayFieldQuery.bind(null, [FILTERS.ACQUISITIONS_UNIT]),
     },
   );
 

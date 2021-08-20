@@ -114,10 +114,13 @@ export default stripesFinalForm({
   subscription: { values: true },
   mutators: {
     setLocationValue: (args, state, tools) => {
-      const id = args[0];
-      const fieldName = args[1];
+      const [location, locationField, holdingFieldName, holdingId] = args;
 
-      tools.changeValue(state, fieldName, () => id);
+      tools.changeValue(state, locationField, () => location?.id || location);
+
+      if (holdingFieldName) {
+        tools.changeValue(state, holdingFieldName, () => holdingId);
+      }
     },
     toggleCheckedAll: (args, state, tools) => {
       const isChecked = !!args[0];

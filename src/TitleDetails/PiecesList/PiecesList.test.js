@@ -4,10 +4,11 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
+import { PIECE_COLUMNS } from '../constants';
 import PiecesList from './PiecesList';
 
 const pieces = [{
-  caption: 'ABA',
+  enumeration: 'v1',
   format: 'Physical',
   receiptDate: '2021-02-06',
   receivedDate: '2020-02-06',
@@ -22,8 +23,9 @@ const renderPiecesList = (selectPiece) => (render(
   <IntlProvider locale="en">
     <PiecesList
       pieces={pieces}
-      visibleColumns={['barcode', 'caption', 'format', 'receiptDate', 'receivedDate', 'request', 'selection']}
+      visibleColumns={['barcode', PIECE_COLUMNS.enumeration, 'format', PIECE_COLUMNS.receiptDate, 'receivedDate', 'request', 'selection']}
       selectPiece={selectPiece}
+      sortedColumn={PIECE_COLUMNS.receiptDate}
     />
   </IntlProvider>,
 ));
@@ -36,7 +38,7 @@ describe('Given Pieces List', () => {
 
     // header is rendered
     expect(getByText('ui-receiving.piece.barcode')).toBeDefined();
-    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
     expect(getByText('ui-receiving.piece.receivedDate')).toBeDefined();
@@ -44,7 +46,7 @@ describe('Given Pieces List', () => {
 
     // piece item is rendered
     expect(getByText(pieces[0].barcode)).toBeDefined();
-    expect(getByText(pieces[0].caption)).toBeDefined();
+    expect(getByText(pieces[0].enumeration)).toBeDefined();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
     expect(getByText(pieces[0].receiptDate)).toBeDefined();
     expect(getByText(pieces[0].receivedDate)).toBeDefined();

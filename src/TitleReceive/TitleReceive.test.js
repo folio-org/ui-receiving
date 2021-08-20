@@ -4,16 +4,19 @@ import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 import { noop } from 'lodash';
 
-import '@folio/stripes-acq-components/test/jest/__mock__';
-
 import TitleReceive from './TitleReceive';
+
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  FieldInventory: jest.fn(() => 'FieldInventory'),
+}));
 
 const title = 'The American Journal of Medicine';
 const note = 'Test receiving note';
 const initialValues = {
   receivedItems: [{
     barcode: '10001',
-    caption: 'The American Journal of Medicine',
+    enumeration: 'The American Journal of Medicine',
     id: '0001',
   }],
 };
@@ -49,7 +52,7 @@ describe('Receiving title', () => {
 
   describe('When there is receiving note - banner is presented', () => {
     it('it should display receiving note banner', () => {
-      const { getByText } = renderTitleReceive({ receivingNote: note });
+      const { getByText } = renderTitleReceive({ receivingNote: note, paneTitle: title });
 
       expect(getByText(note)).toBeDefined();
     });
@@ -57,7 +60,7 @@ describe('Receiving title', () => {
 
   describe('When there is no receiving note - banner is not presented', () => {
     it('Receiving note banner is not presented', () => {
-      const { queryByText } = renderTitleReceive({ receivingNote: null });
+      const { queryByText } = renderTitleReceive({ receivingNote: null, paneTitle: title });
 
       expect(queryByText(note)).toBeNull();
     });

@@ -53,9 +53,9 @@ describe('Edit received piece', function () {
     expect(pieceForm.isPresent).to.be.true;
   });
 
-  describe('after change caption and save piece', function () {
+  describe('after change enumeration and save piece', function () {
     beforeEach(async function () {
-      await pieceForm.caption.fill('Test caption');
+      await pieceForm.enumeration.fill('v1');
       await pieceForm.saveButton.click();
     });
 

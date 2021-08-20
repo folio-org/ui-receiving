@@ -4,25 +4,37 @@ import { ITEM_STATUS, PIECE_FORMAT } from '@folio/stripes-acq-components';
 
 import { getDehydratedPiece } from './getDehydratedPiece';
 
-const createItem = (mutatorHoldings, mutatorItems, values, instanceId, loanTypeId, materialTypeId) => {
-  const isCreateItem = Boolean(values.isCreateItem);
-  const { locationId: permanentLocationId, poLineId } = values;
-  const item = {
-    materialType: { id: materialTypeId },
-    permanentLoanType: { id: loanTypeId },
-    purchaseOrderLineIdentifier: poLineId,
-    status: { name: ITEM_STATUS.onOrder },
-  };
-  const holding = {
-    instanceId,
-    permanentLocationId,
-  };
+const getOrCreateHolding = ({ instanceId, holdingId, locationId }, mutatorHoldings) => {
+  const holdingsPromise = holdingId
+    ? Promise.resolve([{ id: holdingId }])
+    : mutatorHoldings.GET({
+      params: {
+        query: `instanceId==${instanceId} and permanentLocationId==${locationId}`,
+      },
+    });
 
-  return isCreateItem
-    ? mutatorHoldings.GET({ params: { query: `instanceId==${instanceId} and permanentLocationId==${permanentLocationId}` } })
-      .then((holdings) => holdings[0] || mutatorHoldings.POST(holding))
-      .then(({ id: holdingsRecordId }) => mutatorItems.POST({ ...item, holdingsRecordId }))
-    : Promise.resolve();
+  return holdingsPromise
+    .then((holdings) => holdings[0] || mutatorHoldings.POST({
+      instanceId,
+      permanentLocationId: locationId,
+    }));
+};
+
+const createItem = (mutatorHoldings, mutatorItems, values, instanceId, loanTypeId, materialTypeId) => {
+  if (!values.isCreateItem) {
+    return Promise.resolve();
+  }
+
+  const { locationId, poLineId, holdingId } = values;
+
+  return getOrCreateHolding({ instanceId, locationId, holdingId }, mutatorHoldings)
+    .then(({ id: holdingsRecordId }) => mutatorItems.POST({
+      materialType: { id: materialTypeId },
+      permanentLoanType: { id: loanTypeId },
+      purchaseOrderLineIdentifier: poLineId,
+      status: { name: ITEM_STATUS.onOrder },
+      holdingsRecordId,
+    }));
 };
 
 export const checkInItems = (pieces, mutator) => {
@@ -32,9 +44,10 @@ export const checkInItems = (pieces, mutator) => {
       barcode: piece.barcode,
       callNumber: piece.callNumber,
       comment: piece.comment,
-      caption: piece.caption,
+      enumeration: piece.enumeration,
       supplement: piece.supplement,
       locationId: piece.locationId || null,
+      holdingId: piece.holdingId || null,
       itemStatus: piece.itemStatus,
     }));
 
@@ -54,7 +67,7 @@ export const checkInItems = (pieces, mutator) => {
           .filter(({ processingStatus }) => processingStatus.type === 'failure')
           .map((d) => ({
             ...d,
-            caption: pieces.find(({ id }) => id === d.pieceId)?.caption,
+            enumeration: pieces.find(({ id }) => id === d.pieceId)?.enumeration,
           }));
 
         return [...acc, ...errorResults];

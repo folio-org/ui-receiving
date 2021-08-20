@@ -14,7 +14,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import {
-  FieldLocationFinal,
+  FieldInventory,
   getItemStatusLabel,
   PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
@@ -23,7 +23,7 @@ import { CreateItemField } from '../common/components';
 
 const visibleColumns = [
   'checked',
-  'caption',
+  'enumeration',
   'barcode',
   'format',
   'hasRequest',
@@ -48,13 +48,13 @@ export const TitleReceiveList = ({
   const cellFormatters = useMemo(
     () => {
       return {
-        caption: record => (
+        enumeration: record => (
           <Field
-            name={`${field}[${record.rowIndex}].caption`}
+            name={`${field}[${record.rowIndex}].enumeration`}
             component={TextField}
             marginBottom0
             fullWidth
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.caption' })}
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.enumeration' })}
           />
         ),
         barcode: record => (
@@ -100,12 +100,18 @@ export const TitleReceiveList = ({
           const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
 
           return (
-            <FieldLocationFinal
+            <FieldInventory
+              instanceId={instanceId}
+              locationIds={locationIds}
+              locations={locations}
+
+              labelless
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-              prepopulatedLocationsIds={locationIds}
-              locationsForDict={locations}
-              name={`${field}[${record.rowIndex}].locationId`}
-              onChange={({ id }) => selectLocation(id, `${field}[${record.rowIndex}].locationId`)}
+
+              holdingName={`${field}[${record.rowIndex}].holdingId`}
+              locationName={`${field}[${record.rowIndex}].locationId`}
+
+              onChange={selectLocation}
             />
           );
         },
@@ -147,7 +153,7 @@ export const TitleReceiveList = ({
           aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
         />
       ),
-      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
+      enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { PIECE_COLUMNS } from '../constants';
 import PiecesList from '../PiecesList';
 
-const visibleColumns = ['barcode', 'caption', 'format', 'receivedDate', 'request', 'selection'];
+const visibleColumns = ['barcode', PIECE_COLUMNS.enumeration, 'format', PIECE_COLUMNS.receivedDate, 'request', 'selection'];
 
 const ReceivedPiecesList = ({ pieces, selectPiece }) => {
   return (
@@ -11,6 +12,7 @@ const ReceivedPiecesList = ({ pieces, selectPiece }) => {
       pieces={pieces}
       selectPiece={selectPiece}
       visibleColumns={visibleColumns}
+      sortedColumn={PIECE_COLUMNS.receivedDate}
     />
   );
 };

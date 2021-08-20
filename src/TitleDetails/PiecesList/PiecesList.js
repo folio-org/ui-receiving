@@ -4,30 +4,36 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   Icon,
-  MultiColumnList,
   NoValue,
   Tooltip,
 } from '@folio/stripes/components';
 import {
   acqRowFormatter,
   FolioFormattedDate,
+  FrontendSortingMCL,
   PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_COLUMNS } from '../constants';
 import styles from './PiecesList.css';
 
+const sorters = {
+  [PIECE_COLUMNS.enumeration]: ({ enumeration }) => enumeration?.toLowerCase(),
+  [PIECE_COLUMNS.receiptDate]: ({ receiptDate }) => receiptDate,
+  [PIECE_COLUMNS.receivedDate]: ({ receivedDate }) => receivedDate,
+};
 const columnMapping = {
   barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
-  caption: <FormattedMessage id="ui-receiving.piece.caption" />,
+  [PIECE_COLUMNS.enumeration]: <FormattedMessage id="ui-receiving.piece.enumeration" />,
   format: <FormattedMessage id="ui-receiving.piece.format" />,
-  receiptDate: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
-  receivedDate: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
+  [PIECE_COLUMNS.receiptDate]: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
+  [PIECE_COLUMNS.receivedDate]: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
   request: <FormattedMessage id="ui-receiving.piece.request" />,
   selection: null,
 };
 
 const formatter = {
-  caption: piece => piece.caption || <NoValue />,
+  [PIECE_COLUMNS.enumeration]: piece => piece.enumeration || <NoValue />,
   format: piece => (
     <span>
       {PIECE_FORMAT_LABELS[piece.format]}
@@ -51,8 +57,8 @@ const formatter = {
       }
     </span>
   ),
-  receiptDate: piece => <FolioFormattedDate value={piece.receiptDate} />,
-  receivedDate: piece => <FolioFormattedDate value={piece.receivedDate} />,
+  [PIECE_COLUMNS.receiptDate]: piece => <FolioFormattedDate value={piece.receiptDate} />,
+  [PIECE_COLUMNS.receivedDate]: piece => <FolioFormattedDate value={piece.receivedDate} />,
   barcode: piece => piece.barcode || <NoValue />,
   request: piece => (
     piece.request
@@ -62,14 +68,14 @@ const formatter = {
   selection: () => <Icon icon="caret-right" />,
 };
 
-const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
+const PiecesList = ({ pieces, id, visibleColumns, selectPiece, sortedColumn }) => {
   const hasRowClick = Boolean(selectPiece);
   const rowProps = useMemo(() => ({ alignLastColToEnd: hasRowClick }), [hasRowClick]);
 
   if (!pieces) return null;
 
   return (
-    <MultiColumnList
+    <FrontendSortingMCL
       columnMapping={columnMapping}
       contentData={pieces}
       formatter={formatter}
@@ -79,6 +85,8 @@ const PiecesList = ({ pieces, id, visibleColumns, selectPiece }) => {
       rowProps={rowProps}
       visibleColumns={visibleColumns}
       onRowClick={selectPiece}
+      sortedColumn={sortedColumn}
+      sorters={sorters}
     />
   );
 };
@@ -88,6 +96,7 @@ PiecesList.propTypes = {
   id: PropTypes.string,
   selectPiece: PropTypes.func,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+  sortedColumn: PropTypes.string.isRequired,
 };
 
 export default PiecesList;

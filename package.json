@@ -1,6 +1,6 @@
 {
   "name": "@folio/receiving",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "Description for receiving",
   "main": "index.js",
   "repository": "",
@@ -28,7 +28,6 @@
       "locations": "3.0",
       "material-types": "2.2",
       "order-lines": "2.0",
-      "orders-storage.pieces": "4.0",
       "orders": "11.0",
       "organizations.organizations": "1.0",
       "pieces": "2.0",
@@ -80,9 +79,8 @@
           "inventory-storage.locations.item.get",
           "inventory-storage.material-types.collection.get",
           "inventory.items.collection.get",
-          "orders-storage.pieces.collection.get",
+          "orders.pieces.collection.get",
           "orders.po-lines.item.get",
-          "orders.titles.all",
           "organizations.organizations.collection.get",
           "tags.collection.get"
         ]
@@ -162,6 +160,7 @@
     "lint": "eslint .",
     "start": "yarn stripes serve",
     "test:unit": "jest --ci --coverage && yarn run test:unit:report",
+    "test:unit:watch": "jest --ci --coverage --watch",
     "test:unit:report": "cp -r ./artifacts/coverage-jest ./artifacts/coverage",
     "test:e2e": "yarn stripes test karma --karma.singleRun --karma.browsers ChromeDocker --karma.reporters mocha junit --coverage",
     "test": "yarn run test:e2e && yarn run test:unit",
@@ -181,8 +180,10 @@
     "@folio/stripes": "^6.0.0",
     "@folio/stripes-cli": "^2.0.0",
     "@formatjs/cli": "^4.2.16",
+    "@testing-library/dom": "^8.1.0",
     "@testing-library/jest-dom": "^5.11.1",
     "@testing-library/react": "^11.0.2",
+    "@testing-library/user-event": "^13.2.1",
     "babel-eslint": "^10.0.0",
     "babel-jest": "^26.3.0",
     "chai": "^4.2.0",
@@ -217,8 +218,8 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-instance": "*",
-    "@folio/plugin-find-po-line": "*",
-    "@folio/plugin-find-organization": "*"
+    "@folio/plugin-find-organization": "*",
+    "@folio/plugin-find-po-line": "*"
   },
   "resolutions": {
     "@rehooks/local-storage": "2.4.0",

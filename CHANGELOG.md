@@ -3,6 +3,21 @@
 ## (IN PROGRESS)
 
 * Also support `holdings-storage` `5.0` and `inventory` `11.0`. Refs UIREC-139.
+* The Delete button is displayed in the Add piece pop up (new pice). Refs UIREC-146.
+* Ability to sort expected pieces by other table headers. Refs UIREC-147.
+* Connect items created for pieces to holdings. Refs UIREC-152.
+* Update create, edit and receive piece forms with additional fields. Refs UIREC-135.
+* Use mod-orders for piece queries. Refs UIREC-55.
+
+## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)
+
+* Location filter not returning results when expected. Refs UIREC-149.
+
+## [1.4.1](https://github.com/folio-org/ui-receiving/tree/v1.4.1) (2021-07-27)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.0...v1.4.1)
+
+* permission sets should avoid .all permissions. Refs UIREC-141.
 
 ## [1.4.0](https://github.com/folio-org/ui-receiving/tree/v1.4.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.4...v1.4.0)
@@ -15,6 +30,7 @@
 * "Expected receipt date" in Title POL accordion showing wrong date. Refs UIREC-137.
 * Resizable Panes - Persistence | Use PersistedPaneset smart component. Refs UIREC-127.
 * Receiving app | Apply baseline keyboard shortcuts. Refs UIREC-117.
+* Allow user to select holding or location at point of receipt. Refs UIREC-133.
 
 ## [1.3.4](https://github.com/folio-org/ui-receiving/tree/v1.3.4) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.3.3...v1.3.4)

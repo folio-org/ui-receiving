@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import {
-  get,
   includes,
 } from 'lodash';
 
@@ -20,7 +19,7 @@ import {
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
-  FieldLocationFinal,
+  FieldInventory,
   FieldSelectFinal,
   INVENTORY_RECORDS_TYPE,
   ModalFooter,
@@ -34,7 +33,7 @@ const AddPieceModal = ({
   close,
   createInventoryValues,
   deletePiece,
-  form,
+  form: { mutators, change },
   handleSubmit,
   hasValidationErrors,
   instanceId,
@@ -45,7 +44,7 @@ const AddPieceModal = ({
   pieceFormatOptions,
   values: formValues,
 }) => {
-  const { caption, format, id, receivingStatus } = formValues;
+  const { enumeration, format, id, receivingStatus } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
@@ -61,8 +60,14 @@ const AddPieceModal = ({
 
   const onDelete = useCallback(() => {
     close();
-    deletePiece({ id, caption });
-  }, [caption, close, deletePiece, id]);
+    deletePiece({ id, enumeration });
+  }, [enumeration, close, deletePiece, id]);
+
+  const onChangeDisplayOnHolding = ({ target: { checked } }) => {
+    change('displayOnHolding', checked);
+
+    if (!checked) change('discoverySuppress', checked);
+  };
 
   const start = (
     <Button
@@ -75,7 +80,7 @@ const AddPieceModal = ({
   );
   const end = (
     <>
-      {isManuallyAddPieces && (
+      {Boolean(isManuallyAddPieces && id) && (
         <Button
           marginBottom0
           onClick={toggleDeleteConfirmation}
@@ -126,12 +131,25 @@ const AddPieceModal = ({
             <Field
               component={TextField}
               fullWidth
-              id="caption"
-              label={<FormattedMessage id="ui-receiving.piece.caption" />}
-              name="caption"
+              id="enumeration"
+              label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
+              name="enumeration"
               type="text"
             />
           </Col>
+          <Col xs={6}>
+            <Field
+              component={TextField}
+              fullWidth
+              id="chronology"
+              label={<FormattedMessage id="ui-receiving.piece.chronology" />}
+              name="chronology"
+              type="text"
+            />
+          </Col>
+        </Row>
+
+        <Row>
           <Col xs>
             <FieldSelectFinal
               dataOptions={pieceFormatOptions}
@@ -161,31 +179,64 @@ const AddPieceModal = ({
         </Row>
         <Row>
           <Col xs={6}>
-            <FieldLocationFinal
-              isDisabled={!isNotReceived}
-              labelId="ui-receiving.piece.location"
-              locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-              locationsForDict={locations}
-              name="locationId"
-              onChange={form.mutators.setLocationValue}
-              prepopulatedLocationsIds={locationIds}
+            <FieldInventory
+              instanceId={instanceId}
+              locationIds={locationIds}
+              locations={locations}
+
+              holdingName="holdingId"
+              locationName="locationId"
+
+              onChange={mutators.setLocationValue}
+              disabled={!isNotReceived}
               required={isLocationRequired}
             />
           </Col>
-          <Col xs>
-            <CreateItemField
-              createInventoryValues={createInventoryValues}
-              instanceId={instanceId}
-              label={<FormattedMessage id="ui-receiving.piece.createItem" />}
-              piece={formValues}
-            />
-          </Col>
+
+          {
+            Boolean(instanceId) && (
+              <Col xs>
+                <CreateItemField
+                  createInventoryValues={createInventoryValues}
+                  instanceId={instanceId}
+                  label={<FormattedMessage id="ui-receiving.piece.createItem" />}
+                  piece={formValues}
+                />
+              </Col>
+            )
+          }
+
           <Col xs>
             <Field
               component={Checkbox}
               fullWidth
               label={<FormattedMessage id="ui-receiving.piece.supplement" />}
               name="supplement"
+              type="checkbox"
+              vertical
+            />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xsOffset={6} xs={3}>
+            <Field
+              component={Checkbox}
+              fullWidth
+              label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
+              name="displayOnHolding"
+              type="checkbox"
+              vertical
+              onChange={onChangeDisplayOnHolding}
+            />
+          </Col>
+          <Col xs={3}>
+            <Field
+              component={Checkbox}
+              disabled={!formValues.displayOnHolding}
+              fullWidth
+              label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
+              name="discoverySuppress"
               type="checkbox"
               vertical
             />
@@ -236,9 +287,13 @@ export default stripesFinalForm({
   subscription: { hasValidationErrors: true, values: true },
   mutators: {
     setLocationValue: (args, state, tools) => {
-      const { id } = get(args, '0', {});
+      const [location, locationField, holdingFieldName, holdingId] = args;
 
-      tools.changeValue(state, 'locationId', () => id);
+      tools.changeValue(state, locationField, () => location?.id || location);
+
+      if (holdingFieldName) {
+        tools.changeValue(state, holdingFieldName, () => holdingId);
+      }
     },
   },
 })(AddPieceModal);
