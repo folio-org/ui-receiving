@@ -34,10 +34,12 @@ const TitleReceive = ({
   poLineLocationIds,
   locations,
 }) => {
+  const isReceiveDisabled = values[FIELD_NAME].every(({ checked }) => !checked);
+
   const paneFooter = (
     <FormFooter
       handleSubmit={handleSubmit}
-      isSubmitDisabled={values[FIELD_NAME].every(({ checked }) => !checked)}
+      isSubmitDisabled={isReceiveDisabled}
       label={<FormattedMessage id="ui-receiving.title.details.button.receive" />}
       onCancel={onCancel}
       pristine={pristine}
@@ -50,6 +52,11 @@ const TitleReceive = ({
       name: 'cancel',
       shortcut: 'esc',
       handler: handleKeyCommand(onCancel),
+    },
+    {
+      name: 'receive',
+      shortcut: 'mod + alt + r',
+      handler: handleKeyCommand(handleSubmit, { disabled: isReceiveDisabled }),
     },
   ];
 

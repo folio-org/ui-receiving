@@ -20,6 +20,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { CreateItemField } from '../common/components';
+import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
 const visibleColumns = [
   'checked',
@@ -45,6 +46,9 @@ export const TitleReceiveList = ({
   const intl = useIntl();
 
   const field = fields.name;
+
+  const { onKeyDown: onFieldKeyDown } = useFieldArrowNavigation(field, []);
+
   const cellFormatters = useMemo(
     () => {
       return {
@@ -166,9 +170,13 @@ export const TitleReceiveList = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [isAllChecked, toggleAll],
   );
+  const rowProps = useMemo(() => ({
+    onKeyDown: onFieldKeyDown,
+  }), [onFieldKeyDown]);
 
   return (
     <MultiColumnList
+      rowProps={rowProps}
       columnMapping={columnMapping}
       columnWidths={columnWidths}
       contentData={fields.value}
