@@ -27,6 +27,13 @@ import { TitleEditContainer } from './TitleEdit';
 import { TitleReceiveContainer } from './TitleReceive';
 import { TitleUnreceiveContainer } from './TitleUnreceive';
 
+const receivingCommands = [{
+  name: 'receive',
+  shortcut: 'mod+alt+r',
+  label: <FormattedMessage id="ui-receiving.shortcut.receive" />,
+}];
+const shortcutCommands = [...receivingCommands, ...defaultKeyboardShortcuts];
+
 const Receiving = () => {
   const [isOpen, toggleModal] = useModalToggle();
   const focusSearchField = () => {
@@ -51,7 +58,7 @@ const Receiving = () => {
 
   return (
     <>
-      <CommandList commands={defaultKeyboardShortcuts}>
+      <CommandList commands={shortcutCommands}>
         <HasCommand
           commands={shortcuts}
           isWithinScope={checkScope}
@@ -100,6 +107,7 @@ const Receiving = () => {
       </CommandList>
       {isOpen && (
         <AcqKeyboardShortcutsModal
+          commands={receivingCommands}
           onClose={toggleModal}
         />
       )}

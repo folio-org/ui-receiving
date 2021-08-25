@@ -157,5 +157,7 @@
   "requests.message.multiple": "The following items have open requests",
   "requests.message.barcode": "Barcode ({barcode})",
   "requests.message.itemId": "Item ({itemId})",
-  "requests.footer.close": "Close"
+  "requests.footer.close": "Close",
+
+  "shortcut.receive": "Receive pieces/Quick receive"
 }
