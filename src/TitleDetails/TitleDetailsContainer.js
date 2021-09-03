@@ -159,8 +159,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
 
   const onAddPiece = useCallback(
     (values) => {
-      const actionType = values.id ? 'updatePiece' : 'addPiece';
-
       return savePiece(
         mutator.orderPieces,
         mutator.holdings,
@@ -172,18 +170,16 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
       )
         .then(() => {
           showCallout({
-            messageId: `ui-receiving.piece.actions.${actionType}.success`,
+            messageId: 'ui-receiving.piece.actions.savePiece.success',
             type: 'success',
-            values: { enumeration: values.enumeration },
           });
         }, async response => {
           const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
           if (!hasCommonErrors) {
             showCallout({
-              messageId: `ui-receiving.piece.actions.${actionType}.error`,
+              messageId: 'ui-receiving.piece.actions.savePiece.error',
               type: 'error',
-              values: { enumeration: values.enumeration },
             });
           }
         })
@@ -208,9 +204,8 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
         .then(() => {
           if (!values.id) {
             showCallout({
-              messageId: 'ui-receiving.piece.actions.addPiece.success',
+              messageId: 'ui-receiving.piece.actions.savePiece.success',
               type: 'success',
-              values: { enumeration: values.enumeration },
             });
           }
           showCallout({
