@@ -210,13 +210,13 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             showCallout({
               messageId: 'ui-receiving.piece.actions.addPiece.success',
               type: 'success',
-              values: { caption: values.caption },
+              values: { enumeration: values.enumeration },
             });
           }
           showCallout({
             messageId: 'ui-receiving.piece.actions.checkInItem.success',
             type: 'success',
-            values: { caption: values.caption },
+            values: { enumeration: values.enumeration },
           });
         }, response => handleReceiveErrorResponse(showCallout, response))
         .finally(() => fetchReceivingResources(poLine.id));
@@ -233,15 +233,19 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
         showCallout({
           messageId: 'ui-receiving.piece.actions.delete.success',
           type: 'success',
-          values: { caption: piece?.caption },
+          values: { enumeration: piece?.enumeration },
         });
       },
-      () => {
-        showCallout({
-          messageId: 'ui-receiving.piece.actions.delete.error',
-          type: 'error',
-          values: { caption: piece?.caption },
-        });
+      async (response) => {
+        const hasCommonErrors = await handleCommonErrors(showCallout, response);
+
+        if (!hasCommonErrors) {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.delete.error',
+            type: 'error',
+            values: { enumeration: piece?.enumeration },
+          });
+        }
       },
     ).finally(() => fetchReceivingResources(poLine.id));
   }, [fetchReceivingResources, poLine.id, showCallout]);

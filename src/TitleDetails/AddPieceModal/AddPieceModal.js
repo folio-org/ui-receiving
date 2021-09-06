@@ -40,7 +40,6 @@ const AddPieceModal = ({
   handleSubmit,
   hasValidationErrors,
   instanceId,
-  isManuallyAddPieces,
   locationIds,
   locations,
   onCheckIn,
@@ -83,7 +82,7 @@ const AddPieceModal = ({
   );
   const end = (
     <>
-      {Boolean(isManuallyAddPieces && id) && (
+      {id && (
         <Button
           marginBottom0
           onClick={toggleDeleteConfirmation}
@@ -293,7 +292,6 @@ AddPieceModal.propTypes = {
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
-  isManuallyAddPieces: PropTypes.bool,
   onCheckIn: PropTypes.func.isRequired,
   pieceFormatOptions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
@@ -305,7 +303,6 @@ AddPieceModal.propTypes = {
 };
 
 AddPieceModal.defaultProps = {
-  isManuallyAddPieces: false,
   pieceFormatOptions: [],
 };
 

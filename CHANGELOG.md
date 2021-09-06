@@ -9,6 +9,7 @@
 * Update create, edit and receive piece forms with additional fields. Refs UIREC-135.
 * Use mod-orders for piece queries. Refs UIREC-55.
 * Make keyboard shortcuts for receiving screens. Refs UIREC-157.
+* Allow user to adjust order quantity and location/hodlings connection from receiving ui. Refs UIREC-132.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)

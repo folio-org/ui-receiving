@@ -28,6 +28,7 @@ const POLDetails = ({
   requester,
   rush = false,
   vendor,
+  checkinItems = false,
 }) => {
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
   const showMaterialSupplier = orderFormat !== ORDER_FORMATS.electronicResource;
@@ -141,6 +142,18 @@ const POLDetails = ({
           md={3}
         >
           <Checkbox
+            checked={checkinItems}
+            disabled
+            label={<FormattedMessage id="ui-receiving.title.checkinItems" />}
+            type="checkbox"
+            vertical
+          />
+        </Col>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <Checkbox
             checked={rush}
             disabled
             label={<FormattedMessage id="ui-receiving.title.rush" />}
@@ -165,6 +178,7 @@ POLDetails.propTypes = {
   requester: PropTypes.string,
   rush: PropTypes.bool,
   vendor: PropTypes.string,
+  checkinItems: PropTypes.bool,
 };
 
 export default POLDetails;

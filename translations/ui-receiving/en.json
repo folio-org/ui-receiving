@@ -3,6 +3,7 @@
 
   "errors.itemUpdateFailed": "Piece <b>{enumeration}</b> was not received. The item record failed to be updated",
   "errors.instanceId": "Piece was not received. Instance record could not be found.",
+  "errors.receivingProcessEncumbrancesError": "Pieces can not be added to or deleted from this Title until all the Fund distributions on the related purchase order line are converted from amounts to percentages.",
 
   "search.keyword": "Keyword",
   "search.title": "Title (Receiving titles)",
@@ -54,6 +55,8 @@
 
   "title.accessProvider": "Access provider",
   "title.closedOrderMessage": "Purchase order is closed - {reason}",
+  "title.changePieceQuantityMessage": "Adding or removing pieces from this record will update the purchase order line quantity and location detail and in turn the estimated price.",
+  "title.checkinItems": "Manually add pieces for receiving",
   "title.contributors.add": "Add contributor",
   "title.contributors.contributor": "Contributor",
   "title.contributors.contributorType": "Contributor ID type",

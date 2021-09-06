@@ -6,7 +6,7 @@ import {
   Button,
 } from '@folio/stripes/components';
 
-export function TitleDetailsExpectedActions({ checkinItems, openAddPieceModal, openReceiveList, hasReceive }) {
+export function TitleDetailsExpectedActions({ openAddPieceModal, openReceiveList, hasReceive }) {
   return (
     <>
       {hasReceive && (
@@ -17,20 +17,17 @@ export function TitleDetailsExpectedActions({ checkinItems, openAddPieceModal, o
           <FormattedMessage id="ui-receiving.title.details.button.receive" />
         </Button>
       )}
-      {checkinItems && (
-        <Button
-          data-test-add-piece-button
-          onClick={openAddPieceModal}
-        >
-          <FormattedMessage id="ui-receiving.piece.button.addPiece" />
-        </Button>
-      )}
+      <Button
+        data-test-add-piece-button
+        onClick={openAddPieceModal}
+      >
+        <FormattedMessage id="ui-receiving.piece.button.addPiece" />
+      </Button>
     </>
   );
 }
 
 TitleDetailsExpectedActions.propTypes = {
-  checkinItems: PropTypes.bool.isRequired,
   hasReceive: PropTypes.bool.isRequired,
   openAddPieceModal: PropTypes.func.isRequired,
   openReceiveList: PropTypes.func.isRequired,

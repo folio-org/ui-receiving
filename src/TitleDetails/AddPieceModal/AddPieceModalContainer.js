@@ -30,8 +30,6 @@ const AddPieceModalContainer = ({
   );
 
   const orderFormat = poLine?.orderFormat;
-  const isManuallyAddPieces = !!poLine?.checkinItems;
-
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
     ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
     : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
@@ -43,7 +41,6 @@ const AddPieceModalContainer = ({
       deletePiece={deletePiece}
       initialValues={initialValues}
       instanceId={instanceId}
-      isManuallyAddPieces={isManuallyAddPieces}
       locationIds={locationIds}
       locations={locations}
       onCheckIn={onCheckIn}

@@ -217,14 +217,13 @@ const TitleDetails = ({
   const expectedPiecesActions = useMemo(
     () => (
       <TitleDetailsExpectedActions
-        checkinItems={checkinItems}
         hasReceive={hasReceive}
         openAddPieceModal={openAddPieceModal}
         openReceiveList={onReceivePieces}
         titleId={titleId}
       />
     ),
-    [titleId, checkinItems, openAddPieceModal, hasReceive, onReceivePieces],
+    [titleId, openAddPieceModal, hasReceive, onReceivePieces],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
@@ -316,6 +315,7 @@ const TitleDetails = ({
             >
               <POLDetails
                 accessProvider={accessProvider}
+                checkinItems={checkinItems}
                 materialSupplier={materialSupplier}
                 orderFormat={orderFormat}
                 orderType={order.orderType}
@@ -328,6 +328,12 @@ const TitleDetails = ({
                 vendor={vendor}
               />
             </Accordion>
+
+            {!checkinItems && (
+              <MessageBanner type="warning">
+                <FormattedMessage id="ui-receiving.title.changePieceQuantityMessage" />
+              </MessageBanner>
+            )}
 
             <Accordion
               displayWhenClosed={expectedPiecesActions}
