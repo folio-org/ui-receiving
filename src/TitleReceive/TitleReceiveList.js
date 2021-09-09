@@ -24,7 +24,9 @@ import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
 const visibleColumns = [
   'checked',
+  'caption',
   'enumeration',
+  'copyNumber',
   'barcode',
   'format',
   'hasRequest',
@@ -52,6 +54,24 @@ export const TitleReceiveList = ({
   const cellFormatters = useMemo(
     () => {
       return {
+        caption: record => (
+          <Field
+            name={`${field}[${record.rowIndex}].caption`}
+            component={TextField}
+            marginBottom0
+            fullWidth
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.caption' })}
+          />
+        ),
+        copyNumber: record => (
+          <Field
+            name={`${field}[${record.rowIndex}].copyNumber`}
+            component={TextField}
+            marginBottom0
+            fullWidth
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.copyNumber' })}
+          />
+        ),
         enumeration: record => (
           <Field
             name={`${field}[${record.rowIndex}].enumeration`}
@@ -157,6 +177,8 @@ export const TitleReceiveList = ({
           aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
         />
       ),
+      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
+      copyNumber: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
       enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,

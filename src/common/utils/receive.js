@@ -44,6 +44,8 @@ export const checkInItems = (pieces, mutator) => {
       barcode: piece.barcode,
       callNumber: piece.callNumber,
       comment: piece.comment,
+      caption: piece.caption,
+      copyNumber: piece.copyNumber,
       enumeration: piece.enumeration,
       supplement: piece.supplement,
       locationId: piece.locationId || null,

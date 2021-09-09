@@ -60,6 +60,10 @@ describe('AddPieceModalContainer', () => {
     const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer(close, onSubmit, initialValues, 'instanceId', onCheckIn, poLine, locations, locationIds);
 
     // header is rendered
+    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByLabelText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.copyNumber')).toBeDefined();
+    expect(getByLabelText('ui-receiving.piece.copyNumber')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
@@ -71,6 +75,8 @@ describe('AddPieceModalContainer', () => {
   it('should display Edit Received Piece form', () => {
     const poLine = { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] };
     const piece = {
+      caption: 'testcaption',
+      copyNumber: 'testcopynumber',
       enumeration: 'testenumeration',
       format: 'Physical',
       id: 'id',
@@ -93,6 +99,8 @@ describe('AddPieceModalContainer', () => {
       locationIds,
     );
 
+    expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy();
+    expect(getByLabelText('ui-receiving.piece.copyNumber').disabled).toBeFalsy();
     expect(getByLabelText('ui-receiving.piece.enumeration').disabled).toBeFalsy();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.receiptDate').disabled).toBeFalsy();

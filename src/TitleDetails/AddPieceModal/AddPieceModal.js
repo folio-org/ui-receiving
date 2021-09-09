@@ -159,6 +159,29 @@ const AddPieceModal = ({
               <Field
                 component={TextField}
                 fullWidth
+                id="caption"
+                label={<FormattedMessage id="ui-receiving.piece.caption" />}
+                name="caption"
+                type="text"
+              />
+            </Col>
+            <Col xs={6}>
+              <Field
+                component={TextField}
+                fullWidth
+                id="copyNumber"
+                label={<FormattedMessage id="ui-receiving.piece.copyNumber" />}
+                name="copyNumber"
+                type="text"
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={6}>
+              <Field
+                component={TextField}
+                fullWidth
                 id="enumeration"
                 label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
                 name="enumeration"
