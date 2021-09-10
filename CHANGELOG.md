@@ -14,6 +14,7 @@
 * Increment stripes to v7. Refs UIREC-154.
 * Display order line locations on piece form. Refs UIREC-163.
 * Display Caption, Copy number in piece form. Refs UIREC-160.
+* Update Received/Expected piece table columns. Refs UIREC-158.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)

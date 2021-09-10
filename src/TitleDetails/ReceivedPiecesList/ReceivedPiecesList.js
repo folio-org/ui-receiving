@@ -4,7 +4,16 @@ import PropTypes from 'prop-types';
 import { PIECE_COLUMNS } from '../constants';
 import PiecesList from '../PiecesList';
 
-const visibleColumns = ['barcode', PIECE_COLUMNS.enumeration, 'format', PIECE_COLUMNS.receivedDate, 'request', 'selection'];
+const visibleColumns = [
+  'barcode',
+  PIECE_COLUMNS.caption,
+  PIECE_COLUMNS.copyNumber,
+  PIECE_COLUMNS.enumeration,
+  'format',
+  PIECE_COLUMNS.receivedDate,
+  'request',
+  'selection',
+];
 
 const ReceivedPiecesList = ({ pieces, selectPiece }) => {
   return (

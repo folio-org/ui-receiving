@@ -23,6 +23,9 @@ const sorters = {
   [PIECE_COLUMNS.receivedDate]: ({ receivedDate }) => receivedDate,
 };
 const columnMapping = {
+  [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
+  [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
+  [PIECE_COLUMNS.caption]: <FormattedMessage id="ui-receiving.piece.caption" />,
   barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
   [PIECE_COLUMNS.enumeration]: <FormattedMessage id="ui-receiving.piece.enumeration" />,
   format: <FormattedMessage id="ui-receiving.piece.format" />,
@@ -33,6 +36,8 @@ const columnMapping = {
 };
 
 const formatter = {
+  [PIECE_COLUMNS.copyNumber]: piece => piece.copyNumber || <NoValue />,
+  [PIECE_COLUMNS.caption]: piece => piece.caption || <NoValue />,
   [PIECE_COLUMNS.enumeration]: piece => piece.enumeration || <NoValue />,
   format: piece => (
     <span>

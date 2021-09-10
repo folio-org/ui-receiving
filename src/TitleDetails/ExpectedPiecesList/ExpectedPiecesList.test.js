@@ -34,6 +34,9 @@ describe('Given Expected Pieces List', () => {
     const { getByText } = renderPiecesList(onEditPiece);
 
     // header is rendered
+    expect(getByText('ui-receiving.piece.copyNumber')).toBeDefined();
+    expect(getByText('ui-receiving.piece.chronology')).toBeDefined();
+    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
