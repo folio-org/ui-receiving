@@ -27,23 +27,12 @@ const LineLocationsView = ({ poLine, locations }) => {
     return lineLocations.filter(Boolean).join(', ');
   }, [holdings, locations, poLine.locations]);
 
-  if (isLoading) {
-    return (
-      <>
-        <Label>
-          <FormattedMessage id="ui-receiving.piece.lineLocations" />
-        </Label>
-        <Loading />
-      </>
-    );
-  }
-
   return (
     <>
       <Label>
         <FormattedMessage id="ui-receiving.piece.lineLocations" />
       </Label>
-      {locationsToDisplay}
+      {isLoading ? <Loading /> : locationsToDisplay}
     </>
   );
 };
