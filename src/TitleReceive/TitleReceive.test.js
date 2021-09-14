@@ -10,6 +10,7 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn(() => 'FieldInventory'),
 }));
+jest.mock('../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
 
 const title = 'The American Journal of Medicine';
 const note = 'Test receiving note';
@@ -20,8 +21,8 @@ const initialValues = {
     id: '0001',
   }],
 };
-const poLineLocationIds = ['001'];
-const locations = [{ id: '001' }];
+const poLine = { locations: [{ locationId: '001' }] };
+const locations = [{ id: '001', name: 'Annex', code: 'AN' }];
 
 const renderTitleReceive = ({ receivingNote, paneTitle }) => (render(
   <IntlProvider locale="en">
@@ -31,7 +32,7 @@ const renderTitleReceive = ({ receivingNote, paneTitle }) => (render(
         initialValues={initialValues}
         instanceId="instanceId"
         locations={locations}
-        poLineLocationIds={poLineLocationIds}
+        poLine={poLine}
         onCancel={noop}
         onSubmit={noop}
         paneTitle={paneTitle}

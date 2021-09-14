@@ -10,6 +10,8 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn(() => 'FieldInventory'),
 }));
+jest.mock('../../common/components/LineLocationsView/LineLocationsView',
+  () => jest.fn().mockReturnValue('LineLocationsView'));
 
 const renderAddPieceModalContainer = (
   close,

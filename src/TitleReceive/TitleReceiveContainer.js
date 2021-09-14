@@ -171,10 +171,6 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     }),
     [poLine],
   );
-  const poLineLocationIds = useMemo(
-    () => poLine?.locations?.map(({ locationId }) => locationId).filter(Boolean),
-    [poLine],
-  );
 
   if (!(pieces && poLine && title && locations)) {
     return (
@@ -197,8 +193,8 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
         onSubmit={onSubmit}
         paneTitle={paneTitle}
         receivingNote={poLine?.details?.receivingNote}
-        poLineLocationIds={poLineLocationIds}
         locations={locations}
+        poLine={poLine}
       />
       {!!receivedPiecesWithRequests.length && (
         <OpenedRequestsModal

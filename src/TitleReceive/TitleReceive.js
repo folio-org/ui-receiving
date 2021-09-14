@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { FieldArray } from 'react-final-form-arrays';
@@ -16,6 +16,7 @@ import {
   handleKeyCommand,
 } from '@folio/stripes-acq-components';
 
+import { LineLocationsView } from '../common/components';
 import { TitleReceiveList } from './TitleReceiveList';
 
 const FIELD_NAME = 'receivedItems';
@@ -31,10 +32,14 @@ const TitleReceive = ({
   receivingNote,
   submitting,
   values,
-  poLineLocationIds,
   locations,
+  poLine,
 }) => {
   const isReceiveDisabled = values[FIELD_NAME].every(({ checked }) => !checked);
+  const poLineLocationIds = useMemo(
+    () => poLine?.locations?.map(({ locationId }) => locationId).filter(Boolean),
+    [poLine],
+  );
 
   const paneFooter = (
     <FormFooter
@@ -76,6 +81,10 @@ const TitleReceive = ({
             onClose={onCancel}
             paneTitle={paneTitle}
           >
+            <LineLocationsView
+              poLine={poLine}
+              locations={locations}
+            />
             {receivingNote && (
               <MessageBanner>
                 {receivingNote}
@@ -112,8 +121,8 @@ TitleReceive.propTypes = {
   receivingNote: PropTypes.string,
   submitting: PropTypes.bool.isRequired,
   values: PropTypes.object.isRequired,  // current form values
-  poLineLocationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
+  poLine: PropTypes.object.isRequired,
 };
 
 export default stripesFinalForm({

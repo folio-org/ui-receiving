@@ -137,6 +137,7 @@
   "piece.itemStatus.Received": "Received",
   "piece.itemStatus.Undefined": "Undefined",
   "piece.itemStatus": "Item status",
+  "piece.lineLocations": "Order line locations",
   "piece.location": "Select location",
   "piece.locationLookup": "Assign a different location",
   "piece.receiptDate": "Expected receipt date",

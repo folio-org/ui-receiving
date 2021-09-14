@@ -30,7 +30,10 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import { CreateItemField } from '../../common/components';
+import {
+  CreateItemField,
+  LineLocationsView,
+} from '../../common/components';
 
 const AddPieceModal = ({
   close,
@@ -45,6 +48,7 @@ const AddPieceModal = ({
   onCheckIn,
   pieceFormatOptions,
   values: formValues,
+  poLine,
 }) => {
   const { enumeration, format, id, receivingStatus } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
@@ -203,17 +207,9 @@ const AddPieceModal = ({
           </Row>
           <Row>
             <Col xs={6}>
-              <FieldInventory
-                instanceId={instanceId}
-                locationIds={locationIds}
+              <LineLocationsView
+                poLine={poLine}
                 locations={locations}
-
-                holdingName="holdingId"
-                locationName="locationId"
-
-                onChange={mutators.setLocationValue}
-                disabled={!isNotReceived}
-                required={isLocationRequired}
               />
             </Col>
 
@@ -241,9 +237,23 @@ const AddPieceModal = ({
               />
             </Col>
           </Row>
-
           <Row>
-            <Col xsOffset={6} xs={3}>
+            <Col xs={6}>
+              <FieldInventory
+                instanceId={instanceId}
+                locationIds={locationIds}
+                locations={locations}
+
+                holdingName="holdingId"
+                locationName="locationId"
+
+                onChange={mutators.setLocationValue}
+                disabled={!isNotReceived}
+                required={isLocationRequired}
+              />
+            </Col>
+
+            <Col xs={3}>
               <Field
                 component={Checkbox}
                 fullWidth
@@ -300,6 +310,7 @@ AddPieceModal.propTypes = {
   hasValidationErrors: PropTypes.bool.isRequired,
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
+  poLine: PropTypes.object.isRequired,
 };
 
 AddPieceModal.defaultProps = {

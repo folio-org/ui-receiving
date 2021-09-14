@@ -11,6 +11,8 @@ jest.mock('@folio/stripes-acq-components', () => {
     FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
   };
 });
+jest.mock('../../common/components/LineLocationsView/LineLocationsView',
+  () => jest.fn().mockReturnValue('LineLocationsView'));
 
 const defaultProps = {
   close: jest.fn(),
@@ -22,10 +24,11 @@ const defaultProps = {
   instanceId: 'instanceId',
   isManuallyAddPieces: true,
   locationIds: [],
-  locations: [],
+  locations: [{ id: '001', name: 'Annex', code: 'AN' }],
   onCheckIn: jest.fn(),
   pieceFormatOptions: [],
   values: {},
+  poLine: { locations: [{ locationId: '001' }] },
 };
 
 const renderAddPieceModal = (props = defaultProps) => (render(
