@@ -25,9 +25,11 @@ import {
   ResetButton,
   ResultsPane,
   SingleSearchForm,
+  PrevNextPagination,
   useFiltersToogle,
   useLocationFilters,
   useLocationSorting,
+  useItemToView,
 } from '@folio/stripes-acq-components';
 
 import TitleDetailsContainer from '../TitleDetails';
@@ -75,6 +77,7 @@ const ReceivingList = ({
   resetData,
   titles,
   titlesCount,
+  pagination,
 }) => {
   const stripes = useStripes();
   const [
@@ -126,6 +129,8 @@ const ReceivingList = ({
     },
   ];
 
+  const { itemToView, setItemToView, deleteItemToView } = useItemToView('receivings-list');
+
   return (
     <HasCommand
       commands={shortcuts}
@@ -169,6 +174,7 @@ const ReceivingList = ({
 
         <ResultsPane
           id="receiving-results-pane"
+          autosize
           title={resultsPaneTitle}
           count={titlesCount}
           renderLastMenu={renderLastMenu}
@@ -176,25 +182,40 @@ const ReceivingList = ({
           filters={filters}
           isFiltersOpened={isFiltersOpened}
         >
-          <MultiColumnList
-            id="receivings-list"
-            totalCount={titlesCount}
-            contentData={titles}
-            visibleColumns={visibleColumns}
-            columnMapping={columnMapping}
-            formatter={resultsFormatter}
-            loading={isLoading}
-            autosize
-            virtualize
-            onNeedMoreData={onNeedMoreData}
-            onRowClick={selectedTitle}
-            sortOrder={sortingField}
-            sortDirection={sortingDirection}
-            onHeaderClick={changeSorting}
-            isEmptyMessage={resultsStatusMessage}
-            hasMargin
-            pagingType="click"
-          />
+          {(({ height, width }) => (
+            <>
+              <MultiColumnList
+                id="receivings-list"
+                totalCount={titlesCount}
+                contentData={titles}
+                visibleColumns={visibleColumns}
+                columnMapping={columnMapping}
+                formatter={resultsFormatter}
+                loading={isLoading}
+                onNeedMoreData={onNeedMoreData}
+                onRowClick={selectedTitle}
+                sortOrder={sortingField}
+                sortDirection={sortingDirection}
+                onHeaderClick={changeSorting}
+                isEmptyMessage={resultsStatusMessage}
+                hasMargin
+                pagingType="none"
+                height={height - PrevNextPagination.HEIGHT}
+                width={width}
+                itemToView={itemToView}
+                onMarkPosition={setItemToView}
+                onResetMark={deleteItemToView}
+              />
+              {titles.length > 0 && (
+                <PrevNextPagination
+                  {...pagination}
+                  totalCount={titlesCount}
+                  disabled={isLoading}
+                  onChange={onNeedMoreData}
+                />
+              )}
+            </>
+          ))}
         </ResultsPane>
 
         <Route
@@ -215,6 +236,7 @@ ReceivingList.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
+  pagination: PropTypes.object.isRequired,
 };
 
 ReceivingList.defaultProps = {

@@ -11,7 +11,9 @@ import '@folio/stripes-acq-components/test/jest/__mock__';
 import ReceivingList from './ReceivingList';
 
 // TODO: move to stripes-acq-components mock
-jest.mock('@folio/stripes-acq-components/lib/AcqList/hooks/useFiltersToogle/useFiltersToogle', () => ({
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useItemToView: jest.fn().mockReturnValue({}),
   useFiltersToogle: jest.fn().mockReturnValue({ isFiltersOpened: true, toggleFilters: jest.fn() }),
 }));
 
