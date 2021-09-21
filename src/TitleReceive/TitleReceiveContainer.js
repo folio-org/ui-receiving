@@ -9,10 +9,8 @@ import {
 } from '@folio/stripes/components';
 import {
   baseManifest,
-  configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
-  LOAN_TYPES,
   locationsManifest,
   PIECE_FORMAT,
   PIECE_STATUS,
@@ -26,19 +24,19 @@ import {
   PO_LINES_API,
 } from '../common/constants';
 import {
-  checkInResource,
-  holdingsResource,
   titleResource,
 } from '../common/resources';
 import {
-  checkIn,
+  useReceive,
+} from '../common/hooks';
+import {
   getHydratedPieces,
   handleReceiveErrorResponse,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
 
-function TitleReceiveContainer({ history, location, match, mutator, resources }) {
+function TitleReceiveContainer({ history, location, match, mutator }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
   const [pieces, setPieces] = useState();
@@ -47,6 +45,8 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
   const [locations, setLocations] = useState();
   const poLineId = title?.poLineId;
   const instanceId = title?.instanceId;
+
+  const { receive } = useReceive();
 
   useEffect(
     () => {
@@ -114,34 +114,9 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
     [onCancel],
   );
 
-  const [loanTypeId, setLoanTypeId] = useState();
-  const configLoanTypeName = resources?.configLoanType?.records?.[0]?.value;
-
-  useEffect(() => {
-    if (configLoanTypeName) {
-      mutator.loanTypes.GET({ params: {
-        query: `name='${configLoanTypeName}'`,
-      } })
-        .then(loanTypes => {
-          setLoanTypeId(loanTypes?.[0]?.id);
-        });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [configLoanTypeName]);
-
   const onSubmit = useCallback(
-    // eslint-disable-next-line no-unused-vars
     ({ receivedItems }) => {
-      return checkIn(
-        receivedItems.filter(({ checked }) => checked === true),
-        mutator.piece,
-        mutator.receive,
-        mutator.holdings,
-        mutator.items,
-        instanceId,
-        loanTypeId,
-        poLine,
-      )
+      receive(receivedItems.filter(({ checked }) => checked === true))
         .then(() => {
           showCallout({
             messageId: 'ui-receiving.title.actions.receive.success',
@@ -154,13 +129,13 @@ function TitleReceiveContainer({ history, location, match, mutator, resources })
           } else {
             setTimeout(onCancel);
           }
-        }, async response => {
+        })
+        .catch(async ({ response }) => {
           await handleReceiveErrorResponse(showCallout, response);
           onCancel();
         });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [instanceId, loanTypeId, poLine, showCallout, onCancel],
+    [receive, showCallout, onCancel],
   );
 
   const createInventoryValues = useMemo(
@@ -220,15 +195,7 @@ TitleReceiveContainer.manifest = Object.freeze({
   },
   items: itemsResource,
   requests: requestsResource,
-  receive: checkInResource,
-  holdings: holdingsResource,
   piece: pieceResource,
-  configLoanType: configLoanTypeResource,
-  loanTypes: {
-    ...LOAN_TYPES,
-    accumulate: true,
-    fetch: false,
-  },
   locations: {
     ...locationsManifest,
     fetch: false,
@@ -240,7 +207,6 @@ TitleReceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
-  resources: PropTypes.object.isRequired,
 };
 
 export default stripesConnect(TitleReceiveContainer);

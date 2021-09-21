@@ -7,11 +7,9 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   baseManifest,
   batchFetch,
-  configLoanTypeResource,
   itemsResource,
   LIMIT_MAX,
   LoadingPane,
-  LOAN_TYPES,
   locationsManifest,
   organizationsManifest,
   pieceResource,
@@ -25,20 +23,20 @@ import {
   PO_LINES_API,
 } from '../common/constants';
 import {
-  checkInResource,
-  holdingsResource,
   titleResource,
 } from '../common/resources';
+import {
+  usePieceMutator,
+  useQuickReceive,
+} from '../common/hooks';
 import {
   getHydratedPieces,
   handleCommonErrors,
   handleReceiveErrorResponse,
-  quickReceive,
-  savePiece,
 } from '../common/utils';
 import TitleDetails from './TitleDetails';
 
-const TitleDetailsContainer = ({ location, history, mutator, match, resources }) => {
+const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const titleId = match.params.id;
   const showCallout = useShowCallout();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,22 +44,11 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
   const [poLine, setPoLine] = useState({});
   const [pieces, setPieces] = useState();
   const [order, setOrder] = useState({});
-  const [loanTypeId, setLoanTypeId] = useState();
   const [locations, setLocations] = useState();
   const [vendorsMap, setVendorsMap] = useState();
-  const configLoanTypeName = resources?.configLoanType?.records?.[0]?.value;
 
-  useEffect(() => {
-    if (configLoanTypeName) {
-      mutator.loanTypes.GET({ params: {
-        query: `name='${configLoanTypeName}'`,
-      } })
-        .then(loanTypes => {
-          setLoanTypeId(loanTypes?.[0]?.id);
-        });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [configLoanTypeName]);
+  const { mutatePiece } = usePieceMutator();
+  const { quickReceive } = useQuickReceive();
 
   const fetchReceivingResources = useCallback(
     (lineId) => {
@@ -159,21 +146,14 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
 
   const onAddPiece = useCallback(
     (values) => {
-      return savePiece(
-        mutator.orderPieces,
-        mutator.holdings,
-        mutator.items,
-        values,
-        title.instanceId,
-        loanTypeId,
-        poLine,
-      )
+      return mutatePiece(values)
         .then(() => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.savePiece.success',
             type: 'success',
           });
-        }, async response => {
+        })
+        .catch(async ({ response }) => {
           const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
           if (!hasCommonErrors) {
@@ -186,21 +166,12 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
+    [fetchReceivingResources, poLine, showCallout],
   );
 
   const onCheckIn = useCallback(
     (values) => {
-      return quickReceive(
-        mutator.checkIn,
-        mutator.orderPieces,
-        mutator.holdings,
-        mutator.items,
-        values,
-        title.instanceId,
-        loanTypeId,
-        poLine,
-      )
+      return quickReceive(values)
         .then(() => {
           if (!values.id) {
             showCallout({
@@ -213,11 +184,14 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
             type: 'success',
             values: { enumeration: values.enumeration },
           });
-        }, response => handleReceiveErrorResponse(showCallout, response))
+        })
+        .catch(({ response }) => {
+          handleReceiveErrorResponse(showCallout, response);
+        })
         .finally(() => fetchReceivingResources(poLine.id));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, poLine, showCallout, title.instanceId, loanTypeId],
+    [fetchReceivingResources, poLine.id, showCallout],
   );
 
   const deletePiece = useCallback((piece) => {
@@ -243,6 +217,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match, resources })
         }
       },
     ).finally(() => fetchReceivingResources(poLine.id));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchReceivingResources, poLine.id, showCallout]);
 
   if (isLoading || !(pieces || locations || vendorsMap)) {
@@ -289,16 +264,8 @@ TitleDetailsContainer.manifest = Object.freeze({
   },
   orderPieces: pieceResource,
   pieces: piecesResource,
-  checkIn: checkInResource,
   items: itemsResource,
   requests: requestsResource,
-  holdings: holdingsResource,
-  configLoanType: configLoanTypeResource,
-  loanTypes: {
-    ...LOAN_TYPES,
-    accumulate: true,
-    fetch: false,
-  },
   locations: {
     ...locationsManifest,
     fetch: false,
@@ -315,7 +282,6 @@ TitleDetailsContainer.propTypes = {
   match: ReactRouterPropTypes.match.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   mutator: PropTypes.object.isRequired,
-  resources: PropTypes.object.isRequired,
 };
 
 export default withRouter(stripesConnect(TitleDetailsContainer));

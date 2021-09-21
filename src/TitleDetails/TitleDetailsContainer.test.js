@@ -2,11 +2,19 @@ import React from 'react';
 import { act, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import {
+  usePieceMutator,
+  useQuickReceive,
+} from '../common/hooks';
+import TitleDetails from './TitleDetails';
 import TitleDetailsContainer from './TitleDetailsContainer';
 
+jest.mock('../common/hooks', () => ({
+  usePieceMutator: jest.fn().mockReturnValue({}),
+  useQuickReceive: jest.fn().mockReturnValue({}),
+}));
 jest.mock('./TitleDetails', () => jest.fn().mockReturnValue('TitleDetails'));
 
-const resourcesMock = { configLoanType: { records: [{ value: 'loanType' }] } };
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -42,15 +50,6 @@ const mutator = {
   requests: {
     GET: jest.fn(),
   },
-  holdings: {
-    GET: jest.fn(),
-  },
-  configLoanType: {
-    GET: jest.fn(),
-  },
-  loanTypes: {
-    GET: jest.fn().mockReturnValue(Promise.resolve([])),
-  },
   locations: {
     GET: jest.fn().mockReturnValue(Promise.resolve(locations)),
     reset: jest.fn(),
@@ -68,12 +67,15 @@ const renderTitleDetailsContainer = () => (render(
       location={locationMock}
       match={{ params: { id: 'titleId' }, path: 'path', url: 'url' }}
       mutator={mutator}
-      resources={resourcesMock}
     />
   </MemoryRouter>,
 ));
 
 describe('TitleDetailsContainer', () => {
+  beforeEach(() => {
+    TitleDetails.mockClear();
+  });
+
   it('should load all data', async () => {
     await act(async () => {
       renderTitleDetailsContainer();
@@ -85,6 +87,33 @@ describe('TitleDetailsContainer', () => {
     expect(mutator.poLine.GET).toHaveBeenCalled();
     expect(mutator.locations.GET).toHaveBeenCalled();
     expect(mutator.vendors.GET).toHaveBeenCalled();
-    expect(mutator.loanTypes.GET).toHaveBeenCalled();
+  });
+
+  it('should mutate piece when onAdd is called', async () => {
+    const mutatePieceMock = jest.fn().mockReturnValue(Promise.resolve());
+
+    usePieceMutator.mockClear().mockReturnValue({ mutatePiece: mutatePieceMock });
+
+    await act(async () => {
+      renderTitleDetailsContainer();
+    });
+
+    await TitleDetails.mock.calls[0][0].onAddPiece(pieces[0]);
+
+    expect(mutatePieceMock).toHaveBeenCalled();
+  });
+
+  it('should receive piece when onCheckIn is called', async () => {
+    const quickReceiveMock = jest.fn().mockReturnValue(Promise.resolve());
+
+    useQuickReceive.mockClear().mockReturnValue({ quickReceive: quickReceiveMock });
+
+    await act(async () => {
+      renderTitleDetailsContainer();
+    });
+
+    await TitleDetails.mock.calls[0][0].onCheckIn(pieces[0]);
+
+    expect(quickReceiveMock).toHaveBeenCalled();
   });
 });

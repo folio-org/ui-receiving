@@ -3,15 +3,20 @@ import { act, render, cleanup, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
+import {
+  useReceive,
+} from '../common/hooks';
 import TitleReceiveContainer from './TitleReceiveContainer';
 import TitleReceive from './TitleReceive';
 
+jest.mock('../common/hooks', () => ({
+  useReceive: jest.fn().mockReturnValue({}),
+}));
 jest.mock('./TitleReceive', () => jest.fn().mockReturnValue('TitleReceive'));
 
 const mockTitle = { title: 'Title', id: '001', poLineId: '002', instanceId: 'instanceId' };
 const mockPoLine = { id: '002', locations: [{ locationId: '1' }] };
 const mockPieces = [{ id: '01', locationId: '1' }];
-const resourcesMock = { configLoanType: { records: [{ value: 'loanType' }] } };
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -32,7 +37,6 @@ const renderTitleReceiveContainer = (mutator) => (render(
         location={locationMock}
         match={{ params: { id: '001' }, path: 'path', url: 'url' }}
         mutator={mutator}
-        resources={resourcesMock}
       />
     </MemoryRouter>
   </IntlProvider>,
@@ -52,9 +56,6 @@ describe('TitleReceiveContainer', () => {
       piece: {
         POST: jest.fn(),
       },
-      loanTypes: {
-        GET: jest.fn().mockReturnValue(Promise.resolve([])),
-      },
       poLine: {
         GET: jest.fn().mockReturnValue(Promise.resolve(mockPoLine)),
       },
@@ -69,14 +70,6 @@ describe('TitleReceiveContainer', () => {
       items: {
         GET: jest.fn(),
         reset: jest.fn(),
-        POST: jest.fn(),
-      },
-      holdings: {
-        GET: jest.fn().mockReturnValue(Promise.resolve([])),
-        POST: jest.fn().mockReturnValue(Promise.resolve({ id: 'holdingId' })),
-      },
-      receive: {
-        POST: jest.fn(),
       },
     };
 
@@ -131,7 +124,6 @@ describe('TitleReceiveContainer', () => {
     expect(mutator.pieces.GET).toHaveBeenCalled();
     expect(mutator.poLine.GET).toHaveBeenCalled();
     expect(mutator.locations.GET).toHaveBeenCalled();
-    expect(mutator.loanTypes.GET).toHaveBeenCalled();
   });
 
   it('should redirect to title details when receive is cancelled', async () => {
@@ -143,10 +135,14 @@ describe('TitleReceiveContainer', () => {
   });
 
   it('should receive pieces', async () => {
+    const receiveMock = jest.fn().mockReturnValue(Promise.resolve());
+
+    useReceive.mockClear().mockReturnValue({ receive: receiveMock });
+
     await act(async () => renderTitleReceiveContainer(mutator));
 
     TitleReceive.mock.calls[0][0].onSubmit({ receivedItems: [{ checked: true, isCreateItem: true }] });
 
-    expect(mutator.holdings.GET).toHaveBeenCalled();
+    expect(receiveMock).toHaveBeenCalled();
   });
 });

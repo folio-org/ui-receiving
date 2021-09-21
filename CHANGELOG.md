@@ -16,6 +16,7 @@
 * Display Caption, Copy number in piece form. Refs UIREC-160.
 * Update Received/Expected piece table columns. Refs UIREC-158.
 * Receiving - Implement MCL Next/Previous pagination. Refs UIREC-164.
+* Piece location/holding field adjustments. Refs UIREC-162.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)
