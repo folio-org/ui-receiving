@@ -26,7 +26,7 @@ const wrapper = ({ children }) => (
 
 const titles = [{ poLineId: '3e1a947f-a605-41b8-839c-7929f02ef911' }];
 
-describe('useOrders', () => {
+describe('useReceiving', () => {
   beforeEach(() => {
     useOkapiKy
       .mockClear()
@@ -58,7 +58,7 @@ describe('useOrders', () => {
     });
   });
 
-  it('should return fetched hydreated receivings list', async () => {
+  it('should return fetched hydrated receivings list', async () => {
     useLocation
       .mockClear()
       .mockReturnValue({ search: 'purchaseOrder.workflowStatus=Open' });
