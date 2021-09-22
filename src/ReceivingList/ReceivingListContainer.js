@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
-import { usePagination } from '@folio/stripes-acq-components';
+import {
+  RESULT_COUNT_INCREMENT,
+  usePagination,
+} from '@folio/stripes-acq-components';
 
 import {
   titlesResource,
@@ -21,8 +24,6 @@ import {
   fetchOrderLineLocations,
   fetchTitleOrderLines,
 } from './utils';
-
-const RESULT_COUNT_INCREMENT = 50;
 
 const resetData = () => {};
 
