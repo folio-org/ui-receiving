@@ -22,7 +22,7 @@ import {
   fetchTitleOrderLines,
 } from './utils';
 
-const RESULT_COUNT_INCREMENT = 30;
+const RESULT_COUNT_INCREMENT = 50;
 
 const resetData = () => {};
 
