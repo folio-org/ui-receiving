@@ -14,7 +14,7 @@
   "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number",
   "search.barcode": "Barcode",
 
-  "filter.acqUnits": "Acquisition units",
+  "filter.acqUnits": "Acquisition unit",
   "filter.orderStatus": "Order status",
   "filter.vendor": "Vendor",
   "filter.orderType": "Order type",
