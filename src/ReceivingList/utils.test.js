@@ -9,6 +9,7 @@ import {
 } from './constants';
 import {
   fetchTitleOrderLines,
+  fetchOrderLineHoldings,
   fetchOrderLineLocations,
   buildTitlesQuery,
 } from './utils';
@@ -126,6 +127,42 @@ describe('ReceivingList utils', () => {
       };
 
       fetchOrderLineLocations(mutator, orderLines, locationsMap)
+        .then((response) => {
+          expect(mutator.GET).not.toHaveBeenCalled();
+          expect(response).toEqual([]);
+        });
+    });
+  });
+
+  describe('fetchOrderLineHoldings', () => {
+    it('should make a request with correct query', () => {
+      expect.assertions(1);
+
+      const mutator = {
+        GET: jest.fn(() => Promise.resolve()),
+        reset: jest.fn(),
+      };
+      const orderLines = [{ locations: [{ holdingId: 1 }] }, { locations: [{ holdingId: 2 }, { holdingId: 3 }] }];
+
+      fetchOrderLineHoldings(mutator, orderLines)
+        .then(() => {
+          expect(mutator.GET).toHaveBeenCalledWith({
+            params: {
+              limit: LIMIT_MAX,
+              query: 'id==1 or id==2 or id==3',
+            },
+          });
+        });
+    });
+
+    it('should not make a request for empty titles', () => {
+      expect.assertions(2);
+
+      const mutator = {
+        GET: jest.fn(() => Promise.resolve()),
+      };
+
+      fetchOrderLineHoldings(mutator, [])
         .then((response) => {
           expect(mutator.GET).not.toHaveBeenCalled();
           expect(response).toEqual([]);

@@ -16,6 +16,7 @@
 * Display Caption, Copy number in piece form. Refs UIREC-160.
 * Update Received/Expected piece table columns. Refs UIREC-158.
 * Receiving - Implement MCL Next/Previous pagination. Refs UIREC-164.
+* Display Holding OR Location name in location column in search results. Refs UIREC-172.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)
