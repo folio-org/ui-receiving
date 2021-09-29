@@ -44,11 +44,9 @@ export const fetchOrderLineHoldings = (mutator, orderLines) => {
     .map(({ holdingId }) => holdingId)
     .filter(Boolean);
 
-  const holdingsPromise = holdingstoFetch.length
+  return holdingstoFetch.length
     ? batchFetch(mutator, uniq(holdingstoFetch))
     : Promise.resolve([]);
-
-  return holdingsPromise;
 };
 
 export const fetchOrderLineLocations = (mutator, orderLines, fetchedLocationsMap) => {
