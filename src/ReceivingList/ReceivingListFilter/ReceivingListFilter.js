@@ -114,7 +114,6 @@ const ReceivingListFilter = ({
         id={`filter-${FILTERS.ACQUISITIONS_UNIT}`}
         activeFilters={activeFilters[FILTERS.ACQUISITIONS_UNIT]}
         disabled={disabled}
-        labelId="ui-receiving.filter.acqUnits"
         name={FILTERS.ACQUISITIONS_UNIT}
         onChange={adaptedApplyFilters}
       />
