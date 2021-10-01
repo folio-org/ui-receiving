@@ -18,6 +18,7 @@
 * Receiving - Implement MCL Next/Previous pagination. Refs UIREC-164.
 * Display Holding OR Location name in location column in search results. Refs UIREC-172.
 * Filter label contains extra 's'. Refs UIREC-173.
+* Disable add and remove piece when order is pending. Refs UIREC-174.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)

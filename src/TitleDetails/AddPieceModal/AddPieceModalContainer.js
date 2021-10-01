@@ -12,6 +12,7 @@ import AddPieceModal from './AddPieceModal';
 const AddPieceModalContainer = ({
   close,
   deletePiece,
+  canDeletePiece,
   initialValues,
   instanceId,
   locations,
@@ -39,6 +40,7 @@ const AddPieceModalContainer = ({
       close={close}
       createInventoryValues={createInventoryValues}
       deletePiece={deletePiece}
+      canDeletePiece={canDeletePiece}
       initialValues={initialValues}
       instanceId={instanceId}
       locationIds={locationIds}
@@ -54,6 +56,7 @@ const AddPieceModalContainer = ({
 AddPieceModalContainer.propTypes = {
   close: PropTypes.func.isRequired,
   deletePiece: PropTypes.func.isRequired,
+  canDeletePiece: PropTypes.bool,
   initialValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   locations: PropTypes.arrayOf(PropTypes.object),

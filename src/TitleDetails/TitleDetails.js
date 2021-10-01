@@ -117,6 +117,8 @@ const TitleDetails = ({
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
+  const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
+
   const shortcuts = [
     {
       name: 'new',
@@ -221,9 +223,10 @@ const TitleDetails = ({
         openAddPieceModal={openAddPieceModal}
         openReceiveList={onReceivePieces}
         titleId={titleId}
+        disabled={isPiecesLock}
       />
     ),
-    [titleId, openAddPieceModal, hasReceive, onReceivePieces],
+    [titleId, openAddPieceModal, hasReceive, isPiecesLock, onReceivePieces],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
@@ -329,7 +332,7 @@ const TitleDetails = ({
               />
             </Accordion>
 
-            {!checkinItems && (
+            {!checkinItems && !isPiecesLock && (
               <MessageBanner type="warning">
                 <FormattedMessage id="ui-receiving.title.changePieceQuantityMessage" />
               </MessageBanner>
@@ -380,6 +383,7 @@ const TitleDetails = ({
           <AddPieceModal
             close={toggleAddPieceModal}
             deletePiece={deletePiece}
+            canDeletePiece={!isPiecesLock}
             initialValues={pieceValues}
             instanceId={title.instanceId}
             locations={locations}
