@@ -1,6 +1,7 @@
 import React from 'react';
 import { act, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
   usePieceMutator,
@@ -15,6 +16,7 @@ jest.mock('../common/hooks', () => ({
 }));
 jest.mock('./TitleDetails', () => jest.fn().mockReturnValue('TitleDetails'));
 
+const queryClient = new QueryClient();
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -60,16 +62,24 @@ const mutator = {
   },
 };
 
-const renderTitleDetailsContainer = () => (render(
-  <MemoryRouter>
-    <TitleDetailsContainer
-      history={historyMock}
-      location={locationMock}
-      match={{ params: { id: 'titleId' }, path: 'path', url: 'url' }}
-      mutator={mutator}
-    />
-  </MemoryRouter>,
-));
+// eslint-disable-next-line react/prop-types
+const wrapper = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    <MemoryRouter>
+      {children}
+    </MemoryRouter>
+  </QueryClientProvider>
+);
+
+const renderTitleDetailsContainer = () => render(
+  <TitleDetailsContainer
+    history={historyMock}
+    location={locationMock}
+    match={{ params: { id: 'titleId' }, path: 'path', url: 'url' }}
+    mutator={mutator}
+  />,
+  { wrapper },
+);
 
 describe('TitleDetailsContainer', () => {
   beforeEach(() => {

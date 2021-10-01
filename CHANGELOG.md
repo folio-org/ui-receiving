@@ -21,6 +21,7 @@
 * Filter label contains extra 's'. Refs UIREC-173.
 * Disable add and remove piece when order is pending. Refs UIREC-174.
 * Do not show 'Display on holdings' when create inventory does not include 'Holdings'. Refs UIREC-178.
+* Confirm if user would like to delete holdings record when deleting piece. Refs UIREC-175.
 
 ## [1.4.2](https://github.com/folio-org/ui-receiving/tree/v1.4.2) (2021-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.1...v1.4.2)
