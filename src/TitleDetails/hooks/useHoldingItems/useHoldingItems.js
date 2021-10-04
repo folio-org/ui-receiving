@@ -29,7 +29,12 @@ export const useHoldingItems = (
   };
 
   const queryFn = () => ky.get(ITEMS_API, options).json();
-  const { data, isLoading, isFetching } = useQuery({ queryKey, queryFn, ...queryOptions });
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey,
+    queryFn,
+    enabled: Boolean(holdingsRecordId),
+    ...queryOptions,
+  });
 
   return {
     isFetching,

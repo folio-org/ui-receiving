@@ -1,1 +1,1 @@
-export { default } from './DeletePieceModalContainer';
+export { DeletePieceModal } from './DeletePieceModal';

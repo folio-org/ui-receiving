@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
@@ -15,7 +15,6 @@ import {
   Row,
   TextArea,
   TextField,
-  Icon,
   checkScope,
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -34,7 +33,7 @@ import {
   CreateItemField,
   LineLocationsView,
 } from '../../common/components';
-import DeletePieceModal from '../DeletePieceModal';
+import { DeletePieceModal } from '../DeletePieceModal';
 
 const AddPieceModal = ({
   close,
@@ -57,7 +56,6 @@ const AddPieceModal = ({
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
-  const [isDeleteModalLoading, setIsDeleteModalLoading] = useState(false);
 
   const receive = useCallback(
     () => {
@@ -93,10 +91,9 @@ const AddPieceModal = ({
         <Button
           marginBottom0
           onClick={toggleDeleteConfirmation}
-          disabled={!canDeletePiece || isDeleteModalLoading}
+          disabled={!canDeletePiece}
         >
           <FormattedMessage id="ui-receiving.piece.actions.delete" />
-          {isDeleteModalLoading && <Icon icon="spinner-ellipsis" width="10px" />}
         </Button>
       )}
       {isNotReceived && (
@@ -317,8 +314,6 @@ const AddPieceModal = ({
           onCancel={toggleDeleteConfirmation}
           onConfirm={onDelete}
           piece={formValues}
-          deletePiece={deletePiece}
-          setIsLoading={setIsDeleteModalLoading}
         />
       )}
     </Modal>

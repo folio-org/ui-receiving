@@ -1,18 +1,21 @@
 import React from 'react';
+import user from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 
 import { DeletePieceModal } from './DeletePieceModal';
 
-jest.mock('@folio/stripes/components', () => ({
-  Modal: jest.fn().mockReturnValue('ModalDeleteWithHolding'),
-  ConfirmationModal: jest.fn().mockReturnValue('ConfirmationModal'),
+jest.mock('../hooks', () => ({
+  useHoldingItems: () => ({ itemsCount: 1, isFetching: false }),
 }));
 
 const defaultProps = {
-  isLastConnectedItem: false,
-  footer: {},
-  onConfirm: jest.fn(),
   onCancel: jest.fn(),
+  onConfirm: jest.fn(),
+  piece: {
+    itemId: 'itemId',
+    holdingsRecordId: 'holdingsRecordId',
+  },
+  setIsLoading: jest.fn(),
 };
 
 const renderDeletePieceModal = (props = {}) => render(
@@ -23,15 +26,42 @@ const renderDeletePieceModal = (props = {}) => render(
 );
 
 describe('DeletePieceModal', () => {
-  it('should render confirmation modal to remove a piece', () => {
+  it('should render default delete piece modal', () => {
     renderDeletePieceModal();
 
-    expect(screen.getByText('ConfirmationModal')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.actions.cancel')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.delete.heading')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.actions.delete.deleteItem')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.actions.delete.deleteHoldingsAndItem')).toBeInTheDocument();
   });
 
-  it('should render confirmation modal to remove a piece, which related to the last connected item on holding', () => {
-    renderDeletePieceModal({ isLastConnectedItem: true });
+  it('should render delete piece (with holding) modal', () => {
+    renderDeletePieceModal({
+      piece: {
+        holdingsRecordId: null,
+      },
+    });
 
-    expect(screen.getByText('ModalDeleteWithHolding')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.actions.cancel')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.delete.heading')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.delete.confirm')).toBeInTheDocument();
+  });
+
+  it('should call onCancel when cancel was clicked', async () => {
+    renderDeletePieceModal();
+
+    const cancelBtn = await screen.findByText('ui-receiving.piece.actions.cancel');
+
+    user.click(cancelBtn);
+    expect(defaultProps.onCancel).toHaveBeenCalled();
+  });
+
+  it('should call onConfirm when delete btn was clicked', async () => {
+    renderDeletePieceModal();
+
+    const deleteBtn = await screen.findByText('ui-receiving.piece.actions.delete.deleteHoldingsAndItem');
+
+    user.click(deleteBtn);
+    expect(defaultProps.onConfirm).toHaveBeenCalled();
   });
 });
