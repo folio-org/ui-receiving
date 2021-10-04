@@ -24,38 +24,42 @@ export const DeletePieceModal = ({
       <FormattedMessage id="ui-receiving.piece.actions.cancel" />
     </Button>
   );
-  const end = isFetching
-    ? <Loading />
-    : (
-      <>
-        {isLastConnectedItem && (
-          <Button
-            buttonStyle="primary"
-            marginBottom0
-            onClick={() => onConfirm({ searchParams: { deleteHolding: true } })}
-          >
-            <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldingsAndItem" />
-          </Button>
-        )}
-        <Button
-          buttonStyle="primary"
-          marginBottom0
-          onClick={onConfirm}
-        >
-          {
-            isLastConnectedItem
-              ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteItem" />
-              : <FormattedMessage id="ui-receiving.piece.delete.confirm" />
-          }
-        </Button>
-      </>
-    );
+  const end = (
+    <>
+      {isLastConnectedItem && (
+      <Button
+        buttonStyle="primary"
+        marginBottom0
+        onClick={() => onConfirm({ searchParams: { deleteHolding: true } })}
+      >
+        <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldingsAndItem" />
+      </Button>
+      )}
+      <Button
+        buttonStyle="primary"
+        marginBottom0
+        onClick={onConfirm}
+      >
+        {
+          isLastConnectedItem
+            ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteItem" />
+            : <FormattedMessage id="ui-receiving.piece.delete.confirm" />
+        }
+      </Button>
+    </>
+  );
 
   const footer = (
     <ModalFooter
       renderStart={start}
-      renderEnd={end}
+      renderEnd={isFetching ? <Loading /> : end}
     />
+  );
+
+  const message = (
+    isLastConnectedItem
+      ? <FormattedMessage id="ui-receiving.piece.delete.deleteHoldingsAndItem.message" />
+      : <FormattedMessage id="ui-receiving.piece.delete.message" />
   );
 
   return (
@@ -66,13 +70,7 @@ export const DeletePieceModal = ({
       id="delete-piece-confirmation"
       label={<FormattedMessage id="ui-receiving.piece.delete.heading" />}
     >
-      {isFetching
-        ? <Loading />
-        : (
-          isLastConnectedItem
-            ? <FormattedMessage id="ui-receiving.piece.delete.deleteHoldingsAndItem.message" />
-            : <FormattedMessage id="ui-receiving.piece.delete.message" />
-        )}
+      {isFetching ? <Loading /> : message}
     </Modal>
   );
 };
