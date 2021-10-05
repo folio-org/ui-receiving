@@ -36,6 +36,19 @@ export const fetchTitleOrderLines = (mutator, titles, fetchedOrderLinesMap) => {
   return orderLinesPromise;
 };
 
+export const fetchOrderLineHoldings = (mutator, orderLines) => {
+  const holdingstoFetch = orderLines
+    .reduce((acc, orderLine) => {
+      return [...acc, ...(orderLine.locations || [])];
+    }, [])
+    .map(({ holdingId }) => holdingId)
+    .filter(Boolean);
+
+  return holdingstoFetch.length
+    ? batchFetch(mutator, uniq(holdingstoFetch))
+    : Promise.resolve([]);
+};
+
 export const fetchOrderLineLocations = (mutator, orderLines, fetchedLocationsMap) => {
   const unfetchedLocations = orderLines
     .reduce((acc, orderLine) => {

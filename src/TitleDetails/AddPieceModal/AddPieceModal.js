@@ -39,6 +39,7 @@ const AddPieceModal = ({
   close,
   createInventoryValues,
   deletePiece,
+  canDeletePiece,
   form: { mutators, change },
   handleSubmit,
   hasValidationErrors,
@@ -90,6 +91,7 @@ const AddPieceModal = ({
         <Button
           marginBottom0
           onClick={toggleDeleteConfirmation}
+          disabled={!canDeletePiece}
         >
           <FormattedMessage id="ui-receiving.piece.actions.delete" />
         </Button>
@@ -321,6 +323,7 @@ AddPieceModal.propTypes = {
   close: PropTypes.func.isRequired,
   createInventoryValues: PropTypes.object.isRequired,
   deletePiece: PropTypes.func.isRequired,
+  canDeletePiece: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   form: PropTypes.object,
   values: PropTypes.object.isRequired,

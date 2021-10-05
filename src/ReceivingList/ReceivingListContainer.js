@@ -5,24 +5,28 @@ import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
-import { usePagination } from '@folio/stripes-acq-components';
+import {
+  getHoldingLocationName,
+  RESULT_COUNT_INCREMENT,
+  usePagination,
+} from '@folio/stripes-acq-components';
 
 import {
   titlesResource,
   orderLinesResource,
   ordersResource,
   locationsResource,
+  holdingsResource,
 } from '../common/resources';
 import ReceivingList from './ReceivingList';
 
 import { useReceiving } from './hooks';
 import {
   fetchLinesOrders,
+  fetchOrderLineHoldings,
   fetchOrderLineLocations,
   fetchTitleOrderLines,
 } from './utils';
-
-const RESULT_COUNT_INCREMENT = 30;
 
 const resetData = () => {};
 
@@ -33,11 +37,28 @@ const ReceivingListContainer = ({ mutator }) => {
 
   const fetchReferences = useCallback(async titlesResponse => {
     const orderLinesResponse = await fetchTitleOrderLines(mutator.receivingListOrderLines, titlesResponse, {});
-    const locationsResponse = await fetchOrderLineLocations(mutator.receivingListLocations, orderLinesResponse, {});
+    const holdingsResponse = await fetchOrderLineHoldings(mutator.receivingListHoldings, orderLinesResponse);
+    const locationsResponse = await fetchOrderLineLocations(
+      mutator.receivingListLocations,
+      [
+        ...orderLinesResponse,
+        ...holdingsResponse
+          .map(({ permanentLocationId: locationId }) => ({
+            locations: [{ locationId }],
+          })),
+      ],
+      {},
+    );
     const linesOrdersResponse = await fetchLinesOrders(mutator.lineOrders, orderLinesResponse, {});
 
     const locationsMap = locationsResponse.reduce((acc, locationItem) => {
       acc[locationItem.id] = locationItem;
+
+      return acc;
+    }, {});
+
+    const holdingsMap = holdingsResponse.reduce((acc, holdingItem) => {
+      acc[holdingItem.id] = holdingItem;
 
       return acc;
     }, {});
@@ -51,9 +72,16 @@ const ReceivingListContainer = ({ mutator }) => {
     const orderLinesMap = orderLinesResponse.reduce((acc, orderLine) => {
       acc[orderLine.id] = {
         ...orderLine,
-        locations: orderLine.locations.map(
-          ({ locationId }) => locationsMap[locationId]?.name ?? invalidReferenceMessage,
-        ),
+        locations: orderLine.locations.map(({ locationId, holdingId }) => {
+          const origLocation = locationsMap[locationId];
+          const origHolding = holdingsMap[holdingId];
+
+          if (origHolding) {
+            return getHoldingLocationName(origHolding, locationsMap);
+          }
+
+          return origLocation?.name ?? invalidReferenceMessage;
+        }),
         orderWorkflow: ordersMap[orderLine.purchaseOrderId]?.workflowStatus,
       };
 
@@ -82,6 +110,7 @@ ReceivingListContainer.manifest = Object.freeze({
   receivingListTitles: titlesResource,
   receivingListOrderLines: orderLinesResource,
   receivingListLocations: locationsResource,
+  receivingListHoldings: holdingsResource,
   lineOrders: ordersResource,
 });
 
