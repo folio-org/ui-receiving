@@ -44,15 +44,17 @@ export const DeletePieceModal = ({
   );
   const end = (
     <>
-      {canDeleteHolding && (
-      <Button
-        buttonStyle="primary"
-        marginBottom0
-        onClick={() => onConfirm({ searchParams: { deleteHolding: true } })}
-      >
-        <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldingsAndItem" />
-      </Button>
-      )}
+      {
+        canDeleteHolding && (
+          <Button
+            buttonStyle="primary"
+            marginBottom0
+            onClick={() => onConfirm({ searchParams: { deleteHolding: true } })}
+          >
+            <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldingsAndItem" />
+          </Button>
+        )
+      }
       <Button
         buttonStyle="primary"
         marginBottom0
