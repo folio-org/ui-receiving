@@ -3,6 +3,10 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import user from '@testing-library/user-event';
 
+import {
+  INVENTORY_RECORDS_TYPE,
+} from '@folio/stripes-acq-components';
+
 import AddPieceModal from './AddPieceModal';
 
 jest.mock('@folio/stripes-acq-components', () => {
@@ -61,12 +65,31 @@ describe('AddPieceModal', () => {
   });
 
   describe('Check display on holding', () => {
-    it('should enable discovery suppress', () => {
-      renderAddPieceModal();
+    it('should enable discovery suppress when clicked', () => {
+      const format = 'Electronic';
+
+      renderAddPieceModal({
+        ...defaultProps,
+        createInventoryValues: { [format]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
+        initialValues: {
+          format,
+        },
+      });
 
       user.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
 
       expect(screen.getByLabelText('ui-receiving.piece.discoverySuppress')).not.toHaveAttribute('disabled');
+    });
+
+    it('should not be visible when create inventory does not include holding', () => {
+      renderAddPieceModal({
+        ...defaultProps,
+        initialValues: {
+          format: INVENTORY_RECORDS_TYPE.instance,
+        },
+      });
+
+      expect(screen.queryByText('ui-receiving.piece.displayOnHolding')).toBeNull();
     });
   });
 });
