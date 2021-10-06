@@ -4,8 +4,9 @@ import { render, screen } from '@testing-library/react';
 
 import { DeletePieceModal } from './DeletePieceModal';
 
-jest.mock('../hooks', () => ({
-  useHoldingItems: () => ({ itemsCount: 1, isFetching: false }),
+jest.mock('../../common/hooks', () => ({
+  useHoldingItems: () => ({ itemsCount: 0, isFetching: false }),
+  usePieces: () => ({ piecesCount: 1, isFetching: false }),
 }));
 
 const defaultProps = {
@@ -13,7 +14,7 @@ const defaultProps = {
   onConfirm: jest.fn(),
   piece: {
     itemId: 'itemId',
-    holdingsRecordId: 'holdingsRecordId',
+    holdingId: 'holdingsRecordId',
   },
   setIsLoading: jest.fn(),
 };
@@ -38,7 +39,7 @@ describe('DeletePieceModal', () => {
   it('should render delete piece (with holding) modal', () => {
     renderDeletePieceModal({
       piece: {
-        holdingsRecordId: null,
+        holdingId: null,
       },
     });
 

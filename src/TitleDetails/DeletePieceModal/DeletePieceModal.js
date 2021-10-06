@@ -4,16 +4,34 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Loading } from '@folio/stripes/components';
 import { ModalFooter } from '@folio/stripes-acq-components';
 
-import { useHoldingItems } from '../hooks';
+import {
+  usePieces,
+  useHoldingItems,
+} from '../../common/hooks';
 
 export const DeletePieceModal = ({
   onCancel,
   onConfirm,
   piece,
 }) => {
-  const { itemId, holdingsRecordId } = piece;
-  const { itemsCount, isFetching } = useHoldingItems(holdingsRecordId, { searchParams: { limit: 1 } });
-  const isLastConnectedItem = itemId && itemsCount === 1;
+  const { itemId, holdingId } = piece;
+  const { itemsCount, isFetching: isItemsFetching } = useHoldingItems(holdingId, { searchParams: { limit: 1 } });
+  const { piecesCount, isFetching: isPiecesFetching } = usePieces(
+    {
+      searchParams: {
+        limit: 1,
+        query: `holdingId==${holdingId}`,
+      },
+    },
+    { enabled: Boolean(holdingId) },
+  );
+
+  const isFetching = isItemsFetching || isPiecesFetching;
+  const canDeleteHolding = Boolean(
+    holdingId
+    && piecesCount === 1
+    && ((itemsCount === 1 && itemId) || itemsCount === 0),
+  );
 
   const start = (
     <Button
@@ -26,7 +44,7 @@ export const DeletePieceModal = ({
   );
   const end = (
     <>
-      {isLastConnectedItem && (
+      {canDeleteHolding && (
       <Button
         buttonStyle="primary"
         marginBottom0
@@ -41,7 +59,7 @@ export const DeletePieceModal = ({
         onClick={onConfirm}
       >
         {
-          isLastConnectedItem
+          canDeleteHolding
             ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteItem" />
             : <FormattedMessage id="ui-receiving.piece.delete.confirm" />
         }
@@ -57,7 +75,7 @@ export const DeletePieceModal = ({
   );
 
   const message = (
-    isLastConnectedItem
+    canDeleteHolding
       ? <FormattedMessage id="ui-receiving.piece.delete.deleteHoldingsAndItem.message" />
       : <FormattedMessage id="ui-receiving.piece.delete.message" />
   );

@@ -19,12 +19,17 @@ const wrapper = ({ children }) => (
 );
 
 describe('usePieceMutator', () => {
-  it('should make post request when id is not provided', async () => {
-    const postMock = jest.fn().mockReturnValue(Promise.resolve({ json: () => ({ id: 'pieceId' }) }));
+  const kyMock = jest.fn();
+  const KY_PATH = 'orders/pieces/pieceId';
 
-    useOkapiKy.mockClear().mockReturnValue({
-      post: postMock,
-    });
+  beforeEach(() => {
+    kyMock.mockClear().mockReturnValue(Promise.resolve());
+  });
+
+  it('should make post request when id is not provided', async () => {
+    kyMock.mockClear().mockReturnValue(Promise.resolve({ json: () => ({ id: 'pieceId' }) }));
+
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
 
     const { result } = renderHook(
       () => usePieceMutator(),
@@ -32,19 +37,17 @@ describe('usePieceMutator', () => {
     );
 
     await result.current.mutatePiece({
-      holdingId: 'holdingId',
-      caption: 'v1',
+      piece: {
+        holdingId: 'holdingId',
+        caption: 'v1',
+      },
     });
 
-    expect(postMock).toHaveBeenCalled();
+    expect(kyMock).toHaveBeenCalled();
   });
 
   it('should make put request when id is provided', async () => {
-    const putMock = jest.fn().mockReturnValue(Promise.resolve());
-
-    useOkapiKy.mockClear().mockReturnValue({
-      put: putMock,
-    });
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
 
     const { result } = renderHook(
       () => usePieceMutator(),
@@ -52,16 +55,17 @@ describe('usePieceMutator', () => {
     );
 
     await result.current.mutatePiece({
-      id: 'pieceId',
-      holdingId: 'holdingId',
-      caption: 'v1',
+      piece: {
+        id: 'pieceId',
+        holdingId: 'holdingId',
+        caption: 'v1',
+      },
     });
 
-    expect(putMock).toHaveBeenCalled();
+    expect(kyMock).toHaveBeenCalled();
   });
 
   it('should add createItem query param when piece isCreateItem is true', async () => {
-    const putMock = jest.fn().mockReturnValue(Promise.resolve());
     const pieceValues = {
       id: 'pieceId',
       holdingId: 'holdingId',
@@ -69,44 +73,70 @@ describe('usePieceMutator', () => {
       isCreateItem: true,
     };
 
-    useOkapiKy.mockClear().mockReturnValue({
-      put: putMock,
-    });
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
 
     const { result } = renderHook(
       () => usePieceMutator(),
       { wrapper },
     );
 
-    await result.current.mutatePiece(pieceValues);
+    await result.current.mutatePiece({ piece: pieceValues });
 
-    expect(putMock.mock.calls[0][1]).toEqual({
+    expect(kyMock).toHaveBeenCalledWith(KY_PATH, {
+      method: 'put',
       json: getDehydratedPiece(pieceValues),
       searchParams: { createItem: true },
     });
   });
 
   it('should not add createItem query param when piece isCreateItem is false', async () => {
-    const putMock = jest.fn().mockReturnValue(Promise.resolve());
     const pieceValues = {
       id: 'pieceId',
       holdingId: 'holdingId',
       caption: 'v1',
     };
 
-    useOkapiKy.mockClear().mockReturnValue({
-      put: putMock,
-    });
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
 
     const { result } = renderHook(
       () => usePieceMutator(),
       { wrapper },
     );
 
-    await result.current.mutatePiece(pieceValues);
+    await result.current.mutatePiece({ piece: pieceValues });
 
-    expect(putMock.mock.calls[0][1]).toEqual({
+    expect(kyMock).toHaveBeenCalledWith(KY_PATH, {
       json: getDehydratedPiece(pieceValues),
+      method: 'put',
+      searchParams: undefined,
+    });
+  });
+
+  it('should make delete request when \'delete\' method is specified in options', async () => {
+    const pieceValues = {
+      id: 'pieceId',
+      holdingId: 'holdingId',
+    };
+
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
+
+    const { result } = renderHook(
+      () => usePieceMutator(),
+      { wrapper },
+    );
+
+    await result.current.mutatePiece({
+      piece: pieceValues,
+      options: {
+        method: 'delete',
+        searchParams: { deleteHolding: true },
+      },
+    });
+
+    expect(kyMock).toHaveBeenCalledWith(KY_PATH, {
+      json: getDehydratedPiece(pieceValues),
+      method: 'delete',
+      searchParams: { deleteHolding: true },
     });
   });
 });

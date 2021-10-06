@@ -8,7 +8,7 @@ export const useQuickReceive = () => {
   const { receive } = useReceive();
 
   const quickReceive = (pieceValues) => {
-    return mutatePiece(pieceValues)
+    return mutatePiece({ piece: pieceValues })
       .then(piece => receive([{ ...piece, itemStatus: ITEM_STATUS.inProcess }]));
   };
 

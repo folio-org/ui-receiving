@@ -34,7 +34,6 @@ import {
   handleCommonErrors,
   handleReceiveErrorResponse,
 } from '../common/utils';
-import { usePieceMutation } from './hooks';
 import TitleDetails from './TitleDetails';
 
 const TitleDetailsContainer = ({ location, history, mutator, match }) => {
@@ -146,8 +145,8 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   );
 
   const onAddPiece = useCallback(
-    (values) => {
-      return mutatePiece(values)
+    (piece) => {
+      return mutatePiece({ piece })
         .then(() => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.savePiece.success',
