@@ -278,17 +278,22 @@ const AddPieceModal = ({
               />
             </Col>
 
-            <Col xs={3}>
-              <Field
-                component={Checkbox}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
-                name="displayOnHolding"
-                type="checkbox"
-                vertical
-                onChange={onChangeDisplayOnHolding}
-              />
-            </Col>
+            {
+              isLocationRequired && (
+                <Col xs={3}>
+                  <Field
+                    component={Checkbox}
+                    fullWidth
+                    label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
+                    name="displayOnHolding"
+                    type="checkbox"
+                    vertical
+                    onChange={onChangeDisplayOnHolding}
+                  />
+                </Col>
+              )
+            }
+
             <Col xs={3}>
               <Field
                 component={Checkbox}
