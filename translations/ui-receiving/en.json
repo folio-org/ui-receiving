@@ -152,7 +152,7 @@
   "piece.delete.confirm": "Confirm",
   "piece.delete.heading": "Delete piece",
   "piece.delete.message": "Are you sure you want to delete piece?",
-  "piece.delete.deleteHoldingsAndItem.message": "This item is connected to records in inventory. The related item is the only item connected to the related Holdings record. After deleting this piece would you like FOLIO to delete both the item and the Holdings, or only the item?",
+  "piece.delete.deleteHoldingsAndItem.message": "This piece is connected to records in inventory. There are no other items connected to the related Holdings record. After deleting this piece would you like FOLIO to delete the Holdings?",
 
   "find-po-line-plugin-unavailable": "Find PO line plugin is not available",
 
