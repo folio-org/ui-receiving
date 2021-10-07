@@ -280,31 +280,33 @@ const AddPieceModal = ({
 
             {
               isLocationRequired && (
-                <Col xs={3}>
-                  <Field
-                    component={Checkbox}
-                    fullWidth
-                    label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
-                    name="displayOnHolding"
-                    type="checkbox"
-                    vertical
-                    onChange={onChangeDisplayOnHolding}
-                  />
-                </Col>
+                <>
+                  <Col xs={3}>
+                    <Field
+                      component={Checkbox}
+                      fullWidth
+                      label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
+                      name="displayOnHolding"
+                      type="checkbox"
+                      vertical
+                      onChange={onChangeDisplayOnHolding}
+                    />
+                  </Col>
+
+                  <Col xs={3}>
+                    <Field
+                      component={Checkbox}
+                      disabled={!formValues.displayOnHolding}
+                      fullWidth
+                      label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
+                      name="discoverySuppress"
+                      type="checkbox"
+                      vertical
+                    />
+                  </Col>
+                </>
               )
             }
-
-            <Col xs={3}>
-              <Field
-                component={Checkbox}
-                disabled={!formValues.displayOnHolding}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
-                name="discoverySuppress"
-                type="checkbox"
-                vertical
-              />
-            </Col>
           </Row>
         </form>
       </HasCommand>
