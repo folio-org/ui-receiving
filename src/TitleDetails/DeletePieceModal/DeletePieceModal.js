@@ -42,6 +42,11 @@ export const DeletePieceModal = ({
       <FormattedMessage id="ui-receiving.piece.actions.cancel" />
     </Button>
   );
+  const lastPieceDeleteBtn = (
+    itemId
+      ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteItem" />
+      : <FormattedMessage id="ui-receiving.piece.actions.delete" />
+  );
   const end = (
     <>
       {
@@ -51,7 +56,11 @@ export const DeletePieceModal = ({
             marginBottom0
             onClick={() => onConfirm({ searchParams: { deleteHolding: true } })}
           >
-            <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldingsAndItem" />
+            {
+              itemId
+                ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldingsAndItem" />
+                : <FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldings" />
+            }
           </Button>
         )
       }
@@ -62,7 +71,7 @@ export const DeletePieceModal = ({
       >
         {
           canDeleteHolding
-            ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteItem" />
+            ? lastPieceDeleteBtn
             : <FormattedMessage id="ui-receiving.piece.delete.confirm" />
         }
       </Button>

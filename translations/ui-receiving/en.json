@@ -102,6 +102,7 @@
   "piece.actions.delete.success": "The piece <b>{enumeration}</b> was successfully <b>deleted</b>",
   "piece.actions.delete.error": "The piece <b>{enumeration}</b> was not deleted",
   "piece.actions.delete.deleteItem": "Delete item",
+  "piece.actions.delete.deleteHoldings": "Delete Holdings",
   "piece.actions.delete.deleteHoldingsAndItem": "Delete Holdings and Item",
   "piece.actions.edit":"Edit",
   "piece.actions.load.error": "Failed to load pieces",
