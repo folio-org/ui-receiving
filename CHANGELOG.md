@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [2.0.0](https://github.com/folio-org/ui-receiving/tree/v2.0.0) (2021-10-08)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.2...v2.0.0)
+
 * Also support `holdings-storage` `5.0` and `inventory` `11.0`. Refs UIREC-139.
 * The Delete button is displayed in the Add piece pop up (new pice). Refs UIREC-146.
 * Ability to sort expected pieces by other table headers. Refs UIREC-147.
