@@ -42,7 +42,7 @@ export const DeletePieceModal = ({
       <FormattedMessage id="ui-receiving.piece.actions.cancel" />
     </Button>
   );
-  const lastPieceDeleteBtn = (
+  const lastPieceDeleteBtnLabel = (
     itemId
       ? <FormattedMessage id="ui-receiving.piece.actions.delete.deleteItem" />
       : <FormattedMessage id="ui-receiving.piece.actions.delete" />
@@ -71,7 +71,7 @@ export const DeletePieceModal = ({
       >
         {
           canDeleteHolding
-            ? lastPieceDeleteBtn
+            ? lastPieceDeleteBtnLabel
             : <FormattedMessage id="ui-receiving.piece.delete.confirm" />
         }
       </Button>
