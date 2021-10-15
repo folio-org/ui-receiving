@@ -12,8 +12,10 @@ import {
   NoValue,
   TextArea,
 } from '@folio/stripes/components';
-
-import { PIECE_FORMAT_LABELS } from '@folio/stripes-acq-components';
+import {
+  getHoldingLocationName,
+  PIECE_FORMAT_LABELS,
+} from '@folio/stripes-acq-components';
 
 const visibleColumns = [
   'checked',
@@ -26,7 +28,7 @@ const visibleColumns = [
   'callNumber',
 ];
 
-export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCheckedAll } }) => {
+export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, pieceHoldingMap, toggleCheckedAll } }) => {
   const intl = useIntl();
 
   const field = fields.name;
@@ -50,7 +52,11 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
             aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
           />
         ),
-        location: ({ locationId }) => pieceLocationMap[locationId],
+        location: ({ locationId, holdingId }) => (
+          holdingId
+            ? getHoldingLocationName(pieceHoldingMap[holdingId], pieceLocationMap)
+            : (pieceLocationMap[locationId]?.name && `${pieceLocationMap[locationId].name} (${pieceLocationMap[locationId].code})`) || ''
+        ),
         hasRequest: record => (
           record.request
             ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
@@ -62,7 +68,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, toggleCh
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pieceLocationMap],
+    [pieceLocationMap, pieceHoldingMap],
   );
 
   const isAllChecked = fields.value.every(({ checked }) => !!checked);
@@ -113,6 +119,7 @@ TitleUnreceiveList.propTypes = {
   fields: PropTypes.object.isRequired,
   props: PropTypes.shape({
     pieceLocationMap: PropTypes.object,
+    pieceHoldingMap: PropTypes.object,
     toggleCheckedAll: PropTypes.func.isRequired,
   }).isRequired,
 };

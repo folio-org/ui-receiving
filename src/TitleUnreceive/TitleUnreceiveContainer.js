@@ -25,6 +25,7 @@ import {
   receivingResource,
   locationsResource,
   titleResource,
+  holdingsResource,
 } from '../common/resources';
 import {
   getHydratedPieces,
@@ -39,6 +40,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
   const [pieceLocationMap, setPieceLocationMap] = useState();
+  const [pieceHoldingMap, setPieceHoldingMap] = useState();
   const poLineId = title?.poLineId;
 
   useEffect(
@@ -76,21 +78,26 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
           .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
           .then(hydratedPieces => {
             setPieces(hydratedPieces);
-            const locationIds = hydratedPieces.map(({ locationId }) => locationId);
+            const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
+            const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);
+            const holdingsPromise = holdingIds.length ? batchFetch(mutator.holdings, holdingIds) : Promise.resolve([]);
 
-            return batchFetch(mutator.locations, locationIds);
+            return Promise.all([holdingsPromise, locationIds]);
           })
-          .then((locationsResponse) => {
-            setPieceLocationMap(locationsResponse.reduce(
-              (acc, { code, id, name }) => {
-                acc[id] = `${name} (${code})`;
+          .then(([holdingsResponse, locationIds]) => {
+            setPieceHoldingMap(holdingsResponse.reduce((acc, h) => ({ ...acc, [h.id]: h }), {}));
 
-                return acc;
-              },
-              {},
-            ));
+            const holdingLocations = holdingsResponse.map(({ permanentLocationId }) => permanentLocationId);
+
+            return batchFetch(mutator.locations, [...new Set([...holdingLocations, ...locationIds])]);
           })
-          .catch(() => setPieceLocationMap({}));
+          .then(locationsResponse => {
+            setPieceLocationMap(locationsResponse.reduce((acc, l) => ({ ...acc, [l.id]: l }), {}));
+          })
+          .catch(() => {
+            setPieceHoldingMap({});
+            setPieceLocationMap({});
+          });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +132,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
     [onCancel, showCallout],
   );
 
-  if (!(pieces && poLine && title && pieceLocationMap)) {
+  if (!(pieces && poLine && title && pieceLocationMap && pieceHoldingMap)) {
     return (
       <Paneset>
         <LoadingPane />
@@ -143,6 +150,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
       onSubmit={onSubmit}
       paneTitle={paneTitle}
       pieceLocationMap={pieceLocationMap}
+      pieceHoldingMap={pieceHoldingMap}
     />
   );
 }
@@ -163,6 +171,10 @@ TitleUnreceiveContainer.manifest = Object.freeze({
   requests: requestsResource,
   locations: {
     ...locationsResource,
+    fetch: false,
+  },
+  holdings: {
+    ...holdingsResource,
     fetch: false,
   },
   unreceive: receivingResource,

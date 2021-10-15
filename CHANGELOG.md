@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Display "Invalid reference" when Holdings ID is not valid. Refs UIREC-182.
+
 ## [2.0.0](https://github.com/folio-org/ui-receiving/tree/v2.0.0) (2021-10-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.2...v2.0.0)
 

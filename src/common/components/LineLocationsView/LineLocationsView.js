@@ -20,7 +20,7 @@ const LineLocationsView = ({ poLine, locations }) => {
     const holdingsMap = holdings.reduce((acc, h) => ({ ...acc, [h.id]: h }), {});
     const lineLocations = poLine.locations.map(({ holdingId, locationId }) => (
       holdingId
-        ? holdings.length && getHoldingLocationName(holdingsMap[holdingId], locationsMap)
+        ? holdings.length && holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap)
         : (locationsMap[locationId].name && `${locationsMap[locationId].name} (${locationsMap[locationId].code})`) || ''
     ));
 

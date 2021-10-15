@@ -5,6 +5,7 @@ import {
   useIntl,
 } from 'react-intl';
 import { Field } from 'react-final-form';
+import { includes } from 'lodash';
 
 import {
   Checkbox,
@@ -16,6 +17,7 @@ import {
 import {
   FieldInventory,
   getItemStatusLabel,
+  INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
 
@@ -122,10 +124,11 @@ export const TitleReceiveList = ({
         location: record => {
           const locationId = fields.value[record.rowIndex]?.locationId;
           const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
+          const isHolding = includes(createInventoryValues[record.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
 
           return (
             <FieldInventory
-              instanceId={instanceId}
+              instanceId={isHolding ? instanceId : undefined}
               locationIds={locationIds}
               locations={locations}
 

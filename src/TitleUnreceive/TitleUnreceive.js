@@ -25,6 +25,7 @@ const TitleUnreceive = ({
   onCancel,
   paneTitle,
   pieceLocationMap,
+  pieceHoldingMap,
   pristine,
   submitting,
   values,
@@ -72,6 +73,7 @@ const TitleUnreceive = ({
               name={FIELD_NAME}
               props={{
                 pieceLocationMap,
+                pieceHoldingMap,
                 toggleCheckedAll: form.mutators.toggleCheckedAll,
               }}
             />
@@ -86,6 +88,7 @@ TitleUnreceive.propTypes = {
   form: PropTypes.object,  // form object to get initialValues
   handleSubmit: PropTypes.func.isRequired,
   pieceLocationMap: PropTypes.object.isRequired,
+  pieceHoldingMap: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,
