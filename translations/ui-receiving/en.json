@@ -105,6 +105,8 @@
   "piece.actions.delete.deleteHoldings": "Delete Holdings",
   "piece.actions.delete.deleteHoldingsAndItem": "Delete Holdings and Item",
   "piece.actions.edit":"Edit",
+  "piece.actions.edit.keepHoldings":"Keep Holdings",
+  "piece.actions.edit.deleteHoldings.message":"This piece is connected to records in inventory. After this edit there will be no other pieces OR items connected to the related Holdings record. After making this change would you like FOLIO to delete the Holdings?",
   "piece.actions.load.error": "Failed to load pieces",
   "piece.actions.quickReceive":"Quick receive",
   "piece.actions.save":"Save & close",

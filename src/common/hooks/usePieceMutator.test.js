@@ -108,7 +108,7 @@ describe('usePieceMutator', () => {
     expect(kyMock).toHaveBeenCalledWith(KY_PATH, {
       json: getDehydratedPiece(pieceValues),
       method: 'put',
-      searchParams: undefined,
+      searchParams: {},
     });
   });
 

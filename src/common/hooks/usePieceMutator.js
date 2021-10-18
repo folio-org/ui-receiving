@@ -21,8 +21,11 @@ export const usePieceMutator = (mutatorOptions = {}) => {
       const kyOptions = {
         method: options?.method ?? kyMethod,
         json: piece,
-        searchParams: pieceValues.isCreateItem ? { createItem: true } : undefined,
         ...options,
+        searchParams: {
+          ...(pieceValues.isCreateItem ? { createItem: true } : {}),
+          ...options?.searchParams,
+        },
       };
 
       return ky(kyPath, kyOptions).then(response => (piece.id ? piece : response.json()));

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -20,6 +20,7 @@ const AddPieceModalContainer = ({
   onCheckIn,
   onSubmit,
   poLine,
+  getHoldingsItemsAndPieces,
 }) => {
   const createInventoryValues = useMemo(
     () => ({
@@ -29,6 +30,7 @@ const AddPieceModalContainer = ({
     }),
     [poLine],
   );
+  const [searchParams, setSearchParams] = useState({});
 
   const orderFormat = poLine?.orderFormat;
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
@@ -46,9 +48,11 @@ const AddPieceModalContainer = ({
       locationIds={locationIds}
       locations={locations}
       onCheckIn={onCheckIn}
-      onSubmit={onSubmit}
+      onSubmit={(values) => onSubmit(values, { searchParams })}
       pieceFormatOptions={pieceFormatOptions}
       poLine={poLine}
+      setSearchParams={setSearchParams}
+      getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
     />
   );
 };
@@ -64,6 +68,7 @@ AddPieceModalContainer.propTypes = {
   onCheckIn: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
+  getHoldingsItemsAndPieces: PropTypes.func.isRequired,
 };
 
 export default AddPieceModalContainer;

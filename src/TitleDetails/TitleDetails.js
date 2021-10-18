@@ -88,6 +88,7 @@ const TitleDetails = ({
   poLine,
   title,
   vendorsMap,
+  getHoldingsItemsAndPieces,
 }) => {
   const stripes = useStripes();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
@@ -201,8 +202,8 @@ const TitleDetails = ({
   }, [toggleConfirmReceiving, confirmReceiving, checkInPieceValues]);
 
   const onSave = useCallback(
-    (values) => {
-      onAddPiece(values);
+    (values, options) => {
+      onAddPiece(values, options);
       toggleAddPieceModal();
     },
     [onAddPiece, toggleAddPieceModal],
@@ -391,6 +392,7 @@ const TitleDetails = ({
             onCheckIn={onQuickReceive}
             onSubmit={onSave}
             poLine={poLine}
+            getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
         )}
 
@@ -424,6 +426,7 @@ TitleDetails.propTypes = {
   poLine: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,
   vendorsMap: PropTypes.object.isRequired,
+  getHoldingsItemsAndPieces: PropTypes.func.isRequired,
 };
 
 TitleDetails.defaultProps = {

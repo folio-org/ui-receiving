@@ -3,6 +3,7 @@
 ## (IN PROGRESS)
 
 * Display "Invalid reference" when Holdings ID is not valid. Refs UIREC-182.
+* Confirm user would like to delete holdings record when changing Holdings link of Piece. Refs UIREC-181.
 
 ## [2.0.0](https://github.com/folio-org/ui-receiving/tree/v2.0.0) (2021-10-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.2...v2.0.0)

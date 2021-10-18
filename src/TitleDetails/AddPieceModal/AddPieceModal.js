@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
@@ -11,6 +11,7 @@ import {
   Checkbox,
   Col,
   HasCommand,
+  Loading,
   Modal,
   Row,
   TextArea,
@@ -34,13 +35,14 @@ import {
   LineLocationsView,
 } from '../../common/components';
 import { DeletePieceModal } from '../DeletePieceModal';
+import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
 
 const AddPieceModal = ({
   close,
   createInventoryValues,
   deletePiece,
   canDeletePiece,
-  form: { mutators, change },
+  form: { mutators, change, getState },
   handleSubmit,
   hasValidationErrors,
   instanceId,
@@ -50,12 +52,19 @@ const AddPieceModal = ({
   pieceFormatOptions,
   values: formValues,
   poLine,
+  setSearchParams,
+  getHoldingsItemsAndPieces,
 }) => {
-  const { enumeration, format, id, receivingStatus } = formValues;
+  const { enumeration, format, id, receivingStatus, itemId } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
+  const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
+  const [isHoldingsLoading, setIsHoldingsLoading] = useState(false);
+
+  const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, []);
+  const initialLocationId = useMemo(() => getState().initialValues?.locationId, []);
 
   const receive = useCallback(
     () => {
@@ -74,6 +83,46 @@ const AddPieceModal = ({
     change('displayOnHolding', checked);
 
     if (!checked) change('discoverySuppress', checked);
+  };
+
+  const onChangeHoldings = useCallback((...args) => {
+    const [,, holdingIdName, holdingIdValue] = args;
+
+    if (holdingIdValue !== initialHoldingId) {
+      mutators.setLocationValue(...args);
+
+      if (holdingIdName) {
+        setIsHoldingsLoading(true);
+
+        getHoldingsItemsAndPieces(initialHoldingId, { limit: 1 })
+          .then(({ pieces, items }) => {
+            const canDeleteHolding = Boolean(
+              pieces && items
+              && (pieces.totalRecords === 1)
+              && ((items.totalRecords === 1 && itemId) || items.totalRecords === 0),
+            );
+
+            if (canDeleteHolding) toggleDeleteHoldingsConfirmation();
+            setIsHoldingsLoading(false);
+          });
+      }
+    }
+  }, []);
+
+  const setDeleteHoldingsParam = (param) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      deleteHolding: param,
+    }));
+
+    toggleDeleteHoldingsConfirmation();
+  };
+
+  const onDeleteHoldingsCancel = () => {
+    change('holdingId', initialHoldingId);
+    change('locationId', initialLocationId);
+
+    toggleDeleteHoldingsConfirmation();
   };
 
   const start = (
@@ -99,7 +148,7 @@ const AddPieceModal = ({
       {isNotReceived && (
         <Button
           data-test-add-piece-check-in
-          disabled={hasValidationErrors}
+          disabled={hasValidationErrors || isHoldingsLoading}
           marginBottom0
           onClick={receive}
         >
@@ -109,7 +158,7 @@ const AddPieceModal = ({
       <Button
         buttonStyle="primary"
         data-test-add-piece-save
-        disabled={hasValidationErrors}
+        disabled={hasValidationErrors || isHoldingsLoading}
         marginBottom0
         onClick={handleSubmit}
       >
@@ -272,10 +321,11 @@ const AddPieceModal = ({
                 holdingName="holdingId"
                 locationName="locationId"
 
-                onChange={mutators.setLocationValue}
+                onChange={(id && initialHoldingId) ? onChangeHoldings : mutators.setLocationValue}
                 disabled={!isNotReceived}
                 required={isLocationRequired}
               />
+              {isHoldingsLoading && <Loading />}
             </Col>
 
             {
@@ -311,13 +361,25 @@ const AddPieceModal = ({
         </form>
       </HasCommand>
 
-      {isDeleteConfirmation && (
-        <DeletePieceModal
-          onCancel={toggleDeleteConfirmation}
-          onConfirm={onDelete}
-          piece={formValues}
-        />
-      )}
+      {
+        isDeleteConfirmation && (
+          <DeletePieceModal
+            onCancel={toggleDeleteConfirmation}
+            onConfirm={onDelete}
+            piece={formValues}
+          />
+        )
+      }
+
+      {
+        isDeleteHoldingsConfirmation && (
+          <DeleteHoldingsModal
+            onCancel={onDeleteHoldingsCancel}
+            onKeepHoldings={() => setDeleteHoldingsParam(false)}
+            onConfirm={() => setDeleteHoldingsParam(true)}
+          />
+        )
+      }
     </Modal>
   );
 };
@@ -340,6 +402,8 @@ AddPieceModal.propTypes = {
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
+  setSearchParams: PropTypes.func.isRequired,
+  getHoldingsItemsAndPieces: PropTypes.func.isRequired,
 };
 
 AddPieceModal.defaultProps = {

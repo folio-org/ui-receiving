@@ -70,6 +70,34 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     [titleId],
   );
 
+  const getHoldingsItemsAndPieces = useCallback((holdingId, params = {}) => {
+    const holdingsPieces = mutator.pieces.GET({
+      params: {
+        limit: `${LIMIT_MAX}`,
+        query: `holdingId==${holdingId}`,
+        ...params,
+      },
+      records: undefined,
+    });
+
+    const holdingsItems = mutator.items.GET({
+      params: {
+        limit: `${LIMIT_MAX}`,
+        query: `holdingsRecordId==${holdingId}`,
+        ...params,
+      },
+      records: undefined,
+    });
+
+    return Promise
+      .all([holdingsPieces, holdingsItems])
+      .then(([piecesInHolding, itemsInHolding]) => ({
+        pieces: piecesInHolding,
+        items: itemsInHolding,
+      }))
+      .catch(() => ({}));
+  }, []);
+
   useEffect(
     () => {
       setIsLoading(true);
@@ -145,8 +173,8 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   );
 
   const onAddPiece = useCallback(
-    (piece) => {
-      return mutatePiece({ piece })
+    (piece, options) => {
+      return mutatePiece({ piece, options })
         .then(() => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.savePiece.success',
@@ -249,6 +277,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       poLine={poLine}
       title={title}
       vendorsMap={vendorsMap}
+      getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
     />
   );
 };

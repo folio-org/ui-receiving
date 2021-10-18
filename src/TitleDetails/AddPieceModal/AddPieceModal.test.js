@@ -22,7 +22,13 @@ const defaultProps = {
   close: jest.fn(),
   createInventoryValues: {},
   deletePiece: jest.fn(),
-  form: {},
+  form: {
+    getState: jest.fn().mockReturnValue({
+      initialValues: {
+        holdingId: '',
+      },
+    }),
+  },
   onSubmit: jest.fn(),
   hasValidationErrors: false,
   instanceId: 'instanceId',
