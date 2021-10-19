@@ -114,9 +114,10 @@ const AddPieceModal = ({
     toggleDeleteHoldingsConfirmation();
   };
 
-  const onDeleteHoldings = useCallback(async () => {
-    await Promise.resolve(setDeleteHoldingsParam(true));
-    handleSubmit();
+  const onDeleteHoldings = useCallback(() => {
+    Promise.resolve()
+      .then(() => setDeleteHoldingsParam(true))
+      .then(() => handleSubmit());
   }, []);
 
   const start = (
