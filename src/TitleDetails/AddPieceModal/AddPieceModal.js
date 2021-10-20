@@ -85,7 +85,7 @@ const AddPieceModal = ({
   const onSave = useCallback((e) => {
     const holdingId = getState().values?.holdingId;
 
-    if (holdingId !== initialHoldingId) {
+    if ((id && initialHoldingId) && (holdingId !== initialHoldingId)) {
       return getHoldingsItemsAndPieces(initialHoldingId, { limit: 1 })
         .then(({ pieces, items }) => {
           const canDeleteHolding = Boolean(
@@ -155,7 +155,7 @@ const AddPieceModal = ({
         data-test-add-piece-save
         disabled={hasValidationErrors}
         marginBottom0
-        onClick={(id && initialHoldingId) ? onSave : handleSubmit}
+        onClick={onSave}
       >
         <FormattedMessage id="ui-receiving.piece.actions.save" />
       </Button>
