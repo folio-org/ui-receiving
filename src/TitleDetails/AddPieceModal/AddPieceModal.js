@@ -51,7 +51,6 @@ const AddPieceModal = ({
   pieceFormatOptions,
   values: formValues,
   poLine,
-  setSearchParams,
   getHoldingsItemsAndPieces,
 }) => {
   const { enumeration, format, id, receivingStatus, itemId } = formValues;
@@ -105,19 +104,9 @@ const AddPieceModal = ({
     return handleSubmit(e);
   }, []);
 
-  const setDeleteHoldingsParam = (param) => {
-    setSearchParams((prev) => ({
-      ...prev,
-      deleteHolding: param,
-    }));
-
-    toggleDeleteHoldingsConfirmation();
-  };
-
   const onDeleteHoldings = useCallback(() => {
-    Promise.resolve()
-      .then(() => setDeleteHoldingsParam(true))
-      .then(() => handleSubmit());
+    change('deleteHolding', true);
+    handleSubmit();
   }, []);
 
   const start = (
@@ -396,7 +385,6 @@ AddPieceModal.propTypes = {
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
-  setSearchParams: PropTypes.func.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
 };
 
