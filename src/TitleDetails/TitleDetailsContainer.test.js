@@ -126,4 +126,15 @@ describe('TitleDetailsContainer', () => {
 
     expect(quickReceiveMock).toHaveBeenCalled();
   });
+
+  it('should fetch items and pieces in holding', async () => {
+    await act(async () => {
+      renderTitleDetailsContainer();
+    });
+
+    TitleDetails.mock.calls[0][0].getHoldingsItemsAndPieces('holdingId');
+
+    expect(mutator.pieces.GET).toHaveBeenCalled();
+    expect(mutator.items.GET).toHaveBeenCalled();
+  });
 });
