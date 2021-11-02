@@ -141,12 +141,9 @@ const POLDetails = ({
           xs={6}
           md={3}
         >
-          <Checkbox
-            checked={checkinItems}
-            disabled
-            label={<FormattedMessage id="ui-receiving.title.checkinItems" />}
-            type="checkbox"
-            vertical
+          <KeyValue
+            label={<FormattedMessage id="ui-receiving.title.receivingWorkflow" />}
+            value={<FormattedMessage id={`ui-receiving.title.receivingWorkflow.${checkinItems ? 'independent' : 'synchronized'}`} />}
           />
         </Col>
         <Col

@@ -5,6 +5,7 @@
 * Display "Invalid reference" when Holdings ID is not valid. Refs UIREC-182.
 * Confirm user would like to delete holdings record when changing Holdings link of Piece. Refs UIREC-181.
 * Permission- "Receiving: view and edit" missing instance plugin perms. Refs UIREC-184.
+* Receiving: Update manually add pieces for receiving field. Refs UIREC-186.
 
 ## [2.0.0](https://github.com/folio-org/ui-receiving/tree/v2.0.0) (2021-10-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v1.4.2...v2.0.0)
