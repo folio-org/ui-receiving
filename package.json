@@ -35,7 +35,7 @@
       "organizations.organizations": "1.0",
       "pieces": "2.0",
       "receiving": "1.0",
-      "search": "0.6",
+      "search": "0.5 0.6",
       "tags": "1.0",
       "titles": "1.2"
     },
