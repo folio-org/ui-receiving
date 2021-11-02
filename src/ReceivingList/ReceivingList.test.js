@@ -38,12 +38,12 @@ jest.mock('./ReceivingListFilter', () => {
   return () => <span>ReceivingListFilter</span>;
 });
 
-const generateTitle = () => ({
-  title: `${faker.name.title()}_${(new Date()).valueOf()}`,
+const generateTitle = (idx) => ({
+  title: `${faker.name.title()}_${(new Date()).valueOf()}_${idx}`,
 });
 
 const titlesCount = 24;
-const titles = [...Array(titlesCount)].map(() => generateTitle());
+const titles = [...Array(titlesCount)].map((_, idx) => generateTitle(idx));
 
 const renderReceivingList = () => (render(
   <IntlProvider locale="en">

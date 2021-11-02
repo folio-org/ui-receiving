@@ -1,6 +1,6 @@
 {
   "name": "@folio/receiving",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Description for receiving",
   "main": "index.js",
   "repository": "",
@@ -35,7 +35,7 @@
       "organizations.organizations": "1.0",
       "pieces": "2.0",
       "receiving": "1.0",
-      "search": "0.6",
+      "search": "0.5 0.6",
       "tags": "1.0",
       "titles": "1.2"
     },
