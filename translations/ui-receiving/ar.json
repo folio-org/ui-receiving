@@ -155,6 +155,6 @@
     "piece.lineLocations": "مواقع سطر الطلببية",
     "piece.delete.deleteHoldingsAndItem.message": "هذه القطعة مرتبطة بتسجيلات في المخزون. لا توجد مواد أخرى مرتبطة بتسجيلة المقتنيات ذات الصلة. بعد حذف هذه القطعة، هل ترغب في أن يقوم فوليو بحذف المقتنيات؟",
     "shortcut.receive": "استلام القطع / الاستلام السريع",
-    "piece.actions.edit.keepHoldings": "Keep Holdings",
-    "piece.actions.edit.deleteHoldings.message": "This piece is connected to records in inventory. After this edit there will be no other pieces OR items connected to the related Holdings record. After making this change would you like FOLIO to delete the Holdings?"
+    "piece.actions.edit.keepHoldings": "احتفظ بالمقتنيات",
+    "piece.actions.edit.deleteHoldings.message": "هذه القطعة متصلة بتسجيلات في المخزون. بعد إجراء هذا التحرير لن تكون هناك أي قطع أو مواد متصلة بتسجيلة المقتنيات ذات الصلة. بعد القيام بهذا التغيير، هل ترغب في أن يقوم فوليو بحذف المقتنيات؟"
 }
