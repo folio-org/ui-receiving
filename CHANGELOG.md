@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [2.0.2](https://github.com/folio-org/ui-receiving/tree/v2.0.2) (2021-11-04)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.1...v2.0.2)
+
 * Receiving: Update manually add pieces for receiving field. Refs UIREC-186.
 
 ## [2.0.1](https://github.com/folio-org/ui-receiving/tree/v2.0.1) (2021-11-02)
