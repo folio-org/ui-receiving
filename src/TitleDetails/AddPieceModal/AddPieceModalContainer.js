@@ -22,6 +22,8 @@ const AddPieceModalContainer = ({
   onSubmit,
   poLine,
   getHoldingsItemsAndPieces,
+  isCreateAnotherChecked,
+  setCreateAnotherChecked,
 }) => {
   const createInventoryValues = useMemo(
     () => ({
@@ -59,6 +61,8 @@ const AddPieceModalContainer = ({
       pieceFormatOptions={pieceFormatOptions}
       poLine={poLine}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
+      isCreateAnotherChecked={isCreateAnotherChecked}
+      setCreateAnotherChecked={setCreateAnotherChecked}
     />
   );
 };
@@ -75,6 +79,8 @@ AddPieceModalContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  isCreateAnotherChecked: PropTypes.bool.isRequired,
+  setCreateAnotherChecked: PropTypes.func.isRequired,
 };
 
 export default AddPieceModalContainer;

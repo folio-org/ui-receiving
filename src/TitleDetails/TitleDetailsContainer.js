@@ -33,6 +33,7 @@ import {
   getHydratedPieces,
   handleCommonErrors,
   handleReceiveErrorResponse,
+  getPieceById,
 } from '../common/utils';
 import TitleDetails from './TitleDetails';
 
@@ -175,11 +176,13 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const onAddPiece = useCallback(
     (piece, options) => {
       return mutatePiece({ piece, options })
-        .then(() => {
+        .then((res) => {
           showCallout({
             messageId: 'ui-receiving.piece.actions.savePiece.success',
             type: 'success',
           });
+
+          return res;
         })
         .catch(async ({ response }) => {
           const hasCommonErrors = await handleCommonErrors(showCallout, response);
@@ -200,7 +203,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const onCheckIn = useCallback(
     (values) => {
       return quickReceive(values)
-        .then(() => {
+        .then((res) => {
           if (!values.id) {
             showCallout({
               messageId: 'ui-receiving.piece.actions.savePiece.success',
@@ -212,6 +215,8 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
             type: 'success',
             values: { enumeration: values.enumeration },
           });
+
+          return res;
         })
         .catch(({ response }) => {
           handleReceiveErrorResponse(showCallout, response);
@@ -278,6 +283,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       title={title}
       vendorsMap={vendorsMap}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
+      getPieceValues={getPieceById(mutator.orderPieces)}
     />
   );
 };

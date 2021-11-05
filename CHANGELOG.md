@@ -3,6 +3,7 @@
 ## (IN PROGRESS)
 
 * Allow user to select instance for Title AND edit title from POL view. Refs UIREC-189.
+* Allow user to save and create another piece. Refs UIREC-188.
 
 ## [2.0.2](https://github.com/folio-org/ui-receiving/tree/v2.0.2) (2021-11-04)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.1...v2.0.2)

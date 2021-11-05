@@ -52,6 +52,8 @@ const AddPieceModal = ({
   values: formValues,
   poLine,
   getHoldingsItemsAndPieces,
+  isCreateAnotherChecked,
+  setCreateAnotherChecked,
 }) => {
   const { enumeration, format, id, receivingStatus, itemId } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
@@ -129,9 +131,16 @@ const AddPieceModal = ({
           <FormattedMessage id="ui-receiving.piece.actions.delete" />
         </Button>
       )}
+      <Checkbox
+        label={<FormattedMessage id="ui-receiving.piece.actions.createAnother" />}
+        checked={isCreateAnotherChecked}
+        onChange={e => setCreateAnotherChecked(e.target.checked)}
+        inline
+      />
       {isNotReceived && (
         <Button
           data-test-add-piece-check-in
+          buttonStyle={isCreateAnotherChecked ? 'primary' : 'default'}
           disabled={hasValidationErrors}
           marginBottom0
           onClick={receive}
@@ -146,7 +155,9 @@ const AddPieceModal = ({
         marginBottom0
         onClick={onSave}
       >
-        <FormattedMessage id="ui-receiving.piece.actions.save" />
+        <FormattedMessage
+          id={`ui-receiving.piece.actions.${isCreateAnotherChecked ? 'save' : 'saveAndClose'}`}
+        />
       </Button>
     </>
   );
@@ -386,6 +397,8 @@ AddPieceModal.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  isCreateAnotherChecked: PropTypes.bool.isRequired,
+  setCreateAnotherChecked: PropTypes.func.isRequired,
 };
 
 AddPieceModal.defaultProps = {

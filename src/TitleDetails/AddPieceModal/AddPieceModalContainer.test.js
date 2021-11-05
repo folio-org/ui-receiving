@@ -70,11 +70,11 @@ describe('AddPieceModalContainer', () => {
     expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeFalsy();
   });
 
-  it('should call on submit when \'Save\' button was clicked', async () => {
+  it('should call on submit when \'Save&Close\' button was clicked', async () => {
     renderAddPieceModalContainer();
 
     const saveBtn = await screen.findByRole('button', {
-      name: 'ui-receiving.piece.actions.save',
+      name: 'ui-receiving.piece.actions.saveAndClose',
     });
 
     user.click(saveBtn);

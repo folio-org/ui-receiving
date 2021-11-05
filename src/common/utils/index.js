@@ -3,3 +3,4 @@ export * from './getHydratedPieces';
 export * from './handleCommonErrors';
 export * from './handleReceiveErrorResponse';
 export * from './receive';
+export * from './utils';

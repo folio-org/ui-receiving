@@ -34,3 +34,20 @@ export const PIECE_COLUMNS = {
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
 };
+
+export const REUSABLE_FORM_FIELDS = [
+  'poLineId',
+  'titleId',
+  'caption',
+  'copyNumber',
+  'enumeration',
+  'chronology',
+  'format',
+  'receiptDate',
+  'comment',
+  'holdingId',
+  'locationId',
+  'discoverySuppress',
+  'displayOnHolding',
+  'supplement',
+];

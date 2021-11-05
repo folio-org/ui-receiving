@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import {
   get,
+  pick,
   sortBy,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
@@ -44,6 +45,7 @@ import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
   ORDER_FORMAT_TO_PIECE_FORMAT,
+  REUSABLE_FORM_FIELDS,
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
@@ -53,6 +55,7 @@ import {
 } from './TitleDetailsActions';
 import Title from './Title';
 import POLDetails from './POLDetails';
+import { getPieceIdFromCheckInResponse } from '../common/utils';
 
 function getNewPieceValues(titleId, poLine) {
   const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
@@ -89,6 +92,7 @@ const TitleDetails = ({
   title,
   vendorsMap,
   getHoldingsItemsAndPieces,
+  getPieceValues,
 }) => {
   const stripes = useStripes();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
@@ -98,6 +102,7 @@ const TitleDetails = ({
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
   const [confirmReceiving, setConfirmReceiving] = useState();
   const [checkInPieceValues, setCheckInPieceValues] = useState();
+  const [isCreateAnotherChecked, setCreateAnotherChecked] = useState(false);
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
   const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
@@ -190,6 +195,16 @@ const TitleDetails = ({
     [title.isAcknowledged, toggleAcknowledgeNote, goToReceiveList],
   );
 
+  const onCreateAnotherPiece = useCallback(piece => {
+    const pieceFormValues = {
+      ...pick(piece, REUSABLE_FORM_FIELDS),
+      isCreateItem: piece?.itemId ? true : piece?.isCreateItem,
+    };
+
+    setPieceValues(pieceFormValues);
+    toggleAddPieceModal();
+  }, [setPieceValues, toggleAddPieceModal]);
+
   const onReceivePieces = useCallback(() => {
     setConfirmReceiving(() => openReceiveList);
 
@@ -203,18 +218,35 @@ const TitleDetails = ({
 
   const onSave = useCallback(
     (values, options) => {
-      onAddPiece(values, options);
       toggleAddPieceModal();
+      onAddPiece(values, options)
+        .then(res => {
+          if (isCreateAnotherChecked) {
+            return values.id
+              ? getPieceValues(values.id).then(onCreateAnotherPiece)
+              : onCreateAnotherPiece(res);
+          }
+
+          return res;
+        });
     },
-    [onAddPiece, toggleAddPieceModal],
+    [onAddPiece, toggleAddPieceModal, isCreateAnotherChecked, getPieceValues, onCreateAnotherPiece],
   );
 
   const onQuickReceive = useCallback(values => {
-    setConfirmReceiving(() => onCheckIn);
+    const withCreateAnother = (checkInValues) => (
+      onCheckIn(checkInValues)
+        .then(getPieceIdFromCheckInResponse)
+        .then(id => (
+          isCreateAnotherChecked && getPieceValues(id).then(onCreateAnotherPiece)
+        ))
+    );
+
+    setConfirmReceiving(() => withCreateAnother);
     setCheckInPieceValues(values);
 
-    return isOrderClosed ? toggleConfirmReceiving() : onCheckIn(values);
-  }, [isOrderClosed, toggleConfirmReceiving, onCheckIn]);
+    return isOrderClosed ? toggleConfirmReceiving() : withCreateAnother(values);
+  }, [isOrderClosed, toggleConfirmReceiving, onCheckIn, isCreateAnotherChecked, getPieceValues, onCreateAnotherPiece]);
 
   const hasReceive = Boolean(expectedPieces.length);
   const expectedPiecesActions = useMemo(
@@ -393,6 +425,8 @@ const TitleDetails = ({
             onSubmit={onSave}
             poLine={poLine}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
+            isCreateAnotherChecked={isCreateAnotherChecked}
+            setCreateAnotherChecked={setCreateAnotherChecked}
           />
         )}
 
@@ -427,6 +461,7 @@ TitleDetails.propTypes = {
   title: PropTypes.object.isRequired,
   vendorsMap: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  getPieceValues: PropTypes.func.isRequired,
 };
 
 TitleDetails.defaultProps = {
