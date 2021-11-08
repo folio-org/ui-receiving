@@ -59,11 +59,15 @@ function TitleEditContainer({ history, location, match, mutator }) {
   }, [titleId]);
 
   const onCancel = useCallback(
-    () => history.push({
-      pathname: `/receiving/${titleId}/view`,
-      search: location.search,
-    }),
-    [history, titleId, location.search],
+    () => {
+      const pathname = location.state?.backPathname || `/receiving/${titleId}/view`;
+
+      history.push({
+        pathname,
+        search: location.search,
+      });
+    },
+    [history, titleId, location.search, location.state],
   );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
