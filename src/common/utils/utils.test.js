@@ -1,5 +1,3 @@
-import { ORDER_PIECES_API } from '@folio/stripes-acq-components';
-
 import {
   getPieceById,
   getPieceIdFromCheckInResponse,
@@ -8,17 +6,25 @@ import {
 const PIECE_ID = 'pieceId';
 
 describe('getPieceById', () => {
-  it('should call GET method from mutator to get piece values', () => {
-    const mutator = {
-      GET: jest.fn().mockReturnValue({
-        catch: jest.fn(),
-      }),
-    };
+  const mutator = {
+    GET: (params) => new Promise((res, rej) => {
+      const includesId = params.path.includes(PIECE_ID);
 
-    getPieceById(mutator)(PIECE_ID);
-    expect(mutator.GET).toHaveBeenCalledWith({
-      path: `${ORDER_PIECES_API}/${PIECE_ID}`,
-    });
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return includesId ? res({ id: PIECE_ID }) : rej({});
+    }),
+  };
+
+  it('should return a piece fetched by id if it was resolved', async () => {
+    const res = await getPieceById(mutator)(PIECE_ID);
+
+    expect(res).toEqual({ id: PIECE_ID });
+  });
+
+  it('should return an empty object if it was rejected', async () => {
+    const res = await getPieceById(mutator)();
+
+    expect(res).toEqual({});
   });
 });
 
