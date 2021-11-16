@@ -156,7 +156,7 @@ const AddPieceModal = ({
         onClick={onSave}
       >
         <FormattedMessage
-          id={`ui-receiving.piece.actions.${isCreateAnotherChecked ? 'save' : 'saveAndClose'}`}
+          id={isCreateAnotherChecked ? 'stripes-core.button.save' : 'ui-receiving.piece.actions.saveAndClose'}
         />
       </Button>
     </>

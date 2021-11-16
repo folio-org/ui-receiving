@@ -146,7 +146,7 @@ describe('AddPieceModal', () => {
       });
 
       const saveBtn = await screen.findByRole('button', {
-        name: 'ui-receiving.piece.actions.save',
+        name: 'stripes-core.button.save',
       });
 
       const quickReceiveBtn = await screen.findByRole('button', {

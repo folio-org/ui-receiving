@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import {
   get,
-  pick,
+  omit,
   sortBy,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
@@ -45,7 +45,6 @@ import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
   ORDER_FORMAT_TO_PIECE_FORMAT,
-  REUSABLE_FORM_FIELDS,
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
@@ -197,7 +196,7 @@ const TitleDetails = ({
 
   const onCreateAnotherPiece = useCallback(piece => {
     const pieceFormValues = {
-      ...pick(piece, REUSABLE_FORM_FIELDS),
+      ...omit(piece, ['id', 'itemId', 'receivingStatus', 'receivedDate']),
       isCreateItem: piece?.itemId ? true : piece?.isCreateItem,
     };
 
