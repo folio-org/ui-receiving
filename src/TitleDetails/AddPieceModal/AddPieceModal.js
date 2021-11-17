@@ -52,10 +52,8 @@ const AddPieceModal = ({
   values: formValues,
   poLine,
   getHoldingsItemsAndPieces,
-  isCreateAnotherChecked,
-  setCreateAnotherChecked,
 }) => {
-  const { enumeration, format, id, receivingStatus, itemId } = formValues;
+  const { enumeration, format, id, receivingStatus, itemId, isCreateAnother } = formValues;
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
@@ -133,15 +131,15 @@ const AddPieceModal = ({
       )}
       <Checkbox
         label={<FormattedMessage id="ui-receiving.piece.actions.createAnother" />}
-        value={isCreateAnotherChecked}
-        checked={isCreateAnotherChecked}
-        onChange={e => setCreateAnotherChecked(e.target.checked)}
+        value={isCreateAnother}
+        checked={isCreateAnother}
+        onChange={e => change('isCreateAnother', e.target.checked)}
         inline
       />
       {isNotReceived && (
         <Button
           data-test-add-piece-check-in
-          buttonStyle={isCreateAnotherChecked ? 'primary' : 'default'}
+          buttonStyle={isCreateAnother ? 'primary' : 'default'}
           disabled={hasValidationErrors}
           marginBottom0
           onClick={receive}
@@ -157,7 +155,7 @@ const AddPieceModal = ({
         onClick={onSave}
       >
         <FormattedMessage
-          id={isCreateAnotherChecked ? 'stripes-core.button.save' : 'ui-receiving.piece.actions.saveAndClose'}
+          id={isCreateAnother ? 'stripes-core.button.save' : 'ui-receiving.piece.actions.saveAndClose'}
         />
       </Button>
     </>
@@ -398,8 +396,6 @@ AddPieceModal.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
-  isCreateAnotherChecked: PropTypes.bool.isRequired,
-  setCreateAnotherChecked: PropTypes.func.isRequired,
 };
 
 AddPieceModal.defaultProps = {

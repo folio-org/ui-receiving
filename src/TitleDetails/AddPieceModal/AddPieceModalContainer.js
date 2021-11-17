@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { omit, noop } from 'lodash';
 
@@ -8,7 +8,6 @@ import {
   PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
-import { getPieceIdFromCheckInResponse } from '../../common/utils';
 import AddPieceModal from './AddPieceModal';
 
 const AddPieceModalContainer = ({
@@ -34,15 +33,14 @@ const AddPieceModalContainer = ({
     }),
     [poLine],
   );
-  const [isCreateAnotherChecked, setCreateAnotherChecked] = useState(initialValues.isCreateAnother);
 
   const onSavePiece = (formValues) => {
-    const { deleteHolding = false, id } = formValues;
+    const { deleteHolding = false, id, isCreateAnother } = formValues;
     const values = omit(formValues, ['deleteHolding', 'isCreateAnother']);
 
     onSubmit(values, { searchParams: { deleteHolding } })
       .then(res => {
-        if (isCreateAnotherChecked) {
+        if (isCreateAnother) {
           return id
             ? getPieceValues(id).then(onCreateAnotherPiece)
             : onCreateAnotherPiece(res);
@@ -54,10 +52,10 @@ const AddPieceModalContainer = ({
 
   const onQuickReceive = (formValues) => {
     onCheckIn(omit(formValues, 'isCreateAnother'))
-      .then(getPieceIdFromCheckInResponse, noop)
+      .then((res) => res?.[0]?.receivingItemResults?.[0]?.pieceId, noop)
       .then(pieceId => (
         pieceId
-          && isCreateAnotherChecked
+          && formValues.isCreateAnother
           && getPieceValues(pieceId).then(onCreateAnotherPiece)
       ));
   };
@@ -82,8 +80,6 @@ const AddPieceModalContainer = ({
       pieceFormatOptions={pieceFormatOptions}
       poLine={poLine}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
-      isCreateAnotherChecked={isCreateAnotherChecked}
-      setCreateAnotherChecked={setCreateAnotherChecked}
     />
   );
 };

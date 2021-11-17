@@ -43,8 +43,6 @@ const defaultProps = {
   getHoldingsItemsAndPieces: jest.fn().mockReturnValue({
     then: () => ({}),
   }),
-  setCreateAnotherChecked: jest.fn(),
-  isCreateAnotherChecked: false,
 };
 
 const renderAddPieceModal = (props = defaultProps) => (render(
@@ -130,19 +128,10 @@ describe('AddPieceModal', () => {
   });
 
   describe('Create another piece', () => {
-    it('should call \'setCreateAnotherChecked\' when \'Create another\' checkbox was clicked', async () => {
-      renderAddPieceModal();
-
-      const createAnotherCheckbox = await screen.findByText('ui-receiving.piece.actions.createAnother');
-
-      user.click(createAnotherCheckbox);
-      expect(defaultProps.setCreateAnotherChecked).toHaveBeenCalled();
-    });
-
     it('should update footer btns when \'Create another\' is active', async () => {
       renderAddPieceModal({
         ...defaultProps,
-        isCreateAnotherChecked: true,
+        initialValues: { isCreateAnother: true },
       });
 
       const saveBtn = await screen.findByRole('button', {

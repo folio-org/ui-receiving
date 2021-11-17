@@ -1,6 +1,5 @@
 import {
   getPieceById,
-  getPieceIdFromCheckInResponse,
 } from './utils';
 
 const PIECE_ID = 'pieceId';
@@ -25,18 +24,5 @@ describe('getPieceById', () => {
     const res = await getPieceById(mutator)();
 
     expect(res).toEqual({});
-  });
-});
-
-describe('getPieceIdFromCheckInResponse', () => {
-  it('should return a piece id from the response after quick receiving', () => {
-    const response = [{
-      receivingItemResults: [{
-        pieceId: PIECE_ID,
-      }],
-    }];
-    const id = getPieceIdFromCheckInResponse(response);
-
-    expect(id).toBe(PIECE_ID);
   });
 });
