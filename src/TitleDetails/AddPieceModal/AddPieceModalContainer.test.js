@@ -16,7 +16,7 @@ jest.mock('../../common/components/LineLocationsView/LineLocationsView',
 
 const defaultProps = {
   close: jest.fn(),
-  onSubmit: jest.fn(),
+  onSubmit: jest.fn(() => Promise.resolve({})),
   onCheckIn: jest.fn(),
   deletePiece: jest.fn(),
   poLine: { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] },

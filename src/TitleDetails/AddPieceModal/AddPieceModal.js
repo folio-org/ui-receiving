@@ -133,6 +133,7 @@ const AddPieceModal = ({
       )}
       <Checkbox
         label={<FormattedMessage id="ui-receiving.piece.actions.createAnother" />}
+        value={isCreateAnotherChecked}
         checked={isCreateAnotherChecked}
         onChange={e => setCreateAnotherChecked(e.target.checked)}
         inline

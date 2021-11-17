@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import omit from 'lodash/omit';
+import { omit, noop } from 'lodash';
 
 import {
   ORDER_FORMATS,
@@ -8,6 +8,7 @@ import {
   PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
+import { getPieceIdFromCheckInResponse } from '../../common/utils';
 import AddPieceModal from './AddPieceModal';
 
 const AddPieceModalContainer = ({
@@ -22,8 +23,8 @@ const AddPieceModalContainer = ({
   onSubmit,
   poLine,
   getHoldingsItemsAndPieces,
-  isCreateAnotherChecked,
-  setCreateAnotherChecked,
+  getPieceValues,
+  onCreateAnotherPiece,
 }) => {
   const createInventoryValues = useMemo(
     () => ({
@@ -33,12 +34,33 @@ const AddPieceModalContainer = ({
     }),
     [poLine],
   );
+  const [isCreateAnotherChecked, setCreateAnotherChecked] = useState(initialValues.isCreateAnother);
 
   const onSavePiece = (formValues) => {
-    const { deleteHolding = false } = formValues;
-    const values = omit(formValues, 'deleteHolding');
+    const { deleteHolding = false, id } = formValues;
+    const values = omit(formValues, ['deleteHolding', 'isCreateAnother']);
+    const searchParams = deleteHolding ? { deleteHolding } : {};
 
-    onSubmit(values, { searchParams: { deleteHolding } });
+    onSubmit(values, { ...searchParams })
+      .then(res => {
+        if (isCreateAnotherChecked) {
+          return id
+            ? getPieceValues(id).then(onCreateAnotherPiece)
+            : onCreateAnotherPiece(res);
+        }
+
+        return res;
+      });
+  };
+
+  const onQuickReceive = (formValues) => {
+    onCheckIn(omit(formValues, 'isCreateAnother'))
+      .then(getPieceIdFromCheckInResponse, noop)
+      .then(pieceId => (
+        pieceId
+          && isCreateAnotherChecked
+          && getPieceValues(pieceId).then(onCreateAnotherPiece)
+      ));
   };
 
   const orderFormat = poLine?.orderFormat;
@@ -56,7 +78,7 @@ const AddPieceModalContainer = ({
       instanceId={instanceId}
       locationIds={locationIds}
       locations={locations}
-      onCheckIn={onCheckIn}
+      onCheckIn={onQuickReceive}
       onSubmit={onSavePiece}
       pieceFormatOptions={pieceFormatOptions}
       poLine={poLine}
@@ -79,8 +101,8 @@ AddPieceModalContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
-  isCreateAnotherChecked: PropTypes.bool.isRequired,
-  setCreateAnotherChecked: PropTypes.func.isRequired,
+  getPieceValues: PropTypes.func.isRequired,
+  onCreateAnotherPiece: PropTypes.func.isRequired,
 };
 
 export default AddPieceModalContainer;
