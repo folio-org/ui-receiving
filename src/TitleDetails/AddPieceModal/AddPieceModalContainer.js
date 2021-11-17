@@ -39,9 +39,8 @@ const AddPieceModalContainer = ({
   const onSavePiece = (formValues) => {
     const { deleteHolding = false, id } = formValues;
     const values = omit(formValues, ['deleteHolding', 'isCreateAnother']);
-    const searchParams = deleteHolding ? { deleteHolding } : {};
 
-    onSubmit(values, { ...searchParams })
+    onSubmit(values, { searchParams: { deleteHolding } })
       .then(res => {
         if (isCreateAnotherChecked) {
           return id
