@@ -13,10 +13,10 @@ import {
   PIECE_STATUS, PIECE_FORMAT,
   INVENTORY_RECORDS_TYPE,
   ORDER_FORMATS,
+  ORDER_STATUSES,
 } from '@folio/stripes-acq-components';
 
 import TitleDetails from './TitleDetails';
-import { TitleDetailsExpectedActions } from './TitleDetailsActions';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
   HasCommand: jest.fn(({ children }) => <div>{children}</div>),
@@ -29,10 +29,6 @@ jest.mock('@folio/stripes-acq-components', () => ({
 }));
 jest.mock('./TitleInformation', () => jest.fn().mockReturnValue('TitleInformation'));
 jest.mock('./ReceivedPiecesList', () => jest.fn().mockReturnValue('ReceivedPiecesList'));
-jest.mock('./TitleDetailsActions', () => ({
-  TitleDetailsExpectedActions: jest.fn().mockReturnValue('TitleDetailsExpectedActions'),
-  TitleDetailsReceivedActions: jest.fn().mockReturnValue('TitleDetailsReceivedActions'),
-}));
 jest.mock('./Title', () => jest.fn().mockReturnValue('Title'));
 jest.mock('./POLDetails', () => jest.fn().mockReturnValue('POLDetails'));
 jest.mock('../common/components', () => ({
@@ -72,11 +68,7 @@ const defaultProps = {
   locations: [{ id: 'locationId', name: 'locationName', code: 'locationCode' }],
   onEdit: jest.fn(),
   onClose: jest.fn(),
-  onCheckIn: jest.fn().mockReturnValue({
-    then: () => ({
-      then: (fn) => fn(),
-    }),
-  }),
+  onCheckIn: jest.fn(() => Promise.resolve({})),
   onAddPiece: jest.fn(() => Promise.resolve({})),
   deletePiece: jest.fn(),
   location: locationMock,
@@ -97,8 +89,9 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const renderTitleDetails = (props = defaultProps) => (render(
+const renderTitleDetails = (props = {}) => (render(
   <TitleDetails
+    {...defaultProps}
     {...props}
   />,
   { wrapper },
@@ -114,11 +107,12 @@ describe('TitleDetails', () => {
     expect(screen.getByText('ui-receiving.title.received')).toBeDefined();
   });
 
-  it('should open add piece modal and stay on title details', async () => {
-    await act(async () => renderTitleDetails());
+  it('should open piece modal and stay on title details', async () => {
+    renderTitleDetails();
 
-    await act(async () => TitleDetailsExpectedActions.mock.calls[0][0].openAddPieceModal());
+    const pieceRow = await screen.findAllByRole('row');
 
+    user.click(pieceRow[1]);
     expect(screen.getByText('Title')).toBeDefined();
   });
 
@@ -172,6 +166,39 @@ describe('TitleDetails', () => {
       user.selectOptions(formatSelection, ['Electronic']);
       user.click(quickReceiveBtn);
 
+      expect(defaultProps.onCheckIn).toHaveBeenCalled();
+    });
+
+    it('should call \'onCheckIn\' when \'Quick receive\' button was clicked and user confirm action', async () => {
+      renderTitleDetails({
+        order: { workflowStatus: ORDER_STATUSES.closed },
+      });
+
+      const pieceRow = await screen.findAllByRole('row');
+
+      user.click(pieceRow[1]);
+
+      const createAnotherCheckbox = await screen.findByRole('checkbox', {
+        name: 'ui-receiving.piece.actions.createAnother',
+      });
+      const formatSelection = await screen.findByRole('combobox', {
+        name: 'ui-receiving.piece.format',
+      });
+
+      user.click(createAnotherCheckbox);
+
+      const quickReceiveBtn = await screen.findByRole('button', {
+        name: 'ui-receiving.piece.actions.quickReceive',
+      });
+
+      user.selectOptions(formatSelection, ['Electronic']);
+      user.click(quickReceiveBtn);
+
+      const confirmBtn = await screen.findByRole('button', {
+        name: 'ui-receiving.piece.actions.confirm',
+      });
+
+      user.click(confirmBtn);
       expect(defaultProps.onCheckIn).toHaveBeenCalled();
     });
   });

@@ -17,12 +17,13 @@ jest.mock('../../common/components/LineLocationsView/LineLocationsView',
 const defaultProps = {
   close: jest.fn(),
   onSubmit: jest.fn(() => Promise.resolve({})),
-  onCheckIn: jest.fn(),
+  onCheckIn: jest.fn(() => Promise.resolve([{ receivingItemResults: [{ pieceId: 'pieceId' }] }])),
   deletePiece: jest.fn(),
   poLine: { id: 'poLineId', physical: { createInventory: 'None' }, locations: [{ locationId: '001' }] },
   initialValues: { enumeration: 'testenumeration', format: 'Physical', id: 'id', poLineId: 'poLineId', titleId: 'titleId', locationId: '001' },
   locations: [{ name: 'Location', code: 'code', id: '001' }],
   locationIds: ['001'],
+  getPieceValues: jest.fn(() => Promise.resolve({})),
 };
 
 const renderAddPieceModalContainer = (props = {}) => render(
@@ -70,7 +71,7 @@ describe('AddPieceModalContainer', () => {
     expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeFalsy();
   });
 
-  it('should call on submit when \'Save&Close\' button was clicked', async () => {
+  it('should call \'onSubmit\' when \'Save&Close\' button was clicked', async () => {
     renderAddPieceModalContainer();
 
     const saveBtn = await screen.findByRole('button', {
@@ -79,5 +80,21 @@ describe('AddPieceModalContainer', () => {
 
     user.click(saveBtn);
     expect(defaultProps.onSubmit).toHaveBeenCalled();
+  });
+
+  it('should call onCheckIn when \'Quick receive\' button was clicked', async () => {
+    renderAddPieceModalContainer({
+      initialValues: {
+        ...defaultProps.initialValues,
+        isCreateAnother: true,
+      },
+    });
+
+    const quickReceiveBtn = await screen.findByRole('button', {
+      name: 'ui-receiving.piece.actions.quickReceive',
+    });
+
+    user.click(quickReceiveBtn);
+    expect(defaultProps.onCheckIn).toHaveBeenCalled();
   });
 });
