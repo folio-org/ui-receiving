@@ -227,19 +227,39 @@ const TitleDetails = ({
   };
 
   const onSave = useCallback(
-    (values, options) => {
+    async (values, options, isCreateAnother) => {
       toggleAddPieceModal();
 
-      return onAddPiece(values, options);
+      const piece = await onAddPiece(values, options);
+
+      if (isCreateAnother) {
+        return values.id
+          ? getPieceValues(values.id).then(onCreateAnotherPiece)
+          : onCreateAnotherPiece(piece);
+      }
+
+      return piece;
     },
-    [onAddPiece, toggleAddPieceModal],
+    [onAddPiece, toggleAddPieceModal, getPieceValues, onCreateAnotherPiece],
   );
 
-  const onQuickReceive = useCallback(values => (
-    isOrderClosed
-      ? confirmReceiving().then(() => onCheckIn(values))
-      : onCheckIn(values)
-  ), [isOrderClosed, onCheckIn, confirmReceiving]);
+  const onQuickReceive = useCallback((values, isCreateAnother) => {
+    const onReceive = async (receivingValues) => {
+      const res = await onCheckIn(receivingValues);
+
+      if (isCreateAnother) {
+        const pieceId = res?.[0]?.receivingItemResults?.[0]?.pieceId;
+
+        return pieceId && getPieceValues(pieceId).then(onCreateAnotherPiece);
+      }
+
+      return res;
+    };
+
+    return isOrderClosed
+      ? confirmReceiving().then(() => onReceive(values), noop)
+      : onReceive(values);
+  }, [isOrderClosed, confirmReceiving, onCheckIn, getPieceValues, onCreateAnotherPiece]);
 
   const hasReceive = Boolean(expectedPieces.length);
   const expectedPiecesActions = useMemo(
@@ -418,8 +438,6 @@ const TitleDetails = ({
             onSubmit={onSave}
             poLine={poLine}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
-            getPieceValues={getPieceValues}
-            onCreateAnotherPiece={onCreateAnotherPiece}
           />
         )}
 

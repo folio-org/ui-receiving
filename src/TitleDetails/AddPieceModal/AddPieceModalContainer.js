@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { omit, noop } from 'lodash';
+import { omit } from 'lodash';
 
 import {
   ORDER_FORMATS,
@@ -22,8 +22,6 @@ const AddPieceModalContainer = ({
   onSubmit,
   poLine,
   getHoldingsItemsAndPieces,
-  getPieceValues,
-  onCreateAnotherPiece,
 }) => {
   const createInventoryValues = useMemo(
     () => ({
@@ -35,30 +33,13 @@ const AddPieceModalContainer = ({
   );
 
   const onSavePiece = (formValues) => {
-    const { deleteHolding = false, id, isCreateAnother } = formValues;
+    const { deleteHolding = false, isCreateAnother } = formValues;
     const values = omit(formValues, ['deleteHolding', 'isCreateAnother']);
 
-    onSubmit(values, { searchParams: { deleteHolding } })
-      .then(res => {
-        if (isCreateAnother) {
-          return id
-            ? getPieceValues(id).then(onCreateAnotherPiece)
-            : onCreateAnotherPiece(res);
-        }
-
-        return res;
-      });
+    onSubmit(values, { searchParams: { deleteHolding } }, isCreateAnother);
   };
 
-  const onQuickReceive = (formValues) => {
-    onCheckIn(omit(formValues, 'isCreateAnother'))
-      .then((res) => res?.[0]?.receivingItemResults?.[0]?.pieceId, noop)
-      .then(pieceId => (
-        pieceId
-          && formValues.isCreateAnother
-          && getPieceValues(pieceId).then(onCreateAnotherPiece)
-      ));
-  };
+  const onQuickReceive = (formValues) => onCheckIn(omit(formValues, 'isCreateAnother'), formValues.isCreateAnother);
 
   const orderFormat = poLine?.orderFormat;
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
@@ -96,8 +77,6 @@ AddPieceModalContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
-  getPieceValues: PropTypes.func.isRequired,
-  onCreateAnotherPiece: PropTypes.func.isRequired,
 };
 
 export default AddPieceModalContainer;
