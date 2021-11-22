@@ -9,8 +9,10 @@ import {
   batchFetch,
   itemsResource,
   LIMIT_MAX,
+  LINES_API,
   LoadingPane,
   locationsManifest,
+  ORDERS_API,
   organizationsManifest,
   pieceResource,
   piecesResource,
@@ -18,10 +20,6 @@ import {
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import {
-  ORDERS_API,
-  PO_LINES_API,
-} from '../common/constants';
 import {
   titleResource,
 } from '../common/resources';
@@ -112,7 +110,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
           setTitle(response);
 
           return mutator.poLine.GET({
-            path: `${PO_LINES_API}/${response.poLineId}`,
+            path: `${LINES_API}/${response.poLineId}`,
           });
         })
         .then(line => {

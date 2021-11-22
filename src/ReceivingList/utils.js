@@ -24,7 +24,7 @@ export const fetchTitleOrderLines = (mutator, titles, fetchedOrderLinesMap) => {
     .map(title => `id==${title.poLineId}`)
     .join(' or ');
 
-  const orderLinesPromise = orderLinesQuery
+  return orderLinesQuery
     ? mutator.GET({
       params: {
         limit: LIMIT_MAX,
@@ -32,8 +32,6 @@ export const fetchTitleOrderLines = (mutator, titles, fetchedOrderLinesMap) => {
       },
     })
     : Promise.resolve([]);
-
-  return orderLinesPromise;
 };
 
 export const fetchOrderLineHoldings = (mutator, orderLines) => {
@@ -56,11 +54,9 @@ export const fetchOrderLineLocations = (mutator, orderLines, fetchedLocationsMap
     }, [])
     .map(({ locationId }) => locationId);
 
-  const locationsPromise = unfetchedLocations.length
+  return unfetchedLocations.length
     ? batchFetch(mutator, uniq(unfetchedLocations))
     : Promise.resolve([]);
-
-  return locationsPromise;
 };
 
 export const buildTitlesQuery = (queryParams) => {
@@ -120,9 +116,7 @@ export const fetchLinesOrders = (mutator, lines, fetchedOrdersMap) => {
     .map(({ purchaseOrderId }) => purchaseOrderId)
     .filter(Boolean);
 
-  const fetchPromise = unfetched.length
+  return unfetched.length
     ? batchFetch(mutator, uniq(unfetched))
     : Promise.resolve([]);
-
-  return fetchPromise;
 };

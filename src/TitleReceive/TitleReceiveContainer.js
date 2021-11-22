@@ -11,6 +11,7 @@ import {
   baseManifest,
   itemsResource,
   LIMIT_MAX,
+  LINES_API,
   locationsManifest,
   PIECE_FORMAT,
   PIECE_STATUS,
@@ -20,9 +21,6 @@ import {
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import {
-  PO_LINES_API,
-} from '../common/constants';
 import {
   titleResource,
 } from '../common/resources';
@@ -61,7 +59,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     () => {
       if (poLineId) {
         mutator.poLine.GET({
-          path: `${PO_LINES_API}/${poLineId}`,
+          path: `${LINES_API}/${poLineId}`,
         }).then(setPoLine);
       }
     },

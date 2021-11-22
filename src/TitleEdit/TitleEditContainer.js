@@ -17,10 +17,10 @@ import {
   ERROR_CODE_GENERIC,
   getErrorCodeFromResponse,
   identifierTypesManifest,
+  LINES_API,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import { PO_LINES_API } from '../common/constants';
 import { titleResource } from '../common/resources';
 import TitleForm from '../TitleForm/TitleForm';
 
@@ -50,7 +50,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
         setTitle(titleResponse);
 
         return mutator.editTitlePOLine.GET({
-          path: `${PO_LINES_API}/${titleResponse.poLineId}`,
+          path: `${LINES_API}/${titleResponse.poLineId}`,
         });
       })
       .then(setPoLine)

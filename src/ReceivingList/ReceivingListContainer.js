@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import {
   getHoldingLocationName,
+  locationsManifest,
   RESULT_COUNT_INCREMENT,
   usePagination,
 } from '@folio/stripes-acq-components';
@@ -15,7 +16,6 @@ import {
   titlesResource,
   orderLinesResource,
   ordersResource,
-  locationsResource,
   holdingsResource,
 } from '../common/resources';
 import ReceivingList from './ReceivingList';
@@ -109,7 +109,7 @@ const ReceivingListContainer = ({ mutator }) => {
 ReceivingListContainer.manifest = Object.freeze({
   receivingListTitles: titlesResource,
   receivingListOrderLines: orderLinesResource,
-  receivingListLocations: locationsResource,
+  receivingListLocations: locationsManifest,
   receivingListHoldings: holdingsResource,
   lineOrders: ordersResource,
 });

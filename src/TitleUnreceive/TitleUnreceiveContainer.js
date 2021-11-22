@@ -12,6 +12,8 @@ import {
   batchFetch,
   itemsResource,
   LIMIT_MAX,
+  LINES_API,
+  locationsManifest,
   PIECE_STATUS,
   piecesResource,
   requestsResource,
@@ -19,11 +21,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  PO_LINES_API,
-} from '../common/constants';
-import {
   receivingResource,
-  locationsResource,
   titleResource,
   holdingsResource,
 } from '../common/resources';
@@ -56,7 +54,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
     () => {
       if (poLineId) {
         mutator.poLine.GET({
-          path: `${PO_LINES_API}/${poLineId}`,
+          path: `${LINES_API}/${poLineId}`,
         }).then(setPoLine);
       }
     },
@@ -170,7 +168,7 @@ TitleUnreceiveContainer.manifest = Object.freeze({
   items: itemsResource,
   requests: requestsResource,
   locations: {
-    ...locationsResource,
+    ...locationsManifest,
     fetch: false,
   },
   holdings: {
