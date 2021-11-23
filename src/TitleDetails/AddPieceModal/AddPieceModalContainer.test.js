@@ -90,6 +90,12 @@ describe('AddPieceModalContainer', () => {
       },
     });
 
+    const supplement = await screen.findByRole('checkbox', {
+      name: 'ui-receiving.piece.supplement',
+    });
+
+    user.click(supplement);
+
     const quickReceiveBtn = await screen.findByRole('button', {
       name: 'ui-receiving.piece.actions.quickReceive',
     });
