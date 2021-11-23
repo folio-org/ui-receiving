@@ -46,12 +46,14 @@ const AddPieceModalContainer = ({
     ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
     : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
 
-  const initialCheckboxValues = ['discoverySuppress', 'isCreateAnother', 'isCreateItem', 'supplement']
-    .reduce((acc, key) => {
-      acc[key] = Boolean(initialValues[key]);
+  const initialCheckboxValues = useMemo(() => (
+    ['discoverySuppress', 'isCreateAnother', 'isCreateItem', 'supplement']
+      .reduce((acc, key) => {
+        acc[key] = Boolean(initialValues[key]);
 
-      return acc;
-    }, {});
+        return acc;
+      }, {})
+  ), [initialValues]);
 
   return (
     <AddPieceModal

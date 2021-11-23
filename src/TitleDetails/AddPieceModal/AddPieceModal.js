@@ -401,7 +401,7 @@ AddPieceModal.propTypes = {
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
-  pristine: PropTypes.bool,
+  pristine: PropTypes.bool.isRequired,
 };
 
 AddPieceModal.defaultProps = {
