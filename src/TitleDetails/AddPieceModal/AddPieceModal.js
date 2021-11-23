@@ -42,8 +42,10 @@ const AddPieceModal = ({
   deletePiece,
   canDeletePiece,
   form: { mutators, change, getState },
+  initialValues,
   handleSubmit,
   hasValidationErrors,
+  pristine,
   instanceId,
   locationIds,
   locations,
@@ -61,6 +63,8 @@ const AddPieceModal = ({
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, []);
+
+  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
 
   const receive = useCallback(
     () => {
@@ -140,7 +144,7 @@ const AddPieceModal = ({
         <Button
           data-test-add-piece-check-in
           buttonStyle={isCreateAnother ? 'primary' : 'default'}
-          disabled={hasValidationErrors}
+          disabled={disabled}
           marginBottom0
           onClick={receive}
         >
@@ -150,7 +154,7 @@ const AddPieceModal = ({
       <Button
         buttonStyle="primary"
         data-test-add-piece-save
-        disabled={hasValidationErrors}
+        disabled={disabled}
         marginBottom0
         onClick={onSave}
       >
@@ -176,12 +180,12 @@ const AddPieceModal = ({
     },
     {
       name: 'save',
-      handler: handleKeyCommand(handleSubmit, { disabled: hasValidationErrors }),
+      handler: handleKeyCommand(onSave, { disabled }),
     },
     {
       name: 'receive',
       shortcut: 'mod + alt + r',
-      handler: handleKeyCommand(receive, { disabled: hasValidationErrors }),
+      handler: handleKeyCommand(receive, { disabled }),
     },
   ];
 
@@ -396,6 +400,8 @@ AddPieceModal.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  pristine: PropTypes.bool,
 };
 
 AddPieceModal.defaultProps = {
