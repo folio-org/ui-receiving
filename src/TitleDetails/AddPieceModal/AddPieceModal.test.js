@@ -31,6 +31,7 @@ const defaultProps = {
   },
   onSubmit: jest.fn(),
   hasValidationErrors: false,
+  initialValues: { isCreateAnother: false },
   instanceId: 'instanceId',
   isManuallyAddPieces: true,
   locationIds: [],
