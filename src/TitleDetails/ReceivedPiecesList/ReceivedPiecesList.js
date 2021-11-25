@@ -9,6 +9,7 @@ const visibleColumns = [
   PIECE_COLUMNS.caption,
   PIECE_COLUMNS.copyNumber,
   PIECE_COLUMNS.enumeration,
+  PIECE_COLUMNS.comment,
   'format',
   PIECE_COLUMNS.receivedDate,
   'request',

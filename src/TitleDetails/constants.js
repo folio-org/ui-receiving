@@ -33,4 +33,5 @@ export const PIECE_COLUMNS = {
   enumeration: 'enumeration',
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
+  comment: 'comment',
 };
