@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import user from '@testing-library/user-event';
 
+import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import { TitleDetailsExpectedActions } from './TitleDetailsExpectedActions';
 
 const defaultProps = {
@@ -9,6 +10,8 @@ const defaultProps = {
   openAddPieceModal: jest.fn(),
   openReceiveList: jest.fn(),
   hasReceive: true,
+  visibleColumns: EXPECTED_PIECE_VISIBLE_COLUMNS,
+  toggleColumn: jest.fn(),
 };
 
 const renderTitleDetailsExpectedActions = (props = defaultProps) => (render(
@@ -21,15 +24,18 @@ describe('TitleDetailsExpectedActions', () => {
   it('should display Title details expected actions', () => {
     renderTitleDetailsExpectedActions();
 
-    expect(screen.getByText('ui-receiving.title.details.button.receive')).toBeDefined();
-    expect(screen.getByText('ui-receiving.piece.button.addPiece')).toBeDefined();
+    user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+
+    expect(screen.getByTestId('receive-button')).toBeDefined();
+    expect(screen.getByTestId('add-piece-button')).toBeDefined();
   });
 
   it('should call openReceiveList when receive button is pressed and actions are not disabled', () => {
     defaultProps.openReceiveList.mockClear();
     renderTitleDetailsExpectedActions();
 
-    user.click(screen.getByText('ui-receiving.title.details.button.receive'));
+    user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+    user.click(screen.getByTestId('receive-button'));
 
     expect(defaultProps.openReceiveList).toHaveBeenCalled();
   });
@@ -38,7 +44,8 @@ describe('TitleDetailsExpectedActions', () => {
     defaultProps.openAddPieceModal.mockClear();
     renderTitleDetailsExpectedActions();
 
-    user.click(screen.getByText('ui-receiving.piece.button.addPiece'));
+    user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+    user.click(screen.getByTestId('add-piece-button'));
 
     expect(defaultProps.openAddPieceModal).toHaveBeenCalled();
   });
@@ -47,7 +54,8 @@ describe('TitleDetailsExpectedActions', () => {
     defaultProps.openReceiveList.mockClear();
     renderTitleDetailsExpectedActions({ ...defaultProps, disabled: true });
 
-    user.click(screen.getByText('ui-receiving.title.details.button.receive'));
+    user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+    user.click(screen.getByTestId('receive-button'));
 
     expect(defaultProps.openReceiveList).not.toHaveBeenCalled();
   });
@@ -56,7 +64,8 @@ describe('TitleDetailsExpectedActions', () => {
     defaultProps.openAddPieceModal.mockClear();
     renderTitleDetailsExpectedActions({ ...defaultProps, disabled: true });
 
-    user.click(screen.getByText('ui-receiving.piece.button.addPiece'));
+    user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+    user.click(screen.getByTestId('add-piece-button'));
 
     expect(defaultProps.openAddPieceModal).not.toHaveBeenCalled();
   });

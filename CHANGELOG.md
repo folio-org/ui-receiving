@@ -7,6 +7,7 @@
 * Tech debt: reducing code smells, usage of consts and resources from stripes-acq. Refs UIREC-192.
 * Validate user has made a change to the piece form before activating "Save" or "Quick receive" buttons. Refs UIREC-190.
 * Display comment in receiving in column rather than on hover. Refs UIREC-193.
+* Allow user to choose what columns display for expected and received pieces. Refs UIREC-196.
 * Receiving app is reaching the display limit of 1000 pieces - User can't see newly created pieces. Refs UIREC-197.
 
 ## [2.0.2](https://github.com/folio-org/ui-receiving/tree/v2.0.2) (2021-11-04)

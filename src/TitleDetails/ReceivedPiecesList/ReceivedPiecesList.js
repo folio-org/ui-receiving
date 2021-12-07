@@ -4,19 +4,7 @@ import PropTypes from 'prop-types';
 import { PIECE_COLUMNS } from '../constants';
 import PiecesList from '../PiecesList';
 
-const visibleColumns = [
-  'barcode',
-  PIECE_COLUMNS.caption,
-  PIECE_COLUMNS.copyNumber,
-  PIECE_COLUMNS.enumeration,
-  PIECE_COLUMNS.comment,
-  'format',
-  PIECE_COLUMNS.receivedDate,
-  'request',
-  'selection',
-];
-
-const ReceivedPiecesList = ({ pieces, selectPiece }) => {
+const ReceivedPiecesList = ({ pieces, selectPiece, visibleColumns }) => {
   return (
     <PiecesList
       pieces={pieces}
@@ -30,6 +18,7 @@ const ReceivedPiecesList = ({ pieces, selectPiece }) => {
 ReceivedPiecesList.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
   selectPiece: PropTypes.func.isRequired,
+  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ReceivedPiecesList;

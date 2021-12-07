@@ -4,6 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
+import { RECEIVED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import ReceivedPiecesList from './ReceivedPiecesList';
 
 const pieces = [{
@@ -17,6 +18,7 @@ const renderPiecesList = () => (render(
     <ReceivedPiecesList
       pieces={pieces}
       selectPiece={jest.fn}
+      visibleColumns={RECEIVED_PIECE_VISIBLE_COLUMNS}
     />
   </IntlProvider>,
 ));

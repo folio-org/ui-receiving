@@ -4,6 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
+import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import ExpectedPiecesList from './ExpectedPiecesList';
 
 const pieces = [{
@@ -17,6 +18,7 @@ const renderPiecesList = (onEditPiece) => (render(
     <ExpectedPiecesList
       pieces={pieces}
       selectPiece={onEditPiece}
+      visibleColumns={EXPECTED_PIECE_VISIBLE_COLUMNS}
     />
   </IntlProvider>,
 ));
