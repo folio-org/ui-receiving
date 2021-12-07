@@ -55,7 +55,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
       return mutator.pieces.GET({
         params: {
-          limit: `${LIMIT_MAX}`,
+          limit: 3000,
           query: `titleId==${titleId} and poLineId==${lineId} sortby receiptDate`,
         },
       })
