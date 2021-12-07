@@ -31,7 +31,10 @@ import {
   IfPermission,
   useStripes,
 } from '@folio/stripes/core';
-import { ViewMetaData } from '@folio/stripes/smart-components';
+import {
+  ViewMetaData,
+  useColumnManager,
+} from '@folio/stripes/smart-components';
 import {
   handleKeyCommand,
   ORDER_FORMATS,
@@ -45,7 +48,9 @@ import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
+  EXPECTED_PIECE_COLUMN_MAPPING,
   ORDER_FORMAT_TO_PIECE_FORMAT,
+  RECEIVED_PIECE_COLUMN_MAPPING,
   TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
 } from './constants';
@@ -121,6 +126,15 @@ const TitleDetails = ({
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
+
+  const {
+    visibleColumns: expectedPiecesVisibleColumns,
+    toggleColumn: toggleExpectedPiecesColumn,
+  } = useColumnManager('expected-pieces-column-manager', EXPECTED_PIECE_COLUMN_MAPPING);
+  const {
+    visibleColumns: receivedPiecesVisibleColumns,
+    toggleColumn: toggleReceivedPiecesColumn,
+  } = useColumnManager('received-pieces-column-manager', RECEIVED_PIECE_COLUMN_MAPPING);
 
   const shortcuts = [
     {
@@ -270,9 +284,19 @@ const TitleDetails = ({
         openReceiveList={onReceivePieces}
         titleId={titleId}
         disabled={isPiecesLock}
+        toggleColumn={toggleExpectedPiecesColumn}
+        visibleColumns={expectedPiecesVisibleColumns}
       />
     ),
-    [titleId, openAddPieceModal, hasReceive, isPiecesLock, onReceivePieces],
+    [
+      hasReceive,
+      openAddPieceModal,
+      onReceivePieces,
+      titleId,
+      isPiecesLock,
+      toggleExpectedPiecesColumn,
+      expectedPiecesVisibleColumns,
+    ],
   );
 
   const hasUnreceive = Boolean(receivedPieces.length);
@@ -281,9 +305,11 @@ const TitleDetails = ({
       <TitleDetailsReceivedActions
         titleId={titleId}
         hasUnreceive={hasUnreceive}
+        toggleColumn={toggleReceivedPiecesColumn}
+        visibleColumns={receivedPiecesVisibleColumns}
       />
     ),
-    [titleId, hasUnreceive],
+    [titleId, hasUnreceive, toggleReceivedPiecesColumn, receivedPiecesVisibleColumns],
   );
 
   const lastMenu = (
@@ -393,6 +419,7 @@ const TitleDetails = ({
               <ExpectedPiecesList
                 selectPiece={openAddPieceModal}
                 pieces={expectedPieces}
+                visibleColumns={expectedPiecesVisibleColumns}
               />
             </Accordion>
 
@@ -405,6 +432,7 @@ const TitleDetails = ({
               <ReceivedPiecesList
                 pieces={receivedPieces}
                 selectPiece={openEditReceivedPieceModal}
+                visibleColumns={receivedPiecesVisibleColumns}
               />
             </Accordion>
           </AccordionSet>

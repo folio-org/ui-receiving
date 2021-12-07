@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
-import { PIECE_COLUMNS } from '../constants';
+import { PIECE_COLUMNS, RECEIVED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import PiecesList from './PiecesList';
 
 const pieces = [{
@@ -23,7 +23,7 @@ const renderPiecesList = (selectPiece) => (render(
   <IntlProvider locale="en">
     <PiecesList
       pieces={pieces}
-      visibleColumns={['barcode', PIECE_COLUMNS.enumeration, 'format', PIECE_COLUMNS.receiptDate, 'receivedDate', 'request', 'selection']}
+      visibleColumns={RECEIVED_PIECE_VISIBLE_COLUMNS}
       selectPiece={selectPiece}
       sortedColumn={PIECE_COLUMNS.receiptDate}
     />
@@ -40,7 +40,6 @@ describe('Given Pieces List', () => {
     expect(getByText('ui-receiving.piece.barcode')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
-    expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
     expect(getByText('ui-receiving.piece.receivedDate')).toBeDefined();
     expect(getByText('ui-receiving.piece.request')).toBeDefined();
 
@@ -48,7 +47,6 @@ describe('Given Pieces List', () => {
     expect(getByText(pieces[0].barcode)).toBeDefined();
     expect(getByText(pieces[0].enumeration)).toBeDefined();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
-    expect(getByText(pieces[0].receiptDate)).toBeDefined();
     expect(getByText(pieces[0].receivedDate)).toBeDefined();
     expect(getByText('ui-receiving.piece.request.isOpened')).toBeDefined();
   });
