@@ -110,7 +110,7 @@
     "filter.receivingStatus": "接收状态",
     "find-po-line-plugin-unavailable": "查找订单行插件不可用",
     "title.actions.save.error.genericError": "尚未为采购订单行{poLineNumber}添加标题{title}",
-    "title.actions.save.error.titleExist": "采购订单行{poLineNumber}的标题{title} {poLineNumber}已存在",
+    "title.actions.save.error.titleExist": "The title {title} for PO line {poLineNumber} already exists",
     "piece.connectedItem": "已连接",
     "piece.createItem": "创建单件",
     "title.actions.missingLoanTypeId.error": "无法创建单件，未设置永久借阅类型Id，请在“设置”-“订单”-“借阅类型”中进行设置",
