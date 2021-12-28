@@ -8,6 +8,7 @@
 * Validate user has made a change to the piece form before activating "Save" or "Quick receive" buttons. Refs UIREC-190.
 * Display comment in receiving in column rather than on hover. Refs UIREC-193.
 * Allow user to choose what columns display for expected and received pieces. Refs UIREC-196.
+* Add a return to Receiving default search to app context menu dropdown. Refs UIREC-201.
 
 ## [2.0.3](https://github.com/folio-org/ui-receiving/tree/v2.0.3) (2021-12-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.2...v2.0.3)

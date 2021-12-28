@@ -69,6 +69,16 @@ const Receiving = () => {
               <NavList>
                 <NavListSection>
                   <NavListItem
+                    id="receiving-app-search-item"
+                    to="/receiving"
+                    onClick={() => {
+                      handleToggle();
+                      focusSearchField();
+                    }}
+                  >
+                    <FormattedMessage id="ui-receiving.appMenu.receivingAppSearch" />
+                  </NavListItem>
+                  <NavListItem
                     id="keyboard-shortcuts-item"
                     onClick={() => {
                       handleToggle();
