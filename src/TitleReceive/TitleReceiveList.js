@@ -131,13 +131,10 @@ export const TitleReceiveList = ({
               instanceId={isHolding ? instanceId : undefined}
               locationIds={locationIds}
               locations={locations}
-
               labelless
               locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-
               holdingName={`${field}[${record.rowIndex}].holdingId`}
               locationName={`${field}[${record.rowIndex}].locationId`}
-
               onChange={selectLocation}
             />
           );

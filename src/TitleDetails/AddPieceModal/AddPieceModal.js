@@ -315,10 +315,8 @@ const AddPieceModal = ({
                 instanceId={isLocationRequired ? instanceId : undefined}
                 locationIds={locationIds}
                 locations={locations}
-
                 holdingName="holdingId"
                 locationName="locationId"
-
                 onChange={mutators.setLocationValue}
                 disabled={!isNotReceived}
                 required={isLocationRequired}
