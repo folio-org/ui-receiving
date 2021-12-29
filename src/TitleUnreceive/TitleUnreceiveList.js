@@ -63,8 +63,8 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, pieceHol
             : <NoValue />
         ),
         format: ({ format }) => PIECE_FORMAT_LABELS[format],
-        callNumber: ({ callNumber }) => callNumber || <NoValue />,
-        barcode: ({ barcode }) => barcode || <NoValue />,
+        callNumber: record => record.callNumber || <NoValue />,
+        barcode: record => record.barcode || <NoValue />,
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
