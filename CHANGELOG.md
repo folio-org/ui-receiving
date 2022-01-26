@@ -2,6 +2,8 @@
 
 ## (IN PROGRESS)
 
+* Hide "Suppress from discovery" toggle from Piece form. Refs UIREC-208.
+
 ## [2.0.3](https://github.com/folio-org/ui-receiving/tree/v2.0.3) (2021-12-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.2...v2.0.3)
 
