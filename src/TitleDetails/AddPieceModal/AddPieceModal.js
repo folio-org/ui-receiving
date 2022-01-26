@@ -338,17 +338,21 @@ const AddPieceModal = ({
                     />
                   </Col>
 
-                  <Col xs={3}>
-                    <Field
-                      component={Checkbox}
-                      disabled={!formValues.displayOnHolding}
-                      fullWidth
-                      label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
-                      name="discoverySuppress"
-                      type="checkbox"
-                      vertical
-                    />
-                  </Col>
+                  {
+                    false && (
+                      <Col xs={3}>
+                        <Field
+                          component={Checkbox}
+                          disabled={!formValues.displayOnHolding}
+                          fullWidth
+                          label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
+                          name="discoverySuppress"
+                          type="checkbox"
+                          vertical
+                        />
+                      </Col>
+                    )
+                  }
                 </>
               )
             }

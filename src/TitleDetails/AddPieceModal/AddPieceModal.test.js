@@ -77,7 +77,7 @@ describe('AddPieceModal', () => {
   });
 
   describe('Check display on holding', () => {
-    it('should enable discovery suppress when clicked', () => {
+    it.skip('should enable discovery suppress when clicked', () => {
       const format = 'Electronic';
 
       renderAddPieceModal({
