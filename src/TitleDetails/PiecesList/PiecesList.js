@@ -31,7 +31,7 @@ const formatter = {
   [PIECE_COLUMNS.chronology]: piece => piece.chronology || <NoValue />,
   [PIECE_COLUMNS.format]: piece => PIECE_FORMAT_LABELS[piece.format],
   [PIECE_COLUMNS.receiptDate]: piece => <FolioFormattedDate value={piece.receiptDate} />,
-  [PIECE_COLUMNS.receivedDate]: piece => <FolioFormattedDate value={piece.receivedDate} />,
+  [PIECE_COLUMNS.receivedDate]: piece => <FolioFormattedDate value={piece.receivedDate} utc={false} />,
   [PIECE_COLUMNS.comment]: piece => piece.comment || <NoValue />,
   [PIECE_COLUMNS.barcode]: piece => piece.barcode || <NoValue />,
   [PIECE_COLUMNS.request]: piece => (
