@@ -20,6 +20,8 @@ export function TitleDetailsExpectedActions({
   toggleColumn,
   visibleColumns,
 }) {
+  if (!hasReceive) return null;
+
   return (
     <Dropdown
       data-testid="expected-pieces-action-dropdown"

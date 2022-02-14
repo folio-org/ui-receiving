@@ -3,7 +3,7 @@ import {
   ITEM_STATUS,
 } from '@folio/stripes-acq-components';
 
-const getPieceStatusFromItem = (item) => {
+export const getPieceStatusFromItem = (item) => {
   const itemStatus = item?.status?.name || ITEM_STATUS.undefined;
 
   return itemStatus === ITEM_STATUS.onOrder || itemStatus === ITEM_STATUS.orderClosed

@@ -12,6 +12,8 @@ import {
 import { RECEIVED_PIECE_COLUMN_MAPPING } from '../constants';
 
 export function TitleDetailsReceivedActions({ titleId, hasUnreceive, visibleColumns, toggleColumn }) {
+  if (!hasUnreceive) return null;
+
   return (
     <Dropdown
       data-testid="received-pieces-action-dropdown"

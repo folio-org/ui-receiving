@@ -49,6 +49,8 @@ const PIECE_VISIBLE_COLUMNS = [
   PIECE_COLUMNS.format,
 ];
 
+export const SORTABLE_COLUMNS = [PIECE_COLUMNS.enumeration, PIECE_COLUMNS.receiptDate, PIECE_COLUMNS.receivedDate];
+
 export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
   ...PIECE_VISIBLE_COLUMNS,
   PIECE_COLUMNS.receiptDate,
@@ -74,6 +76,7 @@ export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
   request: <FormattedMessage id="ui-receiving.piece.request" />,
   selection: null,
+  arrow: null,
 };
 
 export const EXPECTED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, EXPECTED_PIECE_VISIBLE_COLUMNS);

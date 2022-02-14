@@ -4,8 +4,14 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
+import { usePaginatedPieces } from '../../common/hooks';
+
 import { RECEIVED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import ReceivedPiecesList from './ReceivedPiecesList';
+
+jest.mock('../../common/hooks', () => ({
+  usePaginatedPieces: jest.fn(),
+}));
 
 const pieces = [{
   enumeration: 'v1',
@@ -16,7 +22,7 @@ const pieces = [{
 const renderPiecesList = () => (render(
   <IntlProvider locale="en">
     <ReceivedPiecesList
-      pieces={pieces}
+      title={{ id: 'titleId' }}
       selectPiece={jest.fn}
       visibleColumns={RECEIVED_PIECE_VISIBLE_COLUMNS}
     />
@@ -24,6 +30,14 @@ const renderPiecesList = () => (render(
 ));
 
 describe('Given Received Pieces List', () => {
+  beforeEach(() => {
+    usePaginatedPieces.mockClear().mockReturnValue({
+      pieces,
+      totalCount: pieces.length,
+      isFetching: false,
+    });
+  });
+
   afterEach(cleanup);
 
   it('Than it should display correct table', () => {

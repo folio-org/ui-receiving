@@ -16,6 +16,8 @@ import {
   ORDER_STATUSES,
 } from '@folio/stripes-acq-components';
 
+import { usePaginatedPieces } from '../common/hooks';
+
 import TitleDetails from './TitleDetails';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
@@ -34,6 +36,10 @@ jest.mock('./POLDetails', () => jest.fn().mockReturnValue('POLDetails'));
 jest.mock('../common/components', () => ({
   ...jest.requireActual('../common/components'),
   LineLocationsView: jest.fn().mockReturnValue('LineLocationsView'),
+}));
+jest.mock('../common/hooks', () => ({
+  ...jest.requireActual('../common/hooks'),
+  usePaginatedPieces: jest.fn(),
 }));
 
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
@@ -63,7 +69,7 @@ const defaultProps = {
     physical: { createInventory: INVENTORY_RECORDS_TYPE.instance },
     orderFormat: ORDER_FORMATS.PEMix,
   },
-  title: { instanceId: null },
+  title: { id: 'titleId', instanceId: null },
   vendorsMap: {},
   locations: [{ id: 'locationId', name: 'locationName', code: 'locationCode' }],
   onEdit: jest.fn(),
@@ -98,6 +104,14 @@ const renderTitleDetails = (props = {}) => (render(
 ));
 
 describe('TitleDetails', () => {
+  beforeEach(() => {
+    usePaginatedPieces.mockClear().mockReturnValue({
+      pieces: defaultProps.pieces,
+      totalCount: defaultProps.pieces.length,
+      isFetching: false,
+    });
+  });
+
   it('should display title details accordions', async () => {
     await act(async () => renderTitleDetails());
 

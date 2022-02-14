@@ -6,7 +6,6 @@ import {
   get,
   noop,
   omit,
-  sortBy,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
@@ -91,7 +90,7 @@ const TitleDetails = ({
   onClose,
   onEdit,
   order,
-  pieces,
+  piecesExistance,
   poLine,
   title,
   vendorsMap,
@@ -107,11 +106,7 @@ const TitleDetails = ({
   const confirmReceivingPromise = useRef({});
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
-  const expectedPieces = pieces.filter(({ receivingStatus }) => receivingStatus === PIECE_STATUS.expected);
 
-  const receivedPieces = sortBy(pieces.filter(
-    ({ receivingStatus }) => receivingStatus === PIECE_STATUS.received,
-  ), 'receivedDate');
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
@@ -275,7 +270,7 @@ const TitleDetails = ({
       : onReceive(values);
   }, [isOrderClosed, confirmReceiving, onCheckIn, getPieceValues, onCreateAnotherPiece]);
 
-  const hasReceive = Boolean(expectedPieces.length);
+  const hasReceive = Boolean(piecesExistance?.[PIECE_STATUS.expected]);
   const expectedPiecesActions = useMemo(
     () => (
       <TitleDetailsExpectedActions
@@ -299,7 +294,7 @@ const TitleDetails = ({
     ],
   );
 
-  const hasUnreceive = Boolean(receivedPieces.length);
+  const hasUnreceive = Boolean(piecesExistance?.[PIECE_STATUS.received]);
   const receivedPiecesActions = useMemo(
     () => (
       <TitleDetailsReceivedActions
@@ -417,8 +412,9 @@ const TitleDetails = ({
               label={TITLE_ACCORDION_LABELS.expected}
             >
               <ExpectedPiecesList
+                key={piecesExistance?.key}
+                title={title}
                 selectPiece={openAddPieceModal}
-                pieces={expectedPieces}
                 visibleColumns={expectedPiecesVisibleColumns}
               />
             </Accordion>
@@ -430,7 +426,8 @@ const TitleDetails = ({
               label={TITLE_ACCORDION_LABELS.received}
             >
               <ReceivedPiecesList
-                pieces={receivedPieces}
+                key={piecesExistance?.key}
+                title={title}
                 selectPiece={openEditReceivedPieceModal}
                 visibleColumns={receivedPiecesVisibleColumns}
               />
@@ -495,16 +492,12 @@ TitleDetails.propTypes = {
   onClose: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   order: PropTypes.object.isRequired,
-  pieces: PropTypes.arrayOf(PropTypes.object),
+  piecesExistance: PropTypes.object,
   poLine: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,
   vendorsMap: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   getPieceValues: PropTypes.func.isRequired,
-};
-
-TitleDetails.defaultProps = {
-  pieces: [],
 };
 
 export default withRouter(TitleDetails);

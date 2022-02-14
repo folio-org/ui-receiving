@@ -16,8 +16,8 @@ import {
   organizationsManifest,
   pieceResource,
   piecesResource,
-  requestsResource,
   useShowCallout,
+  PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -28,7 +28,6 @@ import {
   useQuickReceive,
 } from '../common/hooks';
 import {
-  getHydratedPieces,
   handleCommonErrors,
   handleReceiveErrorResponse,
   getPieceById,
@@ -41,7 +40,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
-  const [pieces, setPieces] = useState();
+  const [piecesExistance, setPiecesExistance] = useState();
   const [order, setOrder] = useState({});
   const [locations, setLocations] = useState();
   const [vendorsMap, setVendorsMap] = useState();
@@ -49,24 +48,34 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const { mutatePiece } = usePieceMutator();
   const { quickReceive } = useQuickReceive();
 
+  const hasPieces = useCallback((lineId, status) => (
+    mutator.pieces.GET({
+      params: {
+        limit: 1,
+        query: `titleId==${titleId} and poLineId==${lineId} and receivingStatus=${status}`,
+      },
+    })
+      .then(data => Boolean(data.length))
+      .catch(() => false)
+      .then(flag => ({ [status]: flag }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [titleId]);
+
   const fetchReceivingResources = useCallback(
     (lineId) => {
-      setPieces();
+      setPiecesExistance();
 
-      return mutator.pieces.GET({
-        params: {
-          limit: 3000,
-          query: `titleId==${titleId} and poLineId==${lineId} sortby receiptDate`,
-        },
-      })
-        .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
-        .then(setPieces)
-        .catch(() => {
-          setPieces([]);
-        });
+      Promise.all([
+        hasPieces(lineId, PIECE_STATUS.expected),
+        hasPieces(lineId, PIECE_STATUS.received),
+      ])
+        .then(existances => setPiecesExistance(existances.reduce(
+          (acc, existance) => ({ ...acc, ...existance, key: new Date() }),
+          {},
+        )))
+        .catch(() => setPiecesExistance({}));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titleId],
+    [hasPieces],
   );
 
   const getHoldingsItemsAndPieces = useCallback((holdingId, params = {}) => {
@@ -258,7 +267,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     ).finally(() => fetchReceivingResources(poLine.id));
   }, [fetchReceivingResources, poLine.id, showCallout, mutatePiece]);
 
-  if (isLoading || !(pieces || locations || vendorsMap)) {
+  if (isLoading || !(locations || vendorsMap)) {
     return (
       <LoadingPane
         id="pane-title-details"
@@ -276,7 +285,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       onClose={onClose}
       onEdit={onEdit}
       order={order}
-      pieces={pieces}
+      piecesExistance={piecesExistance}
       poLine={poLine}
       title={title}
       vendorsMap={vendorsMap}
@@ -305,7 +314,6 @@ TitleDetailsContainer.manifest = Object.freeze({
   orderPieces: pieceResource,
   pieces: piecesResource,
   items: itemsResource,
-  requests: requestsResource,
   locations: {
     ...locationsManifest,
     fetch: false,

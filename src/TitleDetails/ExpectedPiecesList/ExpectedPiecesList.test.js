@@ -4,8 +4,14 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
+import { usePaginatedPieces } from '../../common/hooks';
+
 import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import ExpectedPiecesList from './ExpectedPiecesList';
+
+jest.mock('../../common/hooks', () => ({
+  usePaginatedPieces: jest.fn(),
+}));
 
 const pieces = [{
   enumeration: 'v1',
@@ -16,7 +22,7 @@ const pieces = [{
 const renderPiecesList = (onEditPiece) => (render(
   <IntlProvider locale="en">
     <ExpectedPiecesList
-      pieces={pieces}
+      title={{ id: 'titleId' }}
       selectPiece={onEditPiece}
       visibleColumns={EXPECTED_PIECE_VISIBLE_COLUMNS}
     />
@@ -28,6 +34,12 @@ describe('Given Expected Pieces List', () => {
 
   beforeEach(() => {
     onEditPiece = jest.fn();
+
+    usePaginatedPieces.mockClear().mockReturnValue({
+      pieces,
+      totalCount: pieces.length,
+      isFetching: false,
+    });
   });
 
   afterEach(cleanup);
