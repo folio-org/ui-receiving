@@ -43,11 +43,12 @@ const ExpectedPiecesList = ({
 
   useEffect(() => {
     setPagination(prev => ({ ...prev, offset: 0, timestamp: new Date() }));
-  }, [filters, setPagination]);
+  }, [filters]);
 
   useEffect(() => {
     onLoadingStatusChange(isFetching);
-  }, [isFetching, onLoadingStatusChange]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching]);
 
   return (
     <PiecesList
