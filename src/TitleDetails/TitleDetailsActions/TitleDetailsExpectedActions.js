@@ -1,18 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-import { ColumnManagerMenu } from '@folio/stripes/smart-components';
+import { FilterMenu } from '@folio/stripes-acq-components';
+import { CheckboxFilter, ColumnManagerMenu } from '@folio/stripes/smart-components';
 import {
   Button,
   Dropdown,
   DropdownMenu,
   Icon,
+  MenuSection,
 } from '@folio/stripes/components';
 
-import { EXPECTED_PIECE_COLUMN_MAPPING } from '../constants';
+import {
+  EXPECTED_PIECE_COLUMN_MAPPING,
+  MENU_FILTERS,
+  SUPPLEMENT_MENU_FILTER_OPTIONS,
+} from '../constants';
 
 export function TitleDetailsExpectedActions({
+  applyFilters,
+  filters,
   openAddPieceModal,
   openReceiveList,
   hasReceive,
@@ -20,7 +28,7 @@ export function TitleDetailsExpectedActions({
   toggleColumn,
   visibleColumns,
 }) {
-  if (!hasReceive) return null;
+  const intl = useIntl();
 
   return (
     <Dropdown
@@ -29,30 +37,46 @@ export function TitleDetailsExpectedActions({
       buttonProps={{ buttonStyle: 'primary' }}
     >
       <DropdownMenu>
-        <Button
-          data-testid="add-piece-button"
-          data-test-add-piece-button
-          buttonStyle="dropdownItem"
-          onClick={openAddPieceModal}
-          disabled={disabled}
+        <MenuSection
+          label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
+          id="expected-pieces-menu-actions"
         >
-          <Icon size="small" icon="plus-sign">
-            <FormattedMessage id="ui-receiving.piece.button.addPiece" />
-          </Icon>
-        </Button>
-
-        {hasReceive && (
           <Button
-            data-testid="receive-button"
-            data-test-title-receive-button
+            data-testid="add-piece-button"
+            data-test-add-piece-button
             buttonStyle="dropdownItem"
-            onClick={openReceiveList}
+            onClick={openAddPieceModal}
             disabled={disabled}
           >
-            <Icon size="small" icon="receive">
-              <FormattedMessage id="ui-receiving.title.details.button.receive" />
+            <Icon size="small" icon="plus-sign">
+              <FormattedMessage id="ui-receiving.piece.button.addPiece" />
             </Icon>
           </Button>
+
+          {hasReceive && (
+            <Button
+              data-testid="receive-button"
+              data-test-title-receive-button
+              buttonStyle="dropdownItem"
+              onClick={openReceiveList}
+              disabled={disabled}
+            >
+              <Icon size="small" icon="receive">
+                <FormattedMessage id="ui-receiving.title.details.button.receive" />
+              </Icon>
+            </Button>
+          )}
+        </MenuSection>
+
+        {hasReceive && (
+          <FilterMenu prefix="received-pieces">
+            <CheckboxFilter
+              dataOptions={SUPPLEMENT_MENU_FILTER_OPTIONS}
+              name={MENU_FILTERS.supplement}
+              onChange={({ name, values }) => applyFilters(name, values)}
+              selectedValues={filters[MENU_FILTERS.supplement]}
+            />
+          </FilterMenu>
         )}
 
         <ColumnManagerMenu
@@ -67,6 +91,8 @@ export function TitleDetailsExpectedActions({
 }
 
 TitleDetailsExpectedActions.propTypes = {
+  applyFilters: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
   hasReceive: PropTypes.bool.isRequired,
   openAddPieceModal: PropTypes.func.isRequired,
   openReceiveList: PropTypes.func.isRequired,

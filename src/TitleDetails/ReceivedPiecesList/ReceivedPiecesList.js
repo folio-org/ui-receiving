@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -12,12 +12,18 @@ import PiecesList from '../PiecesList';
 
 const RESULT_COUNT_INCREMENT = 30;
 
-const ReceivedPiecesList = ({ title, selectPiece, visibleColumns }) => {
+const ReceivedPiecesList = ({
+  filters,
+  onLoadingStatusChange,
+  title,
+  selectPiece,
+  visibleColumns,
+}) => {
   const [sorting, setSorting] = useState({
     sorting: 'receivedDate',
     sortingDirection: 'descending',
   });
-  const [pagination, setPagination] = useState({ limit: RESULT_COUNT_INCREMENT, offset: 0, timestamp: new Date() });
+  const [pagination, setPagination] = useState({ limit: RESULT_COUNT_INCREMENT });
   const {
     pieces,
     totalRecords,
@@ -28,9 +34,18 @@ const ReceivedPiecesList = ({ title, selectPiece, visibleColumns }) => {
       titleId: title.id,
       poLineId: title.poLineId,
       receivingStatus: PIECE_STATUS.received,
+      ...filters,
       ...sorting,
     },
   });
+
+  useEffect(() => {
+    setPagination(prev => ({ ...prev, offset: 0, timestamp: new Date() }));
+  }, [filters, setPagination]);
+
+  useEffect(() => {
+    onLoadingStatusChange(isFetching);
+  }, [isFetching, onLoadingStatusChange]);
 
   return (
     <PiecesList
@@ -48,6 +63,8 @@ const ReceivedPiecesList = ({ title, selectPiece, visibleColumns }) => {
 };
 
 ReceivedPiecesList.propTypes = {
+  filters: PropTypes.object.isRequired,
+  onLoadingStatusChange: PropTypes.func.isRequired,
   title: PropTypes.object.isRequired,
   selectPiece: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,

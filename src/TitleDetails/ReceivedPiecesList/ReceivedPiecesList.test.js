@@ -22,6 +22,8 @@ const pieces = [{
 const renderPiecesList = () => (render(
   <IntlProvider locale="en">
     <ReceivedPiecesList
+      filters={{}}
+      onLoadingStatusChange={jest.fn()}
       title={{ id: 'titleId' }}
       selectPiece={jest.fn}
       visibleColumns={RECEIVED_PIECE_VISIBLE_COLUMNS}

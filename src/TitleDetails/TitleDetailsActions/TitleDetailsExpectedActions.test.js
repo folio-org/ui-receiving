@@ -6,7 +6,9 @@ import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import { TitleDetailsExpectedActions } from './TitleDetailsExpectedActions';
 
 const defaultProps = {
+  applyFilters: jest.fn(),
   checkinItems: true,
+  filters: {},
   openAddPieceModal: jest.fn(),
   openReceiveList: jest.fn(),
   hasReceive: true,
@@ -68,5 +70,15 @@ describe('TitleDetailsExpectedActions', () => {
     user.click(screen.getByTestId('add-piece-button'));
 
     expect(defaultProps.openAddPieceModal).not.toHaveBeenCalled();
+  });
+});
+
+describe('TitleDetailsExpectedActions filters', () => {
+  it('should call \'applyFilters\' when filter value was changed', () => {
+    renderTitleDetailsExpectedActions({ ...defaultProps, disabled: true });
+
+    user.click(screen.getByText('ui-receiving.filter.supplements'));
+
+    expect(defaultProps.applyFilters).toHaveBeenCalled();
   });
 });

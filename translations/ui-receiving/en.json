@@ -24,6 +24,8 @@
   "filter.orderFormat": "Order format",
   "filter.location": "Location",
   "filter.receivingStatus": "Receiving status",
+  "filter.supplements": "Supplements",
+  "filter.nonSupplements": "Non supplements",
 
   "titles.search": "Search",
   "titles.orderStatus": "Order status",

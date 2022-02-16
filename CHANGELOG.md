@@ -14,6 +14,7 @@
 * Piece received date is not timezone formatted. Refs UIREC-211.
 * Pagination for expected and received pieces. Refs UIREC-213.
 * refactor psets away from backend '.all' permissions. Refs UIREC-177.
+* Filters for expected and received pieces. Refs UIREC-191.
 
 ## [2.0.3](https://github.com/folio-org/ui-receiving/tree/v2.0.3) (2021-12-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.2...v2.0.3)

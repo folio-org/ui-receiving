@@ -7,6 +7,8 @@ import { RECEIVED_PIECE_VISIBLE_COLUMNS } from '../constants';
 import { TitleDetailsReceivedActions } from './TitleDetailsReceivedActions';
 
 const defaultProps = {
+  applyFilters: jest.fn(),
+  filters: {},
   titleId: 'titleId',
   hasUnreceive: true,
   visibleColumns: RECEIVED_PIECE_VISIBLE_COLUMNS,

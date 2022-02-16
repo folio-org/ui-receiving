@@ -1,17 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-import { ColumnManagerMenu } from '@folio/stripes/smart-components';
+import { CheckboxFilter, ColumnManagerMenu } from '@folio/stripes/smart-components';
+import { FilterMenu } from '@folio/stripes-acq-components';
 import {
   Button,
   Dropdown,
   DropdownMenu,
+  MenuSection,
 } from '@folio/stripes/components';
 
-import { RECEIVED_PIECE_COLUMN_MAPPING } from '../constants';
+import {
+  MENU_FILTERS,
+  RECEIVED_PIECE_COLUMN_MAPPING,
+  SUPPLEMENT_MENU_FILTER_OPTIONS,
+} from '../constants';
 
-export function TitleDetailsReceivedActions({ titleId, hasUnreceive, visibleColumns, toggleColumn }) {
+export function TitleDetailsReceivedActions({
+  applyFilters,
+  filters,
+  hasUnreceive,
+  titleId,
+  toggleColumn,
+  visibleColumns,
+}) {
+  const intl = useIntl();
+
   if (!hasUnreceive) return null;
 
   return (
@@ -21,7 +36,10 @@ export function TitleDetailsReceivedActions({ titleId, hasUnreceive, visibleColu
       buttonProps={{ buttonStyle: 'primary' }}
     >
       <DropdownMenu>
-        {hasUnreceive && (
+        <MenuSection
+          label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
+          id="received-pieces-menu-actions"
+        >
           <Button
             data-test-title-unreceive-button
             to={`/receiving/unreceive/${titleId}`}
@@ -29,7 +47,17 @@ export function TitleDetailsReceivedActions({ titleId, hasUnreceive, visibleColu
           >
             <FormattedMessage id="ui-receiving.title.details.button.unreceive" />
           </Button>
-        )}
+        </MenuSection>
+
+        <FilterMenu prefix="received-pieces">
+          <CheckboxFilter
+            dataOptions={SUPPLEMENT_MENU_FILTER_OPTIONS}
+            name={MENU_FILTERS.supplement}
+            onChange={({ name, values }) => applyFilters(name, values)}
+            selectedValues={filters[MENU_FILTERS.supplement]}
+          />
+        </FilterMenu>
+
         <ColumnManagerMenu
           prefix="received-pieces"
           columnMapping={RECEIVED_PIECE_COLUMN_MAPPING}
@@ -42,6 +70,8 @@ export function TitleDetailsReceivedActions({ titleId, hasUnreceive, visibleColu
 }
 
 TitleDetailsReceivedActions.propTypes = {
+  applyFilters: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
   hasUnreceive: PropTypes.bool.isRequired,
   titleId: PropTypes.string.isRequired,
   toggleColumn: PropTypes.func.isRequired,

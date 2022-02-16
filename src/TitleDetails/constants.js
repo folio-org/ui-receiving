@@ -82,3 +82,18 @@ export const PIECE_COLUMN_MAPPING = {
 export const EXPECTED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, EXPECTED_PIECE_VISIBLE_COLUMNS);
 
 export const RECEIVED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, RECEIVED_PIECE_VISIBLE_COLUMNS);
+
+export const MENU_FILTERS = {
+  supplement: 'supplement',
+};
+
+export const SUPPLEMENT_MENU_FILTER_OPTIONS = [
+  {
+    value: 'true',
+    label: <FormattedMessage id="ui-receiving.filter.supplements" />,
+  },
+  {
+    value: 'false',
+    label: <FormattedMessage id="ui-receiving.filter.nonSupplements" />,
+  },
+];

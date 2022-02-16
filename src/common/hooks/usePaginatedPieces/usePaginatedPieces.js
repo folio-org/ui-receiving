@@ -10,19 +10,15 @@ import {
   ITEMS_API,
   ORDER_PIECES_API,
   REQUESTS_API,
+  useLocaleDateFormat,
 } from '@folio/stripes-acq-components';
 
 import { getPieceStatusFromItem } from '../../utils';
+import { makeKeywordQueryBuilder } from './searchConfigs';
 
-export const buildPiecesQuery = makeQueryBuilder(
+export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'cql.allRecords=1',
-  (query, qindex) => {
-    if (qindex) {
-      return `(${qindex}="${query}*")`;
-    }
-
-    return '';
-  },
+  makeKeywordQueryBuilder(dateFormat),
   'sortby receiptDate',
 );
 
@@ -77,8 +73,9 @@ export const usePaginatedPieces = ({
   const { fetchPieceRequests } = usePieceRequestsFetch();
   const { fetchPieceItems } = usePieceItemsFetch();
   const [namespace] = useNamespace({ key: `${queryParams.receivingStatus}-pieces-list` });
+  const localeDateFormat = useLocaleDateFormat();
 
-  const query = buildPiecesQuery(queryParams);
+  const query = buildPiecesQuery(localeDateFormat)(queryParams);
 
   const searchParams = {
     query,

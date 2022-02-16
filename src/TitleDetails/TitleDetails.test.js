@@ -130,6 +130,17 @@ describe('TitleDetails', () => {
     expect(screen.getByText('Title')).toBeDefined();
   });
 
+  it('should display filter search inputs if there are pieces to receive/unreceive', async () => {
+    const piecesExistance = {
+      [PIECE_STATUS.expected]: true,
+      [PIECE_STATUS.received]: true,
+    };
+
+    renderTitleDetails({ piecesExistance });
+
+    expect(screen.getAllByTestId('filter-search-input')).toBeDefined();
+  });
+
   describe('AddPieceModal', () => {
     it('should call \'onAddPiece\' when \'Save\' button was clicked', async () => {
       renderTitleDetails();

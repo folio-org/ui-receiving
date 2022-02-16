@@ -35,10 +35,12 @@ import {
   useColumnManager,
 } from '@folio/stripes/smart-components';
 import {
+  FilterSearchInput,
   handleKeyCommand,
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
+  useFilters,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
@@ -59,6 +61,8 @@ import {
 } from './TitleDetailsActions';
 import Title from './Title';
 import POLDetails from './POLDetails';
+
+import css from './TitleDetails.css';
 
 function getNewPieceValues(titleId, poLine) {
   const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
@@ -271,9 +275,30 @@ const TitleDetails = ({
   }, [isOrderClosed, confirmReceiving, onCheckIn, getPieceValues, onCreateAnotherPiece]);
 
   const hasReceive = Boolean(piecesExistance?.[PIECE_STATUS.expected]);
+
+  const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
+  const [isReceivedPiecesLoading, setReceivedPiecesLoading] = useState(false);
+
+  const {
+    applyFilters: applyExpectedPiecesFilters,
+    applySearch: applyExpectedPiecesSearch,
+    filters: expectedPiecesFilters,
+    changeSearch: changeExpectedPiecesSearch,
+    searchQuery: expectedPiecesSearchQuery,
+  } = useFilters(noop);
+  const {
+    applyFilters: applyReceivedPiecesFilters,
+    applySearch: applyReceivedPiecesSearch,
+    filters: receivedPiecesFilters,
+    changeSearch: changeReceivedPiecesSearch,
+    searchQuery: receivedPiecesSearchQuery,
+  } = useFilters(noop);
+
   const expectedPiecesActions = useMemo(
     () => (
       <TitleDetailsExpectedActions
+        applyFilters={applyExpectedPiecesFilters}
+        filters={expectedPiecesFilters}
         hasReceive={hasReceive}
         openAddPieceModal={openAddPieceModal}
         openReceiveList={onReceivePieces}
@@ -284,6 +309,8 @@ const TitleDetails = ({
       />
     ),
     [
+      applyExpectedPiecesFilters,
+      expectedPiecesFilters,
       hasReceive,
       openAddPieceModal,
       onReceivePieces,
@@ -298,13 +325,22 @@ const TitleDetails = ({
   const receivedPiecesActions = useMemo(
     () => (
       <TitleDetailsReceivedActions
+        applyFilters={applyReceivedPiecesFilters}
+        filters={receivedPiecesFilters}
         titleId={titleId}
         hasUnreceive={hasUnreceive}
         toggleColumn={toggleReceivedPiecesColumn}
         visibleColumns={receivedPiecesVisibleColumns}
       />
     ),
-    [titleId, hasUnreceive, toggleReceivedPiecesColumn, receivedPiecesVisibleColumns],
+    [
+      applyReceivedPiecesFilters,
+      hasUnreceive,
+      receivedPiecesFilters,
+      receivedPiecesVisibleColumns,
+      titleId,
+      toggleReceivedPiecesColumn,
+    ],
   );
 
   const lastMenu = (
@@ -407,12 +443,28 @@ const TitleDetails = ({
 
             <Accordion
               displayWhenClosed={expectedPiecesActions}
-              displayWhenOpen={expectedPiecesActions}
+              displayWhenOpen={(
+                <div className={css['accordion-actions']}>
+                  {hasReceive && (
+                    <FilterSearchInput
+                      applyFilters={applyExpectedPiecesFilters}
+                      applySearch={applyExpectedPiecesSearch}
+                      changeSearch={changeExpectedPiecesSearch}
+                      filters={expectedPiecesFilters}
+                      isLoading={isExpectedPiecesLoading}
+                      searchQuery={expectedPiecesSearchQuery}
+                    />
+                  )}
+                  {expectedPiecesActions}
+                </div>
+              )}
               id={TITLE_ACCORDION.expected}
               label={TITLE_ACCORDION_LABELS.expected}
             >
               <ExpectedPiecesList
                 key={piecesExistance?.key}
+                filters={expectedPiecesFilters}
+                onLoadingStatusChange={setExpectedPiecesLoading}
                 title={title}
                 selectPiece={openAddPieceModal}
                 visibleColumns={expectedPiecesVisibleColumns}
@@ -421,12 +473,28 @@ const TitleDetails = ({
 
             <Accordion
               displayWhenClosed={receivedPiecesActions}
-              displayWhenOpen={receivedPiecesActions}
+              displayWhenOpen={(
+                <div className={css['accordion-actions']}>
+                  {hasUnreceive && (
+                    <FilterSearchInput
+                      applyFilters={applyReceivedPiecesFilters}
+                      applySearch={applyReceivedPiecesSearch}
+                      changeSearch={changeReceivedPiecesSearch}
+                      filters={receivedPiecesFilters}
+                      isLoading={isReceivedPiecesLoading}
+                      searchQuery={receivedPiecesSearchQuery}
+                    />
+                  )}
+                  {receivedPiecesActions}
+                </div>
+              )}
               id={TITLE_ACCORDION.received}
               label={TITLE_ACCORDION_LABELS.received}
             >
               <ReceivedPiecesList
                 key={piecesExistance?.key}
+                filters={receivedPiecesFilters}
+                onLoadingStatusChange={setReceivedPiecesLoading}
                 title={title}
                 selectPiece={openEditReceivedPieceModal}
                 visibleColumns={receivedPiecesVisibleColumns}

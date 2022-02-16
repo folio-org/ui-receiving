@@ -22,6 +22,8 @@ const pieces = [{
 const renderPiecesList = (onEditPiece) => (render(
   <IntlProvider locale="en">
     <ExpectedPiecesList
+      filters={{}}
+      onLoadingStatusChange={jest.fn()}
       title={{ id: 'titleId' }}
       selectPiece={onEditPiece}
       visibleColumns={EXPECTED_PIECE_VISIBLE_COLUMNS}
