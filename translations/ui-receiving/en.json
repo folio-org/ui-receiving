@@ -149,6 +149,7 @@
   "piece.itemStatus.Received": "Received",
   "piece.itemStatus.Undefined": "Undefined",
   "piece.itemStatus": "Item status",
+  "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed.",
   "piece.lineLocations": "Order line locations",
   "piece.location": "Select location",
   "piece.locationLookup": "Assign a different location",

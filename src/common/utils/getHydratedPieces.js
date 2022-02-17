@@ -4,11 +4,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 export const getPieceStatusFromItem = (item) => {
-  const itemStatus = item?.status?.name || ITEM_STATUS.undefined;
-
-  return itemStatus === ITEM_STATUS.onOrder || itemStatus === ITEM_STATUS.orderClosed
-    ? ITEM_STATUS.inProcess
-    : itemStatus;
+  return item?.status?.name || ITEM_STATUS.undefined;
 };
 
 export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {

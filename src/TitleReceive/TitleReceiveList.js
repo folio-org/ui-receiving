@@ -9,6 +9,7 @@ import { includes } from 'lodash';
 
 import {
   Checkbox,
+  InfoPopover,
   MultiColumnList,
   NoValue,
   TextArea,
@@ -185,7 +186,12 @@ export const TitleReceiveList = ({
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,
       comments: <FormattedMessage id="ui-receiving.piece.comment" />,
       location: <FormattedMessage id="ui-receiving.piece.location" />,
-      itemStatus: <FormattedMessage id="ui-receiving.piece.itemStatus" />,
+      itemStatus: (
+        <>
+          <FormattedMessage id="ui-receiving.piece.itemStatus" />
+          <InfoPopover content={(<FormattedMessage id="ui-receiving.piece.itemStatus.info"/>)} />
+        </>
+      ),
       callNumber: <FormattedMessage id="ui-receiving.piece.callNumber" />,
       isCreateItem: <FormattedMessage id="ui-receiving.piece.createItem" />,
     }),
