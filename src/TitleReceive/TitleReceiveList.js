@@ -189,7 +189,7 @@ export const TitleReceiveList = ({
       itemStatus: (
         <>
           <FormattedMessage id="ui-receiving.piece.itemStatus" />
-          <InfoPopover content={(<FormattedMessage id="ui-receiving.piece.itemStatus.info"/>)} />
+          <InfoPopover content={(<FormattedMessage id="ui-receiving.piece.itemStatus.info" />)} />
         </>
       ),
       callNumber: <FormattedMessage id="ui-receiving.piece.callNumber" />,
