@@ -153,16 +153,6 @@
           "orders.titles.item.delete",
           "ui-receiving.edit"
         ]
-      },
-      {
-        "permissionName": "ui-receiving.settings",
-        "displayName": "Settings (Receiving): Can view and edit settings",
-        "visible": true,
-        "subPermissions": [
-          "configuration.all",
-          "module.receiving.enabled",
-          "settings.receiving.enabled"
-        ]
       }
     ]
   },
