@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { usePaginatedPieces } from '../../common/hooks';
-
 import { PIECE_COLUMNS } from '../constants';
 import PiecesList from '../PiecesList';
-
-const RESULT_COUNT_INCREMENT = 30;
+import { usePiecesList } from '../hooks';
 
 const ReceivedPiecesList = ({
   filters,
@@ -19,34 +16,25 @@ const ReceivedPiecesList = ({
   selectPiece,
   visibleColumns,
 }) => {
-  const [sorting, setSorting] = useState({
+  const initialSorting = {
     sorting: 'receivedDate',
     sortingDirection: 'descending',
-  });
-  const [pagination, setPagination] = useState({ limit: RESULT_COUNT_INCREMENT });
+  };
+
   const {
-    pieces,
-    totalRecords,
     isFetching,
-  } = usePaginatedPieces({
     pagination,
-    queryParams: {
-      titleId: title.id,
-      poLineId: title.poLineId,
-      receivingStatus: PIECE_STATUS.received,
-      ...filters,
-      ...sorting,
-    },
+    pieces,
+    setPagination,
+    setSorting,
+    totalRecords,
+  } = usePiecesList({
+    filters,
+    initialSorting,
+    onLoadingStatusChange,
+    title,
+    queryParams: { receivingStatus: PIECE_STATUS.received },
   });
-
-  useEffect(() => {
-    setPagination(prev => ({ ...prev, offset: 0, timestamp: new Date() }));
-  }, [filters]);
-
-  useEffect(() => {
-    onLoadingStatusChange(isFetching);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetching]);
 
   return (
     <PiecesList
