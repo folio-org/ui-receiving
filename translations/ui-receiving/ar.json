@@ -161,5 +161,8 @@
     "title.receivingWorkflow.independent": "كمية الطلبيات والاستلام المستقلة",
     "title.receivingWorkflow.synchronized": "كمية الطلبيات والاستلام المتزامنة",
     "piece.actions.saveAndClose": "حفظ وإغلاق",
-    "piece.actions.createAnother": "إنشاء آخر"
+    "piece.actions.createAnother": "إنشاء آخر",
+    "filter.supplements": "Supplements",
+    "filter.nonSupplements": "Non supplements",
+    "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed."
 }

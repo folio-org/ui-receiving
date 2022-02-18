@@ -161,5 +161,8 @@
     "title.receivingWorkflow.independent": "独立订单和接收数量",
     "title.receivingWorkflow.synchronized": "同步订单和接收数量",
     "piece.actions.saveAndClose": "保存并关闭",
-    "piece.actions.createAnother": "创建另一个"
+    "piece.actions.createAnother": "创建另一个",
+    "filter.supplements": "Supplements",
+    "filter.nonSupplements": "Non supplements",
+    "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed."
 }

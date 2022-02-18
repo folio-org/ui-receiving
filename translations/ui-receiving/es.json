@@ -161,5 +161,8 @@
     "title.receivingWorkflow.independent": "Independent order and receipt quantity",
     "title.receivingWorkflow.synchronized": "Synchronized order and receipt quantity",
     "piece.actions.saveAndClose": "Save & close",
-    "piece.actions.createAnother": "Create another"
+    "piece.actions.createAnother": "Create another",
+    "filter.supplements": "Supplements",
+    "filter.nonSupplements": "Non supplements",
+    "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed."
 }
