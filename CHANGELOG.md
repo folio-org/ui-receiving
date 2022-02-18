@@ -17,6 +17,7 @@
 * Filters for expected and received pieces. Refs UIREC-191.
 * Item status changes unclear from receiving screen. Refs UIREC-218.
 * Item status unclear in receiving screen. Refs UIREC-214.
+* Some fields of the piece are not populated when receiving/unreceiving. Refs UIREC-220.
 
 ## [2.0.3](https://github.com/folio-org/ui-receiving/tree/v2.0.3) (2021-12-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.2...v2.0.3)

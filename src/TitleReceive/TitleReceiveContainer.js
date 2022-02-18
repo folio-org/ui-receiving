@@ -10,6 +10,7 @@ import {
 import {
   baseManifest,
   itemsResource,
+  ITEM_STATUS,
   LIMIT_MAX,
   LINES_API,
   locationsManifest,
@@ -114,7 +115,11 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
 
   const onSubmit = useCallback(
     ({ receivedItems }) => {
-      receive(receivedItems.filter(({ checked }) => checked === true))
+      receive(
+        receivedItems
+          .filter(({ checked }) => checked === true)
+          .map(item => ({ ...item, itemStatus: ITEM_STATUS.inProcess })),
+      )
         .then(() => {
           showCallout({
             messageId: 'ui-receiving.title.actions.receive.success',
