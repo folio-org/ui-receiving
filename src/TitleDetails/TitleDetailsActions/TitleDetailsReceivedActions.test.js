@@ -31,3 +31,13 @@ describe('TitleDetailsReceivedActions', () => {
     expect(screen.getByText('ui-receiving.title.details.button.unreceive')).toBeDefined();
   });
 });
+
+describe('TitleDetailsReceivedActions filters', () => {
+  it('should call \'applyFilters\' when filter value was changed', () => {
+    renderTitleDetailsReceivedActions({ ...defaultProps, disabled: true });
+
+    user.click(screen.getByText('ui-receiving.filter.supplements'));
+
+    expect(defaultProps.applyFilters).toHaveBeenCalled();
+  });
+});
