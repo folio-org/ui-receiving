@@ -38,6 +38,7 @@ const ReceivedPiecesList = ({
 
   return (
     <PiecesList
+      columnIdPrefix="received-pieces"
       pieces={pieces}
       isLoading={isFetching}
       totalCount={totalRecords}

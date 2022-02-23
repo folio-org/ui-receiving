@@ -43,6 +43,7 @@ const formatter = {
 
 const PiecesList = ({
   id,
+  columnIdPrefix,
   isLoading,
   pieces,
   totalCount,
@@ -75,6 +76,7 @@ const PiecesList = ({
     <>
       <MultiColumnList
         id={id}
+        columnIdPrefix={columnIdPrefix}
         contentData={pieces}
         totalCount={totalCount}
         columnMapping={PIECE_COLUMN_MAPPING}
@@ -84,7 +86,7 @@ const PiecesList = ({
         onRowClick={selectPiece}
         rowFormatter={acqRowFormatter}
         rowProps={rowProps}
-        nonInteractiveHeaders={nonInteractiveHeaders}
+        nonInteractiveHeaders={[...nonInteractiveHeaders, 'arrow']}
         onHeaderClick={onHeaderClick}
         sortDirection={sortingDirection}
         sortedColumn={sortingField}
@@ -105,6 +107,7 @@ const PiecesList = ({
 PiecesList.propTypes = {
   pieces: PropTypes.arrayOf(PropTypes.object),
   id: PropTypes.string,
+  columnIdPrefix: PropTypes.string,
   selectPiece: PropTypes.func,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   sortedColumn: PropTypes.string.isRequired,

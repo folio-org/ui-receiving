@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import {
@@ -61,6 +61,9 @@ const AddPieceModal = ({
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
+
+  const intl = useIntl();
+  const modalLabel = intl.formatMessage({ id: labelId });
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, []);
 
@@ -194,7 +197,8 @@ const AddPieceModal = ({
       enforceFocus={false}
       footer={footer}
       id="add-piece-modal"
-      label={<FormattedMessage id={labelId} />}
+      label={modalLabel}
+      aria-label={modalLabel}
       open
     >
       <HasCommand

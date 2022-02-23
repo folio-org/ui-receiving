@@ -52,8 +52,8 @@ export function TitleDetailsReceivedActions({
         <FilterMenu prefix="received-pieces">
           <CheckboxFilter
             dataOptions={SUPPLEMENT_MENU_FILTER_OPTIONS}
-            name={MENU_FILTERS.supplement}
-            onChange={({ name, values }) => applyFilters(name, values)}
+            name={`received-${MENU_FILTERS.supplement}`}
+            onChange={({ values }) => applyFilters(MENU_FILTERS.supplement, values)}
             selectedValues={filters[MENU_FILTERS.supplement]}
           />
         </FilterMenu>

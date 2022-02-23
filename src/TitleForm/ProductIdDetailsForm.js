@@ -56,7 +56,7 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
       <Row>
         <Col xs>
           <Field
-            ariaLabelledBy="productIdsFormProductIdLabel"
+            aria-labelledby="productIdsFormProductIdLabel"
             component={TextField}
             fullWidth
             name={`${elem}.productId`}
@@ -67,7 +67,7 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
         </Col>
         <Col xs>
           <Field
-            ariaLabelledBy="productIdsFormQualifierLabel"
+            aria-labelledby="productIdsFormQualifierLabel"
             component={TextField}
             fullWidth
             name={`${elem}.qualifier`}
@@ -76,7 +76,7 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
         </Col>
         <Col xs>
           <FieldSelectFinal
-            ariaLabelledBy="productIdsFormProductIdTypeLabel"
+            aria-labelledby="productIdsFormProductIdTypeLabel"
             dataOptions={identifierTypesOptions}
             disabled={disabled}
             fullWidth

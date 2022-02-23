@@ -42,6 +42,7 @@ const ExpectedPiecesList = ({
 
   return (
     <PiecesList
+      columnIdPrefix="expected-pieces"
       pieces={pieces}
       isLoading={isFetching}
       totalCount={totalRecords}

@@ -49,7 +49,7 @@ function ContributorsForm({ contributorNameTypes, disabled }) {
       <Row>
         <Col xs>
           <Field
-            ariaLabelledBy="contributorFormContributorLabel"
+            aria-labelledby="contributorFormContributorLabel"
             component={TextField}
             disabled={disabled}
             fullWidth
@@ -60,7 +60,7 @@ function ContributorsForm({ contributorNameTypes, disabled }) {
         </Col>
         <Col xs>
           <FieldSelectFinal
-            ariaLabelledBy="contributorFormContributorTypeLabel"
+            aria-labelledby="contributorFormContributorTypeLabel"
             dataOptions={contributorNameTypesOptions}
             disabled={disabled}
             fullWidth

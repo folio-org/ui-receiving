@@ -69,11 +69,11 @@ export function TitleDetailsExpectedActions({
         </MenuSection>
 
         {hasReceive && (
-          <FilterMenu prefix="received-pieces">
+          <FilterMenu prefix="expected-pieces">
             <CheckboxFilter
               dataOptions={SUPPLEMENT_MENU_FILTER_OPTIONS}
-              name={MENU_FILTERS.supplement}
-              onChange={({ name, values }) => applyFilters(name, values)}
+              name={`expected-${MENU_FILTERS.supplement}`}
+              onChange={({ values }) => applyFilters(MENU_FILTERS.supplement, values)}
               selectedValues={filters[MENU_FILTERS.supplement]}
             />
           </FilterMenu>
