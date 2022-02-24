@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { groupBy } from 'lodash';
 
 import {
@@ -25,17 +25,20 @@ const buildFooter = closeModal => {
 };
 
 const OpenedRequestsModal = ({ pieces, closeModal }) => {
+  const intl = useIntl();
   const footer = useMemo(() => buildFooter(closeModal), [closeModal]);
 
   const requestPieces = pieces.filter(piece => piece.request);
   const itemRequestGroups = groupBy(requestPieces, 'request.item.title');
   const isMultiple = requestPieces.length > 1;
+  const modalLabel = intl.formatMessage({ id: `ui-receiving.requests.title.${isMultiple ? 'multiple' : 'single'}` });
 
   return (
     <Modal
       id="data-test-opened-requests-modal"
       open
-      label={<FormattedMessage id={`ui-receiving.requests.title.${isMultiple ? 'multiple' : 'single'}`} />}
+      label={modalLabel}
+      aria-label={modalLabel}
       footer={footer}
     >
       <FormattedMessage id={`ui-receiving.requests.message.${isMultiple ? 'multiple' : 'single'}`} />

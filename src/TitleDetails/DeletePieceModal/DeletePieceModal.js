@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import { Button, Modal, Loading } from '@folio/stripes/components';
@@ -25,6 +25,9 @@ export const DeletePieceModal = ({
     },
     { enabled: Boolean(holdingId) },
   );
+
+  const intl = useIntl();
+  const modalLabel = intl.formatMessage({ id: 'ui-receiving.piece.delete.heading' });
 
   const isFetching = isItemsFetching || isPiecesFetching;
   const canDeleteHolding = Boolean(
@@ -97,7 +100,8 @@ export const DeletePieceModal = ({
       size="small"
       footer={footer}
       id="delete-piece-confirmation"
-      label={<FormattedMessage id="ui-receiving.piece.delete.heading" />}
+      label={modalLabel}
+      aria-label={modalLabel}
     >
       {isFetching ? <Loading /> : message}
     </Modal>

@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import { Button, Modal } from '@folio/stripes/components';
@@ -9,6 +9,9 @@ export const DeleteHoldingsModal = ({
   onKeepHoldings,
   onConfirm,
 }) => {
+  const intl = useIntl();
+  const modalLabel = intl.formatMessage({ id: 'ui-receiving.piece.actions.delete.deleteHoldings' });
+
   const start = (
     <Button
       marginBottom0
@@ -49,7 +52,8 @@ export const DeleteHoldingsModal = ({
       size="small"
       footer={footer}
       id="delete-holdings-confirmation"
-      label={<FormattedMessage id="ui-receiving.piece.actions.delete.deleteHoldings" />}
+      label={modalLabel}
+      aria-label={modalLabel}
     >
       <FormattedMessage id="ui-receiving.piece.actions.edit.deleteHoldings.message" />
     </Modal>

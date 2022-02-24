@@ -7,7 +7,7 @@ import {
   noop,
   omit,
 } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
   Accordion,
@@ -101,6 +101,7 @@ const TitleDetails = ({
   getHoldingsItemsAndPieces,
   getPieceValues,
 }) => {
+  const intl = useIntl();
   const stripes = useStripes();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
@@ -125,6 +126,9 @@ const TitleDetails = ({
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
+
+  const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
+  const acknowledgeNoteModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.receivingNoteModal.title' });
 
   const {
     visibleColumns: expectedPiecesVisibleColumns,
@@ -505,8 +509,9 @@ const TitleDetails = ({
 
         {isAcknowledgeNote && (
           <ConfirmationModal
+            aria-label={acknowledgeNoteModalLabel}
             confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
-            heading={<FormattedMessage id="ui-receiving.piece.receivingNoteModal.title" />}
+            heading={acknowledgeNoteModalLabel}
             id="acknowledge-receiving-note"
             message={receivingNote}
             onCancel={toggleAcknowledgeNote}
@@ -536,8 +541,9 @@ const TitleDetails = ({
 
         {isConfirmReceiving && (
           <ConfirmationModal
+            aria-label={confirmReceivingModalLabel}
             confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
-            heading={<FormattedMessage id="ui-receiving.piece.confirmReceiving.title" />}
+            heading={confirmReceivingModalLabel}
             id="confirm-receiving"
             message={<FormattedMessage id="ui-receiving.piece.confirmReceiving.message" />}
             onCancel={onCancelReceiving}
