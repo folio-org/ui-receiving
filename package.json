@@ -133,7 +133,7 @@
           "inventory.instances.item.get",
           "orders.titles.item.put",
           "search.instances.collection.get",
-          "search.instances.facets.collection.get"
+          "search.facets.collection.get"
         ]
       },
       {
