@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.0.3) (2022-03-03)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.3...v2.1.0)
+
 * Allow user to select instance for Title AND edit title from POL view. Refs UIREC-189.
 * Allow user to save and create another piece. Refs UIREC-188.
 * Tech debt: reducing code smells, usage of consts and resources from stripes-acq. Refs UIREC-192.
