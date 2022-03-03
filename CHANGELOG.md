@@ -2,7 +2,7 @@
 
 ## (IN PROGRESS)
 
-## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.0.3) (2022-03-03)
+## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.3...v2.1.0)
 
 * Allow user to select instance for Title AND edit title from POL view. Refs UIREC-189.
