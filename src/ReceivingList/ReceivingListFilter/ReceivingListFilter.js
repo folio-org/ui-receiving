@@ -123,7 +123,7 @@ const ReceivingListFilter = ({
         id={`filter-${FILTERS.RUSH}`}
         activeFilters={activeFilters[FILTERS.RUSH]}
         disabled={disabled}
-        labelId="ui-orders.filter.rush"
+        labelId="ui-receiving.filter.rush"
         name={FILTERS.RUSH}
         onChange={adaptedApplyFilters}
       />

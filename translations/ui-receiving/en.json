@@ -24,6 +24,7 @@
   "filter.orderFormat": "Order format",
   "filter.location": "Location",
   "filter.receivingStatus": "Receiving status",
+  "filter.rush": "Rush",
   "filter.supplements": "Supplements",
   "filter.nonSupplements": "Non supplements",
 
