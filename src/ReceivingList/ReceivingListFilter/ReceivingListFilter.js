@@ -10,6 +10,7 @@ import {
   AcqDateRangeFilter,
   AcqTagsFilter,
   AcqUnitFilter,
+  BooleanFilter,
   LocationFilterContainer,
   MaterialTypeFilterContainer,
   ORDER_FORMAT_OPTIONS,
@@ -115,6 +116,15 @@ const ReceivingListFilter = ({
         activeFilters={activeFilters[FILTERS.ACQUISITIONS_UNIT]}
         disabled={disabled}
         name={FILTERS.ACQUISITIONS_UNIT}
+        onChange={adaptedApplyFilters}
+      />
+
+      <BooleanFilter
+        id={`filter-${FILTERS.RUSH}`}
+        activeFilters={activeFilters[FILTERS.RUSH]}
+        disabled={disabled}
+        labelId="ui-orders.filter.rush"
+        name={FILTERS.RUSH}
         onChange={adaptedApplyFilters}
       />
 

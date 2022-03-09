@@ -15,6 +15,7 @@ export const FILTERS = {
   RECEIVED_DATE: 'pieces.receivedDate',
   EXPECTED_RECEIPT_DATE: 'pieces.receiptDate',
   RECEIPT_DUE: 'poLine.physical.receiptDue',
+  RUSH: 'poLine.rush',
 };
 
 export const ORDER_FORMAT_MATERIAL_TYPE_MAP = {

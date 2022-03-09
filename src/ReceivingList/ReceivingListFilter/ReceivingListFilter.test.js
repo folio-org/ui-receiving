@@ -25,5 +25,6 @@ describe('ReceivingListFilter', () => {
     expect(screen.getByText('ui-receiving.filter.materialType')).toBeDefined();
     expect(screen.getByText('ui-receiving.filter.orderFormat')).toBeDefined();
     expect(screen.getByText('ui-receiving.filter.location')).toBeDefined();
+    expect(screen.getByText('ui-orders.filter.rush')).toBeDefined();
   });
 });
