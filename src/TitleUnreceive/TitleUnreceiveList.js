@@ -20,6 +20,7 @@ import {
 const visibleColumns = [
   'checked',
   'barcode',
+  'caption',
   'enumeration',
   'format',
   'hasRequest',
@@ -64,6 +65,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, pieceHol
         ),
         format: ({ format }) => PIECE_FORMAT_LABELS[format],
         callNumber: record => record.callNumber || <NoValue />,
+        caption: record => record.caption || <NoValue />,
         barcode: record => record.barcode || <NoValue />,
       };
     },
@@ -91,6 +93,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, pieceHol
         />
       ),
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
+      caption: <FormattedMessage id="ui-receiving.piece.caption" />,
       enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,

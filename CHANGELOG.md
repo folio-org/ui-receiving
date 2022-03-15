@@ -3,6 +3,7 @@
 ## (IN PROGRESS)
 
 * Filter Receiving titles by 'Rush'. Refs UIREC-205.
+* Add Caption detail to the Unreceive screen. Refs UIREC-226.
 
 ## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.3...v2.1.0)
