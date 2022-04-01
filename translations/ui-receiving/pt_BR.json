@@ -165,5 +165,5 @@
     "filter.supplements": "Suplementos",
     "filter.nonSupplements": "Não suplementos",
     "piece.itemStatus.info": "Ao receber peças que tenham exemplares conectados. Um exemplar conectado com o estado de \"Pedido fechado\" ou \"Em pedido\" será atualizado para um status de \"Em processo\". Exemplares em outros estados não terão seu estado alterado.",
-    "filter.rush": "Rush"
+    "filter.rush": "Priotirário"
 }

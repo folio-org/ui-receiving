@@ -29,7 +29,7 @@
     "title.edit.save": "Salva e chiudi",
     "title.details.button.edit": "Modifica",
     "title.edit.cancel": "Annulla",
-    "title.actions.save.success": "Il titolo <b>{title}</b> è stato aggiunto con successo per la <b>riga dell'ordine d'acquisto {poLineNumber}</b>",
+    "title.actions.save.success": "Il titolo <b>{title}</b> è stato aggiunto correttamente per la <b>riga dell'ordine d'acquisto {poLineNumber}</b>",
     "search.keyword": "Parola chiave",
     "search.title": "Titolo (Titoli in ricevimento)",
     "search.poLine.titleOrPackage": "Pacchetto (nome pacchetto POL)",
@@ -77,7 +77,7 @@
     "title.productIds.productId": "ID prodotto",
     "title.productIds.productIdType": "Tipologia ID prodotto",
     "title.productIds.qualifier": "Qualificatore",
-    "piece.actions.checkInItem.success": "Il pezzo <b>{enumeration}</b> è stato <b>ricevuto</b> con successo",
+    "piece.actions.checkInItem.success": "Il pezzo <b>{enumeration}</b> è stato <b>ricevuto</b> correttamente",
     "piece.actions.edit": "Modifica",
     "piece.barcode": "Barcode",
     "piece.callNumber": "Collocazione",
@@ -100,7 +100,7 @@
     "requests.title.multiple": "Multiple items have open requests",
     "requests.message.single": "The following item has an open request",
     "requests.message.multiple": "The following items have open requests",
-    "requests.message.barcode": "Barcode  ({barcode})",
+    "requests.message.barcode": "Barcode ({barcode})",
     "requests.message.itemId": "Item ({itemId})",
     "requests.footer.close": "Close",
     "title.closedOrderMessage": "L'ordine di acquisto è stato chiuso - {reason}",
@@ -165,5 +165,5 @@
     "filter.supplements": "Supplements",
     "filter.nonSupplements": "Non supplements",
     "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed.",
-    "filter.rush": "Rush"
+    "filter.rush": "Urgente"
 }

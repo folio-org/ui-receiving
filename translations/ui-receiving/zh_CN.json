@@ -165,5 +165,5 @@
     "filter.supplements": "补编",
     "filter.nonSupplements": "非补编",
     "piece.itemStatus.info": "当接收具有连接单件的件时。状态为“订单已关闭”或“订购中”的已连接单件将更新为“处理中”状态。其他状态的单件的状态不会改变。",
-    "filter.rush": "Rush"
+    "filter.rush": "忙碌"
 }
