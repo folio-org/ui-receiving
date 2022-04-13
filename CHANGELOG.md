@@ -6,6 +6,7 @@
 * Add Caption detail to the Unreceive screen. Refs UIREC-226.
 * Select filter should announce the number of Results in the Results List pane header. Refs UIREC-227.
 * Remove react-hot-loader. Refs UIREC-230.
+* Insufficient padding when displaying location key value and receiving note in full screen view. Refs UIREC-231.
 
 ## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.3...v2.1.0)

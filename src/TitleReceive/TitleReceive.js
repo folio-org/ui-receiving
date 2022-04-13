@@ -7,6 +7,7 @@ import stripesFinalForm from '@folio/stripes/final-form';
 import {
   checkScope,
   HasCommand,
+  Layout,
   MessageBanner,
   Pane,
   Paneset,
@@ -86,9 +87,11 @@ const TitleReceive = ({
               locations={locations}
             />
             {receivingNote && (
-              <MessageBanner>
-                {receivingNote}
-              </MessageBanner>
+              <Layout className="marginTopHalf">
+                <MessageBanner>
+                  {receivingNote}
+                </MessageBanner>
+              </Layout>
             )}
             <FieldArray
               component={TitleReceiveList}
