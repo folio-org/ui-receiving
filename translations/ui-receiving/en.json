@@ -176,5 +176,10 @@
   "requests.message.itemId": "Item ({itemId})",
   "requests.footer.close": "Close",
 
-  "shortcut.receive": "Receive pieces/Quick receive"
+  "shortcut.receive": "Receive pieces/Quick receive",
+
+  "permission.view": "Receiving: View",
+  "permission.edit": "Receiving: View, edit",
+  "permission.create": "Receiving: View, edit, create",
+  "permission.delete": "Receiving: View, edit, delete"
 }
