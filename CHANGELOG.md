@@ -9,6 +9,7 @@
 * Insufficient padding when displaying location key value and receiving note in full screen view. Refs UIREC-231.
 * Replace `babel-eslint` with `@babel/eslint-parser`. Refs UIREC-232.
 * Add translations for permissions. Refs UIREC-75.
+* ui-receiving: module warnings analysis. Refs UIREC-237.
 
 ## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.3...v2.1.0)

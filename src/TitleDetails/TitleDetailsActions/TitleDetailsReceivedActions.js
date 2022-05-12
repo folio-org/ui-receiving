@@ -34,6 +34,9 @@ export function TitleDetailsReceivedActions({
       data-testid="received-pieces-action-dropdown"
       label={<FormattedMessage id="ui-receiving.button.actions" />}
       buttonProps={{ buttonStyle: 'primary' }}
+      modifiers={{
+        preventOverflow: { boundariesElement: 'scrollParent' },
+      }}
     >
       <DropdownMenu>
         <MenuSection
