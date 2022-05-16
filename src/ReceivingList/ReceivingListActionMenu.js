@@ -50,7 +50,7 @@ export const ReceivingListActionMenu = ({
               buttonStyle="dropdownItem"
               onClick={() => {
                 onToggle();
-                // toggleExportModal();
+                toggleExportModal();
               }}
               disabled={!titlesCount}
             >

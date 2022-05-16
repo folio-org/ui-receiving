@@ -27,12 +27,14 @@ import {
   SingleSearchForm,
   PrevNextPagination,
   useFiltersToogle,
+  useItemToView,
   useLocationFilters,
   useLocationSorting,
-  useItemToView,
+  useModalToggle,
 } from '@folio/stripes-acq-components';
 
 import TitleDetailsContainer from '../TitleDetails';
+import { ExportSettingsModal } from './ExportSettingsModal';
 import { ReceivingListActionMenu } from './ReceivingListActionMenu';
 import ReceivingListFilter from './ReceivingListFilter';
 import {
@@ -96,15 +98,17 @@ const ReceivingList = ({
     changeSorting,
   ] = useLocationSorting(location, history, resetData, sortableFields);
   const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
+  const [isExportModalOpened, toggleExportModal] = useModalToggle();
 
   const renderLastMenu = useCallback(({ onToggle }) => {
     return (
       <ReceivingListActionMenu
         onToggle={onToggle}
         titlesCount={titlesCount}
+        toggleExportModal={toggleExportModal}
       />
     );
-  }, [titlesCount]);
+  }, [titlesCount, toggleExportModal]);
 
   const selectedTitle = useCallback(
     (e, { id }) => {
@@ -225,6 +229,12 @@ const ReceivingList = ({
             </>
           ))}
         </ResultsPane>
+
+        {isExportModalOpened && (
+          <ExportSettingsModal
+            onCancel={toggleExportModal}
+          />
+        )}
 
         <Route
           path={`${match.path}/:id/view`}
