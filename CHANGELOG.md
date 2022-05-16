@@ -10,6 +10,8 @@
 * Replace `babel-eslint` with `@babel/eslint-parser`. Refs UIREC-232.
 * Add translations for permissions. Refs UIREC-75.
 * ui-receiving: module warnings analysis. Refs UIREC-237.
+* Add "Export results (CSV)" action to receiving app. Refs UIREC-233.
+* Allow user to select data points for Export results to CSV. Refs UIREC-234.
 
 ## [2.1.0](https://github.com/folio-org/ui-receiving/tree/v2.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.0.3...v2.1.0)
