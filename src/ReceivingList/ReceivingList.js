@@ -33,8 +33,8 @@ import {
 } from '@folio/stripes-acq-components';
 
 import TitleDetailsContainer from '../TitleDetails';
+import { ReceivingListActionMenu } from './ReceivingListActionMenu';
 import ReceivingListFilter from './ReceivingListFilter';
-import { renderNewButton } from './renderNewButton';
 import {
   searchableIndexes,
 } from './ReceivingListSearchConfig';
@@ -97,7 +97,14 @@ const ReceivingList = ({
   ] = useLocationSorting(location, history, resetData, sortableFields);
   const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
 
-  const renderLastMenu = useCallback(() => renderNewButton(location.search), [location.search]);
+  const renderLastMenu = useCallback(({ onToggle }) => {
+    return (
+      <ReceivingListActionMenu
+        onToggle={onToggle}
+        titlesCount={titlesCount}
+      />
+    );
+  }, [titlesCount]);
 
   const selectedTitle = useCallback(
     (e, { id }) => {
@@ -177,7 +184,7 @@ const ReceivingList = ({
           autosize
           title={resultsPaneTitle}
           count={titlesCount}
-          renderLastMenu={renderLastMenu}
+          renderActionMenu={renderLastMenu}
           toggleFiltersPane={toggleFilters}
           filters={filters}
           isFiltersOpened={isFiltersOpened}

@@ -153,6 +153,13 @@
           "orders.titles.item.delete",
           "ui-receiving.edit"
         ]
+      },
+      {
+        "permissionName": "ui-receiving.exportCSV",
+        "displayName": "Receiving: Export search results",
+        "description": "",
+        "visible": true,
+        "subPermissions": []
       }
     ]
   },

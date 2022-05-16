@@ -47,6 +47,7 @@
   "title.details.button.receive": "Receive",
   "title.details.button.unreceive": "Unreceive",
   "title.edit.cancel": "Cancel",
+  "title.actions.exportCSV": "Export results (CSV)",
   "title.actions.load.error": "Failed to load Title or PO line data",
   "title.actions.missingLoanTypeId.error": "Item can't be created, permanentLoanTypeId is not set, please set it in Settings - Orders - Loan type",
   "title.actions.save.success": "The title <b>{title}</b> has been successfully added for <b>PO line {poLineNumber}</b>",
@@ -181,5 +182,6 @@
   "permission.view": "Receiving: View",
   "permission.edit": "Receiving: View, edit",
   "permission.create": "Receiving: View, edit, create",
-  "permission.delete": "Receiving: View, edit, delete"
+  "permission.delete": "Receiving: View, edit, delete",
+  "permission.exportCSV": "Receiving: Export search results"
 }
