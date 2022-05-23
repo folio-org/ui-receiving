@@ -92,7 +92,12 @@ const ReceivingListContainer = ({ mutator }) => {
   }, []);
 
   const { pagination, changePage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
-  const { titles, totalRecords, isFetching } = useReceiving({ pagination, fetchReferences });
+  const {
+    isFetching,
+    query,
+    titles,
+    totalRecords,
+  } = useReceiving({ pagination, fetchReferences });
 
   return (
     <ReceivingList
@@ -102,6 +107,7 @@ const ReceivingListContainer = ({ mutator }) => {
       isLoading={isFetching}
       titles={titles}
       pagination={pagination}
+      query={query}
     />
   );
 };

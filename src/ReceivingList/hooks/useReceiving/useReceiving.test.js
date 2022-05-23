@@ -73,7 +73,7 @@ describe('useReceiving', () => {
 
     await waitFor(() => !result.current.isFetching);
 
-    expect(result.current).toEqual({
+    expect(result.current).toEqual(expect.objectContaining({
       titles: [{
         poLine: {
           id: titles[0].poLineId,
@@ -82,6 +82,6 @@ describe('useReceiving', () => {
       }],
       totalRecords: 1,
       isFetching: false,
-    });
+    }));
   });
 });

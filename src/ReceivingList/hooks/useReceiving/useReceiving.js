@@ -50,6 +50,7 @@ export const useReceiving = ({
     }));
 
     return {
+      query,
       titles: titlesResult,
       totalRecords,
     };

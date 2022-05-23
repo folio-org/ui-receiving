@@ -26,7 +26,7 @@ export const EXPORT_PIECE_FIELDS = {
   location: 'Location',
   supplement: 'Supplement',
   displayOnHolding: 'Display on holding',
-  itemUUID: 'Item uuid',
+  itemId: 'Item UUID',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {
@@ -50,3 +50,15 @@ export const EXPORT_PIECE_FIELDS_OPTIONS = Object.keys(EXPORT_PIECE_FIELDS).map(
   label: EXPORT_PIECE_FIELDS[field],
   value: field,
 }));
+
+// Resource must be fetched if the value contains export fields
+export const FETCH_CONFIGS_MAP = {
+  contributorNameTypes: ['contributors'],
+  holdings: ['location'],
+  locations: ['location'],
+  identifierTypes: ['productIds'],
+  items: ['barcode', 'callNumber'],
+  poLines: ['orderType', 'location', 'requester', 'rush', 'vendor'],
+  purchaseOrders: ['orderType', 'vendor'],
+  vendors: ['vendor'],
+};

@@ -8,6 +8,7 @@
   "errors.instanceId": "Piece was not received. Instance record could not be found.",
   "errors.receivingProcessEncumbrancesError": "Pieces can not be added to or deleted from this Title until all the Fund distributions on the related purchase order line are converted from amounts to percentages.",
 
+  "exportSettings.error": "Failed to load data for export results (CSV)",
   "exportSettings.export": "Export",
   "exportSettings.export.all": "All",
   "exportSettings.label": "Export settings",
@@ -18,6 +19,7 @@
   "exportSettings.title.all": "Export all title fields",
   "exportSettings.title.fieldsLabel": "Title fields",
   "exportSettings.title.selected": "Export selected title fields",
+  "exportSettings.success": "Export has been started successfully",
 
   "search.keyword": "Keyword",
   "search.title": "Title (Receiving titles)",

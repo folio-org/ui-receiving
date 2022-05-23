@@ -76,10 +76,11 @@ const ReceivingList = ({
   location,
   match,
   onNeedMoreData,
+  pagination,
+  query,
   resetData,
   titles,
   titlesCount,
-  pagination,
 }) => {
   const stripes = useStripes();
   const [
@@ -233,6 +234,7 @@ const ReceivingList = ({
         {isExportModalOpened && (
           <ExportSettingsModal
             onCancel={toggleExportModal}
+            query={query}
           />
         )}
 
@@ -255,6 +257,7 @@ ReceivingList.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   pagination: PropTypes.object.isRequired,
+  query: PropTypes.string,
 };
 
 ReceivingList.defaultProps = {
