@@ -13,6 +13,7 @@ jest.mock('./hooks', () => ({
 
 const defaultProps = {
   onCancel: jest.fn(),
+  query: '',
 };
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const mockExportCSV = {
 describe('ExportSettingsModalContainer', () => {
   beforeEach(() => {
     defaultProps.onCancel.mockClear();
+    mockExportCSV.runExportCSV.mockClear();
     usePiecesExportCSV.mockClear().mockReturnValue(mockExportCSV);
   });
 
@@ -49,31 +51,38 @@ describe('ExportSettingsModalContainer', () => {
 
     expect(screen.getByText('ui-receiving.exportSettings.label')).toBeDefined();
   });
-});
 
-describe('ExportSettingsModal actions', () => {
-  beforeEach(() => {
-    defaultProps.onCancel.mockClear();
-    usePiecesExportCSV.mockClear().mockReturnValue(mockExportCSV);
-  });
+  describe('ExportSettingsModal actions', () => {
+    describe('Close modal', () => {
+      it('should close modal when cancel button clicked', () => {
+        renderExportSettingsModalContainer();
 
-  describe('Close modal', () => {
-    it('should close modal when cancel button clicked', () => {
-      renderExportSettingsModalContainer();
+        user.click(screen.getByText('stripes-core.button.cancel'));
 
-      user.click(screen.getByText('stripes-core.button.cancel'));
-
-      expect(defaultProps.onCancel).toHaveBeenCalled();
+        expect(defaultProps.onCancel).toHaveBeenCalled();
+      });
     });
-  });
 
-  describe('Export', () => {
-    it('should call \'runExportCSV\' when \'Export\' button clicked', () => {
-      renderExportSettingsModalContainer();
+    describe('Export', () => {
+      it('should call \'runExportCSV\' when \'Export\' button clicked', () => {
+        renderExportSettingsModalContainer();
 
-      user.click(screen.getByText('ui-receiving.exportSettings.export'));
+        user.click(screen.getByText('ui-receiving.exportSettings.export'));
 
-      expect(mockExportCSV.runExportCSV).toHaveBeenCalled();
+        expect(mockExportCSV.runExportCSV).toHaveBeenCalled();
+      });
+
+      it('should catch an error if it is occured during export process', () => {
+        const error = 'someError';
+
+        mockExportCSV.runExportCSV.mockRejectedValue(error);
+
+        renderExportSettingsModalContainer();
+
+        user.click(screen.getByText('ui-receiving.exportSettings.export'));
+
+        expect(mockExportCSV.runExportCSV).rejects.toEqual(error);
+      });
     });
   });
 });

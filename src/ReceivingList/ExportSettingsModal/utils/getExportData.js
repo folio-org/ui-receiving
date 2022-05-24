@@ -76,7 +76,7 @@ export const getExportData = (ky) => async ({
       records: 'pieces',
     });
 
-    const itemsData = fetchConfigs.itemsData ? await fetchItemsExportData(ky)(piecesData) : [];
+    const itemsData = fetchConfigs.items ? await fetchItemsExportData(ky)(piecesData) : [];
     const {
       holdings = [],
       locations = [],
