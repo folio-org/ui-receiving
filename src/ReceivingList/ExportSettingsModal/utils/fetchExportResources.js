@@ -38,9 +38,9 @@ export const fetchIdentifierTypesExportData = (ky) => (titles = []) => {
   });
 };
 
-export const fetchContributorNameTypesExportData = (ky) => (poLinesData = []) => {
+export const fetchContributorNameTypesExportData = (ky) => (titles = []) => {
   const contributorNameTypeIds = mapUniqElements(
-    poLinesData.map(({ contributors }) => (
+    titles.map(({ contributors }) => (
       contributors.map(({ contributorNameTypeId }) => contributorNameTypeId)
     )),
   );

@@ -101,7 +101,7 @@ describe('createExportReport', () => {
       barcode: '9876543456',
       callNumber: 'TST',
       caption: 'Caption',
-      chronology: 'v1',
+      chronology: '2022',
       comment: 'test export',
       copyNumber: '3',
       displayOnHolding: false,

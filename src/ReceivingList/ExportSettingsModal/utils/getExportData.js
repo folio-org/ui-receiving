@@ -52,7 +52,7 @@ export const getExportData = (ky) => async ({
     const poLinesData = fetchConfigs.poLines ? await fetchPOLinesExportData(ky)(titles) : [];
     const identifierTypes = fetchConfigs.identifierTypes ? await fetchIdentifierTypesExportData(ky)(titles) : [];
     const contributorNameTypes = fetchConfigs.contributorNameTypes
-      ? await fetchContributorNameTypesExportData(ky)(poLinesData)
+      ? await fetchContributorNameTypesExportData(ky)(titles)
       : [];
     const purchaseOrdersData = fetchConfigs.purchaseOrders ? await fetchPurchaseOrdesExportData(ky)(poLinesData) : [];
     const vendorsData = fetchConfigs.vendors ? await fetchVendorsExportData(ky)(purchaseOrdersData) : [];

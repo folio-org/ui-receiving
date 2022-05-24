@@ -79,7 +79,7 @@ export const createExportReport = (
       caption: pieceData.caption,
       copyNumber: pieceData.copyNumber,
       enumeration: pieceData.enumeration,
-      chronology: pieceData.enumeration,
+      chronology: pieceData.chronology,
       barcode: item?.barcode,
       callNumber: item?.itemLevelCallNumber,
       format: pieceData.format,
