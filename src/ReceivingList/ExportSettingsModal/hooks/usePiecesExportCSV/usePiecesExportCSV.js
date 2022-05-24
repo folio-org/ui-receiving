@@ -30,7 +30,7 @@ export const usePiecesExportCSV = () => {
     const exportData = await getExportData(ky)({ exportFields, query });
     const exportReport = createExportReport(exportData, { intl });
 
-    const filename = `pieces-export-${moment().format('YYYY-MM-DD-hh:mm')}`;
+    const filename = `receiving-export-${moment().format('YYYY-MM-DD-hh:mm')}`;
 
     exportToCsv(
       [{ ...EXPORT_TITLE_FIELDS, ...EXPORT_PIECE_FIELDS }, ...exportReport],

@@ -86,9 +86,9 @@ export const createExportReport = (
       receiptDate: formatDate(pieceData.receiptDate, intl),
       comment: pieceData.comment,
       location: pieceData.id && getPieceLocation(pieceData),
-      supplement: pieceData.supplement,
+      supplement: Boolean(pieceData.supplement),
       displayOnHolding: pieceData.displayOnHolding,
-      itemId: pieceData.itemId,
+      itemHRID: item?.hrid,
     };
   };
 

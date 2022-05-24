@@ -26,7 +26,7 @@ export const EXPORT_PIECE_FIELDS = {
   location: 'Location',
   supplement: 'Supplement',
   displayOnHolding: 'Display on holding',
-  itemId: 'Item UUID',
+  itemHRID: 'Item HRID',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {
@@ -57,7 +57,7 @@ export const FETCH_CONFIGS_MAP = {
   holdings: ['location'],
   locations: ['location'],
   identifierTypes: ['productIds'],
-  items: ['barcode', 'callNumber'],
+  items: ['barcode', 'callNumber', 'itemHRID'],
   poLines: ['orderType', 'location', 'requester', 'rush', 'vendor'],
   purchaseOrders: ['orderType', 'vendor'],
   vendors: ['vendor'],

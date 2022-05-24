@@ -108,7 +108,7 @@ describe('createExportReport', () => {
       edition: 'First edition',
       enumeration: 'v1',
       format: 'Other',
-      itemId: '135ae11c-6c02-4631-be49-9c40f1fb99fa',
+      itemHRID: 'it00000000001',
       location: 'ORWIG ETHNO CD',
       orderType: 'Ongoing',
       publishedDate: '1915',
