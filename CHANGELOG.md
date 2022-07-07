@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [2.2.0](https://github.com/folio-org/ui-receiving/tree/v2.2.0) (2022-07-07)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.1.0...v2.2.0)
+
 * Filter Receiving titles by 'Rush'. Refs UIREC-205.
 * Add Caption detail to the Unreceive screen. Refs UIREC-226.
 * Select filter should announce the number of Results in the Results List pane header. Refs UIREC-227.
