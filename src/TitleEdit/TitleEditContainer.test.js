@@ -88,7 +88,11 @@ describe('TitleEditContainer', () => {
 
     await act(async () => renderTitleEditContainer());
 
-    TitleForm.mock.calls[0][0].onSubmit({});
+    TitleForm.mock.calls[0][0].onSubmit({
+      poLine: {
+        poLineNumber: '10001-1',
+      },
+    });
 
     expect(mutatorMock.editTitle.PUT).toHaveBeenCalled();
   });
