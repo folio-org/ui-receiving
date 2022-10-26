@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [2.3.0](https://github.com/folio-org/ui-receiving/tree/v2.3.0) (2022-10-27)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.2.0...v2.3.0)
+
 * Support holdings-storage 6.0 in okapiInterfaces. Refs UIREC-242.
 * Support inventory 12.0 in okapiInterfaces. Refs UIREC-243.
 
