@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
+  matchPath,
   Route,
   withRouter,
 } from 'react-router-dom';
@@ -13,6 +14,7 @@ import {
   HasCommand,
   MultiColumnList,
   NoValue,
+  TextLink,
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 import { PersistedPaneset } from '@folio/stripes/smart-components';
@@ -61,14 +63,16 @@ const columnMapping = {
   'locations': <FormattedMessage id="ui-receiving.title.locations" />,
   'orderWorkflow': <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
 };
-const resultsFormatter = {
+
+const getResultsFormatter = ({ search }) => ({
+  'title': data => <TextLink to={`/receiving/${data.id}/view${search}`}>{data.title}</TextLink>,
   'poLine.physical.expectedReceiptDate': data => <FolioFormattedDate value={get(data, 'poLine.physical.expectedReceiptDate')} />,
   'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : <NoValue />),
   'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
   'poLine.receivingNote': data => get(data, 'poLine.details.receivingNote') || <NoValue />,
   'locations': data => get(data, 'poLine.locations', []).join(', '),
   'orderWorkflow': title => ORDER_STATUS_LABEL[title.poLine?.orderWorkflow],
-};
+});
 
 const ReceivingList = ({
   history,
@@ -101,6 +105,14 @@ const ReceivingList = ({
   const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
   const [isExportModalOpened, toggleExportModal] = useModalToggle();
 
+  const urlParams = useMemo(() => (
+    matchPath(location.pathname, { path: `${match.path}/:id/view` })
+  ), [location.pathname, match.path]);
+
+  const isRowSelected = useCallback(({ item }) => {
+    return urlParams && (urlParams.params.id === item.id);
+  }, [urlParams]);
+
   const renderLastMenu = useCallback(({ onToggle }) => {
     return (
       <ReceivingListActionMenu
@@ -110,16 +122,6 @@ const ReceivingList = ({
       />
     );
   }, [titlesCount, toggleExportModal]);
-
-  const selectedTitle = useCallback(
-    (e, { id }) => {
-      history.push({
-        pathname: `/receiving/${id}/view`,
-        search: location.search,
-      });
-    },
-    [history, location.search],
-  );
 
   const resultsStatusMessage = (
     <NoResultsMessage
@@ -203,10 +205,9 @@ const ReceivingList = ({
                 contentData={titles}
                 visibleColumns={visibleColumns}
                 columnMapping={columnMapping}
-                formatter={resultsFormatter}
+                formatter={getResultsFormatter({ search: location.search })}
                 loading={isLoading}
                 onNeedMoreData={onNeedMoreData}
-                onRowClick={selectedTitle}
                 sortOrder={sortingField}
                 sortDirection={sortingDirection}
                 onHeaderClick={changeSorting}
@@ -215,6 +216,7 @@ const ReceivingList = ({
                 pagingType="none"
                 height={height - PrevNextPagination.HEIGHT}
                 width={width}
+                isSelected={isRowSelected}
                 itemToView={itemToView}
                 onMarkPosition={setItemToView}
                 onResetMark={deleteItemToView}
