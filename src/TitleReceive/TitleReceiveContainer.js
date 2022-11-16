@@ -10,7 +10,6 @@ import {
 import {
   baseManifest,
   itemsResource,
-  ITEM_STATUS,
   LIMIT_MAX,
   LINES_API,
   locationsManifest,
@@ -30,6 +29,7 @@ import {
 } from '../common/hooks';
 import {
   getHydratedPieces,
+  getReceivingPieceItemStatus,
   handleReceiveErrorResponse,
 } from '../common/utils';
 import TitleReceive from './TitleReceive';
@@ -118,7 +118,10 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
       receive(
         receivedItems
           .filter(({ checked }) => checked === true)
-          .map(item => ({ ...item, itemStatus: ITEM_STATUS.inProcess })),
+          .map(item => ({
+            ...item,
+            itemStatus: getReceivingPieceItemStatus(item),
+          })),
       )
         .then(() => {
           showCallout({
