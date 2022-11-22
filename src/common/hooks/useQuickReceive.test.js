@@ -1,3 +1,8 @@
+import { ITEM_STATUS } from '@folio/stripes-acq-components';
+
+import {
+  getItemById,
+} from '../utils';
 import {
   useQuickReceive,
 } from './useQuickReceive';
@@ -8,6 +13,10 @@ import {
   useReceive,
 } from './useReceive';
 
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
+  getItemById: jest.fn(() => () => Promise.resolve({})),
+}));
 jest.mock('./usePieceMutator', () => ({
   usePieceMutator: jest.fn(),
 }));
@@ -29,6 +38,7 @@ describe('useQuickReceive', () => {
     mutatePieceMock = jest.fn().mockReturnValue(Promise.resolve(pieceValues));
     receivePieceMock = jest.fn();
 
+    getItemById.mockClear();
     usePieceMutator.mockClear().mockReturnValue({ mutatePiece: mutatePieceMock });
     useReceive.mockClear().mockReturnValue({ receive: receivePieceMock });
   });
@@ -47,5 +57,55 @@ describe('useQuickReceive', () => {
     await quickReceive(pieceValues);
 
     expect(receivePieceMock).toHaveBeenCalled();
+  });
+
+  describe('item status update', () => {
+    let quickReceive;
+    const itemId = 'itemId';
+
+    beforeEach(() => {
+      mutatePieceMock.mockImplementation(({ piece }) => Promise.resolve(piece));
+
+      quickReceive = useQuickReceive().quickReceive;
+    });
+
+    it('should update item status from \'On order\' to \'In process\'', async () => {
+      getItemById.mockReturnValue(() => Promise.resolve({
+        id: itemId,
+        status: { name: ITEM_STATUS.onOrder },
+      }));
+
+      await quickReceive({ ...pieceValues, itemId });
+
+      expect(receivePieceMock).toHaveBeenCalledWith([expect.objectContaining({
+        itemStatus: ITEM_STATUS.inProcess,
+      })]);
+    });
+
+    it('should update item status from \'Order closed\' to \'In process\'', async () => {
+      getItemById.mockReturnValue(() => Promise.resolve({
+        id: itemId,
+        status: { name: ITEM_STATUS.orderClosed },
+      }));
+
+      await quickReceive({ ...pieceValues, itemId });
+
+      expect(receivePieceMock).toHaveBeenCalledWith([expect.objectContaining({
+        itemStatus: ITEM_STATUS.inProcess,
+      })]);
+    });
+
+    it('should NOT update item status if it is different from \'On order\' or \'Order closed\'', async () => {
+      getItemById.mockReturnValue(() => Promise.resolve({
+        id: itemId,
+        status: { name: ITEM_STATUS.inTransit },
+      }));
+
+      await quickReceive({ ...pieceValues, itemId });
+
+      expect(receivePieceMock).toHaveBeenCalledWith([expect.objectContaining({
+        itemStatus: ITEM_STATUS.inTransit,
+      })]);
+    });
   });
 });
