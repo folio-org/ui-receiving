@@ -70,7 +70,10 @@ const Receiving = () => {
                 <NavListSection>
                   <NavListItem
                     id="receiving-app-search-item"
-                    to="/receiving"
+                    to={{
+                      pathname: '/receiving',
+                      state: { resetFilters: true },
+                    }}
                     onClick={() => {
                       handleToggle();
                       focusSearchField();

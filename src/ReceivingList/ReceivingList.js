@@ -28,6 +28,7 @@ import {
   ResultsPane,
   SingleSearchForm,
   PrevNextPagination,
+  useFiltersReset,
   useFiltersToogle,
   useItemToView,
   useLocationFilters,
@@ -104,6 +105,8 @@ const ReceivingList = ({
   ] = useLocationSorting(location, history, resetData, sortableFields);
   const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
   const [isExportModalOpened, toggleExportModal] = useModalToggle();
+
+  useFiltersReset(resetFilters);
 
   const urlParams = useMemo(() => (
     matchPath(location.pathname, { path: `${match.path}/:id/view` })
