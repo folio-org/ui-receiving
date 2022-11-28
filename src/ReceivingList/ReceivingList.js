@@ -26,6 +26,7 @@ import {
   ResultsPane,
   SingleSearchForm,
   PrevNextPagination,
+  useFiltersReset,
   useFiltersToogle,
   useItemToView,
   useLocationFilters,
@@ -100,6 +101,8 @@ const ReceivingList = ({
   ] = useLocationSorting(location, history, resetData, sortableFields);
   const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
   const [isExportModalOpened, toggleExportModal] = useModalToggle();
+
+  useFiltersReset(resetFilters);
 
   const renderLastMenu = useCallback(({ onToggle }) => {
     return (
