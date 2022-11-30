@@ -3,7 +3,11 @@
 ## (IN PROGRESS)
 
 * Results List | Hyperlink one column to improve accessibility. Refs UIREC-244.
-* Item statuses other than `Order closed` or `On order` are set to `In process` upon receiving. Refs UIREC-249.
+
+## [2.3.1](https://github.com/folio-org/ui-receiving/tree/v2.3.1) (2022-11-30)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.0...v2.3.1)
+
+* Item statuses other than `Order closed` or `On order` are set to `In process` upon receiving. Refs UIREC-250.
 * Loose plugin dependencies permit incompatible versions. Refs UIREC-252.
 * "No results found" shown after return to search page. Refs UIREC-253.
 
