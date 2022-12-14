@@ -58,10 +58,11 @@ function TitleFormContainer({ history, location, match, mutator }) {
               poLineNumber: poLine.poLineNumber,
             },
           });
-          setTimeout(() => history.push({
+
+          history.push({
             pathname: `/receiving/${id}/view`,
             search: location.search,
-          }));
+          });
         })
         .catch(async (response) => {
           const errorCode = await getErrorCodeFromResponse(response);

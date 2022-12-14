@@ -3,6 +3,7 @@
 ## (IN PROGRESS)
 
 * Results List | Hyperlink one column to improve accessibility. Refs UIREC-244.
+* Avoid using `setTimeout()` in handlers. Refs UIREC-251.
 
 ## [2.3.1](https://github.com/folio-org/ui-receiving/tree/v2.3.1) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.0...v2.3.1)

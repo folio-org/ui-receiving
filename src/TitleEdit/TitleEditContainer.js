@@ -82,7 +82,8 @@ function TitleEditContainer({ history, location, match, mutator }) {
               poLineNumber: line.poLineNumber,
             },
           });
-          setTimeout(onCancel);
+
+          onCancel();
         })
         .catch(async (response) => {
           const errorCode = await getErrorCodeFromResponse(response);

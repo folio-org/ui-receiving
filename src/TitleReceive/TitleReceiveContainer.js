@@ -108,7 +108,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const closeOpenedRequestsModal = useCallback(
     () => {
       setReceivedPiecesWithRequests([]);
-      setTimeout(onCancel);
+      onCancel();
     },
     [onCancel],
   );
@@ -133,7 +133,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
           if (receivedItemsWithRequests.length) {
             setReceivedPiecesWithRequests(receivedItemsWithRequests);
           } else {
-            setTimeout(onCancel);
+            onCancel();
           }
         })
         .catch(async ({ response }) => {

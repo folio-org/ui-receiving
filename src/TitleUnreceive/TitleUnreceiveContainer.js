@@ -120,7 +120,8 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
             messageId: 'ui-receiving.title.actions.unreceive.success',
             type: 'success',
           });
-          setTimeout(onCancel);
+
+          onCancel();
         })
         .catch(() => {
           showCallout({ messageId: 'ui-receiving.title.actions.unreceive.error', type: 'error' });
