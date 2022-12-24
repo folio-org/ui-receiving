@@ -1,6 +1,6 @@
 {
     "meta.title": "Inventarisierung",
-    "titles.search": "Suche",
+    "titles.search": "Suchen",
     "titles.orderStatus": "Bestellungsstatus",
     "titles.title": "Titel",
     "title.paneTitle.create": "Neuer Titel",
@@ -155,7 +155,7 @@
     "shortcut.receive": "Teile inventarisieren/Schnell inventarisieren",
     "piece.actions.edit.keepHoldings": "Bestand behalten",
     "piece.actions.edit.deleteHoldings.message": "Dieses Stück ist mit Datensätzen im Katalog verbunden. Nach dieser Bearbeitung gibt es keine anderen Stücke ODER Exemplare zu den zugehörigen Bestandsdatensätzen. Möchten Sie nach dieser Änderung, dass FOLIO die Bestandsdatensätze löscht?",
-    "appMenu.receivingAppSearch": "Suche in Inventarisierung",
+    "appMenu.receivingAppSearch": "Suche in Inventarisierungsapp",
     "button.actions": "Aktionen",
     "title.receivingWorkflow": "Inventarisierungsworkflow",
     "title.receivingWorkflow.independent": "Independent order and receipt quantity",

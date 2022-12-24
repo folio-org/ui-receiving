@@ -155,7 +155,7 @@
     "shortcut.receive": "Příjem kusů/Rychlý příjem",
     "piece.actions.edit.keepHoldings": "Ponechat holdingy",
     "piece.actions.edit.deleteHoldings.message": "Tento kus je spojen se záznamy v katalogu. Po této úpravě nebudou žádné další kusy NEBO jednotky připojeny k souvisejícímu záznamu holdingu. Chcete po provedení této změny aby FOLIO smazal holdingy?",
-    "appMenu.receivingAppSearch": "Příjem výsledku vyhledávání aplikace",
+    "appMenu.receivingAppSearch": "Vyhledat příjem",
     "button.actions": "Akce",
     "title.receivingWorkflow": "Příjem pracovního postupu",
     "title.receivingWorkflow.independent": "Nezávislé množství objednávky a příjmu",
