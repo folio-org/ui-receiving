@@ -123,7 +123,7 @@
     "piece.actions.selectAll": "Vyberte všechny kusy",
     "piece.actions.select": "Vybrat kus",
     "piece.confirmReceiving.title": "Objednávka uzavřena",
-    "piece.confirmReceiving.message": "Pořadí spojené s tímto názvem je uzavřeno. Opravdu chcete obdržet tento kus(y)?",
+    "piece.confirmReceiving.message": "Objednávka propojená s tímto názvem je uzavřena. Opravdu chcete obdržet tento kus(y)?",
     "titles.orderWorkflow": "Stav objednávky",
     "piece.actions.delete": "Smazat",
     "piece.actions.delete.success": "Kus <b>{enumeration}</b> byl úspěšně <b>smazán</b>",
