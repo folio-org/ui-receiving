@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { omit } from 'lodash';
 
@@ -39,7 +39,9 @@ const AddPieceModalContainer = ({
     onSubmit(values, { searchParams: { deleteHolding } }, isCreateAnother);
   };
 
-  const onQuickReceive = (formValues) => onCheckIn(omit(formValues, 'isCreateAnother'), formValues.isCreateAnother);
+  const onQuickReceive = useCallback((formValues) => (
+    onCheckIn(omit(formValues, 'isCreateAnother'), formValues.isCreateAnother)
+  ), [onCheckIn]);
 
   const orderFormat = poLine?.orderFormat;
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
