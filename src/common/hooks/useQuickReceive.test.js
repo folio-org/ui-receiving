@@ -1,7 +1,10 @@
+import { renderHook } from '@testing-library/react-hooks';
+
 import { ITEM_STATUS } from '@folio/stripes-acq-components';
 
 import {
   getItemById,
+  getPieceById,
 } from '../utils';
 import {
   useQuickReceive,
@@ -16,6 +19,7 @@ import {
 jest.mock('../utils', () => ({
   ...jest.requireActual('../utils'),
   getItemById: jest.fn(() => () => Promise.resolve({})),
+  getPieceById: jest.fn(() => () => Promise.resolve({ json: () => ({}) })),
 }));
 jest.mock('./usePieceMutator', () => ({
   usePieceMutator: jest.fn(),
@@ -39,22 +43,23 @@ describe('useQuickReceive', () => {
     receivePieceMock = jest.fn();
 
     getItemById.mockClear();
+    getPieceById.mockClear();
     usePieceMutator.mockClear().mockReturnValue({ mutatePiece: mutatePieceMock });
     useReceive.mockClear().mockReturnValue({ receive: receivePieceMock });
   });
 
   it('should call mutate piece', async () => {
-    const { quickReceive } = useQuickReceive();
+    const { result } = renderHook(() => useQuickReceive());
 
-    await quickReceive(pieceValues);
+    await result.current.quickReceive(pieceValues);
 
     expect(mutatePieceMock).toHaveBeenCalled();
   });
 
   it('should call receive', async () => {
-    const { quickReceive } = useQuickReceive();
+    const { result } = renderHook(() => useQuickReceive());
 
-    await quickReceive(pieceValues);
+    await result.current.quickReceive(pieceValues);
 
     expect(receivePieceMock).toHaveBeenCalled();
   });
@@ -64,9 +69,12 @@ describe('useQuickReceive', () => {
     const itemId = 'itemId';
 
     beforeEach(() => {
+      getPieceById.mockReturnValue(() => Promise.resolve({ json: () => ({ ...pieceValues, itemId }) }));
       mutatePieceMock.mockImplementation(({ piece }) => Promise.resolve(piece));
 
-      quickReceive = useQuickReceive().quickReceive;
+      const { result } = renderHook(() => useQuickReceive());
+
+      quickReceive = result.current.quickReceive;
     });
 
     it('should update item status from \'On order\' to \'In process\'', async () => {
