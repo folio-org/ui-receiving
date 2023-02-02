@@ -6,6 +6,7 @@
 * Avoid using `setTimeout()` in handlers. Refs UIREC-251.
 * Align the module with API breaking change. Refs UIREC-256.
 * Map missed error codes with new translations. Refs UIREC-260.
+* *BREAKING*: Update `@folio/stripes` to `8.0.0`. Refs UIREC-257.
 
 ## [2.3.1](https://github.com/folio-org/ui-receiving/tree/v2.3.1) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.0...v2.3.1)
