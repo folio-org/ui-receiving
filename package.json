@@ -97,6 +97,7 @@
           "module.receiving.enabled",
           "orders.collection.get",
           "orders.item.get",
+          "orders.pieces.item.get",
           "orders.pieces.item.delete",
           "orders.pieces.item.post",
           "orders.pieces.item.put",
