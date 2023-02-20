@@ -234,9 +234,6 @@
     "@folio/plugin-find-organization": "^3.3.0",
     "@folio/plugin-find-po-line": "^3.3.0"
   },
-  "resolutions": {
-    "@rehooks/local-storage": "2.4.0"
-  },
   "peerDependencies": {
     "@folio/stripes": "^8.0.0",
     "react": "^17.0.2",

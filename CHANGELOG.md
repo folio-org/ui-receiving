@@ -8,6 +8,7 @@
 * Map missed error codes with new translations. Refs UIREC-260.
 * *BREAKING*: Update `@folio/stripes` to `8.0.0`. Refs UIREC-257.
 * Extra holding appears when creating new holding for already existing location during "Quick receive". Refs UIREC-261.
+* Unpin `@rehooks/local-storage` now that it's no longer broken. Refs UIREC-259.
 
 ## [2.3.1](https://github.com/folio-org/ui-receiving/tree/v2.3.1) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.0...v2.3.1)
