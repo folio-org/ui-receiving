@@ -2,6 +2,9 @@
 
 ## (IN PROGRESS)
 
+## [3.0.0](https://github.com/folio-org/ui-receiving/tree/v3.0.0) (2023-02-22)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.1...v3.0.0)
+
 * Results List | Hyperlink one column to improve accessibility. Refs UIREC-244.
 * Avoid using `setTimeout()` in handlers. Refs UIREC-251.
 * Align the module with API breaking change. Refs UIREC-256.
