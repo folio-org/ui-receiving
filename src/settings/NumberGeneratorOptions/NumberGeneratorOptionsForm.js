@@ -18,7 +18,7 @@ const NumberGeneratorOptionsForm = () => {
         <Col xs={12}>
           <div className={css.marginBottomGutter}>
             <MessageBanner>
-              <FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.info" />
+              <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.info" />
             </MessageBanner>
           </div>
         </Col>
@@ -27,12 +27,12 @@ const NumberGeneratorOptionsForm = () => {
         <Col xs={12}>
           <div className={css.marginBottomGutter}>
             <Label>
-              <FormattedMessage id="ui-inventory.barcode" />
+              <FormattedMessage id="ui-receiving.piece.barcode" />
             </Label>
             <Field
               component={RadioButton}
               id="useTextFieldBarcode"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useTextFieldForBarcode" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useTextFieldForBarcode" />}
               name="barcodeGeneratorSetting"
               type="radio"
               value="useTextField"
@@ -40,7 +40,7 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               id="useBothBarcode"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useBothForBarcode" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useBothForBarcode" />}
               name="barcodeGeneratorSetting"
               type="radio"
               value="useBoth"
@@ -48,7 +48,7 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               id="useGeneratorBarcode"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useGeneratorForBarcode" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useGeneratorForBarcode" />}
               name="barcodeGeneratorSetting"
               type="radio"
               value="useGenerator"
@@ -60,7 +60,7 @@ const NumberGeneratorOptionsForm = () => {
         <Col xs={12}>
           <div className={css.marginBottomGutter}>
             <Label>
-              <FormattedMessage id="ui-inventory.accessionNumber" />
+              <FormattedMessage id="ui-receiving.piece.accessionNumber" />
             </Label>
             <Field
               component={RadioButton}
@@ -68,7 +68,7 @@ const NumberGeneratorOptionsForm = () => {
               id="useTextFieldAccessionNumber"
               label={
                 <div className={disableAccessionNumberAndCallNumberOffOptions ? css.greyLabel : null}>
-                  <FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useTextFieldForAccessionNumber" />
+                  <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useTextFieldForAccessionNumber" />
                 </div>
               }
               name="accessionNumberGeneratorSetting"
@@ -78,7 +78,7 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               id="useBothAccessionNumber"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useBothForAccessionNumber" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useBothForAccessionNumber" />}
               name="accessionNumberGeneratorSetting"
               type="radio"
               value="useBoth"
@@ -86,7 +86,7 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               id="useGeneratorAccessionNumber"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useGeneratorForAccessionNumber" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useGeneratorForAccessionNumber" />}
               name="accessionNumberGeneratorSetting"
               type="radio"
               value="useGenerator"
@@ -98,7 +98,7 @@ const NumberGeneratorOptionsForm = () => {
         <Col xs={12}>
           <div className={css.marginBottomGutter}>
             <Label>
-              <FormattedMessage id="ui-inventory.callNumber" />
+              <FormattedMessage id="ui-receiving.piece.callNumber" />
             </Label>
             <Field
               className={disableAccessionNumberAndCallNumberOffOptions ? css.greyLabel : null}
@@ -107,7 +107,7 @@ const NumberGeneratorOptionsForm = () => {
               id="useTextFieldCallNumber"
               label={
                 <div className={disableAccessionNumberAndCallNumberOffOptions ? css.greyLabel : null}>
-                  <FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useTextFieldForCallNumber" />
+                  <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useTextFieldForCallNumber" />
                 </div>
               }
               name="callNumberGeneratorSetting"
@@ -117,7 +117,7 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               id="useBothCallNumber"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useBothForCallNumber" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useBothForCallNumber" />}
               name="callNumberGeneratorSetting"
               type="radio"
               value="useBoth"
@@ -125,7 +125,7 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               id="useGeneratorCallNumber"
-              label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useGeneratorForCallNumber" />}
+              label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useGeneratorForCallNumber" />}
               name="callNumberGeneratorSetting"
               type="radio"
               value="useGenerator"
@@ -142,16 +142,16 @@ const NumberGeneratorOptionsForm = () => {
               label={
                 <>
                   <div className={disableUseForBothFields ? css.greyLabel : null}>
-                    <FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useAccessionNumberForCallNumber" />
+                    <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useAccessionNumberForCallNumber" />
                   </div>
                   <InfoPopover
                     content={
                       <Layout className="display-flex flex-direction-column flex-align-items-center flex-wrap--wrap">
                         <Layout className="padding-bottom-gutter display-flex flex-direction-column flex-align-items-center">
                           <FormattedMessage
-                            id="ui-inventory.settings.numberGeneratorOptions.useAccessionNumberForCallNumberInfo"
+                            id="ui-receiving.settings.numberGeneratorOptions.useAccessionNumberForCallNumberInfo"
                             values={{
-                              linebreak: <br />
+                              linebreak: <br />,
                             }}
                           />
                         </Layout>
@@ -162,7 +162,7 @@ const NumberGeneratorOptionsForm = () => {
                             href="https://wiki.folio.org/display/FOLIOtips/Number+generator"
                             marginBottom0
                           >
-                            <FormattedMessage id="ui-inventory.settings.learnMore" />
+                            <FormattedMessage id="ui-receiving.settings.learnMore" />
                           </Button>
                         </Layout>
                       </Layout>
@@ -176,7 +176,7 @@ const NumberGeneratorOptionsForm = () => {
             />
             {disableUseForBothFields &&
               <MessageBanner type="warning">
-                <FormattedMessage id="ui-inventory.settings.numberGeneratorOptions.useAccessionNumberForCallNumberWarning" />
+                <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useAccessionNumberForCallNumberWarning" />
               </MessageBanner>
             }
           </div>

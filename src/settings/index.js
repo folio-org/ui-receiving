@@ -14,10 +14,10 @@ class ReceivingSettings extends React.Component {
     this.pages = [
       {
         route: 'numbergeneratoroptions',
-        label: <FormattedMessage id="ui-inventory.settings.numberGeneratorOptions" />,
+        label: <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions" />,
         component: NumberGeneratorOptions,
         interface: 'servint',
-        perm: 'ui-inventory.settings.numberGenerator.manage',
+        perm: 'ui-receiving.settings.numberGenerator.manage',
       },
     ];
 
@@ -33,7 +33,7 @@ class ReceivingSettings extends React.Component {
   addPerm = permission => {
     const { stripes } = this.props;
 
-    return stripes.hasPerm(permission) ? permission : 'ui-inventory.settings.list.view';
+    return stripes.hasPerm(permission) ? permission : 'ui-receiving.settings.receiving.enabled';
   };
 
   render() {
@@ -41,7 +41,7 @@ class ReceivingSettings extends React.Component {
       <SettingsSMACOM
         {...this.props}
         pages={this.pages}
-        paneTitle={<FormattedMessage id="ui-inventory.inventory.label" />}
+        paneTitle={<FormattedMessage id="ui-receiving.meta.title" />}
         paneTitleRef={this.paneTitleRef}
         data-test-inventory-settings
       />

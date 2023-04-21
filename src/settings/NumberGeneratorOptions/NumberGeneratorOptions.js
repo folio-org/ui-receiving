@@ -18,7 +18,7 @@ class NumberGeneratorOptions extends React.Component {
   }
 
   defaultValues = {
-    barcodeGeneratorSetting: 'useTextField'
+    barcodeGeneratorSetting: 'useTextField',
   };
 
   beforeSave(data) {
@@ -27,8 +27,10 @@ class NumberGeneratorOptions extends React.Component {
 
   getInitialValues = (settings) => {
     let loadedValues = {};
+
     try {
       const value = settings.length === 0 ? '' : settings[0].value;
+
       loadedValues = JSON.parse(value);
     } catch (e) {
       // Make sure we return _something_ because ConfigManager no longer has a safety check here
@@ -39,15 +41,15 @@ class NumberGeneratorOptions extends React.Component {
       ...this.defaultValues,
       ...loadedValues,
     };
-  }
+  };
 
   render() {
     return (
       <this.connectedConfigManager
         configName="number_generator"
         getInitialValues={this.getInitialValues}
-        label={<FormattedMessage id="ui-inventory.settings.numberGeneratorOptions" />}
-        moduleName="INVENTORY"
+        label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions" />}
+        moduleName="RECEIVING"
         onBeforeSave={this.beforeSave}
         stripes={this.props.stripes}
         formType="final-form"
