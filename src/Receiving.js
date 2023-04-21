@@ -1,4 +1,6 @@
 import React from 'react';
+import Proptypes from 'prop-types';
+
 import {
   Switch,
   Route,
@@ -27,6 +29,8 @@ import { TitleEditContainer } from './TitleEdit';
 import { TitleReceiveContainer } from './TitleReceive';
 import { TitleUnreceiveContainer } from './TitleUnreceive';
 
+import Settings from './settings';
+
 const receivingCommands = [{
   name: 'receive',
   shortcut: 'mod+alt+r',
@@ -34,8 +38,10 @@ const receivingCommands = [{
 }];
 const shortcutCommands = [...receivingCommands, ...defaultKeyboardShortcuts];
 
-const Receiving = () => {
+const Receiving = (props) => {
   const [isOpen, toggleModal] = useModalToggle();
+  const { showSettings } = props;
+
   const focusSearchField = () => {
     const el = document.getElementById('input-record-search');
 
@@ -55,6 +61,10 @@ const Receiving = () => {
       handler: handleKeyCommand(toggleModal),
     },
   ];
+
+  if (showSettings) {
+    return <Settings {...props} />;
+  }
 
   return (
     <>
@@ -126,6 +136,10 @@ const Receiving = () => {
       )}
     </>
   );
+};
+
+Receiving.propTypes = {
+  showSettings: Proptypes.bool,
 };
 
 export default Receiving;

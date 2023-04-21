@@ -10,7 +10,8 @@
   },
   "stripes": {
     "actsAs": [
-      "app"
+      "app",
+      "settings"
     ],
     "displayName": "ui-receiving.meta.title",
     "route": "/receiving",
