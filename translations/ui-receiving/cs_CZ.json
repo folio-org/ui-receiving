@@ -83,7 +83,7 @@
     "piece.callNumber": "Signatura",
     "piece.itemStatus.Available": "Dostupná",
     "piece.itemStatus.In process": "Probíhá",
-    "piece.itemStatus.In transit": "Na cestě",
+    "piece.itemStatus.In transit": "V přepravě",
     "piece.itemStatus.On order": "Objednáno",
     "piece.itemStatus.Received": "Přijato",
     "piece.itemStatus.Undefined": "Nedefinována",
