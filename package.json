@@ -40,6 +40,9 @@
       "tags": "1.0",
       "titles": "1.2"
     },
+    "optionalOkapiInterfaces": {
+      "servint": "2.0 3.0"
+    },
     "queryResource": "query",
     "icons": [
       {
