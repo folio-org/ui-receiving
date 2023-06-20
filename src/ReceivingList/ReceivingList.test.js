@@ -23,7 +23,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
   PersistedPaneset: (props) => <div>{props.children}</div>,
 }));
 
-jest.mock('react-virtualized-auto-sizer/dist/index.cjs', () => {
+jest.mock('react-virtualized-auto-sizer', () => {
   return (props) => {
     const renderCallback = props.children;
 

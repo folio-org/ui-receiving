@@ -153,7 +153,7 @@
     "piece.lineLocations": "Order line locations",
     "piece.delete.deleteHoldingsAndItem.message": "Esta pieza está conectada a los registros del inventario. No hay ninguna otra pieza conectada al registro de fondos relacionado. ¿Después de eliminar esta pieza quieres que FOLIO elimine los fondos?",
     "shortcut.receive": "Receive pieces/Quick receive",
-    "piece.actions.edit.keepHoldings": "Mantener las existencias",
+    "piece.actions.edit.keepHoldings": "Mantener las Holdings",
     "piece.actions.edit.deleteHoldings.message": "This piece is connected to records in inventory. After this edit there will be no other pieces OR items connected to the related Holdings record. After making this change would you like FOLIO to delete the Holdings?",
     "appMenu.receivingAppSearch": "Receiving app Search",
     "button.actions": "Acciones",
