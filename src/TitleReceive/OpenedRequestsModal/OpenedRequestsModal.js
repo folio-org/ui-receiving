@@ -29,7 +29,7 @@ const OpenedRequestsModal = ({ pieces, closeModal }) => {
   const footer = useMemo(() => buildFooter(closeModal), [closeModal]);
 
   const requestPieces = pieces.filter(piece => piece.request);
-  const itemRequestGroups = groupBy(requestPieces, 'request.item.title');
+  const itemRequestGroups = groupBy(requestPieces, 'request.instance.title');
   const isMultiple = requestPieces.length > 1;
   const modalLabel = intl.formatMessage({ id: `ui-receiving.requests.title.${isMultiple ? 'multiple' : 'single'}` });
 
