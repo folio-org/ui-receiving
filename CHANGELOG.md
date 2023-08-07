@@ -4,6 +4,7 @@
 
 * Unpin `@rehooks/local-storage` now that it's no longer broken. Refs UIREC-259.
 * Also support `circulation` `14.0`. Refs UIREC-270.
+* Receiving an item with an open request, the warning dialogue shows "undefined" instead of title. Refs UIREC-278.
 
 ## [3.0.0](https://github.com/folio-org/ui-receiving/tree/v3.0.0) (2023-02-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.1...v3.0.0)
