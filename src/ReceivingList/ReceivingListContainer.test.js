@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 
 import ReceivingListContainer from './ReceivingListContainer';
 import { useReceiving } from './hooks';

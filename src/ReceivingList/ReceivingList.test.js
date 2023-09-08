@@ -1,7 +1,7 @@
 /* istanbul ignore */
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup } from '@folio/jest-config-stripes/testing-library/react';
 import { IntlProvider } from 'react-intl';
 import faker from 'faker';
 import { noop } from 'lodash';

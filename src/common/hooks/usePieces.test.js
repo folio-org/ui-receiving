@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 
 import { useOkapiKy } from '@folio/stripes/core';
 
@@ -37,9 +37,9 @@ describe('usePieces', () => {
   });
 
   it('should fetch pieces', async () => {
-    const { result, waitFor } = renderHook(() => usePieces(), { wrapper });
+    const { result } = renderHook(() => usePieces(), { wrapper });
 
-    await waitFor(() => !result.current.isFetching);
+    await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
     expect(result.current.pieces).toEqual(pieces);
     expect(mockGet).toHaveBeenCalledWith(

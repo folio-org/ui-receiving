@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { useLocation } from 'react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -45,11 +45,11 @@ describe('useReceiving', () => {
       .mockClear()
       .mockReturnValue({ search: '' });
 
-    const { result, waitFor } = renderHook(() => useReceiving({
+    const { result } = renderHook(() => useReceiving({
       pagination: { limit: 5, offset: 0, timestamp: 42 },
     }), { wrapper });
 
-    await waitFor(() => !result.current.isFetching);
+    await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
     expect(result.current).toEqual({
       titles: [],
@@ -66,12 +66,12 @@ describe('useReceiving', () => {
     const fetchReferences = jest.fn().mockReturnValue(Promise.resolve({
       orderLinesMap: { [titles[0].poLineId]: { id: titles[0].poLineId } },
     }));
-    const { result, waitFor } = renderHook(() => useReceiving({
+    const { result } = renderHook(() => useReceiving({
       pagination: { limit: 5, offset: 0, timestamp: 42 },
       fetchReferences,
     }), { wrapper });
 
-    await waitFor(() => !result.current.isFetching);
+    await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
     expect(result.current).toEqual(expect.objectContaining({
       titles: [{

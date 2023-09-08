@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import user from '@testing-library/user-event';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 
@@ -35,10 +35,10 @@ describe('ContributorsForm', () => {
     expect(screen.getByText('ui-receiving.title.contributors.add')).toBeDefined();
   });
 
-  it('should add contributor fields', () => {
+  it('should add contributor fields', async () => {
     renderComponent();
 
-    user.click(screen.getByText('ui-receiving.title.contributors.add'));
+    await user.click(screen.getByText('ui-receiving.title.contributors.add'));
 
     expect(screen.getByText('ui-receiving.title.contributors.contributor')).toBeDefined();
     expect(screen.getByText('ui-receiving.title.contributors.contributorType')).toBeDefined();

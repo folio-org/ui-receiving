@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { useOkapiKy } from '@folio/stripes/core';
@@ -66,11 +66,11 @@ describe('usePaginatedPieces', () => {
   });
 
   it('should return fetched hydrated pieces', async () => {
-    const { result, waitFor } = renderHook(() => usePaginatedPieces({
+    const { result } = renderHook(() => usePaginatedPieces({
       pagination: { limit: 5, offset: 0, timestamp: 42 },
     }), { wrapper });
 
-    await waitFor(() => !result.current.isFetching);
+    await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
     expect(result.current).toEqual({
       pieces: [{

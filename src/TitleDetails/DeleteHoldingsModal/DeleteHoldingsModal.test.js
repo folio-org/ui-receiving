@@ -1,6 +1,6 @@
 import React from 'react';
-import user from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import { DeleteHoldingsModal } from './DeleteHoldingsModal';
 
@@ -31,7 +31,7 @@ describe('DeleteHoldingsModal', () => {
 
     const cancelBtn = await screen.findByText('ui-receiving.piece.actions.cancel');
 
-    user.click(cancelBtn);
+    await user.click(cancelBtn);
     expect(defaultProps.onCancel).toHaveBeenCalled();
   });
 
@@ -40,7 +40,7 @@ describe('DeleteHoldingsModal', () => {
 
     const keepHoldingsBrn = await screen.findByText('ui-receiving.piece.actions.edit.keepHoldings');
 
-    user.click(keepHoldingsBrn);
+    await user.click(keepHoldingsBrn);
     expect(defaultProps.onKeepHoldings).toHaveBeenCalled();
   });
 
@@ -51,7 +51,7 @@ describe('DeleteHoldingsModal', () => {
       name: 'ui-receiving.piece.actions.delete.deleteHoldings',
     });
 
-    user.click(deleteBtn);
+    await user.click(deleteBtn);
     expect(defaultProps.onConfirm).toHaveBeenCalled();
   });
 });

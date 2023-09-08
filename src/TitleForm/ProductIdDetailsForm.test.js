@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import user from '@testing-library/user-event';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 
@@ -35,10 +35,10 @@ describe('ProductIdDetailsForm', () => {
     expect(screen.getByText('ui-receiving.title.productIds.add')).toBeDefined();
   });
 
-  it('should add product id fields', () => {
+  it('should add product id fields', async () => {
     renderComponent();
 
-    user.click(screen.getByText('ui-receiving.title.productIds.add'));
+    await user.click(screen.getByText('ui-receiving.title.productIds.add'));
 
     expect(screen.getByText('ui-receiving.title.productIds.productId')).toBeDefined();
     expect(screen.getByText('ui-receiving.title.productIds.qualifier')).toBeDefined();

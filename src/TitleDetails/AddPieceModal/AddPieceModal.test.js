@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import {
   INVENTORY_RECORDS_TYPE,
@@ -67,17 +67,17 @@ describe('AddPieceModal', () => {
   });
 
   describe('Close Add piece modal', () => {
-    it('should close Add piece modal', () => {
+    it('should close Add piece modal', async () => {
       renderAddPieceModal();
 
-      user.click(screen.getByText('ui-receiving.piece.actions.cancel'));
+      await user.click(screen.getByText('ui-receiving.piece.actions.cancel'));
 
       expect(defaultProps.close).toHaveBeenCalled();
     });
   });
 
   describe('Check display on holding', () => {
-    it.skip('should enable discovery suppress when clicked', () => {
+    it.skip('should enable discovery suppress when clicked', async () => {
       const format = 'Electronic';
 
       renderAddPieceModal({
@@ -88,7 +88,7 @@ describe('AddPieceModal', () => {
         },
       });
 
-      user.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
+      await user.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
 
       expect(screen.getByLabelText('ui-receiving.piece.discoverySuppress')).not.toHaveAttribute('disabled');
     });
@@ -123,7 +123,7 @@ describe('AddPieceModal', () => {
         name: 'ui-receiving.piece.actions.saveAndClose',
       });
 
-      user.click(saveAndCloseBtn);
+      await user.click(saveAndCloseBtn);
       expect(defaultProps.onSubmit).toHaveBeenCalled();
     });
   });

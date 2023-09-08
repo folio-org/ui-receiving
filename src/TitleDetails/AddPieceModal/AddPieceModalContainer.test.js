@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -78,7 +78,7 @@ describe('AddPieceModalContainer', () => {
       name: 'ui-receiving.piece.actions.saveAndClose',
     });
 
-    user.click(saveBtn);
+    await user.click(saveBtn);
     expect(defaultProps.onSubmit).toHaveBeenCalled();
   });
 
@@ -94,13 +94,13 @@ describe('AddPieceModalContainer', () => {
       name: 'ui-receiving.piece.supplement',
     });
 
-    user.click(supplement);
+    await user.click(supplement);
 
     const quickReceiveBtn = await screen.findByRole('button', {
       name: 'ui-receiving.piece.actions.quickReceive',
     });
 
-    user.click(quickReceiveBtn);
+    await user.click(quickReceiveBtn);
     expect(defaultProps.onCheckIn).toHaveBeenCalled();
   });
 });

@@ -1,7 +1,7 @@
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import user from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import { usePiecesExportCSV } from './hooks';
 import { ExportSettingsModalContainer } from './ExportSettingsModalContainer';
@@ -54,32 +54,32 @@ describe('ExportSettingsModalContainer', () => {
 
   describe('ExportSettingsModal actions', () => {
     describe('Close modal', () => {
-      it('should close modal when cancel button clicked', () => {
+      it('should close modal when cancel button clicked', async () => {
         renderExportSettingsModalContainer();
 
-        user.click(screen.getByText('stripes-core.button.cancel'));
+        await user.click(screen.getByText('stripes-core.button.cancel'));
 
         expect(defaultProps.onCancel).toHaveBeenCalled();
       });
     });
 
     describe('Export', () => {
-      it('should call \'runExportCSV\' when \'Export\' button clicked', () => {
+      it('should call \'runExportCSV\' when \'Export\' button clicked', async () => {
         renderExportSettingsModalContainer();
 
-        user.click(screen.getByText('ui-receiving.exportSettings.export'));
+        await user.click(screen.getByText('ui-receiving.exportSettings.export'));
 
         expect(mockExportCSV.runExportCSV).toHaveBeenCalled();
       });
 
-      it('should catch an error if it is occured during export process', () => {
+      it('should catch an error if it is occured during export process', async () => {
         const error = 'someError';
 
         mockExportCSV.runExportCSV.mockRejectedValue(error);
 
         renderExportSettingsModalContainer();
 
-        user.click(screen.getByText('ui-receiving.exportSettings.export'));
+        await user.click(screen.getByText('ui-receiving.exportSettings.export'));
 
         expect(mockExportCSV.runExportCSV).rejects.toEqual(error);
       });

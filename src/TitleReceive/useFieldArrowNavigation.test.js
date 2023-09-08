@@ -1,5 +1,4 @@
-import React from 'react';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 

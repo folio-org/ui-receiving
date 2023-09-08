@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { HasCommand } from '@folio/stripes/components';
 
@@ -51,10 +51,10 @@ describe('TitleUnreceive', () => {
   });
 
   describe('Close title unreceive', () => {
-    it('should close Title unreceive', () => {
+    it('should close Title unreceive', async () => {
       const { getByText } = renderTitleUnreceive();
 
-      user.click(getByText('stripes-acq-components.FormFooter.cancel'));
+      await user.click(getByText('stripes-acq-components.FormFooter.cancel'));
 
       expect(defaultProps.onCancel).toHaveBeenCalled();
     });

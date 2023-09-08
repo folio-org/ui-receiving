@@ -1,6 +1,6 @@
 import React from 'react';
-import user from '@testing-library/user-event';
-import { act, render, screen } from '@testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -126,7 +126,7 @@ describe('TitleDetails', () => {
 
     const pieceRow = await screen.findAllByRole('row');
 
-    user.click(pieceRow[1]);
+    await user.click(pieceRow[1]);
     expect(screen.getByText('Title')).toBeDefined();
   });
 
@@ -147,7 +147,7 @@ describe('TitleDetails', () => {
 
       const pieceRow = await screen.findAllByRole('row');
 
-      user.click(pieceRow[1]);
+      await user.click(pieceRow[1]);
 
       const createAnotherCheckbox = await screen.findByRole('checkbox', {
         name: 'ui-receiving.piece.actions.createAnother',
@@ -156,14 +156,14 @@ describe('TitleDetails', () => {
         name: 'ui-receiving.piece.format',
       });
 
-      user.click(createAnotherCheckbox);
+      await user.click(createAnotherCheckbox);
 
       const saveBtn = await screen.findByRole('button', {
         name: 'stripes-core.button.save',
       });
 
       user.selectOptions(formatSelection, ['Electronic']);
-      user.click(saveBtn);
+      await user.click(saveBtn);
 
       expect(defaultProps.onAddPiece).toHaveBeenCalled();
     });
@@ -173,7 +173,7 @@ describe('TitleDetails', () => {
 
       const pieceRow = await screen.findAllByRole('row');
 
-      user.click(pieceRow[1]);
+      await user.click(pieceRow[1]);
 
       const createAnotherCheckbox = await screen.findByRole('checkbox', {
         name: 'ui-receiving.piece.actions.createAnother',
@@ -182,14 +182,14 @@ describe('TitleDetails', () => {
         name: 'ui-receiving.piece.format',
       });
 
-      user.click(createAnotherCheckbox);
+      await user.click(createAnotherCheckbox);
 
       const quickReceiveBtn = await screen.findByRole('button', {
         name: 'ui-receiving.piece.actions.quickReceive',
       });
 
       user.selectOptions(formatSelection, ['Electronic']);
-      user.click(quickReceiveBtn);
+      await user.click(quickReceiveBtn);
 
       expect(defaultProps.onCheckIn).toHaveBeenCalled();
     });
@@ -201,7 +201,7 @@ describe('TitleDetails', () => {
 
       const pieceRow = await screen.findAllByRole('row');
 
-      user.click(pieceRow[1]);
+      await user.click(pieceRow[1]);
 
       const createAnotherCheckbox = await screen.findByRole('checkbox', {
         name: 'ui-receiving.piece.actions.createAnother',
@@ -210,20 +210,20 @@ describe('TitleDetails', () => {
         name: 'ui-receiving.piece.format',
       });
 
-      user.click(createAnotherCheckbox);
+      await user.click(createAnotherCheckbox);
 
       const quickReceiveBtn = await screen.findByRole('button', {
         name: 'ui-receiving.piece.actions.quickReceive',
       });
 
       user.selectOptions(formatSelection, ['Electronic']);
-      user.click(quickReceiveBtn);
+      await user.click(quickReceiveBtn);
 
       const confirmBtn = await screen.findByRole('button', {
         name: 'ui-receiving.piece.actions.confirm',
       });
 
-      user.click(confirmBtn);
+      await user.click(confirmBtn);
       expect(defaultProps.onCheckIn).toHaveBeenCalled();
     });
   });

@@ -1,6 +1,6 @@
 import { MemoryRouter } from 'react-router-dom';
-import user from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import { ReceivingListActionMenu } from './ReceivingListActionMenu';
 
@@ -31,10 +31,10 @@ describe('ReceivingListActionMenu', () => {
     expect(screen.getByLabelText('ui-receiving.title.actions.exportCSV')).toBeInTheDocument();
   });
 
-  it('should open export settings modal', () => {
+  it('should open export settings modal', async () => {
     renderReceivingListActionMenu();
 
-    user.click(screen.getByTestId('export-csv-button'));
+    await user.click(screen.getByTestId('export-csv-button'));
 
     expect(defaultProps.toggleExportModal).toHaveBeenCalled();
   });

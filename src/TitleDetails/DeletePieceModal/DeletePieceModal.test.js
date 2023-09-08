@@ -1,6 +1,6 @@
 import React from 'react';
-import user from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import { DeletePieceModal } from './DeletePieceModal';
 
@@ -53,7 +53,7 @@ describe('DeletePieceModal', () => {
 
     const cancelBtn = await screen.findByText('ui-receiving.piece.actions.cancel');
 
-    user.click(cancelBtn);
+    await user.click(cancelBtn);
     expect(defaultProps.onCancel).toHaveBeenCalled();
   });
 
@@ -62,7 +62,7 @@ describe('DeletePieceModal', () => {
 
     const deleteBtn = await screen.findByText('ui-receiving.piece.actions.delete.deleteHoldingsAndItem');
 
-    user.click(deleteBtn);
+    await user.click(deleteBtn);
     expect(defaultProps.onConfirm).toHaveBeenCalled();
   });
 });
