@@ -7,6 +7,7 @@
 * Receiving an item with an open request, the warning dialogue shows "undefined" instead of title. Refs UIREC-278.
 * Upgrade `Node.js` to `18` version in GitHub Actions. Refs UIREC-281.
 * *BREAKING* Upgrade React to v18. Refs UIREC-280.
+* *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIREC-286.
 
 ## [3.0.0](https://github.com/folio-org/ui-receiving/tree/v3.0.0) (2023-02-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.1...v3.0.0)
