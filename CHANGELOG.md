@@ -8,6 +8,7 @@
 * Upgrade `Node.js` to `18` version in GitHub Actions. Refs UIREC-281.
 * *BREAKING* Upgrade React to v18. Refs UIREC-280.
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIREC-286.
+* Bump optional plugins to their `@folio/stripes` `v9` compatible versions. Refs UIREC-290.
 
 ## [3.0.0](https://github.com/folio-org/ui-receiving/tree/v3.0.0) (2023-02-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v2.3.1...v3.0.0)
