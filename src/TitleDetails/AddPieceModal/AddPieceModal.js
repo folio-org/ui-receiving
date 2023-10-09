@@ -17,6 +17,7 @@ import {
   TextField,
   checkScope,
 } from '@folio/stripes/components';
+import { useOkapiKy } from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
@@ -33,6 +34,7 @@ import {
   CreateItemField,
   LineLocationsView,
 } from '../../common/components';
+import { HOLDINGS_API } from '../../common/constants';
 import { DeletePieceModal } from '../DeletePieceModal';
 import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
 
@@ -62,6 +64,7 @@ const AddPieceModal = ({
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
 
+  const ky = useOkapiKy();
   const intl = useIntl();
   const modalLabel = intl.formatMessage({ id: labelId });
 
@@ -88,33 +91,42 @@ const AddPieceModal = ({
     if (!checked) change('discoverySuppress', checked);
   };
 
-  const onSave = useCallback((e) => {
+  const checkHoldingAbandonment = useCallback((holdingId) => {
+    return ky.get(`${HOLDINGS_API}/${holdingId}`)
+      .json()
+      .then((holding) => getHoldingsItemsAndPieces(holding.id, { limit: 1 }))
+      .then(({ pieces, items }) => {
+        const willAbandoned = Boolean(
+          pieces && items
+          && (pieces.totalRecords === 1)
+          && ((items.totalRecords === 1 && itemId) || items.totalRecords === 0),
+        );
+
+        return { willAbandoned };
+      })
+      .catch(() => ({ willAbandoned: false }));
+  }, [getHoldingsItemsAndPieces, itemId, ky]);
+
+  const onSave = useCallback(async (e) => {
     const holdingId = getState().values?.holdingId;
+    const shouldCheckHoldingAbandonment = (id && initialHoldingId) && (holdingId !== initialHoldingId);
 
-    if ((id && initialHoldingId) && (holdingId !== initialHoldingId)) {
-      return getHoldingsItemsAndPieces(initialHoldingId, { limit: 1 })
-        .then(({ pieces, items }) => {
-          const canDeleteHolding = Boolean(
-            pieces && items
-            && (pieces.totalRecords === 1)
-            && ((items.totalRecords === 1 && itemId) || items.totalRecords === 0),
-          );
-
-          if (canDeleteHolding) {
-            return toggleDeleteHoldingsConfirmation();
-          }
-
-          return handleSubmit(e);
-        });
+    if (shouldCheckHoldingAbandonment) {
+      return checkHoldingAbandonment(initialHoldingId)
+        .then(({ willAbandoned }) => (
+          willAbandoned
+            ? toggleDeleteHoldingsConfirmation()
+            : handleSubmit(e)
+        ));
     }
 
     return handleSubmit(e);
-  }, []);
+  }, [checkHoldingAbandonment, getState, handleSubmit, id, initialHoldingId, toggleDeleteHoldingsConfirmation]);
 
   const onDeleteHoldings = useCallback(() => {
     change('deleteHolding', true);
     handleSubmit();
-  }, []);
+  }, [change, handleSubmit]);
 
   const start = (
     <Button
