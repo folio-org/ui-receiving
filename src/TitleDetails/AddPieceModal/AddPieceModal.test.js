@@ -1,10 +1,13 @@
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
+
+import { useOkapiKy } from '@folio/stripes/core';
 import {
+  FieldInventory,
   INVENTORY_RECORDS_TYPE,
+  PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
 import AddPieceModal from './AddPieceModal';
@@ -41,9 +44,17 @@ const defaultProps = {
   values: {},
   poLine: { locations: [{ locationId: '001' }] },
   setSearchParams: jest.fn(),
-  getHoldingsItemsAndPieces: jest.fn().mockReturnValue({
-    then: () => ({}),
-  }),
+  getHoldingsItemsAndPieces: jest.fn(),
+};
+
+const holding = {
+  id: 'holdingId',
+};
+
+const kyMock = {
+  get: jest.fn(() => ({
+    json: () => Promise.resolve(holding),
+  })),
 };
 
 const renderAddPieceModal = (props = defaultProps) => (render(
@@ -53,11 +64,21 @@ const renderAddPieceModal = (props = defaultProps) => (render(
   { wrapper: MemoryRouter },
 ));
 
+const findButton = (name) => screen.findByRole('button', { name });
+
+const createNewHoldingForThePiece = (newHoldingId = 'newHoldingUUID') => {
+  return act(async () => FieldInventory.mock.calls[0][0].onChange(null, 'locationId', 'holdingId', newHoldingId));
+}
+
 describe('AddPieceModal', () => {
   beforeEach(() => {
     defaultProps.close.mockClear();
     defaultProps.onCheckIn.mockClear();
     defaultProps.onSubmit.mockClear();
+    defaultProps.getHoldingsItemsAndPieces.mockClear();
+    FieldInventory.mockClear()
+    kyMock.get.mockClear();
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
   it('should display Add piece modal', () => {
@@ -70,7 +91,7 @@ describe('AddPieceModal', () => {
     it('should close Add piece modal', async () => {
       renderAddPieceModal();
 
-      await user.click(screen.getByText('ui-receiving.piece.actions.cancel'));
+      await user.click(await findButton('ui-receiving.piece.actions.cancel'));
 
       expect(defaultProps.close).toHaveBeenCalled();
     });
@@ -78,7 +99,7 @@ describe('AddPieceModal', () => {
 
   describe('Check display on holding', () => {
     it.skip('should enable discovery suppress when clicked', async () => {
-      const format = 'Electronic';
+      const format = PIECE_FORMAT.electronic;
 
       renderAddPieceModal({
         ...defaultProps,
@@ -107,7 +128,7 @@ describe('AddPieceModal', () => {
 
   describe('Save piece', () => {
     it('should call \'onSubmit\' when save button was clicked', async () => {
-      const format = 'Electronic';
+      const format = PIECE_FORMAT.electronic;
 
       renderAddPieceModal({
         ...defaultProps,
@@ -115,16 +136,55 @@ describe('AddPieceModal', () => {
         initialValues: {
           format,
           id: 'pieceId',
-          holdingId: 'holdingId',
+          holdingId: holding.id,
         },
       });
 
-      const saveAndCloseBtn = await screen.findByRole('button', {
-        name: 'ui-receiving.piece.actions.saveAndClose',
-      });
-
-      await user.click(saveAndCloseBtn);
+      await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
       expect(defaultProps.onSubmit).toHaveBeenCalled();
+    });
+
+    describe('Abandoned holdings', () => {
+      it('should display the modal for deleting abandoned holding when the original holding is empty after changing to a new one', async () => {
+        defaultProps.getHoldingsItemsAndPieces.mockResolvedValue({
+          pieces: { totalRecords: 1 },
+          items: { totalRecords: 0 },
+        });
+        
+        renderAddPieceModal({
+          ...defaultProps,
+          initialValues: {
+            id: 'pieceId',
+            format: PIECE_FORMAT.physical,
+            holdingId: holding.id,
+          },
+        });
+    
+        await createNewHoldingForThePiece();
+        await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
+    
+        expect(await screen.findByText('ui-receiving.piece.actions.edit.deleteHoldings.message')).toBeInTheDocument();
+        expect(defaultProps.onSubmit).not.toHaveBeenCalled();
+      });
+    
+      it('should NOT display the modal for deleting abandoned holding if it has already been deleted', async () => {
+        kyMock.get.mockReturnValue(({ json: () => Promise.reject(new Error('404')) }));
+    
+        renderAddPieceModal({
+          ...defaultProps,
+          initialValues: {
+            id: 'pieceId',
+            format: PIECE_FORMAT.physical,
+            holdingId: holding.id,
+          },
+        });
+    
+        await createNewHoldingForThePiece();
+        await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
+    
+        expect(screen.queryByText('ui-receiving.piece.actions.edit.deleteHoldings.message')).not.toBeInTheDocument();
+        expect(defaultProps.onSubmit).toHaveBeenCalled();
+      });
     });
   });
 
@@ -134,14 +194,9 @@ describe('AddPieceModal', () => {
         ...defaultProps,
         initialValues: { isCreateAnother: true },
       });
-
-      const saveBtn = await screen.findByRole('button', {
-        name: 'stripes-core.button.save',
-      });
-
-      const quickReceiveBtn = await screen.findByRole('button', {
-        name: 'ui-receiving.piece.actions.quickReceive',
-      });
+      
+      const saveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
+      const quickReceiveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
 
       expect(saveBtn).toBeInTheDocument();
       expect(quickReceiveBtn.classList.contains('primary')).toBeTruthy();
