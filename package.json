@@ -218,9 +218,9 @@
     "react-router-prop-types": "^1.0.4"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-instance": "^7.0.0",
-    "@folio/plugin-find-organization": "^5.0.0",
-    "@folio/plugin-find-po-line": "^5.0.0"
+    "@folio/plugin-find-instance": "^6.3.0",
+    "@folio/plugin-find-organization": "^4.0.0",
+    "@folio/plugin-find-po-line": "^4.0.0"
   },
   "peerDependencies": {
     "@folio/stripes": "^9.0.0",
