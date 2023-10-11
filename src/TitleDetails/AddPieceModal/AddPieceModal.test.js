@@ -2,7 +2,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
-
 import { useOkapiKy } from '@folio/stripes/core';
 import {
   FieldInventory,
