@@ -68,7 +68,7 @@ const findButton = (name) => screen.findByRole('button', { name });
 
 const createNewHoldingForThePiece = (newHoldingId = 'newHoldingUUID') => {
   return act(async () => FieldInventory.mock.calls[0][0].onChange(null, 'locationId', 'holdingId', newHoldingId));
-}
+};
 
 describe('AddPieceModal', () => {
   beforeEach(() => {
@@ -76,7 +76,7 @@ describe('AddPieceModal', () => {
     defaultProps.onCheckIn.mockClear();
     defaultProps.onSubmit.mockClear();
     defaultProps.getHoldingsItemsAndPieces.mockClear();
-    FieldInventory.mockClear()
+    FieldInventory.mockClear();
     kyMock.get.mockClear();
     useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
@@ -150,7 +150,7 @@ describe('AddPieceModal', () => {
           pieces: { totalRecords: 1 },
           items: { totalRecords: 0 },
         });
-        
+
         renderAddPieceModal({
           ...defaultProps,
           initialValues: {
@@ -159,17 +159,17 @@ describe('AddPieceModal', () => {
             holdingId: holding.id,
           },
         });
-    
+
         await createNewHoldingForThePiece();
         await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
-    
+
         expect(await screen.findByText('ui-receiving.piece.actions.edit.deleteHoldings.message')).toBeInTheDocument();
         expect(defaultProps.onSubmit).not.toHaveBeenCalled();
       });
-    
+
       it('should NOT display the modal for deleting abandoned holding if it has already been deleted', async () => {
         kyMock.get.mockReturnValue(({ json: () => Promise.reject(new Error('404')) }));
-    
+
         renderAddPieceModal({
           ...defaultProps,
           initialValues: {
@@ -178,10 +178,10 @@ describe('AddPieceModal', () => {
             holdingId: holding.id,
           },
         });
-    
+
         await createNewHoldingForThePiece();
         await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
-    
+
         expect(screen.queryByText('ui-receiving.piece.actions.edit.deleteHoldings.message')).not.toBeInTheDocument();
         expect(defaultProps.onSubmit).toHaveBeenCalled();
       });
@@ -194,7 +194,7 @@ describe('AddPieceModal', () => {
         ...defaultProps,
         initialValues: { isCreateAnother: true },
       });
-      
+
       const saveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
       const quickReceiveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
 
