@@ -1,6 +1,9 @@
 # Change history for ui-receiving
 
-## 4.0.0 (IN PROGRESS)
+## 4.1.0 (IN PROGRESS)
+
+## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
 
 * Unpin `@rehooks/local-storage` now that it's no longer broken. Refs UIREC-259.
 * Also support `circulation` `14.0`. Refs UIREC-270.
