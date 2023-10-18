@@ -30,6 +30,7 @@ const visibleColumns = [
   'caption',
   'enumeration',
   'copyNumber',
+  'accessionNumber',
   'barcode',
   'format',
   'hasRequest',
@@ -82,6 +83,16 @@ export const TitleReceiveList = ({
             marginBottom0
             fullWidth
             aria-label={intl.formatMessage({ id: 'ui-receiving.piece.enumeration' })}
+          />
+        ),
+        accessionNumber: record => (
+          <Field
+            name={`${field}[${record.rowIndex}].accessionNumber`}
+            component={TextField}
+            disabled={!record.itemId && !record.isCreateItem}
+            marginBottom0
+            fullWidth
+            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.accessionNumber' })}
           />
         ),
         barcode: record => (
@@ -181,6 +192,7 @@ export const TitleReceiveList = ({
       caption: <FormattedMessage id="ui-receiving.piece.caption" />,
       copyNumber: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
       enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
+      accessionNumber: <FormattedMessage id="ui-receiving.piece.accessionNumber" />,
       barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
       format: <FormattedMessage id="ui-receiving.piece.format" />,
       hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,

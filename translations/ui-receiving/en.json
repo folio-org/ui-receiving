@@ -130,6 +130,7 @@
   "title.requester": "Requester",
   "title.rush": "Rush",
 
+  "piece.accessionNumber": "Accession number",
   "piece.actions.addItem":"Add item",
   "piece.actions.savePiece.error": "The piece was <b>not saved</b>",
   "piece.actions.savePiece.success": "The piece was successfully <b>saved</b>",

@@ -1,6 +1,13 @@
 import { omit } from 'lodash';
 
-export const getDehydratedPiece = (piece) => omit(
-  piece,
-  ['barcode', 'callNumber', 'checked', 'request', 'itemStatus', 'rowIndex', 'isCreateItem', 'holdingsRecordId'],
-);
+export const getDehydratedPiece = (piece) => omit(piece, [
+  'barcode',
+  'accessionNumber',
+  'callNumber',
+  'checked',
+  'request',
+  'itemStatus',
+  'rowIndex',
+  'isCreateItem',
+  'holdingsRecordId',
+]);

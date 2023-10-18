@@ -16,6 +16,7 @@ export const useReceive = (options = {}) => {
         .map(piece => ({
           id: piece.id,
           barcode: piece.barcode,
+          accessionNumber: piece.accessionNumber,
           callNumber: piece.callNumber,
           comment: piece.comment,
           caption: piece.caption,

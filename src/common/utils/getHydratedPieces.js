@@ -27,6 +27,7 @@ export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {
         ...piece,
         itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
         barcode: itemsMap[piece.itemId]?.barcode,
+        accessionNumber: itemsMap[piece.itemId]?.accessionNumber,
         callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
         itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
         request: requestsMap[piece.itemId],
