@@ -95,6 +95,8 @@
   "title.receivingWorkflow": "Receiving workflow",
   "title.receivingWorkflow.independent": "Independent order and receipt quantity",
   "title.receivingWorkflow.synchronized": "Synchronized order and receipt quantity",
+  "title.claimingActive": "Claiming active",
+  "title.claimingInterval": "Claiming interval",
   "title.contributors.add": "Add contributor",
   "title.contributors.contributor": "Contributor",
   "title.contributors.contributorType": "Contributor ID type",

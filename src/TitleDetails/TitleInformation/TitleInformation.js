@@ -1,8 +1,8 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import {
+  Checkbox,
   Col,
   KeyValue,
   NoValue,
@@ -16,6 +16,8 @@ import {
 } from '@folio/stripes-acq-components';
 
 const TitleInformation = ({
+  claimingActive,
+  claimingInterval,
   contributors,
   edition,
   productIds,
@@ -88,6 +90,26 @@ const TitleInformation = ({
             value={subscriptionInterval ?? <NoValue />}
           />
         </Col>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <Checkbox
+            checked={claimingActive}
+            disabled
+            label={<FormattedMessage id="ui-receiving.title.claimingActive" />}
+            vertical
+          />
+        </Col>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <KeyValue
+            label={<FormattedMessage id="ui-receiving.title.claimingInterval" />}
+            value={claimingInterval}
+          />
+        </Col>
       </Row>
       <Row>
         <Col
@@ -114,6 +136,8 @@ const TitleInformation = ({
 };
 
 TitleInformation.propTypes = {
+  claimingActive: PropTypes.bool,
+  claimingInterval: PropTypes.number,
   contributors: PropTypes.arrayOf(PropTypes.object),
   edition: PropTypes.string,
   productIds: PropTypes.arrayOf(PropTypes.object),
