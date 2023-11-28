@@ -3,6 +3,7 @@
 ## 4.1.0 (IN PROGRESS)
 * Include Accession number field in receive all view. Refs UIREC-285.
 * Display and edit claiming active and interval fields in receiving title. Refs UIREC-288.
+* Optimize pieces query to improve performance. Refs UIREC-298.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
