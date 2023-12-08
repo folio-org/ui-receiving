@@ -201,5 +201,6 @@
     "errors.pieceNotRetrieved": "No se ha podido recuperar el registro de la pieza",
     "errors.piecePolMismatch": "La pieza no corresponde a línea de orden de compra",
     "errors.pieceUpdateFailed": "No se ha podido actualizar el registro de piezas",
-    "errors.titleNotFound": "No se han podido encontrar los títulos receptores"
+    "errors.titleNotFound": "No se han podido encontrar los títulos receptores",
+    "piece.accessionNumber": "Número de acceso"
 }

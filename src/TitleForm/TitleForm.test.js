@@ -1,8 +1,7 @@
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { Form } from 'react-final-form';
-import { render } from '@folio/jest-config-stripes/testing-library/react';
+
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import {
@@ -25,24 +24,16 @@ jest.mock('react-router', () => ({
 
 const defaultProps = {
   onCancel: jest.fn(),
-  form: {},
   onSubmit: jest.fn(),
-  pristine: false,
-  submitting: false,
   initialValues: { metadata: {} },
 };
 
-const renderTitleForm = (props = defaultProps) => (render(
-  <Form
-    onSubmit={jest.fn}
-    render={() => (
-      <TitleForm
-        {...props}
-      />
-    )}
+const renderTitleForm = (props = defaultProps) => render(
+  <TitleForm
+    {...props}
   />,
   { wrapper: MemoryRouter },
-));
+);
 
 describe('TitleForm', () => {
   it('should display title', () => {
@@ -62,6 +53,24 @@ describe('TitleForm', () => {
 
     expect(getByText('stripes-acq-components.FormFooter.cancel')).toBeDefined();
     expect(getByText('stripes-acq-components.FormFooter.save')).toBeDefined();
+  });
+
+  it('should clear the \'Claiming interval\' field when a user unchecked \'Claiming active\' checkbox', async () => {
+    renderTitleForm();
+
+    const claimingActiveField = screen.getByRole('checkbox', { name: 'ui-receiving.title.claimingActive' });
+    const claimingIntervalField = screen.getByLabelText('ui-receiving.title.claimingInterval');
+
+    await user.click(claimingActiveField);
+    await user.type(claimingIntervalField, '42');
+
+    expect(claimingActiveField).toBeChecked();
+    expect(claimingIntervalField).toHaveValue(42);
+
+    await user.click(claimingActiveField);
+
+    expect(claimingActiveField).not.toBeChecked();
+    expect(claimingIntervalField).toHaveValue(null);
   });
 
   describe('Close form', () => {

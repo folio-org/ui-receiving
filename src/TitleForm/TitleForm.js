@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { useCallback, useRef } from 'react';
 import { Field } from 'react-final-form';
-import { get } from 'lodash';
+import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router';
 
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -55,6 +55,7 @@ const TitleForm = ({
 }) => {
   const history = useHistory();
   const accordionStatusRef = useRef();
+  const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata } = initialValues;
   const paneFooter = (
@@ -75,6 +76,14 @@ const TitleForm = ({
   const addInstance = form.mutators.setTitleValue;
   const addLines = form.mutators.setPOLine;
   const { details, physical, isPackage } = get(values, 'poLine', {});
+
+  const onClaimingActiveChange = useCallback((event) => {
+    const { target: { checked } } = event;
+
+    change('claimingActive', checked);
+
+    if (!checked) change('claimingInterval', undefined);
+  }, [change]);
 
   const shortcuts = [
     {
@@ -223,6 +232,40 @@ const TitleForm = ({
                           />
                         </Col>
                       </Row>
+
+                      <Row>
+                        <Col
+                          xs={6}
+                          md={3}
+                        >
+                          <Field
+                            component={Checkbox}
+                            fullWidth
+                            label={<FormattedMessage id="ui-receiving.title.claimingActive" />}
+                            onChange={onClaimingActiveChange}
+                            name="claimingActive"
+                            type="checkbox"
+                            vertical
+                            validateFields={[]}
+                          />
+                        </Col>
+
+                        <Col
+                          xs={6}
+                          md={3}
+                        >
+                          <Field
+                            label={<FormattedMessage id="ui-receiving.title.claimingInterval" />}
+                            name="claimingInterval"
+                            component={TextField}
+                            type="number"
+                            fullWidth
+                            disabled={!values.claimingActive}
+                            validateFields={[]}
+                          />
+                        </Col>
+                      </Row>
+
                       <Row>
                         <Col xs={12}>
                           <ContributorsForm contributorNameTypes={contributorNameTypes} />

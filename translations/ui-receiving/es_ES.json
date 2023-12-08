@@ -120,7 +120,7 @@
     "title.orderType.Ongoing": "En curso (recurrente)",
     "title.orderType": "Tipo de pedido",
     "title.vendor": "Vendor",
-    "piece.actions.selectAll": "Select all pieces",
+    "piece.actions.selectAll": "Seleccionar todas las piezas",
     "piece.actions.select": "Select piece",
     "piece.confirmReceiving.title": "Pedido cerrado",
     "piece.confirmReceiving.message": "El pedido asociado a este título está cerrado. Está seguro de que quiere recibir estas partes?",
@@ -201,5 +201,6 @@
     "errors.pieceNotRetrieved": "The piece record could not be retrieved",
     "errors.piecePolMismatch": "The piece does not correspond to PO line",
     "errors.pieceUpdateFailed": "The piece record failed to be updated",
-    "errors.titleNotFound": "The receiving title(s) could not be found"
+    "errors.titleNotFound": "The receiving title(s) could not be found",
+    "piece.accessionNumber": "Número acceso"
 }

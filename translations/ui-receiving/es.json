@@ -201,5 +201,6 @@
     "errors.pieceNotRetrieved": "The piece record could not be retrieved",
     "errors.piecePolMismatch": "The piece does not correspond to PO line",
     "errors.pieceUpdateFailed": "The piece record failed to be updated",
-    "errors.titleNotFound": "The receiving title(s) could not be found"
+    "errors.titleNotFound": "The receiving title(s) could not be found",
+    "piece.accessionNumber": "Número de acceso"
 }

@@ -408,6 +408,8 @@ const TitleDetails = ({
             >
               <ViewMetaData metadata={title.metadata} />
               <TitleInformation
+                claimingActive={title.claimingActive}
+                claimingInterval={title.claimingInterval}
                 contributors={title.contributors}
                 edition={title.edition}
                 productIds={title.productIds}
