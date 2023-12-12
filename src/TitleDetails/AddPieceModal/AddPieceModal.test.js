@@ -19,6 +19,7 @@ jest.mock('@folio/stripes-acq-components', () => {
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
+jest.mock('./ModalActionButtons', () => jest.fn().mockReturnValue('ModalActionButtons'));
 
 const defaultProps = {
   close: jest.fn(),

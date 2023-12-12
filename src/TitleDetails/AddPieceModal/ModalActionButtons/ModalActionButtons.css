@@ -1,0 +1,11 @@
+.dropdownButton {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+
+  &::before, &:focus::before {
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+}
