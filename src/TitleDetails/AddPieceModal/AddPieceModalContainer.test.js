@@ -39,7 +39,7 @@ const renderAddPieceModalContainer = (props = {}) => render(
 
 describe('AddPieceModalContainer', () => {
   it('should display Edit Piece form', () => {
-    const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer();
+    const { getByLabelText, getByText } = renderAddPieceModalContainer();
 
     // header is rendered
     expect(getByText('ui-receiving.piece.caption')).toBeDefined();
@@ -50,7 +50,6 @@ describe('AddPieceModalContainer', () => {
     expect(getByLabelText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
-    expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeTruthy();
     fireEvent.input(getByLabelText('ui-receiving.piece.enumeration'));
   });
 
@@ -96,9 +95,7 @@ describe('AddPieceModalContainer', () => {
 
     await user.click(supplement);
 
-    const quickReceiveBtn = await screen.findByRole('button', {
-      name: 'ui-receiving.piece.actions.quickReceive',
-    });
+    const quickReceiveBtn = await screen.findByTestId('quickReceive');
 
     await user.click(quickReceiveBtn);
     expect(defaultProps.onCheckIn).toHaveBeenCalled();

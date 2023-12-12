@@ -10,6 +10,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import AddPieceModal from './AddPieceModal';
+import { PIECE_STATUS } from './ModalActionButtons/constants';
 
 jest.mock('@folio/stripes-acq-components', () => {
   return {
@@ -19,7 +20,6 @@ jest.mock('@folio/stripes-acq-components', () => {
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
-jest.mock('./ModalActionButtons', () => jest.fn().mockReturnValue('ModalActionButtons'));
 
 const defaultProps = {
   close: jest.fn(),
@@ -189,17 +189,18 @@ describe('AddPieceModal', () => {
   });
 
   describe('Create another piece', () => {
-    it('should update footer btns when \'Create another\' is active', async () => {
+    it('should update footer button when \'Create another\' is active', async () => {
       renderAddPieceModal({
         ...defaultProps,
-        initialValues: { isCreateAnother: true },
+        initialValues: {
+          isCreateAnother: true,
+          receivingStatus: PIECE_STATUS.expected,
+        },
       });
 
-      const saveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
-      const quickReceiveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
+      const saveBtn = await screen.findByTestId('quickReceive');
 
       expect(saveBtn).toBeInTheDocument();
-      expect(quickReceiveBtn.classList.contains('primary')).toBeTruthy();
     });
   });
 });

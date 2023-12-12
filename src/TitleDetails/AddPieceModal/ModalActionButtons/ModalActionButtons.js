@@ -19,6 +19,7 @@ export const ModalActionButtons = ({
   isCreateAnother,
   canDeletePiece,
   onDelete,
+  onReceive,
   onSave,
   status,
 }) => {
@@ -26,6 +27,7 @@ export const ModalActionButtons = ({
     canDeletePiece,
     disabled,
     onDelete,
+    onReceive,
     status,
   });
   const saveButtonLabelId = isCreateAnother ? 'stripes-core.button.save' : 'ui-receiving.piece.actions.saveAndClose';
@@ -67,6 +69,7 @@ ModalActionButtons.propTypes = {
   disabled: PropTypes.bool,
   isCreateAnother: PropTypes.bool,
   onDelete: PropTypes.func,
+  onReceive: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   status: PropTypes.string,
 };

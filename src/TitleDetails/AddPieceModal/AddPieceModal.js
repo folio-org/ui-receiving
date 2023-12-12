@@ -77,7 +77,7 @@ const AddPieceModal = ({
 
   const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
 
-  const receive = useCallback(
+  const onReceive = useCallback(
     () => {
       onCheckIn(formValues);
       close();
@@ -147,6 +147,7 @@ const AddPieceModal = ({
       isCreateAnother={isCreateAnother}
       onSave={onSave}
       onDelete={toggleDeleteConfirmation}
+      onReceive={onReceive}
       canDeletePiece={canDeletePiece}
       disabled={disabled}
       status={receivingStatus}
@@ -173,7 +174,7 @@ const AddPieceModal = ({
     {
       name: 'receive',
       shortcut: 'mod + alt + r',
-      handler: handleKeyCommand(receive, { disabled }),
+      handler: handleKeyCommand(onReceive, { disabled }),
     },
   ];
 

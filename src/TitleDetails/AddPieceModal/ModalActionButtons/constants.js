@@ -45,7 +45,12 @@ export const PIECE_ACTIONS_BY_STATUS = {
   ],
 };
 
-export const PIECE_ACTIONS = ({ disabled, onDelete, canDeletePiece }) => ({
+export const PIECE_ACTIONS = ({
+  canDeletePiece,
+  disabled,
+  onDelete,
+  onReceive,
+}) => ({
   delayClaim: (
     <Button disabled={disabled} buttonStyle="dropdownItem">
       <Icon icon="calendar">
@@ -57,6 +62,7 @@ export const PIECE_ACTIONS = ({ disabled, onDelete, canDeletePiece }) => ({
     <Button
       onClick={onDelete}
       buttonStyle="dropdownItem"
+      data-testid="delete-piece-button"
       disabled={!canDeletePiece || disabled}
     >
       <Icon icon="trash">
@@ -72,7 +78,12 @@ export const PIECE_ACTIONS = ({ disabled, onDelete, canDeletePiece }) => ({
     </Button>
   ),
   quickReceive: (
-    <Button disabled={disabled} buttonStyle="dropdownItem">
+    <Button
+      disabled={disabled}
+      data-testid="quickReceive"
+      buttonStyle="dropdownItem"
+      onClick={onReceive}
+    >
       <Icon icon="receive">
         <FormattedMessage id="ui-receiving.piece.action.button.quickReceive" />
       </Icon>
