@@ -128,6 +128,11 @@ const AddPieceModal = ({
     return handleSubmit(e);
   }, [checkHoldingAbandonment, getState, handleSubmit, id, initialHoldingId, toggleDeleteHoldingsConfirmation]);
 
+  const onCreateAnotherPiece = useCallback((e) => {
+    change('isCreateAnother', true);
+    onSave(e);
+  }, [change, onSave]);
+
   const onDeleteHoldings = useCallback(() => {
     change('deleteHolding', true);
     handleSubmit();
@@ -148,6 +153,7 @@ const AddPieceModal = ({
       onSave={onSave}
       onDelete={toggleDeleteConfirmation}
       onReceive={onReceive}
+      onCreateAnotherPiece={onCreateAnotherPiece}
       canDeletePiece={canDeletePiece}
       disabled={disabled}
       status={receivingStatus}

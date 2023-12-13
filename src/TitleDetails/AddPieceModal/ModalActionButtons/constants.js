@@ -48,6 +48,7 @@ export const PIECE_ACTIONS_BY_STATUS = {
 export const PIECE_ACTIONS = ({
   canDeletePiece,
   disabled,
+  onCreateAnotherPiece,
   onDelete,
   onReceive,
 }) => ({
@@ -90,7 +91,11 @@ export const PIECE_ACTIONS = ({
     </Button>
   ),
   saveAndCreate: (
-    <Button disabled={disabled} buttonStyle="dropdownItem">
+    <Button
+      disabled={disabled}
+      buttonStyle="dropdownItem"
+      onClick={onCreateAnotherPiece}
+    >
       <Icon icon="save">
         <FormattedMessage id="ui-receiving.piece.action.button.saveAndCreateAnother" />
       </Icon>

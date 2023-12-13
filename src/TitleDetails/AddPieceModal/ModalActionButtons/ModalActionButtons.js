@@ -18,6 +18,7 @@ export const ModalActionButtons = ({
   disabled,
   isCreateAnother,
   canDeletePiece,
+  onCreateAnotherPiece,
   onDelete,
   onReceive,
   onSave,
@@ -26,6 +27,7 @@ export const ModalActionButtons = ({
   const actionMenus = getPieceActionMenus({
     canDeletePiece,
     disabled,
+    onCreateAnotherPiece,
     onDelete,
     onReceive,
     status,
@@ -39,6 +41,7 @@ export const ModalActionButtons = ({
         data-test-add-piece-save
         disabled={disabled}
         onClick={onSave}
+        marginBottom0
       >
         <FormattedMessage id={saveButtonLabelId} />
       </Button>
@@ -52,10 +55,17 @@ export const ModalActionButtons = ({
         data-test-add-piece-save
         disabled={disabled}
         onClick={onSave}
+        marginBottom0
       >
         <FormattedMessage id={saveButtonLabelId} />
       </Button>
-      <Dropdown buttonProps={{ buttonStyle: 'primary', buttonClass: css.dropdownButton }}>
+      <Dropdown
+        buttonProps={{
+          buttonStyle: 'primary',
+          buttonClass: css.dropdownButton,
+          marginBottom0: true,
+        }}
+      >
         <DropdownMenu data-role="menu">
           {actionMenus}
         </DropdownMenu>
@@ -68,6 +78,7 @@ ModalActionButtons.propTypes = {
   canDeletePiece: PropTypes.bool,
   disabled: PropTypes.bool,
   isCreateAnother: PropTypes.bool,
+  onCreateAnotherPiece: PropTypes.func,
   onDelete: PropTypes.func,
   onReceive: PropTypes.func,
   onSave: PropTypes.func.isRequired,
