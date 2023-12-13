@@ -17,7 +17,6 @@ import css from './ModalActionButtons.css';
 export const ModalActionButtons = ({
   canDeletePiece,
   disabled,
-  isCreateAnother,
   isEditMode,
   onCreateAnotherPiece,
   onDelete,
@@ -34,7 +33,7 @@ export const ModalActionButtons = ({
     onReceive,
     status,
   });
-  const saveButtonLabelId = isCreateAnother ? 'stripes-core.button.save' : 'ui-receiving.piece.actions.saveAndClose';
+  const saveButtonLabelId = 'ui-receiving.piece.actions.saveAndClose';
 
   if (actionMenus.length === 0) {
     return (
@@ -79,7 +78,6 @@ export const ModalActionButtons = ({
 ModalActionButtons.propTypes = {
   canDeletePiece: PropTypes.bool,
   disabled: PropTypes.bool,
-  isCreateAnother: PropTypes.bool,
   isEditMode: PropTypes.bool.isRequired,
   onCreateAnotherPiece: PropTypes.func,
   onDelete: PropTypes.func,
@@ -91,6 +89,5 @@ ModalActionButtons.propTypes = {
 ModalActionButtons.defaultProps = {
   canDeletePiece: false,
   disabled: false,
-  isCreateAnother: false,
   status: PIECE_STATUS.expected,
 };

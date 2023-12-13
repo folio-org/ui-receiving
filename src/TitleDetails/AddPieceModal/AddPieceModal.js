@@ -128,10 +128,10 @@ const AddPieceModal = ({
     return handleSubmit(e);
   }, [checkHoldingAbandonment, getState, handleSubmit, id, initialHoldingId, toggleDeleteHoldingsConfirmation]);
 
-  const onCreateAnotherPiece = useCallback((e) => {
+  const onCreateAnotherPiece = useCallback(() => {
     change('isCreateAnother', true);
-    onSave(e);
-  }, [change, onSave]);
+    handleSubmit();
+  }, [change, handleSubmit]);
 
   const onDeleteHoldings = useCallback(() => {
     change('deleteHolding', true);
@@ -149,14 +149,14 @@ const AddPieceModal = ({
   );
   const end = (
     <ModalActionButtons
-      isCreateAnother={isCreateAnother}
-      onSave={onSave}
-      onDelete={toggleDeleteConfirmation}
-      onReceive={onReceive}
-      onCreateAnotherPiece={onCreateAnotherPiece}
       canDeletePiece={canDeletePiece}
       disabled={disabled}
+      isCreateAnother={isCreateAnother}
       isEditMode={Boolean(id)}
+      onCreateAnotherPiece={onCreateAnotherPiece}
+      onDelete={toggleDeleteConfirmation}
+      onReceive={onReceive}
+      onSave={onSave}
       status={receivingStatus}
     />
   );
