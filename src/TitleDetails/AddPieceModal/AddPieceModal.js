@@ -156,6 +156,7 @@ const AddPieceModal = ({
       onCreateAnotherPiece={onCreateAnotherPiece}
       canDeletePiece={canDeletePiece}
       disabled={disabled}
+      isEditMode={Boolean(id)}
       status={receivingStatus}
     />
   );

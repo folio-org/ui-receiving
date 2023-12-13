@@ -48,6 +48,7 @@ export const PIECE_ACTIONS_BY_STATUS = {
 export const PIECE_ACTIONS = ({
   canDeletePiece,
   disabled,
+  isEditMode,
   onCreateAnotherPiece,
   onDelete,
   onReceive,
@@ -59,7 +60,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  delete: (
+  delete: isEditMode ? (
     <Button
       onClick={onDelete}
       buttonStyle="dropdownItem"
@@ -70,7 +71,7 @@ export const PIECE_ACTIONS = ({
         <FormattedMessage id="ui-receiving.piece.action.button.delete" />
       </Icon>
     </Button>
-  ),
+  ) : null,
   expect: (
     <Button disabled={disabled} buttonStyle="dropdownItem">
       <Icon icon="calendar">

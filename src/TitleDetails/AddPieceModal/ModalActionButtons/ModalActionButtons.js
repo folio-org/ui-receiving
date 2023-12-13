@@ -15,9 +15,10 @@ import { getPieceActionMenus } from './utils';
 import css from './ModalActionButtons.css';
 
 export const ModalActionButtons = ({
+  canDeletePiece,
   disabled,
   isCreateAnother,
-  canDeletePiece,
+  isEditMode,
   onCreateAnotherPiece,
   onDelete,
   onReceive,
@@ -27,6 +28,7 @@ export const ModalActionButtons = ({
   const actionMenus = getPieceActionMenus({
     canDeletePiece,
     disabled,
+    isEditMode,
     onCreateAnotherPiece,
     onDelete,
     onReceive,
@@ -78,6 +80,7 @@ ModalActionButtons.propTypes = {
   canDeletePiece: PropTypes.bool,
   disabled: PropTypes.bool,
   isCreateAnother: PropTypes.bool,
+  isEditMode: PropTypes.bool.isRequired,
   onCreateAnotherPiece: PropTypes.func,
   onDelete: PropTypes.func,
   onReceive: PropTypes.func,
