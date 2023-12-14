@@ -68,6 +68,7 @@ export const ModalActionButtons = ({
           buttonStyle: 'primary',
           buttonClass: css.dropdownButton,
           marginBottom0: true,
+          'data-testid': 'dropdown-trigger-button',
         }}
       >
         <DropdownMenu data-role="menu">
