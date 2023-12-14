@@ -140,8 +140,8 @@ const AddPieceModal = ({
 
   const onStatusChange = useCallback((status) => {
     change('receivingStatus', status);
-    handleSubmit();
-  }, [change, handleSubmit]);
+    onSave();
+  }, [change, onSave]);
 
   const start = (
     <Button

@@ -1,10 +1,10 @@
+import { noop } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
   Button,
   Icon,
 } from '@folio/stripes/components';
-import { noop } from 'lodash';
 
 export const PIECE_STATUS = {
   received: 'Received',
