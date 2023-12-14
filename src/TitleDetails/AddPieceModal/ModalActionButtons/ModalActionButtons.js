@@ -10,7 +10,7 @@ import {
 } from '@folio/stripes/components';
 
 import { PIECE_STATUS } from './constants';
-import { getPieceActionMenus } from './utils';
+import { getPieceActionMenu } from './utils';
 
 import css from './ModalActionButtons.css';
 
@@ -24,7 +24,7 @@ export const ModalActionButtons = ({
   onSave,
   status,
 }) => {
-  const actionMenus = getPieceActionMenus({
+  const actionMenu = getPieceActionMenu({
     canDeletePiece,
     disabled,
     isEditMode,
@@ -35,7 +35,7 @@ export const ModalActionButtons = ({
   });
   const saveButtonLabelId = 'ui-receiving.piece.actions.saveAndClose';
 
-  if (actionMenus.length === 0) {
+  if (actionMenu.length === 0) {
     return (
       <Button
         buttonStyle="primary"
@@ -57,6 +57,7 @@ export const ModalActionButtons = ({
         disabled={disabled}
         onClick={onSave}
         marginBottom0
+        buttonClass={css.saveButton}
       >
         <FormattedMessage id={saveButtonLabelId} />
       </Button>
@@ -68,7 +69,7 @@ export const ModalActionButtons = ({
         }}
       >
         <DropdownMenu data-role="menu">
-          {actionMenus}
+          {actionMenu}
         </DropdownMenu>
       </Dropdown>
     </ButtonGroup>
