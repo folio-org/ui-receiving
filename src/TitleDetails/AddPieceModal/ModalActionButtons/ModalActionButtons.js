@@ -22,6 +22,7 @@ export const ModalActionButtons = ({
   onDelete,
   onReceive,
   onSave,
+  onStatusChange,
   status,
 }) => {
   const actionMenu = getPieceActionMenu({
@@ -31,6 +32,7 @@ export const ModalActionButtons = ({
     onCreateAnotherPiece,
     onDelete,
     onReceive,
+    onStatusChange,
     status,
   });
   const saveButtonLabelId = 'ui-receiving.piece.actions.saveAndClose';
@@ -84,6 +86,7 @@ ModalActionButtons.propTypes = {
   onDelete: PropTypes.func,
   onReceive: PropTypes.func,
   onSave: PropTypes.func.isRequired,
+  onStatusChange: PropTypes.func,
   status: PropTypes.string,
 };
 

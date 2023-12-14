@@ -4,6 +4,7 @@ import {
   Button,
   Icon,
 } from '@folio/stripes/components';
+import { noop } from 'lodash';
 
 export const PIECE_STATUS = {
   received: 'Received',
@@ -11,7 +12,7 @@ export const PIECE_STATUS = {
   late: 'Late',
   claimDelayed: 'Claim delayed',
   claimSent: 'Claim sent',
-  unreceivable: 'Unreceivable',
+  unReceivable: 'Unreceivable',
 };
 
 export const PIECE_ACTION_NAMES = {
@@ -20,6 +21,7 @@ export const PIECE_ACTION_NAMES = {
   sendClaim: 'sendClaim',
   delayClaim: 'delayClaim',
   unReceivable: 'unReceivable',
+  unReceive: 'unReceive',
   expect: 'expect',
   delete: 'delete',
 };
@@ -35,10 +37,10 @@ export const PIECE_ACTIONS_BY_STATUS = {
   ],
   [PIECE_STATUS.received]: [
     PIECE_ACTION_NAMES.saveAndCreate,
-    PIECE_ACTION_NAMES.unReceivable,
+    PIECE_ACTION_NAMES.unReceive,
     PIECE_ACTION_NAMES.delete,
   ],
-  [PIECE_STATUS.unreceivable]: [
+  [PIECE_STATUS.unReceivable]: [
     PIECE_ACTION_NAMES.saveAndCreate,
     PIECE_ACTION_NAMES.expect,
     PIECE_ACTION_NAMES.delete,
@@ -50,11 +52,16 @@ export const PIECE_ACTIONS = ({
   disabled,
   isEditMode,
   onCreateAnotherPiece,
+  onStatusChange,
   onDelete,
   onReceive,
 }) => ({
   delayClaim: (
-    <Button disabled={disabled} buttonStyle="dropdownItem">
+    <Button
+      disabled={disabled}
+      buttonStyle="dropdownItem"
+      onClick={noop} // TODO UIOR-1160
+    >
       <Icon icon="calendar">
         <FormattedMessage id="ui-receiving.piece.action.button.delayClaim" />
       </Icon>
@@ -73,7 +80,12 @@ export const PIECE_ACTIONS = ({
     </Button>
   ) : null,
   expect: (
-    <Button disabled={disabled} buttonStyle="dropdownItem">
+    <Button
+      disabled={disabled}
+      buttonStyle="dropdownItem"
+      data-testid="expect-piece-button"
+      onClick={() => onStatusChange(PIECE_STATUS.expected)}
+    >
       <Icon icon="calendar">
         <FormattedMessage id="ui-receiving.piece.action.button.expect" />
       </Icon>
@@ -95,6 +107,7 @@ export const PIECE_ACTIONS = ({
     <Button
       disabled={disabled}
       buttonStyle="dropdownItem"
+      data-testid="create-another-piece-button"
       onClick={onCreateAnotherPiece}
     >
       <Icon icon="save">
@@ -103,14 +116,35 @@ export const PIECE_ACTIONS = ({
     </Button>
   ),
   sendClaim: (
-    <Button disabled={disabled} buttonStyle="dropdownItem">
+    <Button
+      disabled={disabled}
+      buttonStyle="dropdownItem"
+      onClick={noop} // TODO UIOR-1152
+    >
       <Icon icon="envelope">
         <FormattedMessage id="ui-receiving.piece.action.button.sendClaim" />
       </Icon>
     </Button>
   ),
+  unReceive: (
+    <Button
+      disabled={disabled}
+      buttonStyle="dropdownItem"
+      data-testid="unReceive-piece-button"
+      onClick={() => onStatusChange(PIECE_STATUS.expected)}
+    >
+      <Icon icon="cancel">
+        <FormattedMessage id="ui-receiving.piece.action.button.unReceive" />
+      </Icon>
+    </Button>
+  ),
   unReceivable: (
-    <Button disabled={disabled} buttonStyle="dropdownItem">
+    <Button
+      disabled={disabled}
+      buttonStyle="dropdownItem"
+      data-testid="unReceivable-piece-button"
+      onClick={() => onStatusChange(PIECE_STATUS.unReceivable)}
+    >
       <Icon icon="cancel">
         <FormattedMessage id="ui-receiving.piece.action.button.unReceivable" />
       </Icon>

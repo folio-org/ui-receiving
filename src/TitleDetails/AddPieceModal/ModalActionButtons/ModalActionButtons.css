@@ -31,7 +31,7 @@
     border-top-right-radius: 999px !important;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    margin-left: 1px;
+    margin-left: -1px;
     margin-right: 0;
   }
 }

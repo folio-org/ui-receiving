@@ -138,6 +138,11 @@ const AddPieceModal = ({
     handleSubmit();
   }, [change, handleSubmit]);
 
+  const onStatusChange = useCallback((status) => {
+    change('receivingStatus', status);
+    handleSubmit();
+  }, [change, handleSubmit]);
+
   const start = (
     <Button
       data-test-add-piece-cancel
@@ -157,6 +162,7 @@ const AddPieceModal = ({
       onDelete={toggleDeleteConfirmation}
       onReceive={onReceive}
       onSave={onSave}
+      onStatusChange={onStatusChange}
       status={receivingStatus}
     />
   );
