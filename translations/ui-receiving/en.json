@@ -75,6 +75,7 @@
   "title.modalLabel.edit": "Add title",
   "title.edit.save": "Save & close",
   "title.details.button.edit": "Edit",
+  "title.details.button.expect": "Expect",
   "title.details.button.receive": "Receive",
   "title.details.button.unreceive": "Unreceive",
   "title.edit.cancel": "Cancel",
@@ -131,6 +132,7 @@
   "title.receiptDue": "Receipt due",
   "title.requester": "Requester",
   "title.rush": "Rush",
+  "title.unreceivable": "Unreceivable",
 
   "piece.accessionNumber": "Accession number",
   "piece.actions.addItem":"Add item",
@@ -220,6 +222,7 @@
   "requests.footer.close": "Close",
 
   "shortcut.receive": "Receive pieces/Quick receive",
+  "shortcut.piece.saveAndCreateAnother": "Save a piece and create another",
 
   "permission.view": "Receiving: View",
   "permission.edit": "Receiving: View, edit",

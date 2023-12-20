@@ -1,10 +1,11 @@
-import React from 'react';
+import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 import { FormattedMessage } from 'react-intl';
-import { pick } from 'lodash';
 
 import {
   ORDER_FORMATS,
   PIECE_FORMAT,
+  PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
 export const TITLE_ACCORDION = {
@@ -12,6 +13,7 @@ export const TITLE_ACCORDION = {
   polDetails: 'polDetails',
   expected: 'expected',
   received: 'received',
+  unreceivable: 'unreceivable',
 };
 
 export const TITLE_ACCORDION_LABELS = {
@@ -19,6 +21,7 @@ export const TITLE_ACCORDION_LABELS = {
   [TITLE_ACCORDION.polDetails]: <FormattedMessage id="ui-receiving.title.polDetails" />,
   [TITLE_ACCORDION.expected]: <FormattedMessage id="ui-receiving.title.expected" />,
   [TITLE_ACCORDION.received]: <FormattedMessage id="ui-receiving.title.received" />,
+  [TITLE_ACCORDION.unreceivable]: <FormattedMessage id="ui-receiving.title.unreceivable" />,
 };
 
 export const ORDER_FORMAT_TO_PIECE_FORMAT = {
@@ -64,6 +67,8 @@ export const RECEIVED_PIECE_VISIBLE_COLUMNS = [
   PIECE_COLUMNS.request,
 ];
 
+export const UNRECEIVABLE_PIECE_VISIBLE_COLUMNS = [...RECEIVED_PIECE_VISIBLE_COLUMNS];
+
 export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
   [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
@@ -80,8 +85,8 @@ export const PIECE_COLUMN_MAPPING = {
 };
 
 export const EXPECTED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, EXPECTED_PIECE_VISIBLE_COLUMNS);
-
 export const RECEIVED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, RECEIVED_PIECE_VISIBLE_COLUMNS);
+export const UNRECEIVABLE_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, UNRECEIVABLE_PIECE_VISIBLE_COLUMNS);
 
 export const MENU_FILTERS = {
   supplement: 'supplement',
@@ -97,3 +102,6 @@ export const SUPPLEMENT_MENU_FILTER_OPTIONS = [
     label: <FormattedMessage id="ui-receiving.filter.nonSupplements" />,
   },
 ];
+
+export const EXPECTED_PIECES_STATUSES = Object.values(omit(PIECE_STATUS, ['received', 'unreceivable']));
+export const EXPECTED_PIECES_SEARCH_VALUE = `(${EXPECTED_PIECES_STATUSES.map(status => `"${status}"`).join(' or ')})`;

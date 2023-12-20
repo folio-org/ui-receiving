@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import { useCallback, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
@@ -32,6 +32,7 @@ import {
   handleReceiveErrorResponse,
   getPieceById,
 } from '../common/utils';
+import { EXPECTED_PIECES_SEARCH_VALUE } from './constants';
 import TitleDetails from './TitleDetails';
 
 const TitleDetailsContainer = ({ location, history, mutator, match }) => {
@@ -66,8 +67,9 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       setPiecesExistance();
 
       Promise.all([
-        hasPieces(lineId, PIECE_STATUS.expected),
+        hasPieces(lineId, EXPECTED_PIECES_SEARCH_VALUE),
         hasPieces(lineId, PIECE_STATUS.received),
+        hasPieces(lineId, PIECE_STATUS.unreceivable),
       ])
         .then(existances => setPiecesExistance(existances.reduce(
           (acc, existance) => ({ ...acc, ...existance, key: new Date() }),

@@ -21,7 +21,10 @@ import {
   TextField,
   checkScope,
 } from '@folio/stripes/components';
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   FieldDatepickerFinal,
@@ -69,6 +72,7 @@ const AddPieceModal = ({
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
 
+  const stripes = useStripes();
   const ky = useOkapiKy();
   const intl = useIntl();
   const modalLabel = intl.formatMessage({ id: labelId });
@@ -188,6 +192,13 @@ const AddPieceModal = ({
       name: 'receive',
       shortcut: 'mod + alt + r',
       handler: handleKeyCommand(onReceive, { disabled }),
+    },
+    {
+      name: 'saveAndCreateAnother',
+      shortcut: 'shift + s',
+      handler: handleKeyCommand(onCreateAnotherPiece, {
+        disabled: disabled || !stripes.hasPerm('ui-receiving.create'),
+      }),
     },
   ];
 

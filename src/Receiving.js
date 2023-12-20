@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Switch,
   Route,
@@ -24,14 +23,22 @@ import {
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleFormContainer } from './TitleForm';
 import { TitleEditContainer } from './TitleEdit';
+import { TitleExpectContainer } from './TitleExpect';
 import { TitleReceiveContainer } from './TitleReceive';
 import { TitleUnreceiveContainer } from './TitleUnreceive';
 
-const receivingCommands = [{
-  name: 'receive',
-  shortcut: 'mod+alt+r',
-  label: <FormattedMessage id="ui-receiving.shortcut.receive" />,
-}];
+const receivingCommands = [
+  {
+    name: 'receive',
+    shortcut: 'mod+alt+r',
+    label: <FormattedMessage id="ui-receiving.shortcut.receive" />,
+  },
+  {
+    name: 'saveAndCreateAnother',
+    shortcut: 'shift+s',
+    label: <FormattedMessage id="ui-receiving.shortcut.piece.saveAndCreateAnother" />,
+  },
+];
 const shortcutCommands = [...receivingCommands, ...defaultKeyboardShortcuts];
 
 const Receiving = () => {
@@ -110,6 +117,10 @@ const Receiving = () => {
             <Route
               component={TitleUnreceiveContainer}
               path="/receiving/unreceive/:id"
+            />
+            <Route
+              component={TitleExpectContainer}
+              path="/receiving/expect/:id"
             />
             <Route
               component={ReceivingListContainer}

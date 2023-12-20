@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
 
-import {
-  EXPECTED_PIECES_STATUSES,
-  PIECE_COLUMNS,
-} from '../constants';
-import {
-  usePiecesList,
-} from '../hooks';
+import { PIECE_STATUS } from '@folio/stripes-acq-components';
+
+import { PIECE_COLUMNS } from '../constants';
+import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 
-const ExpectedPiecesList = ({
+export const UnreceivablePiecesList = ({
   filters,
   onLoadingStatusChange,
   title,
@@ -17,8 +14,8 @@ const ExpectedPiecesList = ({
   visibleColumns,
 }) => {
   const initialSorting = {
-    sorting: 'receiptDate',
-    sortingDirection: 'ascending',
+    sorting: 'receivedDate',
+    sortingDirection: 'descending',
   };
 
   const {
@@ -33,18 +30,18 @@ const ExpectedPiecesList = ({
     initialSorting,
     onLoadingStatusChange,
     title,
-    queryParams: { receivingStatus: EXPECTED_PIECES_STATUSES },
+    queryParams: { receivingStatus: PIECE_STATUS.unreceivable },
   });
 
   return (
     <PiecesList
-      columnIdPrefix="expected-pieces"
+      columnIdPrefix="unreceivable-pieces"
       pieces={pieces}
       isLoading={isFetching}
       totalCount={totalRecords}
       selectPiece={selectPiece}
       visibleColumns={visibleColumns}
-      sortedColumn={PIECE_COLUMNS.receiptDate}
+      sortedColumn={PIECE_COLUMNS.receivedDate}
       pagination={pagination}
       onNeedMoreData={setPagination}
       applySorting={setSorting}
@@ -52,12 +49,10 @@ const ExpectedPiecesList = ({
   );
 };
 
-ExpectedPiecesList.propTypes = {
+UnreceivablePiecesList.propTypes = {
   filters: PropTypes.object.isRequired,
   onLoadingStatusChange: PropTypes.func.isRequired,
   title: PropTypes.object.isRequired,
   selectPiece: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
-
-export default ExpectedPiecesList;

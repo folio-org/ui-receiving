@@ -31,6 +31,7 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 import {
+  ColumnManager,
   ViewMetaData,
   useColumnManager,
 } from '@folio/stripes/smart-components';
@@ -50,17 +51,21 @@ import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
   EXPECTED_PIECE_COLUMN_MAPPING,
+  EXPECTED_PIECES_SEARCH_VALUE,
   ORDER_FORMAT_TO_PIECE_FORMAT,
   RECEIVED_PIECE_COLUMN_MAPPING,
-  TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
+  TITLE_ACCORDION_LABELS,
+  UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from './constants';
 import {
   TitleDetailsExpectedActions,
   TitleDetailsReceivedActions,
+  TitleDetailsUnreceivableActions,
 } from './TitleDetailsActions';
 import Title from './Title';
 import POLDetails from './POLDetails';
+import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
 
@@ -116,7 +121,9 @@ const TitleDetails = ({
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
-  const poLineLocations = poLine?.locations?.map(({ locationId }) => locationId) ?? [];
+  const poLineLocations = useMemo(() => (
+    poLine?.locations?.map(({ locationId }) => locationId) ?? []
+  ), [poLine?.locations]);
   const poLineLocationIds = useMemo(() => poLineLocations.filter(Boolean), [poLineLocations]);
   const locationIds = useMemo(() => (
     pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
@@ -277,10 +284,11 @@ const TitleDetails = ({
       : onReceive(values);
   }, [isOrderClosed, confirmReceiving, onCheckIn, getPieceValues, onCreateAnotherPiece]);
 
-  const hasReceive = Boolean(piecesExistance?.[PIECE_STATUS.expected]);
+  const hasReceive = Boolean(piecesExistance?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
   const [isReceivedPiecesLoading, setReceivedPiecesLoading] = useState(false);
+  const [isUnreceivablePiecesLoading, setUnreceivablePiecesLoading] = useState(false);
 
   const {
     applyFilters: applyExpectedPiecesFilters,
@@ -295,6 +303,13 @@ const TitleDetails = ({
     filters: receivedPiecesFilters,
     changeSearch: changeReceivedPiecesSearch,
     searchQuery: receivedPiecesSearchQuery,
+  } = useFilters(noop);
+  const {
+    applyFilters: applyUnreceivablePiecesFilters,
+    applySearch: applyUnreceivablePiecesSearch,
+    filters: unreceivablePiecesFilters,
+    changeSearch: changeUnreceivablePiecesSearch,
+    searchQuery: unreceivablePiecesSearchQuery,
   } = useFilters(noop);
 
   const expectedPiecesActions = useMemo(
@@ -345,6 +360,22 @@ const TitleDetails = ({
       toggleReceivedPiecesColumn,
     ],
   );
+
+  const hasUnreceivable = Boolean(piecesExistance?.[PIECE_STATUS.unreceivable]);
+  const renderUnreceivablePiecesActions = useCallback((renderColumnsMenu) => (
+    <TitleDetailsUnreceivableActions
+      applyFilters={applyUnreceivablePiecesFilters}
+      filters={unreceivablePiecesFilters}
+      titleId={titleId}
+      hasRecords={hasUnreceivable}
+      renderColumnsMenu={renderColumnsMenu}
+    />
+  ), [
+    applyUnreceivablePiecesFilters,
+    hasUnreceivable,
+    titleId,
+    unreceivablePiecesFilters,
+  ]);
 
   const lastMenu = (
     <PaneMenu>
@@ -505,6 +536,43 @@ const TitleDetails = ({
                 visibleColumns={receivedPiecesVisibleColumns}
               />
             </Accordion>
+
+            <ColumnManager
+              id="unreceivable-pieces-list"
+              columnMapping={UNRECEIVABLE_PIECE_COLUMN_MAPPING}
+            >
+              {({ renderColumnsMenu, visibleColumns }) => (
+                <Accordion
+                  displayWhenClosed={renderUnreceivablePiecesActions(renderColumnsMenu)}
+                  displayWhenOpen={(
+                    <div className={css['accordion-actions']}>
+                      {hasUnreceivable && (
+                        <FilterSearchInput
+                          applyFilters={applyUnreceivablePiecesFilters}
+                          applySearch={applyUnreceivablePiecesSearch}
+                          changeSearch={changeUnreceivablePiecesSearch}
+                          filters={unreceivablePiecesFilters}
+                          isLoading={isUnreceivablePiecesLoading}
+                          searchQuery={unreceivablePiecesSearchQuery}
+                        />
+                      )}
+                      {renderUnreceivablePiecesActions(renderColumnsMenu)}
+                    </div>
+                  )}
+                  id={TITLE_ACCORDION.unreceivable}
+                  label={TITLE_ACCORDION_LABELS[TITLE_ACCORDION.unreceivable]}
+                >
+                  <UnreceivablePiecesList
+                    key={piecesExistance?.key}
+                    filters={unreceivablePiecesFilters}
+                    onLoadingStatusChange={setUnreceivablePiecesLoading}
+                    title={title}
+                    selectPiece={openAddPieceModal}
+                    visibleColumns={visibleColumns}
+                  />
+                </Accordion>
+              )}
+            </ColumnManager>
           </AccordionSet>
         </AccordionStatus>
 
