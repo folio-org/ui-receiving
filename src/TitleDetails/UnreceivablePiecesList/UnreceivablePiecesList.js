@@ -6,6 +6,11 @@ import { PIECE_COLUMNS } from '../constants';
 import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 
+const initialSorting = {
+  sorting: 'receivedDate',
+  sortingDirection: 'descending',
+};
+
 export const UnreceivablePiecesList = ({
   filters,
   onLoadingStatusChange,
@@ -13,11 +18,6 @@ export const UnreceivablePiecesList = ({
   selectPiece,
   visibleColumns,
 }) => {
-  const initialSorting = {
-    sorting: 'receivedDate',
-    sortingDirection: 'descending',
-  };
-
   const {
     isFetching,
     pagination,

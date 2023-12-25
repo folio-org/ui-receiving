@@ -89,18 +89,16 @@ const TitleExpect = ({
 TitleExpect.propTypes = {
   form: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  pieceLocationMap: PropTypes.object.isRequired,
-  pieceHoldingMap: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
+  pieceHoldingMap: PropTypes.object.isRequired,
+  pieceLocationMap: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   values: PropTypes.object.isRequired,
 };
 
 export default stripesFinalForm({
-  navigationCheck: true,
-  subscription: { values: true },
   mutators: {
     toggleCheckedAll: (args, state, tools) => {
       const isChecked = !!args[0];
@@ -110,4 +108,6 @@ export default stripesFinalForm({
       });
     },
   },
+  navigationCheck: true,
+  subscription: { values: true },
 })(TitleExpect);
