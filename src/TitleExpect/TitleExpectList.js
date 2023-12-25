@@ -11,22 +11,10 @@ import {
 import { getHoldingLocationName } from '@folio/stripes-acq-components';
 
 import {
-  PIECE_COLUMNS,
   PIECE_COLUMN_BASE_FORMATTER,
   UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from '../TitleDetails/constants';
-
-const visibleColumns = [
-  'checked',
-  PIECE_COLUMNS.barcode,
-  PIECE_COLUMNS.caption,
-  PIECE_COLUMNS.enumeration,
-  PIECE_COLUMNS.format,
-  PIECE_COLUMNS.request,
-  PIECE_COLUMNS.comment,
-  PIECE_COLUMNS.location,
-  PIECE_COLUMNS.callNumber,
-];
+import { TITLE_EXPECT_PIECES_VISIBLE_COLUMNS } from './constants';
 
 export const TitleExpectList = ({ fields, props: { pieceLocationMap, pieceHoldingMap, toggleCheckedAll } }) => {
   const intl = useIntl();
@@ -89,7 +77,7 @@ export const TitleExpectList = ({ fields, props: { pieceLocationMap, pieceHoldin
       id="title-expect-list"
       interactive={false}
       totalCount={fields.value.length}
-      visibleColumns={visibleColumns}
+      visibleColumns={TITLE_EXPECT_PIECES_VISIBLE_COLUMNS}
     />
   );
 };
