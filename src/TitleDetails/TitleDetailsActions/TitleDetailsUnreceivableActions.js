@@ -41,7 +41,6 @@ export function TitleDetailsUnreceivableActions({
           id="unreceivable-pieces-menu-actions"
         >
           <Button
-            data-test-title-unreceive-button
             to={`/receiving/expect/${titleId}`}
             buttonStyle="dropdownItem"
           >
