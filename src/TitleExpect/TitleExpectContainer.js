@@ -12,7 +12,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  useExpectPieces,
+  usePiecesExpect,
   useTitleHydratedPieces,
 } from '../common/hooks';
 import TitleExpect from './TitleExpect';
@@ -21,7 +21,7 @@ export function TitleExpectContainer({ history, location, match }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
 
-  const { expectPieces } = useExpectPieces();
+  const { expectPieces } = usePiecesExpect();
   const {
     isLoading,
     orderLine,
