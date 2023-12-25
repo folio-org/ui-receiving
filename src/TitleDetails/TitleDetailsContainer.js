@@ -53,7 +53,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     mutator.pieces.GET({
       params: {
         limit: 1,
-        query: `titleId==${titleId} and poLineId==${lineId} and receivingStatus==${status}`,
+        query: `titleId==${titleId} and poLineId==${lineId} and receivingStatus==(${status})`,
       },
     })
       .then(data => Boolean(data.length))

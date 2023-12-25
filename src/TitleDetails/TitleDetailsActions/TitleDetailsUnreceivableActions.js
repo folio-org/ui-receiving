@@ -69,4 +69,5 @@ TitleDetailsUnreceivableActions.propTypes = {
   filters: PropTypes.object.isRequired,
   hasRecords: PropTypes.bool.isRequired,
   titleId: PropTypes.string.isRequired,
+  renderColumnsMenu: PropTypes.func.isRequired,
 };

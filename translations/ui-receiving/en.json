@@ -79,6 +79,8 @@
   "title.details.button.receive": "Receive",
   "title.details.button.unreceive": "Unreceive",
   "title.edit.cancel": "Cancel",
+  "title.actions.expect.error": "Pieces expect failed",
+  "title.actions.expect.success": "Pieces expect successful",
   "title.actions.exportCSV": "Export results (CSV)",
   "title.actions.load.error": "Failed to load Title or PO line data",
   "title.actions.missingLoanTypeId.error": "Item can't be created, permanentLoanTypeId is not set, please set it in Settings - Orders - Loan type",

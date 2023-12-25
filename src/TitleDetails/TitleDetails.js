@@ -288,7 +288,7 @@ const TitleDetails = ({
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
   const [isReceivedPiecesLoading, setReceivedPiecesLoading] = useState(false);
-  const [isUnreceivablePiecesLoading, setUnreceivablePiecesLoading] = useState(false);
+  const [isUnreceivablePiecesLoading, setIsUnreceivablePiecesLoading] = useState(false);
 
   const {
     applyFilters: applyExpectedPiecesFilters,
@@ -565,7 +565,7 @@ const TitleDetails = ({
                   <UnreceivablePiecesList
                     key={piecesExistance?.key}
                     filters={unreceivablePiecesFilters}
-                    onLoadingStatusChange={setUnreceivablePiecesLoading}
+                    onLoadingStatusChange={setIsUnreceivablePiecesLoading}
                     title={title}
                     selectPiece={openAddPieceModal}
                     visibleColumns={visibleColumns}
