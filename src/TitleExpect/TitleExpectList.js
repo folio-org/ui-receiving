@@ -1,20 +1,14 @@
 import PropTypes from 'prop-types';
 import { useCallback, useMemo } from 'react';
-import { Field } from 'react-final-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
-import {
-  Checkbox,
-  MultiColumnList,
-  TextArea,
-} from '@folio/stripes/components';
-import { getHoldingLocationName } from '@folio/stripes-acq-components';
+import { MultiColumnList } from '@folio/stripes/components';
 
-import {
-  PIECE_COLUMN_BASE_FORMATTER,
-  UNRECEIVABLE_PIECE_COLUMN_MAPPING,
-} from '../TitleDetails/constants';
 import { TITLE_EXPECT_PIECES_VISIBLE_COLUMNS } from './constants';
+import {
+  getColumnMapping,
+  getResultFormatter,
+} from './utils';
 
 export const TitleExpectList = ({ fields, props: { pieceLocationMap, pieceHoldingMap, toggleCheckedAll } }) => {
   const intl = useIntl();
@@ -23,51 +17,16 @@ export const TitleExpectList = ({ fields, props: { pieceLocationMap, pieceHoldin
   const isAllChecked = useMemo(() => fields.value.every(({ checked }) => !!checked), [fields]);
 
   const formatter = useMemo(() => {
-    return {
-      ...PIECE_COLUMN_BASE_FORMATTER,
-      checked: record => (
-        <Field
-          data-test-title-unreceive-checke
-          name={`${field}[${record.rowIndex}].checked`}
-          component={Checkbox}
-          type="checkbox"
-          aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
-        />
-      ),
-      comment: record => (
-        <Field
-          name={`${field}[${record.rowIndex}].comment`}
-          component={TextArea}
-          aria-label={intl.formatMessage({ id: 'ui-receiving.piece.comment' })}
-          fullWidth
-        />
-      ),
-      location: ({ locationId, holdingId }) => (
-        holdingId
-          ? getHoldingLocationName(pieceHoldingMap[holdingId], pieceLocationMap)
-          : (pieceLocationMap[locationId]?.name && `${pieceLocationMap[locationId].name} (${pieceLocationMap[locationId].code})`) || ''
-      ),
-    };
+    return getResultFormatter({ field, intl, pieceHoldingMap, pieceLocationMap });
   }, [field, intl, pieceHoldingMap, pieceLocationMap]);
 
   const toggleAll = useCallback(() => {
     toggleCheckedAll(!isAllChecked);
   }, [isAllChecked, toggleCheckedAll]);
 
-  const columnMapping = useMemo(
-    () => ({
-      checked: (
-        <Checkbox
-          checked={isAllChecked}
-          onChange={toggleAll}
-          aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
-        />
-      ),
-      location: <FormattedMessage id="ui-receiving.piece.location" />,
-      ...UNRECEIVABLE_PIECE_COLUMN_MAPPING,
-    }),
-    [intl, isAllChecked, toggleAll],
-  );
+  const columnMapping = useMemo(() => {
+    return getColumnMapping({ intl, isAllChecked, toggleAll });
+  }, [intl, isAllChecked, toggleAll]);
 
   return (
     <MultiColumnList
