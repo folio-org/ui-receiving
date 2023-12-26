@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -8,8 +7,8 @@ import {
   Dropdown,
   DropdownMenu,
 } from '@folio/stripes/components';
+import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { PIECE_STATUS } from './constants';
 import { getPieceActionMenu } from './utils';
 
 import css from './ModalActionButtons.css';

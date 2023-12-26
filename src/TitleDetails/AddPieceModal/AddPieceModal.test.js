@@ -7,11 +7,11 @@ import {
   FieldInventory,
   INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT,
+  PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
 import { usePieceStatusChangeLog } from '../hooks';
 import AddPieceModal from './AddPieceModal';
-import { PIECE_STATUS } from './ModalActionButtons/constants';
 
 jest.mock('@folio/stripes-acq-components', () => {
   return {

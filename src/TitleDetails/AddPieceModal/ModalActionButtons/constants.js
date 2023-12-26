@@ -5,15 +5,16 @@ import {
   Button,
   Icon,
 } from '@folio/stripes/components';
+import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-export const PIECE_STATUS = {
-  received: 'Received',
-  expected: 'Expected',
-  late: 'Late',
-  claimDelayed: 'Claim delayed',
-  claimSent: 'Claim sent',
-  unReceivable: 'Unreceivable',
-};
+// export const PIECE_STATUS = {
+//   received: 'Received',
+//   expected: 'Expected',
+//   late: 'Late',
+//   claimDelayed: 'Claim delayed',
+//   claimSent: 'Claim sent',
+//   unReceivable: 'Unreceivable',
+// };
 
 export const PIECE_ACTION_NAMES = {
   saveAndCreate: 'saveAndCreate',
@@ -40,7 +41,7 @@ export const PIECE_ACTIONS_BY_STATUS = {
     PIECE_ACTION_NAMES.unReceive,
     PIECE_ACTION_NAMES.delete,
   ],
-  [PIECE_STATUS.unReceivable]: [
+  [PIECE_STATUS.unreceivable]: [
     PIECE_ACTION_NAMES.saveAndCreate,
     PIECE_ACTION_NAMES.expect,
     PIECE_ACTION_NAMES.delete,
@@ -143,7 +144,7 @@ export const PIECE_ACTIONS = ({
       disabled={disabled}
       buttonStyle="dropdownItem"
       data-testid="unReceivable-piece-button"
-      onClick={() => onStatusChange(PIECE_STATUS.unReceivable)}
+      onClick={() => onStatusChange(PIECE_STATUS.unreceivable)}
     >
       <Icon icon="cancel">
         <FormattedMessage id="ui-receiving.piece.action.button.unReceivable" />

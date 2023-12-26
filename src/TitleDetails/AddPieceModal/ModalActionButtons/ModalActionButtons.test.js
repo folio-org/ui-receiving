@@ -1,7 +1,7 @@
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { PIECE_STATUS } from './constants';
 import { ModalActionButtons } from './ModalActionButtons';
 
 const onSave = jest.fn();
