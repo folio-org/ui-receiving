@@ -1,8 +1,9 @@
-import { includes } from 'lodash';
+import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import {
   useCallback,
   useMemo,
+  useRef,
 } from 'react';
 import { Field } from 'react-final-form';
 import {
@@ -11,6 +12,9 @@ import {
 } from 'react-intl';
 
 import {
+  Accordion,
+  AccordionSet,
+  AccordionStatus,
   Button,
   Checkbox,
   Col,
@@ -20,12 +24,15 @@ import {
   TextArea,
   TextField,
   checkScope,
+  collapseAllSections,
+  expandAllSections,
 } from '@folio/stripes/components';
 import {
   useOkapiKy,
   useStripes,
 } from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
+import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   FieldDatepickerFinal,
   FieldInventory,
@@ -42,9 +49,14 @@ import {
   LineLocationsView,
 } from '../../common/components';
 import { HOLDINGS_API } from '../../common/constants';
+import {
+  PIECE_MODAL_ACCORDION,
+  PIECE_MODAL_ACCORDION_LABELS,
+} from '../constants';
 import { DeletePieceModal } from '../DeletePieceModal';
 import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
 import { ModalActionButtons } from './ModalActionButtons';
+import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
 const AddPieceModal = ({
   close,
@@ -75,6 +87,7 @@ const AddPieceModal = ({
   const stripes = useStripes();
   const ky = useOkapiKy();
   const intl = useIntl();
+  const accordionStatusRef = useRef();
   const modalLabel = intl.formatMessage({ id: labelId });
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, []);
@@ -200,6 +213,14 @@ const AddPieceModal = ({
         disabled: disabled || !stripes.hasPerm('ui-receiving.create'),
       }),
     },
+    {
+      name: 'expandAllSections',
+      handler: (e) => expandAllSections(e, accordionStatusRef),
+    },
+    {
+      name: 'collapseAllSections',
+      handler: (e) => collapseAllSections(e, accordionStatusRef),
+    },
   ];
 
   return (
@@ -216,162 +237,183 @@ const AddPieceModal = ({
         isWithinScope={checkScope}
         scope={document.body}
       >
-        <form>
-          <Row>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="caption"
-                label={<FormattedMessage id="ui-receiving.piece.caption" />}
-                name="caption"
-                type="text"
-              />
-            </Col>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="copyNumber"
-                label={<FormattedMessage id="ui-receiving.piece.copyNumber" />}
-                name="copyNumber"
-                type="text"
-              />
-            </Col>
-          </Row>
+        <AccordionStatus ref={accordionStatusRef}>
+          <AccordionSet>
+            {id && <ViewMetaData metadata={formValues.metadata} />}
 
-          <Row>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="enumeration"
-                label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
-                name="enumeration"
-                type="text"
-              />
-            </Col>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="chronology"
-                label={<FormattedMessage id="ui-receiving.piece.chronology" />}
-                name="chronology"
-                type="text"
-              />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col xs>
-              <FieldSelectFinal
-                dataOptions={pieceFormatOptions}
-                disabled={!isNotReceived}
-                label={<FormattedMessage id="ui-receiving.piece.format" />}
-                name="format"
-                required
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs>
-              <FieldDatepickerFinal
-                labelId="ui-receiving.piece.receiptDate"
-                name="receiptDate"
-                usePortal
-              />
-            </Col>
-            <Col xs>
-              <Field
-                component={TextArea}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.comment" />}
-                name="comment"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <LineLocationsView
-                poLine={poLine}
-                locations={locations}
-              />
-            </Col>
-
-            {
-              Boolean(instanceId) && (
-                <Col xs>
-                  <CreateItemField
-                    createInventoryValues={createInventoryValues}
-                    instanceId={instanceId}
-                    label={<FormattedMessage id="ui-receiving.piece.createItem" />}
-                    piece={formValues}
-                  />
-                </Col>
-              )
-            }
-
-            <Col xs>
-              <Field
-                component={Checkbox}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.supplement" />}
-                name="supplement"
-                type="checkbox"
-                vertical
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <FieldInventory
-                instanceId={isLocationRequired ? instanceId : undefined}
-                locationIds={locationIds}
-                locations={locations}
-                holdingName="holdingId"
-                locationName="locationId"
-                onChange={mutators.setLocationValue}
-                disabled={!isNotReceived}
-                required={isLocationRequired}
-              />
-            </Col>
-
-            {
-              isLocationRequired && (
-                <>
-                  <Col xs={3}>
+            <form>
+              <Accordion
+                id={PIECE_MODAL_ACCORDION.pieceDetails}
+                label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.pieceDetails]}
+              >
+                <Row>
+                  <Col xs={6}>
                     <Field
-                      component={Checkbox}
+                      component={TextField}
                       fullWidth
-                      label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
-                      name="displayOnHolding"
-                      type="checkbox"
-                      vertical
-                      onChange={onChangeDisplayOnHolding}
+                      id="caption"
+                      label={<FormattedMessage id="ui-receiving.piece.caption" />}
+                      name="caption"
+                      type="text"
+                    />
+                  </Col>
+                  <Col xs={6}>
+                    <Field
+                      component={TextField}
+                      fullWidth
+                      id="copyNumber"
+                      label={<FormattedMessage id="ui-receiving.piece.copyNumber" />}
+                      name="copyNumber"
+                      type="text"
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col xs={6}>
+                    <Field
+                      component={TextField}
+                      fullWidth
+                      id="enumeration"
+                      label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
+                      name="enumeration"
+                      type="text"
+                    />
+                  </Col>
+                  <Col xs={6}>
+                    <Field
+                      component={TextField}
+                      fullWidth
+                      id="chronology"
+                      label={<FormattedMessage id="ui-receiving.piece.chronology" />}
+                      name="chronology"
+                      type="text"
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col xs>
+                    <FieldSelectFinal
+                      dataOptions={pieceFormatOptions}
+                      disabled={!isNotReceived}
+                      label={<FormattedMessage id="ui-receiving.piece.format" />}
+                      name="format"
+                      required
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs>
+                    <FieldDatepickerFinal
+                      labelId="ui-receiving.piece.receiptDate"
+                      name="receiptDate"
+                      usePortal
+                    />
+                  </Col>
+                  <Col xs>
+                    <Field
+                      component={TextArea}
+                      fullWidth
+                      label={<FormattedMessage id="ui-receiving.piece.comment" />}
+                      name="comment"
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={6}>
+                    <LineLocationsView
+                      poLine={poLine}
+                      locations={locations}
                     />
                   </Col>
 
                   {
-                    false && (
-                      <Col xs={3}>
-                        <Field
-                          component={Checkbox}
-                          disabled={!formValues.displayOnHolding}
-                          fullWidth
-                          label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
-                          name="discoverySuppress"
-                          type="checkbox"
-                          vertical
+                    Boolean(instanceId) && (
+                      <Col xs>
+                        <CreateItemField
+                          createInventoryValues={createInventoryValues}
+                          instanceId={instanceId}
+                          label={<FormattedMessage id="ui-receiving.piece.createItem" />}
+                          piece={formValues}
                         />
                       </Col>
                     )
                   }
-                </>
-              )
-            }
-          </Row>
-        </form>
+
+                  <Col xs>
+                    <Field
+                      component={Checkbox}
+                      fullWidth
+                      label={<FormattedMessage id="ui-receiving.piece.supplement" />}
+                      name="supplement"
+                      type="checkbox"
+                      vertical
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={6}>
+                    <FieldInventory
+                      instanceId={isLocationRequired ? instanceId : undefined}
+                      locationIds={locationIds}
+                      locations={locations}
+                      holdingName="holdingId"
+                      locationName="locationId"
+                      onChange={mutators.setLocationValue}
+                      disabled={!isNotReceived}
+                      required={isLocationRequired}
+                    />
+                  </Col>
+
+                  {
+                    isLocationRequired && (
+                      <>
+                        <Col xs={3}>
+                          <Field
+                            component={Checkbox}
+                            fullWidth
+                            label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
+                            name="displayOnHolding"
+                            type="checkbox"
+                            vertical
+                            onChange={onChangeDisplayOnHolding}
+                          />
+                        </Col>
+
+                        {
+                          false && (
+                            <Col xs={3}>
+                              <Field
+                                component={Checkbox}
+                                disabled={!formValues.displayOnHolding}
+                                fullWidth
+                                label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
+                                name="discoverySuppress"
+                                type="checkbox"
+                                vertical
+                              />
+                            </Col>
+                          )
+                        }
+                      </>
+                    )
+                  }
+                </Row>
+              </Accordion>
+            </form>
+
+            {id && (
+              <Accordion
+                closedByDefault
+                id={PIECE_MODAL_ACCORDION.statusChangeLog}
+                label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.statusChangeLog]}
+              >
+                <ReceivingStatusChangeLog piece={formValues} />
+              </Accordion>
+            )}
+          </AccordionSet>
+        </AccordionStatus>
       </HasCommand>
 
       {

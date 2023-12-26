@@ -121,3 +121,14 @@ export const SUPPLEMENT_MENU_FILTER_OPTIONS = [
 
 export const EXPECTED_PIECES_STATUSES = Object.values(omit(PIECE_STATUS, ['received', 'unreceivable']));
 export const EXPECTED_PIECES_SEARCH_VALUE = EXPECTED_PIECES_STATUSES.map(status => `"${status}"`).join(' or ');
+export const PIECE_MODAL_ACCORDION = {
+  pieceDetails: 'pieceDetails',
+  itemDetails: 'itemDetails',
+  statusChangeLog: 'statusChangeLog',
+};
+
+export const PIECE_MODAL_ACCORDION_LABELS = {
+  [PIECE_MODAL_ACCORDION.pieceDetails]: <FormattedMessage id="ui-receiving.piece.accordion.pieceDetails" />,
+  [PIECE_MODAL_ACCORDION.itemDetails]: <FormattedMessage id="ui-receiving.piece.accordion.itemDetails" />,
+  [PIECE_MODAL_ACCORDION.statusChangeLog]: <FormattedMessage id="ui-receiving.piece.accordion.statusChangeLog" />,
+};
