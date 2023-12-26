@@ -27,6 +27,7 @@ export const EXPORT_PIECE_FIELDS = {
   supplement: 'Supplement',
   displayOnHolding: 'Display on holding',
   itemHRID: 'Item HRID',
+  receivingStatus: 'Receiving status',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {

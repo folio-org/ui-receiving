@@ -89,6 +89,7 @@ export const createExportReport = (
       supplement: Boolean(pieceData.supplement),
       displayOnHolding: pieceData.displayOnHolding,
       itemHRID: item?.hrid,
+      receivingStatus: pieceData.receivingStatus,
     };
   };
 

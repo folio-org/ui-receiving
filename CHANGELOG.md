@@ -9,6 +9,7 @@
 * Add unreceivable accordion to receiving title view. Refs UIREC-302.
 * Add validation for the `claimingInterval` field. Refs UIREC-308.
 * View piece status change log. Refs UIREC-305.
+* Add CSV export options for new piece statuses. Refs UIREC-306.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
