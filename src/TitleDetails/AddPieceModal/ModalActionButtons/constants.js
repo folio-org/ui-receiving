@@ -7,15 +7,6 @@ import {
 } from '@folio/stripes/components';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-// export const PIECE_STATUS = {
-//   received: 'Received',
-//   expected: 'Expected',
-//   late: 'Late',
-//   claimDelayed: 'Claim delayed',
-//   claimSent: 'Claim sent',
-//   unReceivable: 'Unreceivable',
-// };
-
 export const PIECE_ACTION_NAMES = {
   saveAndCreate: 'saveAndCreate',
   quickReceive: 'quickReceive',
