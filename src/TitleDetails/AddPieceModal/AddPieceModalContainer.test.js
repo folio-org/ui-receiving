@@ -1,10 +1,11 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
+
 import AddPieceModalContainer from './AddPieceModalContainer';
 
 jest.mock('@folio/stripes-acq-components', () => ({
@@ -13,7 +14,10 @@ jest.mock('@folio/stripes-acq-components', () => ({
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
-
+jest.mock('../hooks', () => ({
+  ...jest.requireActual('../hooks'),
+  usePieceStatusChangeLog: jest.fn(() => ({ data: [] })),
+}));
 const defaultProps = {
   close: jest.fn(),
   onSubmit: jest.fn(() => Promise.resolve({})),

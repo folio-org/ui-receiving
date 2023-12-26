@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import {
   MultiColumnList,
   TextLink,
 } from '@folio/stripes/components';
 import { getFullName } from '@folio/stripes/util';
+import { FolioFormattedDate } from '@folio/stripes-acq-components';
 
 import { usePieceStatusChangeLog } from '../../hooks';
 
@@ -23,7 +24,7 @@ const COLUMN_MAPPING = {
 
 const FORMATTER = {
   [COLUMN_NAMES.status]: item => item.receivingStatus,
-  [COLUMN_NAMES.eventDate]: item => <FormattedDate value={item.eventDate} />,
+  [COLUMN_NAMES.eventDate]: item => <FolioFormattedDate value={item.eventDate} />,
   [COLUMN_NAMES.user]: item => (
     item.user
       ? <TextLink to={`/users/preview/${item.user.id}`}>{getFullName(item.user)}</TextLink>

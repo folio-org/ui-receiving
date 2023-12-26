@@ -9,6 +9,7 @@ import {
   PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
+import { usePieceStatusChangeLog } from '../hooks';
 import AddPieceModal from './AddPieceModal';
 import { PIECE_STATUS } from './ModalActionButtons/constants';
 
@@ -20,6 +21,10 @@ jest.mock('@folio/stripes-acq-components', () => {
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
+jest.mock('../hooks', () => ({
+  ...jest.requireActual('../hooks'),
+  usePieceStatusChangeLog: jest.fn(),
+}));
 
 const defaultProps = {
   close: jest.fn(),
@@ -50,6 +55,25 @@ const defaultProps = {
 const holding = {
   id: 'holdingId',
 };
+const userData = {
+  id: 'user-1',
+  personal: {
+    lastName: 'Galt',
+    firstName: 'John',
+  },
+};
+const logs = [
+  {
+    eventDate: '2023-12-26T14:08:19.402Z',
+    user: userData,
+    receivingStatus: PIECE_STATUS.received,
+  },
+  {
+    eventDate: '2023-12-25T14:08:18.402Z',
+    user: userData,
+    receivingStatus: PIECE_STATUS.expected,
+  },
+];
 
 const kyMock = {
   get: jest.fn(() => ({
@@ -57,12 +81,13 @@ const kyMock = {
   })),
 };
 
-const renderAddPieceModal = (props = defaultProps) => (render(
+const renderAddPieceModal = (props = {}) => render(
   <AddPieceModal
+    {...defaultProps}
     {...props}
   />,
   { wrapper: MemoryRouter },
-));
+);
 
 const findButton = (name) => screen.findByRole('button', { name });
 
@@ -79,6 +104,9 @@ describe('AddPieceModal', () => {
     FieldInventory.mockClear();
     kyMock.get.mockClear();
     useOkapiKy.mockClear().mockReturnValue(kyMock);
+    usePieceStatusChangeLog
+      .mockClear()
+      .mockReturnValue({ data: logs });
   });
 
   it('should display Add piece modal', () => {
@@ -229,7 +257,6 @@ describe('AddPieceModal', () => {
     const dropdownButton = screen.getByTestId('dropdown-trigger-button');
 
     await user.click(dropdownButton);
-    await screen.findByRole('button', { expanded: true });
 
     const unReceiveButton = screen.getByTestId('unReceivable-piece-button');
 
