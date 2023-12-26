@@ -122,6 +122,7 @@ export const SUPPLEMENT_MENU_FILTER_OPTIONS = [
 export const EXPECTED_PIECES_STATUSES = Object.values(omit(PIECE_STATUS, ['received', 'unreceivable']));
 export const EXPECTED_PIECES_SEARCH_VALUE = EXPECTED_PIECES_STATUSES.map(status => `"${status}"`).join(' or ');
 export const PIECE_MODAL_ACCORDION = {
+  metadata: 'metadata',
   pieceDetails: 'pieceDetails',
   itemDetails: 'itemDetails',
   statusChangeLog: 'statusChangeLog',

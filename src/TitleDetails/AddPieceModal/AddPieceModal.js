@@ -77,7 +77,16 @@ const AddPieceModal = ({
   poLine,
   getHoldingsItemsAndPieces,
 }) => {
-  const { enumeration, format, id, receivingStatus, itemId, isCreateAnother } = formValues;
+  const {
+    enumeration,
+    format,
+    id,
+    itemId,
+    isCreateAnother,
+    metadata,
+    receivingStatus,
+  } = formValues;
+
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
@@ -90,7 +99,7 @@ const AddPieceModal = ({
   const accordionStatusRef = useRef();
   const modalLabel = intl.formatMessage({ id: labelId });
 
-  const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, []);
+  const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
   const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
 
@@ -239,7 +248,12 @@ const AddPieceModal = ({
       >
         <AccordionStatus ref={accordionStatusRef}>
           <AccordionSet>
-            {id && <ViewMetaData metadata={formValues.metadata} />}
+            {metadata && (
+              <ViewMetaData
+                id={PIECE_MODAL_ACCORDION.metadata}
+                metadata={metadata}
+              />
+            )}
 
             <form>
               <Accordion
