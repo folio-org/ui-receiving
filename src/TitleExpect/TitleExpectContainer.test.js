@@ -2,7 +2,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
-
 import { useShowCallout } from '@folio/stripes-acq-components';
 
 import {
@@ -34,6 +33,7 @@ const orderLine = {
   poLineNumber: '10002-2',
 };
 const pieces = [{ id: '01', locationId: '1' }];
+const paneTitle = `${orderLine.poLineNumber} - ${title.title}`;
 
 const defaultProps = {
   history: { push: jest.fn() },
@@ -75,17 +75,18 @@ describe('TitleUnreceiveContainer', () => {
       });
   });
 
-  it('should render loading pane', async () => {
+  it('should not render pane title while loading', async () => {
     useTitleHydratedPieces.mockReturnValue({ isLoading: true });
 
     renderTitleExpectContainer();
 
-    screen.debug();
+    expect(screen.queryByText(paneTitle)).not.toBeInTheDocument();
   });
 
   it('should render unreceivable pieces list', async () => {
     renderTitleExpectContainer();
 
+    expect(screen.getByText(paneTitle)).toBeInTheDocument();
     TITLE_EXPECT_PIECES_VISIBLE_COLUMNS.slice(1).forEach((column) => {
       expect(screen.getByText(`ui-receiving.piece.${column}`)).toBeInTheDocument();
     });

@@ -30,12 +30,12 @@ import { TitleUnreceiveContainer } from './TitleUnreceive';
 const receivingCommands = [
   {
     name: 'receive',
-    shortcut: 'mod+alt+r',
+    shortcut: 'mod + alt + r',
     label: <FormattedMessage id="ui-receiving.shortcut.receive" />,
   },
   {
     name: 'saveAndCreateAnother',
-    shortcut: 'shift+s',
+    shortcut: 'alt + s',
     label: <FormattedMessage id="ui-receiving.shortcut.piece.saveAndCreateAnother" />,
   },
 ];

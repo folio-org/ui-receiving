@@ -195,7 +195,7 @@ const AddPieceModal = ({
     },
     {
       name: 'saveAndCreateAnother',
-      shortcut: 'shift + s',
+      shortcut: 'alt + s',
       handler: handleKeyCommand(onCreateAnotherPiece, {
         disabled: disabled || !stripes.hasPerm('ui-receiving.create'),
       }),

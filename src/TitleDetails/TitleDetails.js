@@ -362,7 +362,7 @@ const TitleDetails = ({
   );
 
   const hasUnreceivable = Boolean(piecesExistance?.[PIECE_STATUS.unreceivable]);
-  const renderUnreceivablePiecesActions = useCallback((renderColumnsMenu) => (
+  const renderUnreceivablePiecesActions = (renderColumnsMenu) => (
     <TitleDetailsUnreceivableActions
       applyFilters={applyUnreceivablePiecesFilters}
       filters={unreceivablePiecesFilters}
@@ -370,12 +370,7 @@ const TitleDetails = ({
       hasRecords={hasUnreceivable}
       renderColumnsMenu={renderColumnsMenu}
     />
-  ), [
-    applyUnreceivablePiecesFilters,
-    hasUnreceivable,
-    titleId,
-    unreceivablePiecesFilters,
-  ]);
+  );
 
   const lastMenu = (
     <PaneMenu>

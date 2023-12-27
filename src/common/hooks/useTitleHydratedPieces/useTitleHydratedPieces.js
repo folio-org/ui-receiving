@@ -50,43 +50,43 @@ export const useTitleHydratedPieces = ({ receivingStatus, titleId } = {}) => {
     || isPiecesLoading
   );
 
-  const { data, isLoading } = useQuery(
-    [namespace, pieces],
-    async ({ signal }) => {
-      const mutatorAdapter = (api, recordsKey) => ({
-        GET: ({ params: searchParams }) => {
-          return ky.get(api, { searchParams, signal })
-            .json()
-            .then((response) => response[recordsKey]);
-        },
-      });
+  const queryFn = async ({ signal }) => {
+    const mutatorAdapter = (api, recordsKey) => ({
+      GET: ({ params: searchParams }) => {
+        return ky.get(api, { searchParams, signal })
+          .json()
+          .then((response) => response[recordsKey]);
+      },
+    });
 
-      const hydratedPieces = await getHydratedPieces(
-        pieces,
-        mutatorAdapter(REQUESTS_API, 'requests'),
-        mutatorAdapter(ITEMS_API, 'items'),
-      );
+    const hydratedPieces = await getHydratedPieces(
+      pieces,
+      mutatorAdapter(REQUESTS_API, 'requests'),
+      mutatorAdapter(ITEMS_API, 'items'),
+    );
 
-      const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
-      const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);
+    const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
+    const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);
 
-      const holdings = holdingIds.length
-        ? await batchFetch(mutatorAdapter(HOLDINGS_API, 'holdingsRecords'), holdingIds)
-        : [];
+    const holdings = holdingIds.length
+      ? await batchFetch(mutatorAdapter(HOLDINGS_API, 'holdingsRecords'), holdingIds)
+      : [];
 
-      const holdingLocationIds = holdings.map(({ permanentLocationId }) => permanentLocationId);
-      const holdingLocations = await batchFetch(mutatorAdapter(LOCATIONS_API, 'locations'), [...new Set([...holdingLocationIds, ...locationIds])]);
+    const holdingLocationIds = holdings.map(({ permanentLocationId }) => permanentLocationId);
+    const holdingLocations = await batchFetch(mutatorAdapter(LOCATIONS_API, 'locations'), [...new Set([...holdingLocationIds, ...locationIds])]);
 
-      return {
-        pieces: hydratedPieces,
-        pieceLocationMap: keyBy(holdingLocations, 'id'),
-        pieceHoldingMap: keyBy(holdings, 'id'),
-      };
-    },
-    {
-      enabled: !isReferenceDataLoading && Boolean(pieces?.length),
-    },
-  );
+    return {
+      pieces: hydratedPieces,
+      pieceLocationMap: keyBy(holdingLocations, 'id'),
+      pieceHoldingMap: keyBy(holdings, 'id'),
+    };
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: [namespace, pieces],
+    queryFn,
+    enabled: !isReferenceDataLoading && Boolean(pieces?.length),
+  });
 
   return {
     isLoading: isLoading || isReferenceDataLoading,
