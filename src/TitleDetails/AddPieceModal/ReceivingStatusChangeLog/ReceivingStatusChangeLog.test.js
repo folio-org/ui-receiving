@@ -52,8 +52,8 @@ describe('ReceivingStatusChangeLog', () => {
   it('should render piece status log list', () => {
     renderComponent();
 
-    expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.status'));
-    expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.date'));
-    expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.updatedBy'));
+    expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.status')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.date')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.updatedBy')).toBeInTheDocument();
   });
 });
