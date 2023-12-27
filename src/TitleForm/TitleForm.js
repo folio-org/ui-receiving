@@ -32,6 +32,7 @@ import {
   FormFooter,
   handleKeyCommand,
   validateRequired,
+  validateRequiredPositiveNumber,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -41,6 +42,12 @@ import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
 
 const ALLOWED_YEAR_LENGTH = 4;
+
+const validateClaimingInterval = (value, { claimingActive }) => {
+  if (!claimingActive) return undefined;
+
+  return validateRequired(value) || validateRequiredPositiveNumber(value);
+};
 
 const TitleForm = ({
   handleSubmit,
@@ -72,6 +79,7 @@ const TitleForm = ({
   const paneTitle = isEditMode
     ? title
     : <FormattedMessage id="ui-receiving.title.paneTitle.create" />;
+  const isClaimingActive = Boolean(values.claimingActive);
 
   const addInstance = form.mutators.setTitleValue;
   const addLines = form.mutators.setPOLine;
@@ -246,7 +254,7 @@ const TitleForm = ({
                             name="claimingActive"
                             type="checkbox"
                             vertical
-                            validateFields={[]}
+                            validateFields={['claimingInterval']}
                           />
                         </Col>
 
@@ -259,8 +267,11 @@ const TitleForm = ({
                             name="claimingInterval"
                             component={TextField}
                             type="number"
+                            min={1}
                             fullWidth
-                            disabled={!values.claimingActive}
+                            disabled={!isClaimingActive}
+                            required={isClaimingActive}
+                            validate={validateClaimingInterval}
                             validateFields={[]}
                           />
                         </Col>

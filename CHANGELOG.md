@@ -7,6 +7,7 @@
 * Display claim actions for Piece. Refs UIREC-291.
 * Set claiming workflow statuses for single Piece. Refs UIREC-292.
 * Add unreceivable accordion to receiving title view. Refs UIREC-302.
+* Add validation for the `claimingInterval` field. Refs UIREC-308.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
