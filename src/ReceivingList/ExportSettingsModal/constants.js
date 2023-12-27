@@ -28,6 +28,8 @@ export const EXPORT_PIECE_FIELDS = {
   displayOnHolding: 'Display on holding',
   itemHRID: 'Item HRID',
   receivingStatus: 'Receiving status',
+  internalNote: 'Internal note',
+  externalNote: 'External note',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {
