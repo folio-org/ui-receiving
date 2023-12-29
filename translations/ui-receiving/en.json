@@ -237,5 +237,7 @@
   "permission.edit": "Receiving: View, edit",
   "permission.create": "Receiving: View, edit, create",
   "permission.delete": "Receiving: View, edit, delete",
+  "permission.acq-units.assignment.assign": "Receiving: Assign acquisition units to new receiving title",
+  "permission.acq-units.assignment.manage": "Receiving: Manage acquisition units of existing receiving title",
   "permission.exportCSV": "Receiving: Export search results"
 }

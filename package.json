@@ -157,6 +157,24 @@
         ]
       },
       {
+        "permissionName": "ui-receiving.acq-units.assignment.assign",
+        "displayName": "Receiving: Assign acquisition units to new receiving title",
+        "description": "",
+        "visible": true,
+        "subPermissions": [
+          "titles.acquisitions-units-assignments.assign"
+        ]
+      },
+      {
+        "permissionName": "ui-receiving.acq-units.assignment.manage",
+        "displayName": "Receiving: Manage acquisition units of existing receiving title",
+        "description": "",
+        "visible": true,
+        "subPermissions": [
+          "titles.acquisitions-units-assignments.manage"
+        ]
+      },
+      {
         "permissionName": "ui-receiving.exportCSV",
         "displayName": "Receiving: Export search results",
         "description": "",

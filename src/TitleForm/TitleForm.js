@@ -27,6 +27,7 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
+  AcqUnitsField,
   FieldDatepickerFinal,
   FolioFormattedDate,
   FormFooter,
@@ -42,6 +43,8 @@ import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
 
 const ALLOWED_YEAR_LENGTH = 4;
+const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.assign';
+const MANAGE_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.manage';
 
 const validateClaimingInterval = (value, { claimingActive }) => {
   if (!claimingActive) return undefined;
@@ -273,6 +276,19 @@ const TitleForm = ({
                             required={isClaimingActive}
                             validate={validateClaimingInterval}
                             validateFields={[]}
+                          />
+                        </Col>
+                        <Col
+                          xs={6}
+                          md={3}
+                        >
+                          <AcqUnitsField
+                            id="title-acq-units"
+                            name="acqUnitIds"
+                            perm={isEditMode ? MANAGE_ACQ_UNITS_PERM : ASSIGN_ACQ_UNITS_PERM}
+                            isEdit={isEditMode}
+                            preselectedUnits={values.acqUnitIds}
+                            isFinal
                           />
                         </Col>
                       </Row>
