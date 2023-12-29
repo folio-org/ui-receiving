@@ -166,7 +166,7 @@
       },
       {
         "permissionName": "ui-receiving.acq-units.assignment.manage",
-        "displayName": "Receiving: Manage acquisition units of existing receiving title",
+        "displayName": "Receiving: Manage acquisition units",
         "visible": true,
         "subPermissions": [
           "titles.acquisitions-units-assignments.manage"
