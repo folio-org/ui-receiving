@@ -209,6 +209,7 @@
   "piece.receivingNoteModal.title": "Receiving note",
   "piece.request": "Request",
   "piece.request.isOpened": "Yes",
+  "piece.status":"Status",
   "piece.statusChangeLog.column.date":"Date",
   "piece.statusChangeLog.column.status":"Status change",
   "piece.statusChangeLog.column.updatedBy":"Updated by",

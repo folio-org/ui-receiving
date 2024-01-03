@@ -45,6 +45,7 @@ export const PIECE_COLUMNS = {
   request: 'request',
   barcode: 'barcode',
   location: 'location',
+  status: 'status',
 };
 
 const PIECE_VISIBLE_COLUMNS = [
@@ -59,7 +60,9 @@ const PIECE_VISIBLE_COLUMNS = [
 export const SORTABLE_COLUMNS = [PIECE_COLUMNS.enumeration, PIECE_COLUMNS.receiptDate, PIECE_COLUMNS.receivedDate];
 
 export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
-  ...PIECE_VISIBLE_COLUMNS,
+  PIECE_COLUMNS.caption,
+  PIECE_COLUMNS.status,
+  ...PIECE_VISIBLE_COLUMNS.slice(1),
   PIECE_COLUMNS.receiptDate,
   PIECE_COLUMNS.request,
 ];
@@ -86,6 +89,7 @@ export const PIECE_COLUMN_MAPPING = {
   request: <FormattedMessage id="ui-receiving.piece.request" />,
   selection: null,
   arrow: null,
+  [PIECE_COLUMNS.status]: <FormattedMessage id="ui-receiving.piece.status" />,
 };
 
 export const PIECE_COLUMN_BASE_FORMATTER = {
@@ -95,6 +99,7 @@ export const PIECE_COLUMN_BASE_FORMATTER = {
   [PIECE_COLUMNS.caption]: record => record.caption || <NoValue />,
   [PIECE_COLUMNS.copyNumber]: record => record.copyNumber || <NoValue />,
   [PIECE_COLUMNS.barcode]: record => record.barcode || <NoValue />,
+  [PIECE_COLUMNS.status]: record => record.receivingStatus || <NoValue />,
 };
 
 export const EXPECTED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, EXPECTED_PIECE_VISIBLE_COLUMNS);
