@@ -17,15 +17,20 @@ export const PIECE_ACTION_NAMES = {
   delete: 'delete',
 };
 
+export const EXPECTED_PIECES_ACTIONS = [
+  PIECE_ACTION_NAMES.saveAndCreate,
+  PIECE_ACTION_NAMES.quickReceive,
+  PIECE_ACTION_NAMES.sendClaim,
+  PIECE_ACTION_NAMES.delayClaim,
+  PIECE_ACTION_NAMES.unReceivable,
+  PIECE_ACTION_NAMES.delete,
+];
+
 export const PIECE_ACTIONS_BY_STATUS = {
-  [PIECE_STATUS.expected]: [
-    PIECE_ACTION_NAMES.saveAndCreate,
-    PIECE_ACTION_NAMES.quickReceive,
-    PIECE_ACTION_NAMES.sendClaim,
-    PIECE_ACTION_NAMES.delayClaim,
-    PIECE_ACTION_NAMES.unReceivable,
-    PIECE_ACTION_NAMES.delete,
-  ],
+  [PIECE_STATUS.expected]: EXPECTED_PIECES_ACTIONS,
+  [PIECE_STATUS.claimDelayed]: EXPECTED_PIECES_ACTIONS,
+  [PIECE_STATUS.claimSent]: EXPECTED_PIECES_ACTIONS,
+  [PIECE_STATUS.late]: EXPECTED_PIECES_ACTIONS,
   [PIECE_STATUS.received]: [
     PIECE_ACTION_NAMES.saveAndCreate,
     PIECE_ACTION_NAMES.unReceive,
