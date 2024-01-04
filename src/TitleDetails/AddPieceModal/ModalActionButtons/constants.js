@@ -1,4 +1,3 @@
-import { noop } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -43,6 +42,8 @@ export const PIECE_ACTIONS = ({
   canDeletePiece,
   disabled,
   isEditMode,
+  onClaimDelay,
+  onClaimSend,
   onCreateAnotherPiece,
   onStatusChange,
   onDelete,
@@ -52,7 +53,7 @@ export const PIECE_ACTIONS = ({
     <Button
       disabled={disabled}
       buttonStyle="dropdownItem"
-      onClick={noop} // TODO UIOR-1160
+      onClick={onClaimDelay}
     >
       <Icon icon="calendar">
         <FormattedMessage id="ui-receiving.piece.action.button.delayClaim" />
@@ -111,7 +112,7 @@ export const PIECE_ACTIONS = ({
     <Button
       disabled={disabled}
       buttonStyle="dropdownItem"
-      onClick={noop} // TODO UIOR-1152
+      onClick={onClaimSend}
     >
       <Icon icon="envelope">
         <FormattedMessage id="ui-receiving.piece.action.button.sendClaim" />

@@ -192,6 +192,7 @@
   "piece.confirmReceiving.message": "The order linked to this Title is closed. Are you sure you want to receive this piece(s)?",
   "piece.connectedItem": "Connected",
   "piece.createItem": "Create item",
+  "piece.externalNote": "External note",
   "piece.format": "Piece format",
   "piece.itemStatus.Available": "Available",
   "piece.itemStatus.In process": "In process",
@@ -201,6 +202,7 @@
   "piece.itemStatus.Undefined": "Undefined",
   "piece.itemStatus": "Item status",
   "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed.",
+  "piece.internalNote": "Internal note",
   "piece.lineLocations": "Order line locations",
   "piece.location": "Select location",
   "piece.locationLookup": "Assign a different location",
@@ -230,8 +232,15 @@
   "requests.message.itemId": "Item ({itemId})",
   "requests.footer.close": "Close",
 
+  "modal.delayClaim.heading": "Delay piece",
+  "modal.delayClaim.field.delayTo": "Delay to",
+  "modal.sendClaim.heading": "Send claim",
+  "modal.sendClaim.field.claimExpiryDate": "Claim expiry date",
+
   "shortcut.receive": "Receive pieces/Quick receive",
   "shortcut.piece.saveAndCreateAnother": "Save a piece and create another",
+
+  "validation.dateAfter": "Selected date must be later than the current date",
 
   "permission.view": "Receiving: View",
   "permission.edit": "Receiving: View, edit",

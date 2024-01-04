@@ -49,12 +49,15 @@ import {
   LineLocationsView,
 } from '../../common/components';
 import { HOLDINGS_API } from '../../common/constants';
+import { getClaimingIntervalFromDate } from '../../common/utils';
 import {
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
 } from '../constants';
+import { DelayClaimModal } from '../DelayClaimModal';
 import { DeletePieceModal } from '../DeletePieceModal';
 import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
+import { SendClaimModal } from '../SendClaimModal';
 import { ModalActionButtons } from './ModalActionButtons';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
@@ -63,7 +66,7 @@ const AddPieceModal = ({
   createInventoryValues,
   deletePiece,
   canDeletePiece,
-  form: { mutators, change, getState },
+  form,
   initialValues,
   handleSubmit,
   hasValidationErrors,
@@ -78,9 +81,17 @@ const AddPieceModal = ({
   getHoldingsItemsAndPieces,
 }) => {
   const {
+    batch,
+    change,
+    getState,
+    mutators,
+  } = form;
+  const {
     enumeration,
+    externalNote,
     format,
     id,
+    internalNote,
     itemId,
     isCreateAnother,
     metadata,
@@ -90,8 +101,11 @@ const AddPieceModal = ({
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
+
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
+  const [isClaimDelayModalOpen, toggleClaimDelayModal] = useModalToggle();
+  const [isClaimSendModalOpen, toggleClaimSendModal] = useModalToggle();
 
   const stripes = useStripes();
   const ky = useOkapiKy();
@@ -169,6 +183,19 @@ const AddPieceModal = ({
     onSave();
   }, [change, onSave]);
 
+  const onClaimDelay = useCallback(({ claimingDate }) => {
+    change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
+    onStatusChange(PIECE_STATUS.claimDelayed);
+  }, [change, onStatusChange]);
+
+  const onClaimSend = useCallback(({ claimingDate, ...rest }) => {
+    batch(() => {
+      change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
+      Object.entries(rest).forEach(([field, value]) => change(field, value));
+    });
+    onStatusChange(PIECE_STATUS.claimSent);
+  }, [batch, change, onStatusChange]);
+
   const start = (
     <Button
       data-test-add-piece-cancel
@@ -185,6 +212,8 @@ const AddPieceModal = ({
       isCreateAnother={isCreateAnother}
       isEditMode={Boolean(id)}
       onCreateAnotherPiece={onCreateAnotherPiece}
+      onClaimDelay={toggleClaimDelayModal}
+      onClaimSend={toggleClaimSendModal}
       onDelete={toggleDeleteConfirmation}
       onReceive={onReceive}
       onSave={onSave}
@@ -335,6 +364,24 @@ const AddPieceModal = ({
                   </Col>
                 </Row>
                 <Row>
+                  <Col xs>
+                    <Field
+                      component={TextArea}
+                      fullWidth
+                      label={<FormattedMessage id="ui-receiving.piece.internalNote" />}
+                      name="internalNote"
+                    />
+                  </Col>
+                  <Col xs>
+                    <Field
+                      component={TextArea}
+                      fullWidth
+                      label={<FormattedMessage id="ui-receiving.piece.externalNote" />}
+                      name="externalNote"
+                    />
+                  </Col>
+                </Row>
+                <Row>
                   <Col xs={6}>
                     <LineLocationsView
                       poLine={poLine}
@@ -449,6 +496,19 @@ const AddPieceModal = ({
           />
         )
       }
+
+      <DelayClaimModal
+        open={isClaimDelayModalOpen}
+        onCancel={toggleClaimDelayModal}
+        onSubmit={onClaimDelay}
+      />
+
+      <SendClaimModal
+        open={isClaimSendModalOpen}
+        onCancel={toggleClaimSendModal}
+        onSubmit={onClaimSend}
+        initialValues={{ internalNote, externalNote }}
+      />
     </Modal>
   );
 };
