@@ -59,6 +59,7 @@ import { DeletePieceModal } from '../DeletePieceModal';
 import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
 import { SendClaimModal } from '../SendClaimModal';
 import { ModalActionButtons } from './ModalActionButtons';
+import { PIECE_ACTION_NAMES } from './ModalActionButtons/constants';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
 const AddPieceModal = ({
@@ -67,7 +68,6 @@ const AddPieceModal = ({
   deletePiece,
   canDeletePiece,
   form,
-  initialValues,
   handleSubmit,
   hasValidationErrors,
   pristine,
@@ -115,7 +115,7 @@ const AddPieceModal = ({
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
-  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
+  const isSaveDisabled = (id && pristine) || hasValidationErrors;
 
   const onReceive = useCallback(
     () => {
@@ -196,6 +196,12 @@ const AddPieceModal = ({
     onStatusChange(PIECE_STATUS.claimSent);
   }, [batch, change, onStatusChange]);
 
+  const actionsDisabled = {
+    [PIECE_ACTION_NAMES.saveAndClose]: isSaveDisabled,
+    [PIECE_ACTION_NAMES.saveAndCreate]: isSaveDisabled,
+    [PIECE_ACTION_NAMES.delete]: !canDeletePiece,
+  };
+
   const start = (
     <Button
       data-test-add-piece-cancel
@@ -207,8 +213,7 @@ const AddPieceModal = ({
   );
   const end = (
     <ModalActionButtons
-      canDeletePiece={canDeletePiece}
-      disabled={disabled}
+      actionsDisabled={actionsDisabled}
       isCreateAnother={isCreateAnother}
       isEditMode={Boolean(id)}
       onCreateAnotherPiece={onCreateAnotherPiece}
@@ -237,18 +242,18 @@ const AddPieceModal = ({
     },
     {
       name: 'save',
-      handler: handleKeyCommand(onSave, { disabled }),
+      handler: handleKeyCommand(onSave, { disabled: isSaveDisabled }),
     },
     {
       name: 'receive',
       shortcut: 'mod + alt + r',
-      handler: handleKeyCommand(onReceive, { disabled }),
+      handler: handleKeyCommand(onReceive),
     },
     {
       name: 'saveAndCreateAnother',
       shortcut: 'alt + s',
       handler: handleKeyCommand(onCreateAnotherPiece, {
-        disabled: disabled || !stripes.hasPerm('ui-receiving.create'),
+        disabled: isSaveDisabled || !stripes.hasPerm('ui-receiving.create'),
       }),
     },
     {
@@ -532,7 +537,6 @@ AddPieceModal.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
 };
 
