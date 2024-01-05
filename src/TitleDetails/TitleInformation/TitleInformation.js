@@ -10,12 +10,14 @@ import {
 } from '@folio/stripes/components';
 
 import {
+  AcqUnitsView,
   ContributorDetails,
   FolioFormattedDate,
   ProductIdDetails,
 } from '@folio/stripes-acq-components';
 
 const TitleInformation = ({
+  acqUnitIds,
   claimingActive,
   claimingInterval,
   contributors,
@@ -110,6 +112,12 @@ const TitleInformation = ({
             value={claimingInterval}
           />
         </Col>
+        <Col
+          xs={6}
+          lg={3}
+        >
+          <AcqUnitsView units={acqUnitIds} />
+        </Col>
       </Row>
       <Row>
         <Col
@@ -136,6 +144,7 @@ const TitleInformation = ({
 };
 
 TitleInformation.propTypes = {
+  acqUnitIds: PropTypes.arrayOf(PropTypes.string),
   claimingActive: PropTypes.bool,
   claimingInterval: PropTypes.number,
   contributors: PropTypes.arrayOf(PropTypes.object),

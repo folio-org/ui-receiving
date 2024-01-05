@@ -433,6 +433,7 @@ const TitleDetails = ({
             >
               <ViewMetaData metadata={title.metadata} />
               <TitleInformation
+                acqUnitIds={title.acqUnitIds}
                 claimingActive={title.claimingActive}
                 claimingInterval={title.claimingInterval}
                 contributors={title.contributors}
