@@ -58,6 +58,7 @@ export const PIECE_ACTIONS = ({
     <Button
       disabled={disabled}
       buttonStyle="dropdownItem"
+      data-testid="delay-claim-button"
       onClick={onClaimDelay}
     >
       <Icon icon="calendar">
@@ -117,6 +118,7 @@ export const PIECE_ACTIONS = ({
     <Button
       disabled={disabled}
       buttonStyle="dropdownItem"
+      data-testid="send-claim-button"
       onClick={onClaimSend}
     >
       <Icon icon="envelope">

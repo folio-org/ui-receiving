@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { MemoryRouter } from 'react-router-dom';
 
 import user from '@folio/jest-config-stripes/testing-library/user-event';
@@ -81,6 +82,9 @@ const kyMock = {
   })),
 };
 
+const DATE_FORMAT = 'MM/DD/YYYY';
+const today = moment();
+
 const renderAddPieceModal = (props = {}) => render(
   <AddPieceModal
     {...defaultProps}
@@ -130,7 +134,6 @@ describe('AddPieceModal', () => {
       const format = PIECE_FORMAT.electronic;
 
       renderAddPieceModal({
-        ...defaultProps,
         createInventoryValues: { [format]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
         initialValues: {
           format,
@@ -144,7 +147,6 @@ describe('AddPieceModal', () => {
 
     it('should not be visible when create inventory does not include holding', () => {
       renderAddPieceModal({
-        ...defaultProps,
         initialValues: {
           format: INVENTORY_RECORDS_TYPE.instance,
         },
@@ -159,7 +161,6 @@ describe('AddPieceModal', () => {
       const format = PIECE_FORMAT.electronic;
 
       renderAddPieceModal({
-        ...defaultProps,
         createInventoryValues: { [format]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
         initialValues: {
           format,
@@ -180,7 +181,6 @@ describe('AddPieceModal', () => {
         });
 
         renderAddPieceModal({
-          ...defaultProps,
           initialValues: {
             id: 'pieceId',
             format: PIECE_FORMAT.physical,
@@ -199,7 +199,6 @@ describe('AddPieceModal', () => {
         kyMock.get.mockReturnValue(({ json: () => Promise.reject(new Error('404')) }));
 
         renderAddPieceModal({
-          ...defaultProps,
           initialValues: {
             id: 'pieceId',
             format: PIECE_FORMAT.physical,
@@ -219,7 +218,6 @@ describe('AddPieceModal', () => {
   describe('Create another piece', () => {
     it('should update footer button when \'Create another\' is active', async () => {
       renderAddPieceModal({
-        ...defaultProps,
         initialValues: {
           isCreateAnother: true,
           receivingStatus: PIECE_STATUS.expected,
@@ -236,7 +234,6 @@ describe('AddPieceModal', () => {
     const onChange = jest.fn();
 
     renderAddPieceModal({
-      ...defaultProps,
       form: {
         ...defaultProps.form,
         change: onChange,
@@ -263,5 +260,49 @@ describe('AddPieceModal', () => {
     await user.click(unReceiveButton);
 
     expect(defaultProps.onSubmit).toHaveBeenCalled();
+  });
+
+  describe('Actions', () => {
+    const initialValues = {
+      format: PIECE_FORMAT.other,
+      holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+    };
+    const date = today.add(3, 'days');
+
+    beforeEach(async () => {
+      renderAddPieceModal({ initialValues });
+
+      await user.click(screen.getByTestId('dropdown-trigger-button'));
+    });
+
+    it('should handle "Delay claim" action', async () => {
+      await user.click(screen.getByTestId('delay-claim-button'));
+      await user.type(screen.getByRole('textbox', { name: 'ui-receiving.modal.delayClaim.field.delayTo' }), date.format(DATE_FORMAT));
+      await user.click(await findButton('stripes-acq-components.FormFooter.save'));
+
+      expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          claimingInterval: 3,
+          receivingStatus: PIECE_STATUS.claimDelayed,
+        }),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('should handle "Send claim" action', async () => {
+      await user.click(screen.getByTestId('send-claim-button'));
+      await user.type(screen.getByRole('textbox', { name: 'ui-receiving.modal.sendClaim.field.claimExpiryDate' }), date.format(DATE_FORMAT));
+      await user.click(await findButton('stripes-acq-components.FormFooter.save'));
+
+      expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          claimingInterval: 3,
+          receivingStatus: PIECE_STATUS.claimSent,
+        }),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
   });
 });
