@@ -220,6 +220,7 @@ const TitleDetails = ({
     const pieceFormValues = {
       ...omit(piece, ['id', 'itemId', 'receivingStatus', 'receivedDate']),
       isCreateItem: piece?.itemId ? true : piece?.isCreateItem,
+      isCreateAnother: true,
     };
 
     setPieceValues(pieceFormValues);

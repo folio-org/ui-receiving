@@ -2,6 +2,7 @@ import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
 } from 'react';
@@ -68,6 +69,7 @@ const AddPieceModal = ({
   deletePiece,
   canDeletePiece,
   form,
+  initialValues,
   handleSubmit,
   hasValidationErrors,
   pristine,
@@ -98,6 +100,14 @@ const AddPieceModal = ({
     receivingStatus,
   } = formValues;
 
+  /*
+    When "saveAndCreate" action is triggered, `isCreateAnother` is passed as initial value to apply validations.
+    This param should be reseted to `false` after the component init.
+  */
+  useEffect(() => {
+    change('isCreateAnother', false);
+  }, [change]);
+
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
@@ -115,7 +125,7 @@ const AddPieceModal = ({
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
-  const isSaveDisabled = (id && pristine) || hasValidationErrors;
+  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
 
   const onReceive = useCallback(
     () => {
@@ -197,8 +207,10 @@ const AddPieceModal = ({
   }, [batch, change, onStatusChange]);
 
   const actionsDisabled = {
-    [PIECE_ACTION_NAMES.saveAndClose]: isSaveDisabled,
-    [PIECE_ACTION_NAMES.saveAndCreate]: isSaveDisabled,
+    [PIECE_ACTION_NAMES.quickReceive]: disabled,
+    [PIECE_ACTION_NAMES.saveAndClose]: disabled,
+    [PIECE_ACTION_NAMES.saveAndCreate]: disabled,
+    [PIECE_ACTION_NAMES.unReceivable]: disabled,
     [PIECE_ACTION_NAMES.delete]: !canDeletePiece,
   };
 
@@ -242,18 +254,18 @@ const AddPieceModal = ({
     },
     {
       name: 'save',
-      handler: handleKeyCommand(onSave, { disabled: isSaveDisabled }),
+      handler: handleKeyCommand(onSave, { disabled }),
     },
     {
       name: 'receive',
       shortcut: 'mod + alt + r',
-      handler: handleKeyCommand(onReceive),
+      handler: handleKeyCommand(onReceive, { disabled }),
     },
     {
       name: 'saveAndCreateAnother',
       shortcut: 'alt + s',
       handler: handleKeyCommand(onCreateAnotherPiece, {
-        disabled: isSaveDisabled || !stripes.hasPerm('ui-receiving.create'),
+        disabled: disabled || !stripes.hasPerm('ui-receiving.create'),
       }),
     },
     {
@@ -537,6 +549,7 @@ AddPieceModal.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
 };
 
