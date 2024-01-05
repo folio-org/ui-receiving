@@ -45,7 +45,7 @@ export const PIECE_ACTIONS_BY_STATUS = {
 };
 
 export const PIECE_ACTIONS = ({
-  actionsDisabled,
+  actionsDisabled = {},
   isEditMode,
   onClaimDelay,
   onClaimSend,
