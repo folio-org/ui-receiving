@@ -34,15 +34,13 @@ const SendClaimModal = ({
     </Button>
   );
   const end = (
-    <>
-      <Button
-        buttonStyle="primary"
-        marginBottom0
-        onClick={handleSubmit}
-      >
-        <FormattedMessage id="stripes-acq-components.FormFooter.save" />
-      </Button>
-    </>
+    <Button
+      buttonStyle="primary"
+      marginBottom0
+      onClick={handleSubmit}
+    >
+      <FormattedMessage id="stripes-acq-components.FormFooter.save" />
+    </Button>
   );
 
   const footer = (

@@ -15,7 +15,7 @@ import { ModalFooter } from '@folio/stripes-acq-components';
 
 import { FieldClaimingDate } from '../../common/components';
 
-export const DelayClaimModal = ({
+const DelayClaimModal = ({
   onCancel,
   handleSubmit,
   open,
@@ -32,15 +32,13 @@ export const DelayClaimModal = ({
     </Button>
   );
   const end = (
-    <>
-      <Button
-        buttonStyle="primary"
-        onClick={handleSubmit}
-        marginBottom0
-      >
-        <FormattedMessage id="stripes-acq-components.FormFooter.save" />
-      </Button>
-    </>
+    <Button
+      buttonStyle="primary"
+      onClick={handleSubmit}
+      marginBottom0
+    >
+      <FormattedMessage id="stripes-acq-components.FormFooter.save" />
+    </Button>
   );
 
   const footer = (
