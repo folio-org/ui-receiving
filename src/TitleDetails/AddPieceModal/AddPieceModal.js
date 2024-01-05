@@ -101,8 +101,8 @@ const AddPieceModal = ({
   } = formValues;
 
   /*
-    When "saveAndCreate" action is triggered, `isCreateAnother` is passed as initial value to apply validations.
-    This param should be reseted to `false` after the component init.
+    When the "saveAndCreate" action is triggered, `isCreateAnother` is passed as an initial value to apply validations.
+    This param should be reset to `false` after the component init.
   */
   useEffect(() => {
     change('isCreateAnother', false);
