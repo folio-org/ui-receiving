@@ -1,3 +1,4 @@
+import identity from 'lodash/identity';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import {
@@ -72,6 +73,7 @@ const SendClaimModal = ({
               fullWidth
               label={<FormattedMessage id="ui-receiving.piece.internalNote" />}
               name="internalNote"
+              parse={identity}
             />
           </Col>
           <Col xs>
@@ -80,6 +82,7 @@ const SendClaimModal = ({
               fullWidth
               label={<FormattedMessage id="ui-receiving.piece.externalNote" />}
               name="externalNote"
+              parse={identity}
             />
           </Col>
         </Row>
