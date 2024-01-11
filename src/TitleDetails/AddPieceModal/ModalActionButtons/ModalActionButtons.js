@@ -9,13 +9,14 @@ import {
 } from '@folio/stripes/components';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
+import { PIECE_ACTION_NAMES } from './constants';
 import { getPieceActionMenu } from './utils';
 
 import css from './ModalActionButtons.css';
 
 export const ModalActionButtons = ({
+  actionsDisabled,
   canDeletePiece,
-  disabled,
   isEditMode,
   onClaimDelay,
   onClaimSend,
@@ -27,8 +28,8 @@ export const ModalActionButtons = ({
   status,
 }) => {
   const actionMenu = getPieceActionMenu({
+    actionsDisabled,
     canDeletePiece,
-    disabled,
     isEditMode,
     onClaimDelay,
     onClaimSend,
@@ -39,13 +40,14 @@ export const ModalActionButtons = ({
     status,
   });
   const saveButtonLabelId = 'ui-receiving.piece.actions.saveAndClose';
+  const isSaveDisabled = actionsDisabled[PIECE_ACTION_NAMES.saveAndClose];
 
   if (actionMenu.length === 0) {
     return (
       <Button
         buttonStyle="primary"
         data-test-add-piece-save
-        disabled={disabled}
+        disabled={isSaveDisabled}
         onClick={onSave}
         marginBottom0
       >
@@ -59,7 +61,7 @@ export const ModalActionButtons = ({
       <Button
         buttonStyle="primary"
         data-test-add-piece-save
-        disabled={disabled}
+        disabled={isSaveDisabled}
         onClick={onSave}
         marginBottom0
         buttonClass={css.saveButton}
@@ -83,8 +85,8 @@ export const ModalActionButtons = ({
 };
 
 ModalActionButtons.propTypes = {
+  actionsDisabled: PropTypes.objectOf(PropTypes.bool),
   canDeletePiece: PropTypes.bool,
-  disabled: PropTypes.bool,
   isEditMode: PropTypes.bool.isRequired,
   onClaimDelay: PropTypes.func.isRequired,
   onClaimSend: PropTypes.func.isRequired,
@@ -97,7 +99,7 @@ ModalActionButtons.propTypes = {
 };
 
 ModalActionButtons.defaultProps = {
+  actionsDisabled: {},
   canDeletePiece: false,
-  disabled: false,
   status: PIECE_STATUS.expected,
 };

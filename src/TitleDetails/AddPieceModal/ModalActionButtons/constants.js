@@ -7,6 +7,7 @@ import {
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
 export const PIECE_ACTION_NAMES = {
+  saveAndClose: 'saveAndClose',
   saveAndCreate: 'saveAndCreate',
   quickReceive: 'quickReceive',
   sendClaim: 'sendClaim',
@@ -44,8 +45,7 @@ export const PIECE_ACTIONS_BY_STATUS = {
 };
 
 export const PIECE_ACTIONS = ({
-  canDeletePiece,
-  disabled,
+  actionsDisabled = {},
   isEditMode,
   onClaimDelay,
   onClaimSend,
@@ -56,7 +56,7 @@ export const PIECE_ACTIONS = ({
 }) => ({
   delayClaim: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.delayClaim]}
       buttonStyle="dropdownItem"
       data-testid="delay-claim-button"
       onClick={onClaimDelay}
@@ -71,7 +71,7 @@ export const PIECE_ACTIONS = ({
       onClick={onDelete}
       buttonStyle="dropdownItem"
       data-testid="delete-piece-button"
-      disabled={!canDeletePiece || disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.delete]}
     >
       <Icon icon="trash">
         <FormattedMessage id="ui-receiving.piece.action.button.delete" />
@@ -80,7 +80,7 @@ export const PIECE_ACTIONS = ({
   ) : null,
   expect: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.expect]}
       buttonStyle="dropdownItem"
       data-testid="expect-piece-button"
       onClick={() => onStatusChange(PIECE_STATUS.expected)}
@@ -92,7 +92,7 @@ export const PIECE_ACTIONS = ({
   ),
   quickReceive: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.quickReceive]}
       data-testid="quickReceive"
       buttonStyle="dropdownItem"
       onClick={onReceive}
@@ -104,7 +104,7 @@ export const PIECE_ACTIONS = ({
   ),
   saveAndCreate: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.saveAndCreate]}
       buttonStyle="dropdownItem"
       data-testid="create-another-piece-button"
       onClick={onCreateAnotherPiece}
@@ -116,7 +116,7 @@ export const PIECE_ACTIONS = ({
   ),
   sendClaim: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.sendClaim]}
       buttonStyle="dropdownItem"
       data-testid="send-claim-button"
       onClick={onClaimSend}
@@ -128,7 +128,7 @@ export const PIECE_ACTIONS = ({
   ),
   unReceive: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceive]}
       buttonStyle="dropdownItem"
       data-testid="unReceive-piece-button"
       onClick={() => onStatusChange(PIECE_STATUS.expected)}
@@ -140,7 +140,7 @@ export const PIECE_ACTIONS = ({
   ),
   unReceivable: (
     <Button
-      disabled={disabled}
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceivable]}
       buttonStyle="dropdownItem"
       data-testid="unReceivable-piece-button"
       onClick={() => onStatusChange(PIECE_STATUS.unreceivable)}
