@@ -2,6 +2,7 @@ import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
 } from 'react';
@@ -59,6 +60,7 @@ import { DeletePieceModal } from '../DeletePieceModal';
 import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
 import { SendClaimModal } from '../SendClaimModal';
 import { ModalActionButtons } from './ModalActionButtons';
+import { PIECE_ACTION_NAMES } from './ModalActionButtons/constants';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
 const AddPieceModal = ({
@@ -97,6 +99,14 @@ const AddPieceModal = ({
     metadata,
     receivingStatus,
   } = formValues;
+
+  /*
+    When the "saveAndCreate" action is triggered, `isCreateAnother` is passed as an initial value to apply validations.
+    This param should be reset to `false` after the component init.
+  */
+  useEffect(() => {
+    change('isCreateAnother', false);
+  }, [change]);
 
   const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isNotReceived = receivingStatus !== PIECE_STATUS.received;
@@ -196,6 +206,14 @@ const AddPieceModal = ({
     onStatusChange(PIECE_STATUS.claimSent);
   }, [batch, change, onStatusChange]);
 
+  const actionsDisabled = {
+    [PIECE_ACTION_NAMES.quickReceive]: disabled,
+    [PIECE_ACTION_NAMES.saveAndClose]: disabled,
+    [PIECE_ACTION_NAMES.saveAndCreate]: disabled,
+    [PIECE_ACTION_NAMES.unReceivable]: disabled,
+    [PIECE_ACTION_NAMES.delete]: !canDeletePiece,
+  };
+
   const start = (
     <Button
       data-test-add-piece-cancel
@@ -207,8 +225,7 @@ const AddPieceModal = ({
   );
   const end = (
     <ModalActionButtons
-      canDeletePiece={canDeletePiece}
-      disabled={disabled}
+      actionsDisabled={actionsDisabled}
       isCreateAnother={isCreateAnother}
       isEditMode={Boolean(id)}
       onCreateAnotherPiece={onCreateAnotherPiece}
