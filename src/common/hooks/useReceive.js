@@ -21,6 +21,7 @@ export const useReceive = (options = {}) => {
           comment: piece.comment,
           caption: piece.caption,
           chronology: piece.chronology,
+          receiptDate: piece.receiptDate,
           copyNumber: piece.copyNumber,
           displayOnHolding: piece.displayOnHolding,
           enumeration: piece.enumeration,
