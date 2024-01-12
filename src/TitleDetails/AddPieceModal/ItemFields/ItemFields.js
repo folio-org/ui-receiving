@@ -34,7 +34,7 @@ export const ItemFields = ({ disabled }) => {
           md={3}
         >
           <Field
-            name="itemLevelCallNumber"
+            name="callNumber"
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.callNumber" />}
             disabled={disabled}
