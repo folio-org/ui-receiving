@@ -217,5 +217,21 @@
     "title.actions.expect.error": "Pieces expect failed",
     "title.actions.expect.success": "Pieces expect successful",
     "title.unreceivable": "Unreceivable",
-    "shortcut.piece.saveAndCreateAnother": "Save a piece and create another"
+    "shortcut.piece.saveAndCreateAnother": "Save a piece and create another",
+    "piece.accordion.itemDetails": "Item details",
+    "piece.accordion.pieceDetails": "Piece details",
+    "piece.accordion.statusChangeLog": "Status log",
+    "piece.statusChangeLog.column.date": "Date",
+    "piece.statusChangeLog.column.status": "Status change",
+    "piece.statusChangeLog.column.updatedBy": "Updated by",
+    "piece.status": "Status",
+    "permission.acq-units.assignment.assign": "Receiving: Assign acquisition units to new receiving title",
+    "permission.acq-units.assignment.manage": "Receiving: Manage acquisition units",
+    "piece.externalNote": "External note",
+    "piece.internalNote": "Internal note",
+    "modal.delayClaim.heading": "Delay piece",
+    "modal.delayClaim.field.delayTo": "Delay to",
+    "modal.sendClaim.heading": "Send claim",
+    "modal.sendClaim.field.claimExpiryDate": "Claim expiry date",
+    "validation.dateAfter": "Selected date must be later than the current date"
 }
