@@ -33,11 +33,15 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
 };
 
 export const PIECE_COLUMNS = {
+  accessionNumber: 'accessionNumber',
+  displaySummary: 'displaySummary',
   callNumber: 'callNumber',
   chronology: 'chronology',
   copyNumber: 'copyNumber',
-  displaySummary: 'displaySummary',
+  displayOnHolding: 'displayOnHolding',
   enumeration: 'enumeration',
+  isCreateItem: 'isCreateItem',
+  itemStatus: 'itemStatus',
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
   comment: 'comment',
@@ -46,6 +50,7 @@ export const PIECE_COLUMNS = {
   barcode: 'barcode',
   location: 'location',
   status: 'status',
+  supplement: 'supplement',
 };
 
 const PIECE_VISIBLE_COLUMNS = [
@@ -77,19 +82,25 @@ export const RECEIVED_PIECE_VISIBLE_COLUMNS = [
 export const UNRECEIVABLE_PIECE_VISIBLE_COLUMNS = [...RECEIVED_PIECE_VISIBLE_COLUMNS];
 
 export const PIECE_COLUMN_MAPPING = {
-  [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
-  [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
+  arrow: null,
+  selection: null,
+  [PIECE_COLUMNS.accessionNumber]: <FormattedMessage id="ui-receiving.piece.accessionNumber" />,
+  [PIECE_COLUMNS.barcode]: <FormattedMessage id="ui-receiving.piece.barcode" />,
+  [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,
   [PIECE_COLUMNS.displaySummary]: <FormattedMessage id="ui-receiving.piece.displaySummary" />,
-  barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
+  [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
+  [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
+  [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
+  [PIECE_COLUMNS.displayOnHolding]: <FormattedMessage id="ui-receiving.piece.displayOnHolding" />,
   [PIECE_COLUMNS.enumeration]: <FormattedMessage id="ui-receiving.piece.enumeration" />,
-  format: <FormattedMessage id="ui-receiving.piece.format" />,
+  [PIECE_COLUMNS.format]: <FormattedMessage id="ui-receiving.piece.format" />,
+  [PIECE_COLUMNS.isCreateItem]: <FormattedMessage id="ui-receiving.piece.createItem" />,
+  [PIECE_COLUMNS.location]: <FormattedMessage id="ui-receiving.piece.location" />,
   [PIECE_COLUMNS.receiptDate]: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
   [PIECE_COLUMNS.receivedDate]: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
-  [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
-  request: <FormattedMessage id="ui-receiving.piece.request" />,
-  selection: null,
-  arrow: null,
+  [PIECE_COLUMNS.request]: <FormattedMessage id="ui-receiving.piece.request" />,
   [PIECE_COLUMNS.status]: <FormattedMessage id="ui-receiving.piece.status" />,
+  [PIECE_COLUMNS.supplement]: <FormattedMessage id="ui-receiving.piece.supplement" />,
 };
 
 export const PIECE_COLUMN_BASE_FORMATTER = {
