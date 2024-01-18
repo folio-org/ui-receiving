@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
+import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
+import { useCallback, useMemo } from 'react';
+import { Field } from 'react-final-form';
 import {
   FormattedMessage,
   useIntl,
 } from 'react-intl';
-import { Field } from 'react-final-form';
-import { includes } from 'lodash';
 
 import {
   Checkbox,
@@ -16,6 +16,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import {
+  FieldDatepickerFinal,
   FieldInventory,
   getItemStatusLabel,
   INVENTORY_RECORDS_TYPE,
@@ -23,27 +24,202 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { CreateItemField } from '../common/components';
+import {
+  PIECE_COLUMN_MAPPING,
+  PIECE_COLUMNS,
+} from '../TitleDetails/constants';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
 const visibleColumns = [
   'checked',
-  'displaySummary',
-  'enumeration',
-  'copyNumber',
-  'accessionNumber',
-  'barcode',
-  'format',
-  'hasRequest',
-  'comments',
-  'location',
-  'itemStatus',
-  'callNumber',
-  'isCreateItem',
+  PIECE_COLUMNS.displaySummary,
+  PIECE_COLUMNS.enumeration,
+  PIECE_COLUMNS.chronology,
+  PIECE_COLUMNS.copyNumber,
+  PIECE_COLUMNS.accessionNumber,
+  PIECE_COLUMNS.barcode,
+  PIECE_COLUMNS.format,
+  PIECE_COLUMNS.receiptDate,
+  PIECE_COLUMNS.request,
+  PIECE_COLUMNS.comment,
+  PIECE_COLUMNS.location,
+  PIECE_COLUMNS.itemStatus,
+  PIECE_COLUMNS.callNumber,
+  PIECE_COLUMNS.isCreateItem,
+  PIECE_COLUMNS.displayOnHolding,
+  PIECE_COLUMNS.supplement,
 ];
 
 const columnWidths = {
   location: '250px',
 };
+
+const getResultFormatter = ({
+  createInventoryValues,
+  field,
+  fieldsValue,
+  instanceId,
+  intl,
+  locations,
+  poLineLocationIds,
+  selectLocation,
+}) => ({
+  checked: record => (
+    <Field
+      data-test-title-receive-checked
+      name={`${field}[${record.rowIndex}].checked`}
+      component={Checkbox}
+      type="checkbox"
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
+    />
+  ),
+  [PIECE_COLUMNS.displaySummary]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].displaySummary`}
+      component={TextField}
+      marginBottom0
+      fullWidth
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.displaySummary' })}
+    />
+  ),
+  [PIECE_COLUMNS.enumeration]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].enumeration`}
+      component={TextField}
+      marginBottom0
+      fullWidth
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.enumeration' })}
+    />
+  ),
+  [PIECE_COLUMNS.chronology]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].chronology`}
+      component={TextField}
+      marginBottom0
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.chronology' })}
+      fullWidth
+    />
+  ),
+  [PIECE_COLUMNS.copyNumber]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].copyNumber`}
+      component={TextField}
+      marginBottom0
+      fullWidth
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.copyNumber' })}
+    />
+  ),
+  [PIECE_COLUMNS.accessionNumber]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].accessionNumber`}
+      component={TextField}
+      disabled={!record.itemId && !record.isCreateItem}
+      marginBottom0
+      fullWidth
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.accessionNumber' })}
+    />
+  ),
+  [PIECE_COLUMNS.barcode]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].barcode`}
+      component={TextField}
+      disabled={!record.itemId && !record.isCreateItem}
+      marginBottom0
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.barcode' })}
+      fullWidth
+    />
+  ),
+  [PIECE_COLUMNS.format]: ({ format }) => PIECE_FORMAT_LABELS[format],
+  [PIECE_COLUMNS.receiptDate]: record => (
+    <FieldDatepickerFinal
+      name={`${field}[${record.rowIndex}].receiptDate`}
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.receiptDate' })}
+      marginBottom0
+      usePortal
+    />
+  ),
+  [PIECE_COLUMNS.request]: record => (
+    record.request
+      ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
+      : <NoValue />
+  ),
+  [PIECE_COLUMNS.comment]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].comment`}
+      component={TextArea}
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.comment' })}
+      fullWidth
+    />
+  ),
+  [PIECE_COLUMNS.location]: record => {
+    const locationId = fieldsValue[record.rowIndex]?.locationId;
+    const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
+    const isHolding = includes(createInventoryValues[record.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
+
+    return (
+      <FieldInventory
+        instanceId={isHolding ? instanceId : undefined}
+        locationIds={locationIds}
+        locations={locations}
+        labelless
+        locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
+        holdingName={`${field}[${record.rowIndex}].holdingId`}
+        locationName={`${field}[${record.rowIndex}].locationId`}
+        onChange={selectLocation}
+      />
+    );
+  },
+  [PIECE_COLUMNS.itemStatus]: ({ itemStatus }) => getItemStatusLabel(itemStatus),
+  [PIECE_COLUMNS.callNumber]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].callNumber`}
+      component={TextField}
+      disabled={!record.itemId && !record.isCreateItem}
+      marginBottom0
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.callNumber' })}
+      fullWidth
+    />
+  ),
+  [PIECE_COLUMNS.isCreateItem]: piece => (
+    <CreateItemField
+      createInventoryValues={createInventoryValues}
+      instanceId={instanceId}
+      name={`${field}[${piece.rowIndex}].isCreateItem`}
+      piece={piece}
+    />
+  ),
+  [PIECE_COLUMNS.displayOnHolding]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].displayOnHolding`}
+      component={Checkbox}
+      type="checkbox"
+    />
+  ),
+  [PIECE_COLUMNS.supplement]: record => (
+    <Field
+      name={`${field}[${record.rowIndex}].supplement`}
+      component={Checkbox}
+      type="checkbox"
+    />
+  ),
+});
+
+const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
+  checked: (
+    <Checkbox
+      checked={isAllChecked}
+      onChange={toggleAll}
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
+    />
+  ),
+  [PIECE_COLUMNS.itemStatus]: (
+    <>
+      <FormattedMessage id="ui-receiving.piece.itemStatus" />
+      <InfoPopover content={(<FormattedMessage id="ui-receiving.piece.itemStatus.info" />)} />
+    </>
+  ),
+  ...PIECE_COLUMN_MAPPING,
+});
 
 export const TitleReceiveList = ({
   fields,
@@ -55,161 +231,38 @@ export const TitleReceiveList = ({
 
   const { onKeyDown: onFieldKeyDown } = useFieldArrowNavigation(field, []);
 
-  const cellFormatters = useMemo(
-    () => {
-      return {
-        displaySummary: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].displaySummary`}
-            component={TextField}
-            marginBottom0
-            fullWidth
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.displaySummary' })}
-          />
-        ),
-        copyNumber: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].copyNumber`}
-            component={TextField}
-            marginBottom0
-            fullWidth
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.copyNumber' })}
-          />
-        ),
-        enumeration: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].enumeration`}
-            component={TextField}
-            marginBottom0
-            fullWidth
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.enumeration' })}
-          />
-        ),
-        accessionNumber: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].accessionNumber`}
-            component={TextField}
-            disabled={!record.itemId && !record.isCreateItem}
-            marginBottom0
-            fullWidth
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.accessionNumber' })}
-          />
-        ),
-        barcode: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].barcode`}
-            component={TextField}
-            disabled={!record.itemId && !record.isCreateItem}
-            marginBottom0
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.barcode' })}
-            fullWidth
-          />
-        ),
-        comments: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].comment`}
-            component={TextArea}
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.comment' })}
-            fullWidth
-          />
-        ),
-        checked: record => (
-          <Field
-            data-test-title-receive-checked
-            name={`${field}[${record.rowIndex}].checked`}
-            component={Checkbox}
-            type="checkbox"
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
-          />
-        ),
-        itemStatus: ({ itemStatus }) => getItemStatusLabel(itemStatus),
-        callNumber: record => (
-          <Field
-            name={`${field}[${record.rowIndex}].callNumber`}
-            component={TextField}
-            disabled={!record.itemId && !record.isCreateItem}
-            marginBottom0
-            aria-label={intl.formatMessage({ id: 'ui-receiving.piece.callNumber' })}
-            fullWidth
-          />
-        ),
-        location: record => {
-          const locationId = fields.value[record.rowIndex]?.locationId;
-          const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
-          const isHolding = includes(createInventoryValues[record.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
-
-          return (
-            <FieldInventory
-              instanceId={isHolding ? instanceId : undefined}
-              locationIds={locationIds}
-              locations={locations}
-              labelless
-              locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-              holdingName={`${field}[${record.rowIndex}].holdingId`}
-              locationName={`${field}[${record.rowIndex}].locationId`}
-              onChange={selectLocation}
-            />
-          );
-        },
-        hasRequest: record => (
-          record.request
-            ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-            : <NoValue />
-        ),
-        format: ({ format }) => PIECE_FORMAT_LABELS[format],
-        isCreateItem: piece => (
-          <CreateItemField
-            createInventoryValues={createInventoryValues}
-            instanceId={instanceId}
-            name={`${field}[${piece.rowIndex}].isCreateItem`}
-            piece={piece}
-          />
-        ),
-      };
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [locations, poLineLocationIds],
-  );
+  const cellFormatters = useMemo(() => getResultFormatter({
+    createInventoryValues,
+    field,
+    fieldsValue: fields.value,
+    instanceId,
+    intl,
+    locations,
+    poLineLocationIds,
+    selectLocation,
+  }), [
+    createInventoryValues,
+    field,
+    fields.value,
+    instanceId,
+    intl,
+    locations,
+    poLineLocationIds,
+    selectLocation,
+  ]);
 
   const isAllChecked = fields.value.every(({ checked }) => !!checked);
-  const toggleAll = useCallback(
-    () => {
-      toggleCheckedAll(!isAllChecked);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isAllChecked],
-  );
 
-  const columnMapping = useMemo(
-    () => ({
-      checked: (
-        <Checkbox
-          checked={isAllChecked}
-          onChange={toggleAll}
-          aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.selectAll' })}
-        />
-      ),
-      displaySummary: <FormattedMessage id="ui-receiving.piece.displaySummary" />,
-      copyNumber: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
-      enumeration: <FormattedMessage id="ui-receiving.piece.enumeration" />,
-      accessionNumber: <FormattedMessage id="ui-receiving.piece.accessionNumber" />,
-      barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
-      format: <FormattedMessage id="ui-receiving.piece.format" />,
-      hasRequest: <FormattedMessage id="ui-receiving.piece.request" />,
-      comments: <FormattedMessage id="ui-receiving.piece.comment" />,
-      location: <FormattedMessage id="ui-receiving.piece.location" />,
-      itemStatus: (
-        <>
-          <FormattedMessage id="ui-receiving.piece.itemStatus" />
-          <InfoPopover content={(<FormattedMessage id="ui-receiving.piece.itemStatus.info" />)} />
-        </>
-      ),
-      callNumber: <FormattedMessage id="ui-receiving.piece.callNumber" />,
-      isCreateItem: <FormattedMessage id="ui-receiving.piece.createItem" />,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isAllChecked, toggleAll],
-  );
+  const toggleAll = useCallback(() => {
+    toggleCheckedAll(!isAllChecked);
+  }, [isAllChecked, toggleCheckedAll]);
+
+  const columnMapping = useMemo(() => getColumnMappings({
+    intl,
+    isAllChecked,
+    toggleAll,
+  }), [intl, isAllChecked, toggleAll]);
+
   const rowProps = useMemo(() => ({
     onKeyDown: onFieldKeyDown,
   }), [onFieldKeyDown]);
