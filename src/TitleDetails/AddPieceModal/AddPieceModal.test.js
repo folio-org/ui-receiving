@@ -22,6 +22,10 @@ jest.mock('@folio/stripes-acq-components', () => {
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
+jest.mock('../../common/utils', () => ({
+  ...jest.requireActual('../../common/utils'),
+  unreceivePieces: jest.fn(() => Promise.resolve()),
+}));
 jest.mock('../hooks', () => ({
   ...jest.requireActual('../hooks'),
   usePieceStatusChangeLog: jest.fn(),
@@ -257,6 +261,42 @@ describe('AddPieceModal', () => {
 
     const unReceiveButton = screen.getByTestId('unReceivable-piece-button');
 
+    await user.click(unReceiveButton);
+
+    expect(defaultProps.onSubmit).toHaveBeenCalled();
+  });
+
+  it('should unreceive piece', async () => {
+    const onChange = jest.fn();
+
+    renderAddPieceModal({
+      form: {
+        ...defaultProps.form,
+        change: onChange,
+      },
+      hasValidationErrors: false,
+      initialValues: {
+        'id': 'cd3fd1e7-c195-4d8e-af75-525e1039d643',
+        'format': 'Other',
+        'poLineId': 'a92ae36c-e093-4daf-b234-b4c6dc33a258',
+        'titleId': '03329fea-1b5d-43ab-b955-20bcd9ba530d',
+        'holdingId': '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+        'isCreateAnother': false,
+        'isCreateItem': false,
+        receivingStatus: PIECE_STATUS.received,
+        receivedDate: new Date().toISOString(),
+      },
+      mutator: {
+        unreceive: {
+          POST: jest.fn(),
+        },
+      },
+    });
+
+    await user.click(screen.getByTestId('dropdown-trigger-button'));
+    const unReceiveButton = await screen.findByTestId('unReceive-piece-button');
+
+    expect(unReceiveButton).toBeInTheDocument();
     await user.click(unReceiveButton);
 
     expect(defaultProps.onSubmit).toHaveBeenCalled();
