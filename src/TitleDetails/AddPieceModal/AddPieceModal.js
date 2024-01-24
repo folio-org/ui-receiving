@@ -32,10 +32,14 @@ import {
   PIECE_STATUS,
   handleKeyCommand,
   useModalToggle,
+  useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import { HOLDINGS_API } from '../../common/constants';
-import { getClaimingIntervalFromDate } from '../../common/utils';
+import {
+  getClaimingIntervalFromDate,
+  unreceivePieces,
+} from '../../common/utils';
 import {
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
@@ -51,23 +55,24 @@ import { PieceFields } from './PieceFields';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
 const AddPieceModal = ({
+  canDeletePiece,
   close,
   createInventoryValues,
   deletePiece,
-  canDeletePiece,
   form,
-  initialValues,
+  getHoldingsItemsAndPieces,
   handleSubmit,
   hasValidationErrors,
-  pristine,
+  initialValues,
   instanceId,
   locationIds,
   locations,
+  mutator,
   onCheckIn,
   pieceFormatOptions,
-  values: formValues,
   poLine,
-  getHoldingsItemsAndPieces,
+  pristine,
+  values: formValues,
 }) => {
   const {
     batch,
@@ -107,6 +112,7 @@ const AddPieceModal = ({
   const intl = useIntl();
   const accordionStatusRef = useRef();
   const modalLabel = intl.formatMessage({ id: labelId });
+  const showCallout = useShowCallout();
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
@@ -179,6 +185,25 @@ const AddPieceModal = ({
     onSave();
   }, [change, onSave]);
 
+  const onUnreceivePiece = useCallback(() => {
+    const currentPiece = {
+      ...formValues,
+      checked: true,
+    };
+
+    return unreceivePieces([currentPiece], mutator.unreceive)
+      .then(() => {
+        onStatusChange(PIECE_STATUS.expected);
+      })
+      .catch(() => {
+        showCallout({
+          type: 'error',
+          messageId: 'ui-receiving.title.actions.unreceive.error',
+        });
+      });
+  },
+  [formValues, mutator, onStatusChange, showCallout]);
+
   const onClaimDelay = useCallback(({ claimingDate }) => {
     change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
     onStatusChange(PIECE_STATUS.claimDelayed);
@@ -219,6 +244,7 @@ const AddPieceModal = ({
       onClaimSend={toggleClaimSendModal}
       onDelete={toggleDeleteConfirmation}
       onReceive={onReceive}
+      onUnreceivePiece={onUnreceivePiece}
       onSave={onSave}
       onStatusChange={onStatusChange}
       status={receivingStatus}
@@ -384,6 +410,7 @@ AddPieceModal.propTypes = {
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
+  mutator: PropTypes.object.isRequired,
 };
 
 AddPieceModal.defaultProps = {

@@ -105,6 +105,7 @@ const TitleDetails = ({
   vendorsMap,
   getHoldingsItemsAndPieces,
   getPieceValues,
+  mutator,
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
@@ -601,6 +602,7 @@ const TitleDetails = ({
             onCheckIn={onQuickReceive}
             onSubmit={onSave}
             poLine={poLine}
+            mutator={mutator}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
         )}
@@ -638,6 +640,7 @@ TitleDetails.propTypes = {
   vendorsMap: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   getPieceValues: PropTypes.func.isRequired,
+  mutator: PropTypes.object.isRequired,
 };
 
 export default withRouter(TitleDetails);

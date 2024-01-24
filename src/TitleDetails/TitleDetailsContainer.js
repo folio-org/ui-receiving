@@ -21,6 +21,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  receivingResource,
   titleResource,
 } from '../common/resources';
 import {
@@ -293,6 +294,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       vendorsMap={vendorsMap}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
       getPieceValues={getPieceById(mutator.orderPieces)}
+      mutator={mutator}
     />
   );
 };
@@ -320,6 +322,7 @@ TitleDetailsContainer.manifest = Object.freeze({
     ...locationsManifest,
     fetch: false,
   },
+  unreceive: receivingResource,
   vendors: {
     ...organizationsManifest,
     fetch: false,
