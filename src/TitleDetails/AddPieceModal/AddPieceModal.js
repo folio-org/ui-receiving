@@ -36,10 +36,8 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { HOLDINGS_API } from '../../common/constants';
-import {
-  getClaimingIntervalFromDate,
-  unreceivePieces,
-} from '../../common/utils';
+import { useUnreceive } from '../../common/hooks';
+import { getClaimingIntervalFromDate } from '../../common/utils';
 import {
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
@@ -67,7 +65,6 @@ const AddPieceModal = ({
   instanceId,
   locationIds,
   locations,
-  mutator,
   onCheckIn,
   pieceFormatOptions,
   poLine,
@@ -113,6 +110,7 @@ const AddPieceModal = ({
   const accordionStatusRef = useRef();
   const modalLabel = intl.formatMessage({ id: labelId });
   const showCallout = useShowCallout();
+  const { unreceive } = useUnreceive();
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
@@ -191,7 +189,7 @@ const AddPieceModal = ({
       checked: true,
     };
 
-    return unreceivePieces([currentPiece], mutator.unreceive)
+    return unreceive([currentPiece])
       .then(() => {
         onStatusChange(PIECE_STATUS.expected);
       })
@@ -202,7 +200,7 @@ const AddPieceModal = ({
         });
       });
   },
-  [formValues, mutator, onStatusChange, showCallout]);
+  [formValues, onStatusChange, showCallout, unreceive]);
 
   const onClaimDelay = useCallback(({ claimingDate }) => {
     change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
@@ -410,7 +408,6 @@ AddPieceModal.propTypes = {
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
-  mutator: PropTypes.object.isRequired,
 };
 
 AddPieceModal.defaultProps = {

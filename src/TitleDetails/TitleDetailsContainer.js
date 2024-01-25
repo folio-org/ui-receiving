@@ -20,10 +20,7 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import {
-  receivingResource,
-  titleResource,
-} from '../common/resources';
+import { titleResource } from '../common/resources';
 import {
   usePieceMutator,
   useQuickReceive,
@@ -294,7 +291,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       vendorsMap={vendorsMap}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
       getPieceValues={getPieceById(mutator.orderPieces)}
-      mutator={mutator}
     />
   );
 };
@@ -322,7 +318,6 @@ TitleDetailsContainer.manifest = Object.freeze({
     ...locationsManifest,
     fetch: false,
   },
-  unreceive: receivingResource,
   vendors: {
     ...organizationsManifest,
     fetch: false,
