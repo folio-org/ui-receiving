@@ -22,9 +22,9 @@ jest.mock('@folio/stripes-acq-components', () => {
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
-jest.mock('../../common/utils', () => ({
-  ...jest.requireActual('../../common/utils'),
-  unreceivePieces: jest.fn(() => Promise.resolve()),
+jest.mock('../../common/hooks', () => ({
+  ...jest.requireActual('../../common/hooks'),
+  useUnreceive: jest.fn().mockReturnValue({ unreceive: jest.fn(() => Promise.resolve()) }),
 }));
 jest.mock('../hooks', () => ({
   ...jest.requireActual('../hooks'),
@@ -285,11 +285,6 @@ describe('AddPieceModal', () => {
         'isCreateItem': false,
         receivingStatus: PIECE_STATUS.received,
         receivedDate: new Date().toISOString(),
-      },
-      mutator: {
-        unreceive: {
-          POST: jest.fn(),
-        },
       },
     });
 
