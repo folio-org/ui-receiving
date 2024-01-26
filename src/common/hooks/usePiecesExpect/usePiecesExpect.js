@@ -26,6 +26,7 @@ export const usePiecesExpect = () => {
       };
 
       return ky.post(EXPECT_API, { json })
+        .json()
         .then(({ receivingResults }) => {
           if (receivingResults?.some(({ processedWithError }) => processedWithError > 0)) {
             return Promise.reject(receivingResults);
