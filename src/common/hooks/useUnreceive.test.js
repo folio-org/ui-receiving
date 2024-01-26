@@ -13,7 +13,6 @@ const pieceValues = {
   caption: 'v1',
 };
 
-// eslint-disable-next-line react/prop-types
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     {children}
