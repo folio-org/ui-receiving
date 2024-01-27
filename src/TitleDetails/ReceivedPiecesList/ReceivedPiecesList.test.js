@@ -47,7 +47,7 @@ describe('Given Received Pieces List', () => {
 
     // header is rendered
     expect(getByText('ui-receiving.piece.copyNumber')).toBeDefined();
-    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.displaySummary')).toBeDefined();
     expect(getByText('ui-receiving.piece.barcode')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();

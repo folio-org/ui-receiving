@@ -32,7 +32,7 @@ import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
 const visibleColumns = [
   'checked',
-  PIECE_COLUMNS.caption,
+  PIECE_COLUMNS.displaySummary,
   PIECE_COLUMNS.enumeration,
   PIECE_COLUMNS.chronology,
   PIECE_COLUMNS.copyNumber,
@@ -73,13 +73,13 @@ const getResultFormatter = ({
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
     />
   ),
-  [PIECE_COLUMNS.caption]: record => (
+  [PIECE_COLUMNS.displaySummary]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].caption`}
+      name={`${field}[${record.rowIndex}].displaySummary`}
       component={TextField}
       marginBottom0
       fullWidth
-      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.caption' })}
+      aria-label={intl.formatMessage({ id: 'ui-receiving.piece.displaySummary' })}
     />
   ),
   [PIECE_COLUMNS.enumeration]: record => (

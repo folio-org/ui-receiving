@@ -34,7 +34,7 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
 
 export const PIECE_COLUMNS = {
   accessionNumber: 'accessionNumber',
-  caption: 'caption',
+  displaySummary: 'displaySummary',
   callNumber: 'callNumber',
   chronology: 'chronology',
   copyNumber: 'copyNumber',
@@ -54,7 +54,7 @@ export const PIECE_COLUMNS = {
 };
 
 const PIECE_VISIBLE_COLUMNS = [
-  PIECE_COLUMNS.caption,
+  PIECE_COLUMNS.displaySummary,
   PIECE_COLUMNS.copyNumber,
   PIECE_COLUMNS.enumeration,
   PIECE_COLUMNS.chronology,
@@ -65,7 +65,7 @@ const PIECE_VISIBLE_COLUMNS = [
 export const SORTABLE_COLUMNS = [PIECE_COLUMNS.enumeration, PIECE_COLUMNS.receiptDate, PIECE_COLUMNS.receivedDate];
 
 export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
-  PIECE_COLUMNS.caption,
+  PIECE_COLUMNS.displaySummary,
   PIECE_COLUMNS.status,
   ...PIECE_VISIBLE_COLUMNS.slice(1),
   PIECE_COLUMNS.receiptDate,
@@ -87,7 +87,7 @@ export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.accessionNumber]: <FormattedMessage id="ui-receiving.piece.accessionNumber" />,
   [PIECE_COLUMNS.barcode]: <FormattedMessage id="ui-receiving.piece.barcode" />,
   [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,
-  [PIECE_COLUMNS.caption]: <FormattedMessage id="ui-receiving.piece.caption" />,
+  [PIECE_COLUMNS.displaySummary]: <FormattedMessage id="ui-receiving.piece.displaySummary" />,
   [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
   [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
   [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
@@ -107,7 +107,7 @@ export const PIECE_COLUMN_BASE_FORMATTER = {
   [PIECE_COLUMNS.request]: record => (record.request ? <FormattedMessage id="ui-receiving.piece.request.isOpened" /> : <NoValue />),
   [PIECE_COLUMNS.format]: ({ format }) => PIECE_FORMAT_LABELS[format],
   [PIECE_COLUMNS.callNumber]: record => record.callNumber || <NoValue />,
-  [PIECE_COLUMNS.caption]: record => record.caption || <NoValue />,
+  [PIECE_COLUMNS.displaySummary]: record => record.displaySummary || <NoValue />,
   [PIECE_COLUMNS.copyNumber]: record => record.copyNumber || <NoValue />,
   [PIECE_COLUMNS.barcode]: record => record.barcode || <NoValue />,
   [PIECE_COLUMNS.status]: record => record.receivingStatus || <NoValue />,

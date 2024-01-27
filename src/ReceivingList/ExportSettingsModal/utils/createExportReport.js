@@ -76,7 +76,7 @@ export const createExportReport = (
     const item = itemsMap[pieceData.itemId];
 
     return {
-      caption: pieceData.caption,
+      displaySummary: pieceData.displaySummary,
       copyNumber: pieceData.copyNumber,
       enumeration: pieceData.enumeration,
       chronology: pieceData.chronology,

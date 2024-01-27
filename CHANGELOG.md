@@ -14,6 +14,7 @@
 * Delay claim action for piece record. Refs UIREC-303.
 * Send claim action for piece record. Refs UIREC-304.
 * Align the display of fields in full screen receiving view and piece edit form. Refs UIREC-296.
+* Change field name of "Caption" to Display summary. Refs UIREC-316.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)

@@ -19,7 +19,7 @@ export const useReceive = (options = {}) => {
           accessionNumber: piece.accessionNumber,
           callNumber: piece.callNumber,
           comment: piece.comment,
-          caption: piece.caption,
+          displaySummary: piece.displaySummary,
           chronology: piece.chronology,
           receiptDate: piece.receiptDate,
           copyNumber: piece.copyNumber,

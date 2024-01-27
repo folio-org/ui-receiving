@@ -46,8 +46,8 @@ describe('AddPieceModalContainer', () => {
     const { getByLabelText, getByText } = renderAddPieceModalContainer();
 
     // header is rendered
-    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
-    expect(getByLabelText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.displaySummary')).toBeDefined();
+    expect(getByLabelText('ui-receiving.piece.displaySummary')).toBeDefined();
     expect(getByText('ui-receiving.piece.copyNumber')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.copyNumber')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
@@ -66,7 +66,7 @@ describe('AddPieceModalContainer', () => {
       },
     });
 
-    expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy();
+    expect(getByLabelText('ui-receiving.piece.displaySummary').disabled).toBeFalsy();
     expect(getByLabelText('ui-receiving.piece.copyNumber').disabled).toBeFalsy();
     expect(getByLabelText('ui-receiving.piece.enumeration').disabled).toBeFalsy();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();

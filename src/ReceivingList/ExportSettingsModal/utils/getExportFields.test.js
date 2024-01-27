@@ -22,7 +22,7 @@ describe('getExportFields', () => {
 
   it('should return for export an array with selected fields', () => {
     const titleFields = [{ value: 'title' }];
-    const pieceFields = [{ value: 'caption' }];
+    const pieceFields = [{ value: 'displaySummary' }];
 
     const exportSettings = {
       exportPieceFields: EXPORT_FIELDS_PARAMS.selected,
@@ -33,6 +33,6 @@ describe('getExportFields', () => {
 
     const fields = getExportFields(exportSettings);
 
-    expect(fields).toEqual(['title', 'caption']);
+    expect(fields).toEqual(['title', 'displaySummary']);
   });
 });

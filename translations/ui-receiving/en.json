@@ -181,7 +181,7 @@
   "piece.action.button.delete": "Delete",
   "piece.action.button.expect": "Expect",
   "piece.callNumber": "Call number",
-  "piece.caption": "Caption",
+  "piece.displaySummary": "Display summary",
   "piece.copyNumber": "Copy number",
   "piece.comment": "Comment",
   "piece.enumeration": "Enumeration",

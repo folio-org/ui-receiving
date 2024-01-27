@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 const pieceValues = {
   id: 'pieceId',
   holdingId: 'holdingId',
-  caption: 'v1',
+  displaySummary: 'v1',
 };
 
 // eslint-disable-next-line react/prop-types

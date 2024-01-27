@@ -51,9 +51,9 @@ export const PieceFields = ({
           <Field
             component={TextField}
             fullWidth
-            id="caption"
-            label={<FormattedMessage id="ui-receiving.piece.caption" />}
-            name="caption"
+            id="displaySummary"
+            label={<FormattedMessage id="ui-receiving.piece.displaySummary" />}
+            name="displaySummary"
             type="text"
           />
         </Col>
