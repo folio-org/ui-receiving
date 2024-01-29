@@ -58,6 +58,7 @@ const AddPieceModal = ({
   createInventoryValues,
   deletePiece,
   form,
+  fetchReceivingResources,
   getHoldingsItemsAndPieces,
   handleSubmit,
   hasValidationErrors,
@@ -190,8 +191,13 @@ const AddPieceModal = ({
     };
 
     return unreceive([currentPiece])
-      .then(() => {
-        onStatusChange(PIECE_STATUS.expected);
+      .then(async () => {
+        close();
+        await fetchReceivingResources(poLine.id);
+        showCallout({
+          messageId: 'ui-receiving.title.actions.unreceive.success',
+          type: 'success',
+        });
       })
       .catch(() => {
         showCallout({
@@ -200,7 +206,7 @@ const AddPieceModal = ({
         });
       });
   },
-  [formValues, onStatusChange, showCallout, unreceive]);
+  [close, fetchReceivingResources, formValues, poLine, showCallout, unreceive]);
 
   const onClaimDelay = useCallback(({ claimingDate }) => {
     change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
@@ -393,6 +399,7 @@ AddPieceModal.propTypes = {
   deletePiece: PropTypes.func.isRequired,
   canDeletePiece: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
+  fetchReceivingResources: PropTypes.func.isRequired,
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,

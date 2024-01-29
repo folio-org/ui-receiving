@@ -102,6 +102,7 @@ const TitleDetails = ({
   piecesExistance,
   poLine,
   title,
+  fetchReceivingResources,
   vendorsMap,
   getHoldingsItemsAndPieces,
   getPieceValues,
@@ -601,6 +602,7 @@ const TitleDetails = ({
             onCheckIn={onQuickReceive}
             onSubmit={onSave}
             poLine={poLine}
+            fetchReceivingResources={fetchReceivingResources}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
         )}
@@ -638,6 +640,7 @@ TitleDetails.propTypes = {
   vendorsMap: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   getPieceValues: PropTypes.func.isRequired,
+  fetchReceivingResources: PropTypes.func.isRequired,
 };
 
 export default withRouter(TitleDetails);

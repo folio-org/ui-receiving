@@ -291,6 +291,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       vendorsMap={vendorsMap}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
       getPieceValues={getPieceById(mutator.orderPieces)}
+      fetchReceivingResources={fetchReceivingResources}
     />
   );
 };

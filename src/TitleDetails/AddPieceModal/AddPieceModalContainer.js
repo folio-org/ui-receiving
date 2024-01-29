@@ -14,6 +14,7 @@ const AddPieceModalContainer = ({
   close,
   deletePiece,
   canDeletePiece,
+  fetchReceivingResources,
   initialValues,
   instanceId,
   locations,
@@ -70,6 +71,7 @@ const AddPieceModalContainer = ({
       onCheckIn={onQuickReceive}
       onSubmit={onSavePiece}
       pieceFormatOptions={pieceFormatOptions}
+      fetchReceivingResources={fetchReceivingResources}
       poLine={poLine}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
     />
@@ -88,6 +90,7 @@ AddPieceModalContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  fetchReceivingResources: PropTypes.func.isRequired,
 };
 
 export default AddPieceModalContainer;
