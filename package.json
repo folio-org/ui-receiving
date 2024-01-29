@@ -113,6 +113,7 @@
         "subPermissions": [
           "acquisition.piece.events.get",
           "orders.check-in.collection.post",
+          "orders.expect.collection.post",
           "orders.receiving.collection.post",
           "settings.receiving.enabled",
           "ui-receiving.basic.view",
