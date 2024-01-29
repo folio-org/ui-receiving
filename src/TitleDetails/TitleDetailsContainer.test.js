@@ -13,6 +13,7 @@ import TitleDetailsContainer from './TitleDetailsContainer';
 jest.mock('../common/hooks', () => ({
   usePieceMutator: jest.fn().mockReturnValue({}),
   useQuickReceive: jest.fn().mockReturnValue({}),
+  useUnreceive: jest.fn().mockReturnValue({}),
 }));
 jest.mock('./TitleDetails', () => jest.fn().mockReturnValue('TitleDetails'));
 

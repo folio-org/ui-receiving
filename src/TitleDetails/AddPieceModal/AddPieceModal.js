@@ -32,11 +32,9 @@ import {
   PIECE_STATUS,
   handleKeyCommand,
   useModalToggle,
-  useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import { HOLDINGS_API } from '../../common/constants';
-import { useUnreceive } from '../../common/hooks';
 import { getClaimingIntervalFromDate } from '../../common/utils';
 import {
   PIECE_MODAL_ACCORDION,
@@ -58,7 +56,6 @@ const AddPieceModal = ({
   createInventoryValues,
   deletePiece,
   form,
-  fetchReceivingResources,
   getHoldingsItemsAndPieces,
   handleSubmit,
   hasValidationErrors,
@@ -67,6 +64,7 @@ const AddPieceModal = ({
   locationIds,
   locations,
   onCheckIn,
+  onUnreceive,
   pieceFormatOptions,
   poLine,
   pristine,
@@ -110,8 +108,6 @@ const AddPieceModal = ({
   const intl = useIntl();
   const accordionStatusRef = useRef();
   const modalLabel = intl.formatMessage({ id: labelId });
-  const showCallout = useShowCallout();
-  const { unreceive } = useUnreceive();
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
@@ -184,29 +180,16 @@ const AddPieceModal = ({
     onSave();
   }, [change, onSave]);
 
-  const onUnreceivePiece = useCallback(() => {
+  const onUnreceivePiece = useCallback(async () => {
     const currentPiece = {
       ...formValues,
       checked: true,
     };
 
-    return unreceive([currentPiece])
-      .then(async () => {
-        close();
-        await fetchReceivingResources(poLine.id);
-        showCallout({
-          messageId: 'ui-receiving.title.actions.unreceive.success',
-          type: 'success',
-        });
-      })
-      .catch(() => {
-        showCallout({
-          type: 'error',
-          messageId: 'ui-receiving.title.actions.unreceive.error',
-        });
-      });
+    await onUnreceive([currentPiece]);
+    close();
   },
-  [close, fetchReceivingResources, formValues, poLine, showCallout, unreceive]);
+  [close, onUnreceive, formValues]);
 
   const onClaimDelay = useCallback(({ claimingDate }) => {
     change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
@@ -399,7 +382,7 @@ AddPieceModal.propTypes = {
   deletePiece: PropTypes.func.isRequired,
   canDeletePiece: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
-  fetchReceivingResources: PropTypes.func.isRequired,
+  onUnreceive: PropTypes.func.isRequired,
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,

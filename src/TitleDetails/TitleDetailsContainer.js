@@ -24,6 +24,7 @@ import { titleResource } from '../common/resources';
 import {
   usePieceMutator,
   useQuickReceive,
+  useUnreceive,
 } from '../common/hooks';
 import {
   handleCommonErrors,
@@ -46,6 +47,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   const { mutatePiece } = usePieceMutator();
   const { quickReceive } = useQuickReceive();
+  const { unreceive } = useUnreceive();
 
   const hasPieces = useCallback((lineId, status) => (
     mutator.pieces.GET({
@@ -267,6 +269,23 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     ).finally(() => fetchReceivingResources(poLine.id));
   }, [fetchReceivingResources, poLine.id, showCallout, mutatePiece]);
 
+  const onUnreceive = useCallback((pieces) => {
+    return unreceive(pieces)
+      .then(async () => {
+        await fetchReceivingResources(poLine.id);
+        showCallout({
+          messageId: 'ui-receiving.title.actions.unreceive.success',
+          type: 'success',
+        });
+      })
+      .catch(() => {
+        showCallout({
+          type: 'error',
+          messageId: 'ui-receiving.title.actions.unreceive.error',
+        });
+      });
+  }, [fetchReceivingResources, poLine.id, showCallout, unreceive]);
+
   if (isLoading || !(locations || vendorsMap)) {
     return (
       <LoadingPane
@@ -291,7 +310,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       vendorsMap={vendorsMap}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
       getPieceValues={getPieceById(mutator.orderPieces)}
-      fetchReceivingResources={fetchReceivingResources}
+      onUnreceive={onUnreceive}
     />
   );
 };

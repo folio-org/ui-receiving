@@ -267,10 +267,10 @@ describe('AddPieceModal', () => {
   });
 
   it('should unreceive piece', async () => {
-    const fetchReceivingResources = jest.fn();
+    const onUnreceive = jest.fn();
 
     renderAddPieceModal({
-      fetchReceivingResources,
+      onUnreceive,
       hasValidationErrors: false,
       initialValues: {
         'id': 'cd3fd1e7-c195-4d8e-af75-525e1039d643',
@@ -291,7 +291,7 @@ describe('AddPieceModal', () => {
     expect(unReceiveButton).toBeInTheDocument();
     await user.click(unReceiveButton);
 
-    expect(fetchReceivingResources).toHaveBeenCalled();
+    expect(onUnreceive).toHaveBeenCalled();
   });
 
   describe('Actions', () => {
