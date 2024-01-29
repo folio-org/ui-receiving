@@ -14,7 +14,7 @@ export const EXPORT_TITLE_FIELDS = {
 };
 
 export const EXPORT_PIECE_FIELDS = {
-  displaySummary: 'Display Summary',
+  displaySummary: 'Display summary',
   copyNumber: 'Copy number',
   enumeration: 'Enumeration',
   chronology: 'Chronology',

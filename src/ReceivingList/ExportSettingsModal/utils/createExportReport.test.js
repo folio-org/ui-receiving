@@ -77,7 +77,7 @@ const params = {
     {
       id: 'a3a7c49e-7e3c-43e2-a200-94048703539f',
       format: 'Other',
-      displaySummary: 'Display Summary',
+      displaySummary: 'Display summary',
       chronology: '2022',
       enumeration: 'v1',
       comment: 'test export',
@@ -100,7 +100,7 @@ describe('createExportReport', () => {
     expect(createExportReport(params, { intl })).toEqual([expect.objectContaining({
       barcode: '9876543456',
       callNumber: 'TST',
-      displaySummary: 'Display Summary',
+      displaySummary: 'Display summary',
       chronology: '2022',
       comment: 'test export',
       copyNumber: '3',
