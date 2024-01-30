@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import {
   usePieceMutator,
   useQuickReceive,
+  useUnreceive,
 } from '../common/hooks';
 import TitleDetails from './TitleDetails';
 import TitleDetailsContainer from './TitleDetailsContainer';
@@ -13,6 +14,7 @@ import TitleDetailsContainer from './TitleDetailsContainer';
 jest.mock('../common/hooks', () => ({
   usePieceMutator: jest.fn().mockReturnValue({}),
   useQuickReceive: jest.fn().mockReturnValue({}),
+  useUnreceive: jest.fn().mockReturnValue({ unreceive: Promise.resolve() }),
 }));
 jest.mock('./TitleDetails', () => jest.fn().mockReturnValue('TitleDetails'));
 
@@ -125,6 +127,20 @@ describe('TitleDetailsContainer', () => {
     await TitleDetails.mock.calls[0][0].onCheckIn(pieces[0]);
 
     expect(quickReceiveMock).toHaveBeenCalled();
+  });
+
+  it('should receive piece when onUnreceive is called', async () => {
+    const onUnreceive = jest.fn().mockReturnValue(Promise.resolve());
+
+    useUnreceive.mockClear().mockReturnValue({ unreceive: onUnreceive });
+
+    await act(async () => {
+      renderTitleDetailsContainer();
+    });
+
+    await TitleDetails.mock.calls[0][0].onUnreceive(pieces[0]);
+
+    expect(onUnreceive).toHaveBeenCalled();
   });
 
   it('should fetch items and pieces in holding', async () => {

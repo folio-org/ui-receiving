@@ -51,23 +51,24 @@ import { PieceFields } from './PieceFields';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
 const AddPieceModal = ({
+  canDeletePiece,
   close,
   createInventoryValues,
   deletePiece,
-  canDeletePiece,
   form,
-  initialValues,
+  getHoldingsItemsAndPieces,
   handleSubmit,
   hasValidationErrors,
-  pristine,
+  initialValues,
   instanceId,
   locationIds,
   locations,
   onCheckIn,
+  onUnreceive,
   pieceFormatOptions,
-  values: formValues,
   poLine,
-  getHoldingsItemsAndPieces,
+  pristine,
+  values: formValues,
 }) => {
   const {
     batch,
@@ -179,6 +180,17 @@ const AddPieceModal = ({
     onSave();
   }, [change, onSave]);
 
+  const onUnreceivePiece = useCallback(async () => {
+    const currentPiece = {
+      ...formValues,
+      checked: true,
+    };
+
+    await onUnreceive([currentPiece]);
+    close();
+  },
+  [close, onUnreceive, formValues]);
+
   const onClaimDelay = useCallback(({ claimingDate }) => {
     change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
     onStatusChange(PIECE_STATUS.claimDelayed);
@@ -219,6 +231,7 @@ const AddPieceModal = ({
       onClaimSend={toggleClaimSendModal}
       onDelete={toggleDeleteConfirmation}
       onReceive={onReceive}
+      onUnreceivePiece={onUnreceivePiece}
       onSave={onSave}
       onStatusChange={onStatusChange}
       status={receivingStatus}
@@ -369,6 +382,7 @@ AddPieceModal.propTypes = {
   deletePiece: PropTypes.func.isRequired,
   canDeletePiece: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
+  onUnreceive: PropTypes.func.isRequired,
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
