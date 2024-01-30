@@ -53,6 +53,7 @@ export const PIECE_ACTIONS = ({
   onStatusChange,
   onDelete,
   onReceive,
+  onUnreceivePiece,
 }) => ({
   delayClaim: (
     <Button
@@ -131,7 +132,7 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceive]}
       buttonStyle="dropdownItem"
       data-testid="unReceive-piece-button"
-      onClick={() => onStatusChange(PIECE_STATUS.expected)}
+      onClick={onUnreceivePiece}
     >
       <Icon icon="cancel">
         <FormattedMessage id="ui-receiving.piece.action.button.unReceive" />
