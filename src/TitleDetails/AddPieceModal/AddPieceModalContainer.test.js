@@ -14,6 +14,10 @@ jest.mock('@folio/stripes-acq-components', () => ({
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
+jest.mock('../../common/hooks', () => ({
+  ...jest.requireActual('../../common/hooks'),
+  useUnreceive: jest.fn().mockReturnValue({ unreceive: jest.fn(() => Promise.resolve()) }),
+}));
 jest.mock('../hooks', () => ({
   ...jest.requireActual('../hooks'),
   usePieceStatusChangeLog: jest.fn(() => ({ data: [] })),
