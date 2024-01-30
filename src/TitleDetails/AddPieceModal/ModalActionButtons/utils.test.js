@@ -59,14 +59,14 @@ describe('getPieceActionMenus', () => {
   });
 
   describe('unReceive action', () => {
-    it('should `onStatusChange` be called with `Expected` status value', () => {
-      const onStatusChange = jest.fn();
-      const result = getPieceActionMenu({ status: received, onStatusChange });
+    it('should `onUnreceivePiece` be called with `Expected` status value', () => {
+      const onUnreceivePiece = jest.fn();
+      const result = getPieceActionMenu({ status: received, onUnreceivePiece });
       const receiveButton = result.find(i => i.props['data-testid'] === 'unReceive-piece-button');
 
       receiveButton.props.onClick();
 
-      expect(onStatusChange).toHaveBeenCalledWith(PIECE_STATUS.expected);
+      expect(onUnreceivePiece).toHaveBeenCalledWith();
     });
   });
 
