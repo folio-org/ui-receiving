@@ -213,6 +213,7 @@
   "piece.request.isOpened": "Yes",
   "piece.status":"Status",
   "piece.statusChangeLog.column.date":"Date",
+  "piece.statusChangeLog.column.interval":"Interval",
   "piece.statusChangeLog.column.status":"Status change",
   "piece.statusChangeLog.column.updatedBy":"Updated by",
   "piece.supplement": "Supplement",

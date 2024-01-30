@@ -15,6 +15,7 @@
 * Send claim action for piece record. Refs UIREC-304.
 * Align the display of fields in full screen receiving view and piece edit form. Refs UIREC-296.
 * Expect "Unreceivable" pieces on the full screen form. Refs UIREC-307.
+* Display "Interval" column in the piece status logs. Refs UIREC-312.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
