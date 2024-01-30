@@ -39,7 +39,7 @@ describe('usePieceMutator', () => {
     await result.current.mutatePiece({
       piece: {
         holdingId: 'holdingId',
-        caption: 'v1',
+        displaySummary: 'v1',
       },
     });
 
@@ -58,7 +58,7 @@ describe('usePieceMutator', () => {
       piece: {
         id: 'pieceId',
         holdingId: 'holdingId',
-        caption: 'v1',
+        displaySummary: 'v1',
       },
     });
 
@@ -69,7 +69,7 @@ describe('usePieceMutator', () => {
     const pieceValues = {
       id: 'pieceId',
       holdingId: 'holdingId',
-      caption: 'v1',
+      displaySummary: 'v1',
       isCreateItem: true,
     };
 
@@ -93,7 +93,7 @@ describe('usePieceMutator', () => {
     const pieceValues = {
       id: 'pieceId',
       holdingId: 'holdingId',
-      caption: 'v1',
+      displaySummary: 'v1',
     };
 
     useOkapiKy.mockClear().mockReturnValue(kyMock);

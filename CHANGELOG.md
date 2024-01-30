@@ -1,6 +1,6 @@
 # Change history for ui-receiving
 
-## 4.1.0 (IN PROGRESS)
+## 5.0.0 (IN PROGRESS)
 * Include Accession number field in receive all view. Refs UIREC-285.
 * Display and edit claiming active and interval fields in receiving title. Refs UIREC-288.
 * Optimize pieces query to improve performance. Refs UIREC-298.
@@ -13,6 +13,7 @@
 * Add the "Acquisition units" protected field to the receiving title form. Refs UIREC-295.
 * Delay claim action for piece record. Refs UIREC-303.
 * Send claim action for piece record. Refs UIREC-304.
+* *BREAKING* Bump minimum okapi interfaces for `pieces` (3.0) and `receiving` (2.0). Refs UIREC-316.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)

@@ -16,7 +16,7 @@ const defaultProps = {
 
 const piece = {
   id: 'piece-id',
-  caption: 'Test piece',
+  displaySummary: 'Test piece',
 };
 
 const FormComponent = stripesFinalForm({})(({ children }) => <form>{children}</form>);
