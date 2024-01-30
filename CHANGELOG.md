@@ -1,6 +1,6 @@
 # Change history for ui-receiving
 
-## 4.1.0 (IN PROGRESS)
+## 5.0.0 (IN PROGRESS)
 * Include Accession number field in receive all view. Refs UIREC-285.
 * Display and edit claiming active and interval fields in receiving title. Refs UIREC-288.
 * Optimize pieces query to improve performance. Refs UIREC-298.
@@ -16,6 +16,7 @@
 * Align the display of fields in full screen receiving view and piece edit form. Refs UIREC-296.
 * Expect "Unreceivable" pieces on the full screen form. Refs UIREC-307.
 * Change field name of "Caption" to Display summary. Refs UIREC-316.
+* *BREAKING* Bump minimum okapi interfaces for `pieces` (3.0) and `receiving` (2.0) and Change field name of "Caption" to Display summary. Refs UIREC-316.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
