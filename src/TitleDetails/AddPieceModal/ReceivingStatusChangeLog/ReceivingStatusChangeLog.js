@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   MultiColumnList,
+  NoValue,
   TextLink,
 } from '@folio/stripes/components';
 import { getFullName } from '@folio/stripes/util';
@@ -13,18 +14,21 @@ import { usePieceStatusChangeLog } from '../../hooks';
 const COLUMN_NAMES = {
   status: 'status',
   eventDate: 'eventDate',
+  interval: 'interval',
   user: 'user',
 };
 
 const COLUMN_MAPPING = {
   [COLUMN_NAMES.status]: <FormattedMessage id="ui-receiving.piece.statusChangeLog.column.status" />,
   [COLUMN_NAMES.eventDate]: <FormattedMessage id="ui-receiving.piece.statusChangeLog.column.date" />,
+  [COLUMN_NAMES.interval]: <FormattedMessage id="ui-receiving.piece.statusChangeLog.column.interval" />,
   [COLUMN_NAMES.user]: <FormattedMessage id="ui-receiving.piece.statusChangeLog.column.updatedBy" />,
 };
 
 const FORMATTER = {
   [COLUMN_NAMES.status]: item => item.receivingStatus,
   [COLUMN_NAMES.eventDate]: item => <FolioFormattedDate value={item.eventDate} />,
+  [COLUMN_NAMES.interval]: item => item.claimingInterval || <NoValue />,
   [COLUMN_NAMES.user]: item => (
     item.user
       ? <TextLink to={`/users/preview/${item.user.id}`}>{getFullName(item.user)}</TextLink>
