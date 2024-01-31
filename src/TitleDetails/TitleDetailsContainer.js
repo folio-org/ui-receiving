@@ -30,6 +30,7 @@ import {
   handleCommonErrors,
   handleReceiveErrorResponse,
   getPieceById,
+  handleUnrecieveErrorResponse,
 } from '../common/utils';
 import { EXPECTED_PIECES_SEARCH_VALUE } from './constants';
 import TitleDetails from './TitleDetails';
@@ -278,12 +279,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
           type: 'success',
         });
       })
-      .catch(() => {
-        showCallout({
-          type: 'error',
-          messageId: 'ui-receiving.title.actions.unreceive.error',
-        });
-      });
+      .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems: pieces }));
   }, [fetchReceivingResources, poLine.id, showCallout, unreceive]);
 
   if (isLoading || !(locations || vendorsMap)) {

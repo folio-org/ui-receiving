@@ -27,6 +27,7 @@ import {
 } from '../common/resources';
 import {
   getHydratedPieces,
+  handleUnrecieveErrorResponse,
   unreceivePieces,
 } from '../common/utils';
 import TitleUnreceive from './TitleUnreceive';
@@ -123,9 +124,7 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
 
           onCancel();
         })
-        .catch(() => {
-          showCallout({ messageId: 'ui-receiving.title.actions.unreceive.error', type: 'error' });
-        });
+        .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [onCancel, showCallout],

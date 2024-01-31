@@ -25,6 +25,9 @@
   "errors.pieceUpdateFailed": "The piece record failed to be updated",
   "errors.receivingProcessEncumbrancesError": "Pieces can not be added to or deleted from this Title until all the Fund distributions on the related purchase order line are converted from amounts to percentages.",
   "errors.titleNotFound": "The receiving title(s) could not be found",
+  "errors.userNotAMemberOfTheAcq": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
+  "errors.userHasNoPermission": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
+  "errors.barcodeMustBeUnique": "Barcode must be unique.",
 
   "exportSettings.error": "Failed to load data for export results (CSV)",
   "exportSettings.export": "Export",
