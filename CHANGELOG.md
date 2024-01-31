@@ -16,6 +16,7 @@
 * Align the display of fields in full screen receiving view and piece edit form. Refs UIREC-296.
 * Expect "Unreceivable" pieces on the full screen form. Refs UIREC-307.
 * Display "Interval" column in the piece status logs. Refs UIREC-312.
+* Improve UI error when receipt fails if staff are not members of acquisitions unit. Refs UIREC-275.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
