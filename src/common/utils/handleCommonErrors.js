@@ -1,5 +1,11 @@
 import { ERROR_CODES } from '../constants';
 
+export const BARCODE_NOT_UNIQUE_MESSAGE = 'Barcode must be unique';
+
+const isBarcodeUnique = (message) => {
+  return message?.includes(BARCODE_NOT_UNIQUE_MESSAGE);
+};
+
 export async function handleCommonErrors(showCallout, response) {
   let parsed = response;
   let hasCommonErrors = false;
@@ -18,7 +24,7 @@ export async function handleCommonErrors(showCallout, response) {
       });
       hasCommonErrors = true;
     } else {
-      parsed.errors.forEach(({ parameters }) => {
+      parsed.errors.forEach(({ parameters, message }) => {
         if (parameters?.some(({ key }) => key === 'permanentLoanTypeId')) {
           showCallout({
             messageId: 'ui-receiving.title.actions.missingLoanTypeId.error',
@@ -29,6 +35,13 @@ export async function handleCommonErrors(showCallout, response) {
         if (parameters?.some(({ key }) => key === 'instanceId')) {
           showCallout({
             messageId: 'ui-receiving.errors.instanceId',
+            type: 'error',
+          });
+          hasCommonErrors = true;
+        }
+        if (isBarcodeUnique(message)) {
+          showCallout({
+            messageId: 'ui-receiving.errors.barcodeMustBeUnique',
             type: 'error',
           });
           hasCommonErrors = true;

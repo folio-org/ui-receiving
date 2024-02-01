@@ -1,4 +1,7 @@
-import { handleReceiveErrorResponse } from './handleReceiveErrorResponse';
+import {
+  handleReceiveErrorResponse,
+  handleUnrecieveErrorResponse,
+} from './handleReceiveErrorResponse';
 
 describe('test handleReceiveErrorResponse', () => {
   let showCallout;
@@ -39,6 +42,30 @@ describe('test handleReceiveErrorResponse', () => {
     expect(showCallout).toHaveBeenCalledWith({
       'messageId': 'ui-receiving.errors.instanceId',
       'type': 'error',
+    });
+  });
+
+  describe('handleUnrecieveErrorResponse', () => {
+    it('should return userNotAMemberOfTheAcq error message', async () => {
+      const errorCode = 'userHasNoPermission';
+      const result = await handleUnrecieveErrorResponse({
+        error: [{
+          processedWithError: 1,
+          receivingItemResults: [{
+            processingStatus: {
+              error: { code: errorCode },
+              type: 'failure',
+            },
+          }],
+        }],
+        showCallout,
+      });
+
+      expect(result).toBeFalsy();
+      expect(showCallout).toHaveBeenCalledWith(expect.objectContaining({
+        'messageId': `ui-receiving.errors.${errorCode}`,
+        'type': 'error',
+      }));
     });
   });
 });
