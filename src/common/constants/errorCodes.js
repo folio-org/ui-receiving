@@ -18,4 +18,6 @@ export const ERROR_CODES = {
   pieceUpdateFailed: 'pieceUpdateFailed',
   receivingProcessEncumbrancesError: 'receivingProcessEncumbrancesError',
   titleNotFound: 'titleNotFound',
+  userHasNoPermission: 'userHasNoPermission',
+  userNotAMemberOfTheAcq: 'userNotAMemberOfTheAcq',
 };

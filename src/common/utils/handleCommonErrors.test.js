@@ -1,5 +1,8 @@
 import { ERROR_CODES } from '../constants';
-import { handleCommonErrors } from './handleCommonErrors';
+import {
+  BARCODE_NOT_UNIQUE_MESSAGE,
+  handleCommonErrors,
+} from './handleCommonErrors';
 
 describe('handleCommonErrors', () => {
   let showCallout;
@@ -15,6 +18,17 @@ describe('handleCommonErrors', () => {
 
     expect(showCallout).toHaveBeenCalledWith({
       'messageId': 'ui-receiving.errors.receivingProcessEncumbrancesError',
+      'type': 'error',
+    });
+  });
+
+  it('should call showCallout with barcodeMustBeUniquer error', async () => {
+    const response = { errors: [{ message: BARCODE_NOT_UNIQUE_MESSAGE }] };
+
+    await handleCommonErrors(showCallout, response);
+
+    expect(showCallout).toHaveBeenCalledWith({
+      'messageId': 'ui-receiving.errors.barcodeMustBeUnique',
       'type': 'error',
     });
   });
