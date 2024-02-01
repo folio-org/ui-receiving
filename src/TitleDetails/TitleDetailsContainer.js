@@ -107,7 +107,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         items: itemsInHolding,
       }))
       .catch(() => ({}));
-  }, []);
+  }, [mutator.items, mutator.pieces]);
 
   useEffect(
     () => {
