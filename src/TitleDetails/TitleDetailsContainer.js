@@ -63,23 +63,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [titleId]);
 
-  const fetchReceivingResources = useCallback(
-    (lineId) => {
-      setPiecesExistance();
+  const fetchReceivingResources = useCallback((lineId) => {
+    setPiecesExistance();
 
-      Promise.all([
-        hasPieces(lineId, EXPECTED_PIECES_SEARCH_VALUE),
-        hasPieces(lineId, PIECE_STATUS.received),
-        hasPieces(lineId, PIECE_STATUS.unreceivable),
-      ])
-        .then(existances => setPiecesExistance(existances.reduce(
-          (acc, existance) => ({ ...acc, ...existance, key: new Date() }),
-          {},
-        )))
-        .catch(() => setPiecesExistance({}));
-    },
-    [hasPieces],
-  );
+    return Promise.all([
+      hasPieces(lineId, EXPECTED_PIECES_SEARCH_VALUE),
+      hasPieces(lineId, PIECE_STATUS.received),
+      hasPieces(lineId, PIECE_STATUS.unreceivable),
+    ])
+      .then(existances => setPiecesExistance(existances.reduce(
+        (acc, existance) => ({ ...acc, ...existance, key: new Date() }),
+        {},
+      )))
+      .catch(() => setPiecesExistance({}));
+  }, [hasPieces]);
 
   const getHoldingsItemsAndPieces = useCallback((holdingId, params = {}) => {
     const holdingsPieces = mutator.pieces.GET({
