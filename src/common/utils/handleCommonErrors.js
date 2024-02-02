@@ -23,31 +23,35 @@ export async function handleCommonErrors(showCallout, response) {
         type: 'error',
       });
       hasCommonErrors = true;
-    } else {
-      parsed.errors.forEach(({ parameters, message }) => {
-        if (parameters?.some(({ key }) => key === 'permanentLoanTypeId')) {
-          showCallout({
-            messageId: 'ui-receiving.title.actions.missingLoanTypeId.error',
-            type: 'error',
-          });
-          hasCommonErrors = true;
-        }
-        if (parameters?.some(({ key }) => key === 'instanceId')) {
-          showCallout({
-            messageId: 'ui-receiving.errors.instanceId',
-            type: 'error',
-          });
-          hasCommonErrors = true;
-        }
-        if (isBarcodeUnique(message)) {
-          showCallout({
-            messageId: 'ui-receiving.errors.barcodeMustBeUnique',
-            type: 'error',
-          });
-          hasCommonErrors = true;
-        }
-      });
+
+      return hasCommonErrors;
     }
+
+    parsed.errors.forEach(({ parameters, message }) => {
+      if (parameters?.some(({ key }) => key === 'permanentLoanTypeId')) {
+        showCallout({
+          messageId: 'ui-receiving.title.actions.missingLoanTypeId.error',
+          type: 'error',
+        });
+        hasCommonErrors = true;
+      }
+
+      if (parameters?.some(({ key }) => key === 'instanceId')) {
+        showCallout({
+          messageId: 'ui-receiving.errors.instanceId',
+          type: 'error',
+        });
+        hasCommonErrors = true;
+      }
+
+      if (isBarcodeUnique(message)) {
+        showCallout({
+          messageId: 'ui-receiving.errors.barcodeMustBeUnique',
+          type: 'error',
+        });
+        hasCommonErrors = true;
+      }
+    });
   }
 
   return hasCommonErrors;
