@@ -9,6 +9,7 @@ import {
 import { getFullName } from '@folio/stripes/util';
 import { FolioFormattedDate } from '@folio/stripes-acq-components';
 
+import { isSyntheticUser } from '../../../common/utils';
 import { usePieceStatusChangeLog } from '../../hooks';
 
 const COLUMN_NAMES = {
@@ -29,11 +30,13 @@ const FORMATTER = {
   [COLUMN_NAMES.status]: item => item.receivingStatus,
   [COLUMN_NAMES.eventDate]: item => <FolioFormattedDate value={item.eventDate} />,
   [COLUMN_NAMES.interval]: item => item.claimingInterval || <NoValue />,
-  [COLUMN_NAMES.user]: item => (
-    item.user
-      ? <TextLink to={`/users/preview/${item.user.id}`}>{getFullName(item.user)}</TextLink>
-      : <FormattedMessage id="stripes-acq-components.invalidReference" />
-  ),
+  [COLUMN_NAMES.user]: item => {
+    if (!item.user) return <FormattedMessage id="stripes-acq-components.invalidReference" />;
+
+    return isSyntheticUser(item.user.id)
+      ? <FormattedMessage id="ui-receiving.systemUser.label" />
+      : <TextLink to={`/users/preview/${item.user.id}`}>{getFullName(item.user)}</TextLink>;
+  },
 };
 
 const VISIBLE_COLUMNS = Object.values(COLUMN_NAMES);

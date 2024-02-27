@@ -244,6 +244,8 @@
   "shortcut.receive": "Receive pieces/Quick receive",
   "shortcut.piece.saveAndCreateAnother": "Save a piece and create another",
 
+  "systemUser.label": "System",
+
   "validation.dateAfter": "Selected date must be later than the current date",
 
   "permission.view": "Receiving: View",

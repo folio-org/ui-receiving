@@ -1,0 +1,1 @@
+export const SYNTHETIC_USER_ID = '06c3485f-631c-427e-bade-5e763636c470';
