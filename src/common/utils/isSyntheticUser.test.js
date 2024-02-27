@@ -1,4 +1,4 @@
-import { SYNTHETIC_USER_ID } from '../constants';
+import { CLAIMING_JOB_SYNTHETIC_USER_ID } from '../constants';
 import { isSyntheticUser } from './isSyntheticUser';
 
 describe('isSyntheticUser', () => {
@@ -9,6 +9,6 @@ describe('isSyntheticUser', () => {
   });
 
   it('should return "true" for the synthetic user', () => {
-    expect(isSyntheticUser(SYNTHETIC_USER_ID)).toBeTruthy();
+    expect(isSyntheticUser(CLAIMING_JOB_SYNTHETIC_USER_ID)).toBeTruthy();
   });
 });

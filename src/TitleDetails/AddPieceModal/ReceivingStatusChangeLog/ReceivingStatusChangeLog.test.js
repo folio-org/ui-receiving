@@ -4,7 +4,7 @@ import { render, screen } from '@folio/jest-config-stripes/testing-library/react
 import { getFullName } from '@folio/stripes/util';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { SYNTHETIC_USER_ID } from '../../../common/constants';
+import { CLAIMING_JOB_SYNTHETIC_USER_ID } from '../../../common/constants';
 import { usePieceStatusChangeLog } from '../../hooks';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
@@ -68,7 +68,7 @@ describe('ReceivingStatusChangeLog', () => {
 
     it('should render "System" label if the updater is the synthetic user', () => {
       usePieceStatusChangeLog.mockReturnValue({
-        data: [{ ...data[0], user: { id: SYNTHETIC_USER_ID } }],
+        data: [{ ...data[0], user: { id: CLAIMING_JOB_SYNTHETIC_USER_ID } }],
       });
 
       renderComponent();
