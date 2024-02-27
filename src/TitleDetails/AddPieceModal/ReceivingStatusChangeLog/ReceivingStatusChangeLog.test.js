@@ -1,8 +1,10 @@
 import { MemoryRouter } from 'react-router-dom';
 
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { getFullName } from '@folio/stripes/util';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
+import { CLAIMING_JOB_SYNTHETIC_USER_ID } from '../../../common/constants';
 import { usePieceStatusChangeLog } from '../../hooks';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
@@ -55,5 +57,33 @@ describe('ReceivingStatusChangeLog', () => {
     expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.status')).toBeInTheDocument();
     expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.date')).toBeInTheDocument();
     expect(screen.getByText('ui-receiving.piece.statusChangeLog.column.updatedBy')).toBeInTheDocument();
+  });
+
+  describe('Updated by', () => {
+    it('should render personal data for an updater', () => {
+      renderComponent();
+
+      expect(screen.getAllByText(getFullName(user).trim())).toHaveLength(data.length);
+    });
+
+    it('should render "System" label if the updater is the synthetic user', () => {
+      usePieceStatusChangeLog.mockReturnValue({
+        data: [{ ...data[0], user: { id: CLAIMING_JOB_SYNTHETIC_USER_ID } }],
+      });
+
+      renderComponent();
+
+      expect(screen.getByText('ui-receiving.systemUser.label')).toBeInTheDocument();
+    });
+
+    it('should render "Invalid reference" label if the updater is not found', () => {
+      usePieceStatusChangeLog.mockReturnValue({
+        data: [{ ...data[0], user: undefined }],
+      });
+
+      renderComponent();
+
+      expect(screen.getByText('stripes-acq-components.invalidReference')).toBeInTheDocument();
+    });
   });
 });

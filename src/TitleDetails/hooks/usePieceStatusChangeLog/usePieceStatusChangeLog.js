@@ -13,6 +13,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { PIECE_AUDIT_API } from '../../../common/constants';
+import { isSyntheticUser } from '../../../common/utils';
 
 const DEFAULT_DATA = [];
 
@@ -43,7 +44,7 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
 
       return pieceAuditEvents.map(({ eventDate, userId, pieceSnapshot }) => ({
         eventDate,
-        user: usersMap[userId],
+        user: isSyntheticUser(userId) ? { id: userId } : usersMap[userId],
         ...get(pieceSnapshot, 'map', {}),
       }));
     },
