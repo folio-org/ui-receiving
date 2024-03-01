@@ -215,6 +215,7 @@ const AddPieceModal = ({
     [PIECE_ACTION_NAMES.unReceive]: isRestrictedByAcqUnit,
     [PIECE_ACTION_NAMES.sendClaim]: isRestrictedByAcqUnit,
     [PIECE_ACTION_NAMES.delayClaim]: isRestrictedByAcqUnit,
+    [PIECE_ACTION_NAMES.delete]: isRestrictedByAcqUnit,
   };
 
   const start = (
