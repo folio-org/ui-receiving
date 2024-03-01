@@ -164,7 +164,7 @@ const TitleDetails = ({
       name: 'edit',
       handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.edit')) onEdit();
-      }),
+      }, { disabled: isRestrictedByAcqUnit }),
     },
     {
       name: 'expandAllSections',
