@@ -41,6 +41,7 @@ import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
+  useAcqRestrictions,
   useFilters,
   useModalToggle,
 } from '@folio/stripes-acq-components';
@@ -133,6 +134,9 @@ const TitleDetails = ({
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
+  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(titleId, title.acqUnitIds);
+
+  const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
 
   const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
@@ -323,7 +327,7 @@ const TitleDetails = ({
         openAddPieceModal={openAddPieceModal}
         openReceiveList={onReceivePieces}
         titleId={titleId}
-        disabled={isPiecesLock}
+        disabled={isPiecesLock || isRestrictedByAcqUnit}
         toggleColumn={toggleExpectedPiecesColumn}
         visibleColumns={expectedPiecesVisibleColumns}
       />
@@ -332,6 +336,7 @@ const TitleDetails = ({
       applyExpectedPiecesFilters,
       expectedPiecesFilters,
       hasReceive,
+      isRestrictedByAcqUnit,
       openAddPieceModal,
       onReceivePieces,
       titleId,
@@ -348,6 +353,7 @@ const TitleDetails = ({
         applyFilters={applyReceivedPiecesFilters}
         filters={receivedPiecesFilters}
         titleId={titleId}
+        disabled={isRestrictedByAcqUnit}
         hasUnreceive={hasUnreceive}
         toggleColumn={toggleReceivedPiecesColumn}
         visibleColumns={receivedPiecesVisibleColumns}
@@ -355,6 +361,7 @@ const TitleDetails = ({
     ),
     [
       applyReceivedPiecesFilters,
+      isRestrictedByAcqUnit,
       hasUnreceive,
       receivedPiecesFilters,
       receivedPiecesVisibleColumns,
@@ -369,6 +376,7 @@ const TitleDetails = ({
       applyFilters={applyUnreceivablePiecesFilters}
       filters={unreceivablePiecesFilters}
       titleId={titleId}
+      disabled={isRestrictedByAcqUnit}
       hasRecords={hasUnreceivable}
       renderColumnsMenu={renderColumnsMenu}
     />
@@ -380,6 +388,7 @@ const TitleDetails = ({
         <Button
           onClick={onEdit}
           marginBottom0
+          disabled={isRestrictedByAcqUnit}
           buttonStyle="primary"
         >
           <FormattedMessage id="ui-receiving.title.details.button.edit" />
@@ -602,6 +611,7 @@ const TitleDetails = ({
             onCheckIn={onQuickReceive}
             onSubmit={onSave}
             poLine={poLine}
+            isRestrictedByAcqUnit={isRestrictedByAcqUnit}
             onUnreceive={onUnreceive}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />

@@ -61,6 +61,7 @@ const AddPieceModal = ({
   hasValidationErrors,
   initialValues,
   instanceId,
+  isRestrictedByAcqUnit,
   locationIds,
   locations,
   onCheckIn,
@@ -111,7 +112,7 @@ const AddPieceModal = ({
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
-  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
+  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors || isRestrictedByAcqUnit;
   const isItemFieldsDisabled = !itemId && !isCreateItem;
 
   const onReceive = useCallback(
@@ -210,6 +211,10 @@ const AddPieceModal = ({
     [PIECE_ACTION_NAMES.saveAndCreate]: disabled,
     [PIECE_ACTION_NAMES.unReceivable]: disabled,
     [PIECE_ACTION_NAMES.delete]: !canDeletePiece,
+    [PIECE_ACTION_NAMES.expect]: isRestrictedByAcqUnit,
+    [PIECE_ACTION_NAMES.unReceive]: isRestrictedByAcqUnit,
+    [PIECE_ACTION_NAMES.sendClaim]: isRestrictedByAcqUnit,
+    [PIECE_ACTION_NAMES.delayClaim]: isRestrictedByAcqUnit,
   };
 
   const start = (
@@ -377,6 +382,7 @@ const AddPieceModal = ({
 };
 
 AddPieceModal.propTypes = {
+  isRestrictedByAcqUnit: PropTypes.bool,
   close: PropTypes.func.isRequired,
   createInventoryValues: PropTypes.object.isRequired,
   deletePiece: PropTypes.func.isRequired,
@@ -401,6 +407,7 @@ AddPieceModal.propTypes = {
 };
 
 AddPieceModal.defaultProps = {
+  isRestrictedByAcqUnit: false,
   pieceFormatOptions: [],
 };
 

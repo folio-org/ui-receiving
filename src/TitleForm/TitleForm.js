@@ -32,6 +32,7 @@ import {
   FolioFormattedDate,
   FormFooter,
   handleKeyCommand,
+  useAcqRestrictions,
   validateRequired,
   validateRequiredPositiveNumber,
 } from '@folio/stripes-acq-components';
@@ -67,14 +68,18 @@ const TitleForm = ({
   const accordionStatusRef = useRef();
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
-  const { id, title, metadata } = initialValues;
+  const { id, title, metadata, acqUnitIds } = initialValues;
+  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds);
+
+  const disabled = hasValidationErrors || restrictions?.protectUpdate || isRestrictionsLoading;
+
   const paneFooter = (
     <FormFooter
       handleSubmit={handleSubmit}
       pristine={pristine}
       submitting={submitting}
       onCancel={onCancel}
-      isSubmitDisabled={hasValidationErrors}
+      isSubmitDisabled={disabled}
     />
   );
 

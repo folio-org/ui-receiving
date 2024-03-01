@@ -17,6 +17,7 @@ import {
 
 export function TitleDetailsUnreceivableActions({
   applyFilters,
+  disabled,
   filters,
   hasRecords,
   titleId,
@@ -43,6 +44,7 @@ export function TitleDetailsUnreceivableActions({
           <Button
             to={`/receiving/expect/${titleId}`}
             buttonStyle="dropdownItem"
+            disabled={disabled}
           >
             <FormattedMessage id="ui-receiving.title.details.button.expect" />
           </Button>
@@ -65,6 +67,7 @@ export function TitleDetailsUnreceivableActions({
 
 TitleDetailsUnreceivableActions.propTypes = {
   applyFilters: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   filters: PropTypes.object.isRequired,
   hasRecords: PropTypes.bool.isRequired,
   titleId: PropTypes.string.isRequired,
