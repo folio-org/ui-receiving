@@ -61,7 +61,7 @@ const AddPieceModal = ({
   hasValidationErrors,
   initialValues,
   instanceId,
-  isRestrictedByAcqUnit,
+  restrictionsByAcqUnit,
   locationIds,
   locations,
   onCheckIn,
@@ -112,8 +112,12 @@ const AddPieceModal = ({
 
   const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
-  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors || isRestrictedByAcqUnit;
+  const { protectCreate, protectUpdate, protectDelete } = restrictionsByAcqUnit;
+  const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
   const isItemFieldsDisabled = !itemId && !isCreateItem;
+  const isSaveAndCreateDisabled = disabled || protectUpdate || protectCreate;
+  const isSaveAndCloseDisabled = disabled || (protectUpdate && Boolean(id));
+  const isEditDisabled = disabled || protectUpdate;
 
   const onReceive = useCallback(
     () => {
@@ -206,16 +210,15 @@ const AddPieceModal = ({
   }, [batch, change, onStatusChange]);
 
   const actionsDisabled = {
-    [PIECE_ACTION_NAMES.quickReceive]: disabled,
-    [PIECE_ACTION_NAMES.saveAndClose]: disabled,
-    [PIECE_ACTION_NAMES.saveAndCreate]: disabled,
-    [PIECE_ACTION_NAMES.unReceivable]: disabled,
-    [PIECE_ACTION_NAMES.delete]: !canDeletePiece,
-    [PIECE_ACTION_NAMES.expect]: isRestrictedByAcqUnit,
-    [PIECE_ACTION_NAMES.unReceive]: isRestrictedByAcqUnit,
-    [PIECE_ACTION_NAMES.sendClaim]: isRestrictedByAcqUnit,
-    [PIECE_ACTION_NAMES.delayClaim]: isRestrictedByAcqUnit,
-    [PIECE_ACTION_NAMES.delete]: isRestrictedByAcqUnit,
+    [PIECE_ACTION_NAMES.quickReceive]: isEditDisabled,
+    [PIECE_ACTION_NAMES.saveAndClose]: isSaveAndCloseDisabled,
+    [PIECE_ACTION_NAMES.saveAndCreate]: isSaveAndCreateDisabled,
+    [PIECE_ACTION_NAMES.unReceivable]: isEditDisabled,
+    [PIECE_ACTION_NAMES.delete]: !canDeletePiece || protectDelete,
+    [PIECE_ACTION_NAMES.expect]: isEditDisabled,
+    [PIECE_ACTION_NAMES.unReceive]: isEditDisabled,
+    [PIECE_ACTION_NAMES.sendClaim]: isEditDisabled,
+    [PIECE_ACTION_NAMES.delayClaim]: isEditDisabled,
   };
 
   const start = (
@@ -259,18 +262,18 @@ const AddPieceModal = ({
     },
     {
       name: 'save',
-      handler: handleKeyCommand(onSave, { disabled }),
+      handler: handleKeyCommand(onSave, { disabled: isSaveAndCloseDisabled }),
     },
     {
       name: 'receive',
       shortcut: 'mod + alt + r',
-      handler: handleKeyCommand(onReceive, { disabled }),
+      handler: handleKeyCommand(onReceive, { disabled: isEditDisabled }),
     },
     {
       name: 'saveAndCreateAnother',
       shortcut: 'alt + s',
       handler: handleKeyCommand(onCreateAnotherPiece, {
-        disabled: disabled || !stripes.hasPerm('ui-receiving.create'),
+        disabled: isSaveAndCreateDisabled || !stripes.hasPerm('ui-receiving.create'),
       }),
     },
     {
@@ -383,7 +386,6 @@ const AddPieceModal = ({
 };
 
 AddPieceModal.propTypes = {
-  isRestrictedByAcqUnit: PropTypes.bool,
   close: PropTypes.func.isRequired,
   createInventoryValues: PropTypes.object.isRequired,
   deletePiece: PropTypes.func.isRequired,
@@ -405,11 +407,16 @@ AddPieceModal.propTypes = {
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
+  restrictionsByAcqUnit: PropTypes.shape({
+    protectCreate: PropTypes.bool,
+    protectDelete: PropTypes.bool,
+    protectUpdate: PropTypes.bool,
+  }),
 };
 
 AddPieceModal.defaultProps = {
-  isRestrictedByAcqUnit: false,
   pieceFormatOptions: [],
+  restrictionsByAcqUnit: {},
 };
 
 export default stripesFinalForm({

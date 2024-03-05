@@ -327,7 +327,8 @@ const TitleDetails = ({
         openAddPieceModal={openAddPieceModal}
         openReceiveList={onReceivePieces}
         titleId={titleId}
-        disabled={isPiecesLock || isRestrictedByAcqUnit}
+        disabled={isPiecesLock || restrictions?.protectUpdate}
+        canAddPiece={!restrictions?.protectCreate}
         toggleColumn={toggleExpectedPiecesColumn}
         visibleColumns={expectedPiecesVisibleColumns}
       />
@@ -336,7 +337,7 @@ const TitleDetails = ({
       applyExpectedPiecesFilters,
       expectedPiecesFilters,
       hasReceive,
-      isRestrictedByAcqUnit,
+      restrictions,
       openAddPieceModal,
       onReceivePieces,
       titleId,
@@ -611,7 +612,7 @@ const TitleDetails = ({
             onCheckIn={onQuickReceive}
             onSubmit={onSave}
             poLine={poLine}
-            isRestrictedByAcqUnit={isRestrictedByAcqUnit}
+            restrictionsByAcqUnit={restrictions}
             onUnreceive={onUnreceive}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
