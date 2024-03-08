@@ -237,5 +237,6 @@
     "errors.userNotAMemberOfTheAcq": "A ação é restrita por unidade de aquisição. O usuário não está atribuído à unidade de aquisição especificada.",
     "errors.userHasNoPermission": "A ação é restrita por unidade de aquisição. O usuário não está atribuído à unidade de aquisição especificada.",
     "errors.barcodeMustBeUnique": "O código de barras deve ser único.",
-    "piece.statusChangeLog.column.interval": "Intervalo"
+    "piece.statusChangeLog.column.interval": "Intervalo",
+    "systemUser.label": "Sistema"
 }

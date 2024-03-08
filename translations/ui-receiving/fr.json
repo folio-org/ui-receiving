@@ -237,5 +237,6 @@
     "errors.userNotAMemberOfTheAcq": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
     "errors.userHasNoPermission": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
     "errors.barcodeMustBeUnique": "Barcode must be unique.",
-    "piece.statusChangeLog.column.interval": "Interval"
+    "piece.statusChangeLog.column.interval": "Interval",
+    "systemUser.label": "System"
 }
