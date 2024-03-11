@@ -17,6 +17,15 @@ jest.mock('@folio/stripes-components/lib/Commander', () => ({
   expandAllSections: jest.fn(),
   collapseAllSections: jest.fn(),
 }));
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useAcqRestrictions: jest.fn().mockReturnValue({
+    restrictions: {
+      protectUpdate: false,
+    },
+    isLoading: false,
+  }),
+}));
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
   useHistory: jest.fn(),
