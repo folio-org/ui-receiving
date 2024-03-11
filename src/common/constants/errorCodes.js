@@ -20,4 +20,5 @@ export const ERROR_CODES = {
   titleNotFound: 'titleNotFound',
   userHasNoPermission: 'userHasNoPermission',
   userNotAMemberOfTheAcq: 'userNotAMemberOfTheAcq',
+  barcodeIsNotUnique: 'barcodeIsNotUnique',
 };

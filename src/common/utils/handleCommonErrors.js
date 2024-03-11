@@ -46,7 +46,7 @@ export async function handleCommonErrors(showCallout, response) {
 
       if (isBarcodeUnique(message)) {
         showCallout({
-          messageId: 'ui-receiving.errors.barcodeMustBeUnique',
+          messageId: 'ui-receiving.errors.barcodeIsNotUnique',
           type: 'error',
         });
         hasCommonErrors = true;

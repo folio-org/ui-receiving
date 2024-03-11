@@ -27,7 +27,7 @@
   "errors.titleNotFound": "The receiving title(s) could not be found",
   "errors.userNotAMemberOfTheAcq": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
   "errors.userHasNoPermission": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
-  "errors.barcodeMustBeUnique": "Barcode must be unique, piece and item data could not be updated.",
+  "errors.barcodeIsNotUnique": "Barcode must be unique, piece and item data could not be updated.",
 
   "exportSettings.error": "Failed to load data for export results (CSV)",
   "exportSettings.export": "Export",
