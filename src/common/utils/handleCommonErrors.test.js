@@ -28,7 +28,7 @@ describe('handleCommonErrors', () => {
     await handleCommonErrors(showCallout, response);
 
     expect(showCallout).toHaveBeenCalledWith({
-      'messageId': 'ui-receiving.errors.barcodeMustBeUnique',
+      'messageId': 'ui-receiving.errors.barcodeIsNotUnique',
       'type': 'error',
     });
   });
