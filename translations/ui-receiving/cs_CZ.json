@@ -236,6 +236,7 @@
     "piece.displaySummary": "Zobrazit souhrn",
     "errors.userNotAMemberOfTheAcq": "Akce je omezena akviziční jednotkou. Uživatel není přiřazen k uvedené akviziční jednotce.",
     "errors.userHasNoPermission": "Akce je omezena akviziční jednotkou. Uživatel není přiřazen k uvedené akviziční jednotce.",
-    "errors.barcodeMustBeUnique": "Čárový kód musí být jedinečný.",
-    "piece.statusChangeLog.column.interval": "Interval"
+    "piece.statusChangeLog.column.interval": "Interval",
+    "systemUser.label": "Systém",
+    "errors.barcodeIsNotUnique": "Barcode must be unique, piece and item data could not be updated."
 }

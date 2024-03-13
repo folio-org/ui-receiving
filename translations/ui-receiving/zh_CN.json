@@ -236,6 +236,7 @@
     "piece.displaySummary": "显示摘要",
     "errors.userNotAMemberOfTheAcq": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
     "errors.userHasNoPermission": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
-    "errors.barcodeMustBeUnique": "Barcode must be unique.",
-    "piece.statusChangeLog.column.interval": "Interval"
+    "piece.statusChangeLog.column.interval": "Interval",
+    "systemUser.label": "System",
+    "errors.barcodeIsNotUnique": "Barcode must be unique, piece and item data could not be updated."
 }
