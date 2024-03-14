@@ -6,7 +6,10 @@ import {
   withRouter,
 } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import { get } from 'lodash';
 
 import {
@@ -16,7 +19,10 @@ import {
   NoValue,
   TextLink,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import {
+  TitleManager,
+  useStripes,
+} from '@folio/stripes/core';
 import { PersistedPaneset } from '@folio/stripes/smart-components';
 import {
   FiltersPane,
@@ -26,6 +32,7 @@ import {
   ORDER_STATUS_LABEL,
   ResetButton,
   ResultsPane,
+  SEARCH_PARAMETER,
   SingleSearchForm,
   PrevNextPagination,
   useFiltersReset,
@@ -87,6 +94,7 @@ const ReceivingList = ({
   titles,
   titlesCount,
 }) => {
+  const intl = useIntl();
   const stripes = useStripes();
   const [
     filters,
@@ -148,12 +156,16 @@ const ReceivingList = ({
 
   const { itemToView, setItemToView, deleteItemToView } = useItemToView('receivings-list');
 
+  const queryFilter = filters?.[SEARCH_PARAMETER];
+  const pageTitle = queryFilter ? intl.formatMessage({ id: 'ui-receiving.document.title.search' }, { query: queryFilter }) : null;
+
   return (
     <HasCommand
       commands={shortcuts}
       isWithinScope={checkScope}
       scope={document.body}
     >
+      <TitleManager page={pageTitle} />
       <PersistedPaneset
         appId="ui-receiving"
         id="receiving-paneset"

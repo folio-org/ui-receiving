@@ -22,6 +22,7 @@
 * Handle synthetic user in the piece status change log. Refs UIREC-330.
 * Disable title action buttons if user not part of acquisition unit. Refs UIREC-332.
 * Improve UI error when receipt fails due to duplicate item barcode. Refs UIREC-274.
+* UX Consistency > Search results > Update HTML page title with search term entered. Refs UIREC-320.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)

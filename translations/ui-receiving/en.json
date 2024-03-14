@@ -1,6 +1,7 @@
 {
   "meta.title": "Receiving",
   "appMenu.receivingAppSearch": "Receiving app Search",
+  "document.title.search": "Receiving - {query} - Search",
 
   "button.actions": "Actions",
 
