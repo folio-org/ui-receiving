@@ -23,6 +23,7 @@
 * Disable title action buttons if user not part of acquisition unit. Refs UIREC-332.
 * Improve UI error when receipt fails due to duplicate item barcode. Refs UIREC-274.
 * UX Consistency > Search results > Update HTML page title with search term entered. Refs UIREC-320.
+* Correct the query used to fetch pieces on the receiving full-screen page. Refs UIREC-337.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)
