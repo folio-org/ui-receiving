@@ -14,7 +14,6 @@ import {
   LINES_API,
   locationsManifest,
   PIECE_FORMAT,
-  PIECE_STATUS,
   pieceResource,
   piecesResource,
   requestsResource,
