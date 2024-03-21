@@ -1,8 +1,8 @@
 # Change history for ui-receiving
-  
+
 ## 5.1.0 (IN PROGRESS)
 
-## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-19)
+## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-21)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v4.0.0...v5.0.0)
 
 * Include Accession number field in receive all view. Refs UIREC-285.
