@@ -2,6 +2,8 @@
 
 ## 5.1.0 (IN PROGRESS)
 
+* UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
+
 ## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-21)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v4.0.0...v5.0.0)
 

@@ -28,6 +28,7 @@ import {
 } from '@folio/stripes/components';
 import {
   IfPermission,
+  TitleManager,
   useStripes,
 } from '@folio/stripes/core';
 import {
@@ -413,6 +414,7 @@ const TitleDetails = ({
         onClose={onClose}
         lastMenu={lastMenu}
       >
+        <TitleManager record={title.title} />
         <AccordionStatus ref={accordionStatusRef}>
           <Row end="xs">
             <Col xs={10}>
