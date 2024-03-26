@@ -1,4 +1,9 @@
 .accordion-actions {
   display: flex;
   gap: 1rem;
-};
+}
+
+.divider {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}

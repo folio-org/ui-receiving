@@ -433,7 +433,7 @@ const TitleDetails = ({
             </Col>
           </Row>
 
-          <hr />
+          <hr className={css.divider} />
           <Title
             title={title.title}
             instanceId={title.instanceId}
