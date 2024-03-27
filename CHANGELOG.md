@@ -2,6 +2,8 @@
 
 ## 5.1.0 (IN PROGRESS)
 
+* Visual padding in Third Pane of Receiving App. Refs UIREC-338.
+
 ## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-21)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v4.0.0...v5.0.0)
 
