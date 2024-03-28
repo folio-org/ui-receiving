@@ -149,17 +149,12 @@ describe('TitleDetails', () => {
 
       await user.click(pieceRow[1]);
 
-      const createAnotherCheckbox = await screen.findByRole('checkbox', {
-        name: 'ui-receiving.piece.actions.createAnother',
-      });
       const formatSelection = await screen.findByRole('combobox', {
         name: 'ui-receiving.piece.format',
       });
 
-      await user.click(createAnotherCheckbox);
-
       const saveBtn = await screen.findByRole('button', {
-        name: 'stripes-core.button.save',
+        name: 'ui-receiving.piece.actions.saveAndClose',
       });
 
       user.selectOptions(formatSelection, ['Electronic']);
@@ -175,20 +170,14 @@ describe('TitleDetails', () => {
 
       await user.click(pieceRow[1]);
 
-      const createAnotherCheckbox = await screen.findByRole('checkbox', {
-        name: 'ui-receiving.piece.actions.createAnother',
-      });
       const formatSelection = await screen.findByRole('combobox', {
         name: 'ui-receiving.piece.format',
       });
 
-      await user.click(createAnotherCheckbox);
-
-      const quickReceiveBtn = await screen.findByRole('button', {
-        name: 'ui-receiving.piece.actions.quickReceive',
-      });
-
       user.selectOptions(formatSelection, ['Electronic']);
+
+      const quickReceiveBtn = await screen.findByTestId('quickReceive');
+
       await user.click(quickReceiveBtn);
 
       expect(defaultProps.onCheckIn).toHaveBeenCalled();
@@ -203,18 +192,11 @@ describe('TitleDetails', () => {
 
       await user.click(pieceRow[1]);
 
-      const createAnotherCheckbox = await screen.findByRole('checkbox', {
-        name: 'ui-receiving.piece.actions.createAnother',
-      });
       const formatSelection = await screen.findByRole('combobox', {
         name: 'ui-receiving.piece.format',
       });
 
-      await user.click(createAnotherCheckbox);
-
-      const quickReceiveBtn = await screen.findByRole('button', {
-        name: 'ui-receiving.piece.actions.quickReceive',
-      });
+      const quickReceiveBtn = await screen.findByTestId('quickReceive');
 
       user.selectOptions(formatSelection, ['Electronic']);
       await user.click(quickReceiveBtn);

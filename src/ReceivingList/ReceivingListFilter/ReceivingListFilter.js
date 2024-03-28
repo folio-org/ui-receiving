@@ -1,9 +1,7 @@
-import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useCallback } from 'react';
 
-import {
-  AccordionSet,
-} from '@folio/stripes/components';
+import { AccordionSet } from '@folio/stripes/components';
 
 import {
   AcqCheckboxFilter,
@@ -29,10 +27,7 @@ const ReceivingListFilter = ({
   applyFilters,
   disabled,
 }) => {
-  const adaptedApplyFilters = useCallback(
-    applyFiltersAdapter(applyFilters),
-    [applyFilters],
-  );
+  const adaptedApplyFilters = useCallback((data) => applyFiltersAdapter(applyFilters)(data), [applyFilters]);
 
   return (
     <AccordionSet>

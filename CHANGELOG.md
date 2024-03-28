@@ -1,9 +1,36 @@
 # Change history for ui-receiving
 
-## 4.1.0 (IN PROGRESS)
+## 5.1.0 (IN PROGRESS)
+
+* UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
+* Visual padding in Third Pane of Receiving App. Refs UIREC-338.
+
+## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-21)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v4.0.0...v5.0.0)
+
 * Include Accession number field in receive all view. Refs UIREC-285.
 * Display and edit claiming active and interval fields in receiving title. Refs UIREC-288.
 * Optimize pieces query to improve performance. Refs UIREC-298.
+* Display claim actions for Piece. Refs UIREC-291.
+* Set claiming workflow statuses for single Piece. Refs UIREC-292.
+* Add unreceivable accordion to receiving title view. Refs UIREC-302.
+* Add validation for the `claimingInterval` field. Refs UIREC-308.
+* View piece status change log. Refs UIREC-305.
+* Add CSV export options for new piece statuses. Refs UIREC-306.
+* Add the "Acquisition units" protected field to the receiving title form. Refs UIREC-295.
+* Delay claim action for piece record. Refs UIREC-303.
+* Send claim action for piece record. Refs UIREC-304.
+* *BREAKING* Bump minimum okapi interfaces for `pieces` (3.0) and `receiving` (2.0). Refs UIREC-316.
+* Align the display of fields in full screen receiving view and piece edit form. Refs UIREC-296.
+* Expect "Unreceivable" pieces on the full screen form. Refs UIREC-307.
+* Display "Interval" column in the piece status logs. Refs UIREC-312.
+* Improve UI error when receipt fails if staff are not members of acquisitions unit. Refs UIREC-275.
+* Fix linter issues across the module. Refs UIREC-309.
+* Handle synthetic user in the piece status change log. Refs UIREC-330.
+* Disable title action buttons if user not part of acquisition unit. Refs UIREC-332.
+* Improve UI error when receipt fails due to duplicate item barcode. Refs UIREC-274.
+* UX Consistency > Search results > Update HTML page title with search term entered. Refs UIREC-320.
+* Correct the query used to fetch pieces on the receiving full-screen page. Refs UIREC-337.
 
 ## [4.0.0](https://github.com/folio-org/ui-receiving/tree/v4.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v3.0.0...v4.0.0)

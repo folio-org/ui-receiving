@@ -76,7 +76,7 @@ export const createExportReport = (
     const item = itemsMap[pieceData.itemId];
 
     return {
-      caption: pieceData.caption,
+      displaySummary: pieceData.displaySummary,
       copyNumber: pieceData.copyNumber,
       enumeration: pieceData.enumeration,
       chronology: pieceData.chronology,
@@ -89,6 +89,9 @@ export const createExportReport = (
       supplement: Boolean(pieceData.supplement),
       displayOnHolding: pieceData.displayOnHolding,
       itemHRID: item?.hrid,
+      receivingStatus: pieceData.receivingStatus,
+      internalNote: pieceData.internalNote,
+      externalNote: pieceData.externalNote,
     };
   };
 

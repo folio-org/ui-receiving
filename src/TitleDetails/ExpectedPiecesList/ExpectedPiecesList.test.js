@@ -52,7 +52,7 @@ describe('Given Expected Pieces List', () => {
     // header is rendered
     expect(getByText('ui-receiving.piece.copyNumber')).toBeDefined();
     expect(getByText('ui-receiving.piece.chronology')).toBeDefined();
-    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.displaySummary')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();

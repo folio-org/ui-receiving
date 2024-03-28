@@ -1,78 +1,125 @@
-import React, { useCallback, useMemo } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Field } from 'react-final-form';
 import {
-  includes,
-} from 'lodash';
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
 import {
+  Accordion,
+  AccordionSet,
+  AccordionStatus,
   Button,
-  Checkbox,
-  Col,
   HasCommand,
   Modal,
-  Row,
-  TextArea,
-  TextField,
   checkScope,
+  collapseAllSections,
+  expandAllSections,
 } from '@folio/stripes/components';
-import { useOkapiKy } from '@folio/stripes/core';
-import stripesFinalForm from '@folio/stripes/final-form';
 import {
-  FieldDatepickerFinal,
-  FieldInventory,
-  FieldSelectFinal,
-  INVENTORY_RECORDS_TYPE,
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
+import stripesFinalForm from '@folio/stripes/final-form';
+import { ViewMetaData } from '@folio/stripes/smart-components';
+import {
   ModalFooter,
   PIECE_STATUS,
   handleKeyCommand,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import {
-  CreateItemField,
-  LineLocationsView,
-} from '../../common/components';
 import { HOLDINGS_API } from '../../common/constants';
+import { getClaimingIntervalFromDate } from '../../common/utils';
+import {
+  PIECE_MODAL_ACCORDION,
+  PIECE_MODAL_ACCORDION_LABELS,
+} from '../constants';
+import { DelayClaimModal } from '../DelayClaimModal';
 import { DeletePieceModal } from '../DeletePieceModal';
 import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
+import { SendClaimModal } from '../SendClaimModal';
+import { ItemFields } from './ItemFields';
+import { ModalActionButtons } from './ModalActionButtons';
+import { PIECE_ACTION_NAMES } from './ModalActionButtons/constants';
+import { PieceFields } from './PieceFields';
+import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
 const AddPieceModal = ({
+  canDeletePiece,
   close,
   createInventoryValues,
   deletePiece,
-  canDeletePiece,
-  form: { mutators, change, getState },
-  initialValues,
+  form,
+  getHoldingsItemsAndPieces,
   handleSubmit,
   hasValidationErrors,
-  pristine,
+  initialValues,
   instanceId,
+  restrictionsByAcqUnit,
   locationIds,
   locations,
   onCheckIn,
+  onUnreceive,
   pieceFormatOptions,
-  values: formValues,
   poLine,
-  getHoldingsItemsAndPieces,
+  pristine,
+  values: formValues,
 }) => {
-  const { enumeration, format, id, receivingStatus, itemId, isCreateAnother } = formValues;
-  const isLocationRequired = includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
-  const isNotReceived = receivingStatus !== PIECE_STATUS.received;
+  const {
+    batch,
+    change,
+    getState,
+    mutators,
+  } = form;
+  const {
+    enumeration,
+    externalNote,
+    id,
+    internalNote,
+    itemId,
+    isCreateAnother,
+    isCreateItem,
+    metadata,
+    receivingStatus,
+  } = formValues;
+
+  /*
+    When the "saveAndCreate" action is triggered, `isCreateAnother` is passed as an initial value to apply validations.
+    This param should be reset to `false` after the component init.
+  */
+  useEffect(() => {
+    change('isCreateAnother', false);
+  }, [change]);
+
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
+
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
+  const [isClaimDelayModalOpen, toggleClaimDelayModal] = useModalToggle();
+  const [isClaimSendModalOpen, toggleClaimSendModal] = useModalToggle();
 
+  const stripes = useStripes();
   const ky = useOkapiKy();
   const intl = useIntl();
+  const accordionStatusRef = useRef();
   const modalLabel = intl.formatMessage({ id: labelId });
 
-  const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, []);
+  const initialHoldingId = useMemo(() => getState().initialValues?.holdingId, [getState]);
 
+  const { protectCreate, protectUpdate, protectDelete } = restrictionsByAcqUnit;
   const disabled = (initialValues.isCreateAnother && pristine) || hasValidationErrors;
+  const isItemFieldsDisabled = !itemId && !isCreateItem;
+  const isSaveAndCreateDisabled = disabled || protectUpdate || protectCreate;
+  const isSaveAndCloseDisabled = disabled || (protectUpdate && Boolean(id));
+  const isEditDisabled = disabled || protectUpdate;
 
-  const receive = useCallback(
+  const onReceive = useCallback(
     () => {
       onCheckIn(formValues);
       close();
@@ -123,10 +170,56 @@ const AddPieceModal = ({
     return handleSubmit(e);
   }, [checkHoldingAbandonment, getState, handleSubmit, id, initialHoldingId, toggleDeleteHoldingsConfirmation]);
 
+  const onCreateAnotherPiece = useCallback((e) => {
+    change('isCreateAnother', true);
+    onSave(e);
+  }, [change, onSave]);
+
   const onDeleteHoldings = useCallback(() => {
     change('deleteHolding', true);
     handleSubmit();
   }, [change, handleSubmit]);
+
+  const onStatusChange = useCallback((status) => {
+    change('receivingStatus', status);
+    onSave();
+  }, [change, onSave]);
+
+  const onUnreceivePiece = useCallback(async () => {
+    const currentPiece = {
+      ...formValues,
+      checked: true,
+    };
+
+    await onUnreceive([currentPiece]);
+    close();
+  },
+  [close, onUnreceive, formValues]);
+
+  const onClaimDelay = useCallback(({ claimingDate }) => {
+    change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
+    onStatusChange(PIECE_STATUS.claimDelayed);
+  }, [change, onStatusChange]);
+
+  const onClaimSend = useCallback(({ claimingDate, ...rest }) => {
+    batch(() => {
+      change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
+      Object.entries(rest).forEach(([field, value]) => change(field, value));
+    });
+    onStatusChange(PIECE_STATUS.claimSent);
+  }, [batch, change, onStatusChange]);
+
+  const actionsDisabled = {
+    [PIECE_ACTION_NAMES.quickReceive]: isEditDisabled,
+    [PIECE_ACTION_NAMES.saveAndClose]: isSaveAndCloseDisabled,
+    [PIECE_ACTION_NAMES.saveAndCreate]: isSaveAndCreateDisabled,
+    [PIECE_ACTION_NAMES.unReceivable]: isEditDisabled,
+    [PIECE_ACTION_NAMES.delete]: !canDeletePiece || protectDelete,
+    [PIECE_ACTION_NAMES.expect]: isEditDisabled,
+    [PIECE_ACTION_NAMES.unReceive]: isEditDisabled,
+    [PIECE_ACTION_NAMES.sendClaim]: isEditDisabled,
+    [PIECE_ACTION_NAMES.delayClaim]: isEditDisabled,
+  };
 
   const start = (
     <Button
@@ -138,46 +231,20 @@ const AddPieceModal = ({
     </Button>
   );
   const end = (
-    <>
-      {id && (
-        <Button
-          marginBottom0
-          onClick={toggleDeleteConfirmation}
-          disabled={!canDeletePiece}
-        >
-          <FormattedMessage id="ui-receiving.piece.actions.delete" />
-        </Button>
-      )}
-      <Checkbox
-        label={<FormattedMessage id="ui-receiving.piece.actions.createAnother" />}
-        value={isCreateAnother}
-        checked={isCreateAnother}
-        onChange={e => change('isCreateAnother', e.target.checked)}
-        inline
-      />
-      {isNotReceived && (
-        <Button
-          data-test-add-piece-check-in
-          buttonStyle={isCreateAnother ? 'primary' : 'default'}
-          disabled={disabled}
-          marginBottom0
-          onClick={receive}
-        >
-          <FormattedMessage id="ui-receiving.piece.actions.quickReceive" />
-        </Button>
-      )}
-      <Button
-        buttonStyle="primary"
-        data-test-add-piece-save
-        disabled={disabled}
-        marginBottom0
-        onClick={onSave}
-      >
-        <FormattedMessage
-          id={isCreateAnother ? 'stripes-core.button.save' : 'ui-receiving.piece.actions.saveAndClose'}
-        />
-      </Button>
-    </>
+    <ModalActionButtons
+      actionsDisabled={actionsDisabled}
+      isCreateAnother={isCreateAnother}
+      isEditMode={Boolean(id)}
+      onCreateAnotherPiece={onCreateAnotherPiece}
+      onClaimDelay={toggleClaimDelayModal}
+      onClaimSend={toggleClaimSendModal}
+      onDelete={toggleDeleteConfirmation}
+      onReceive={onReceive}
+      onUnreceivePiece={onUnreceivePiece}
+      onSave={onSave}
+      onStatusChange={onStatusChange}
+      status={receivingStatus}
+    />
   );
 
   const footer = (
@@ -195,12 +262,27 @@ const AddPieceModal = ({
     },
     {
       name: 'save',
-      handler: handleKeyCommand(onSave, { disabled }),
+      handler: handleKeyCommand(onSave, { disabled: isSaveAndCloseDisabled }),
     },
     {
       name: 'receive',
       shortcut: 'mod + alt + r',
-      handler: handleKeyCommand(receive, { disabled }),
+      handler: handleKeyCommand(onReceive, { disabled: isEditDisabled }),
+    },
+    {
+      name: 'saveAndCreateAnother',
+      shortcut: 'alt + s',
+      handler: handleKeyCommand(onCreateAnotherPiece, {
+        disabled: isSaveAndCreateDisabled || !stripes.hasPerm('ui-receiving.create'),
+      }),
+    },
+    {
+      name: 'expandAllSections',
+      handler: (e) => expandAllSections(e, accordionStatusRef),
+    },
+    {
+      name: 'collapseAllSections',
+      handler: (e) => collapseAllSections(e, accordionStatusRef),
     },
   ];
 
@@ -209,6 +291,7 @@ const AddPieceModal = ({
       enforceFocus={false}
       footer={footer}
       id="add-piece-modal"
+      size="large"
       label={modalLabel}
       aria-label={modalLabel}
       open
@@ -218,162 +301,52 @@ const AddPieceModal = ({
         isWithinScope={checkScope}
         scope={document.body}
       >
-        <form>
-          <Row>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="caption"
-                label={<FormattedMessage id="ui-receiving.piece.caption" />}
-                name="caption"
-                type="text"
+        <AccordionStatus ref={accordionStatusRef}>
+          <AccordionSet>
+            {metadata && (
+              <ViewMetaData
+                id={PIECE_MODAL_ACCORDION.metadata}
+                metadata={metadata}
               />
-            </Col>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="copyNumber"
-                label={<FormattedMessage id="ui-receiving.piece.copyNumber" />}
-                name="copyNumber"
-                type="text"
-              />
-            </Col>
-          </Row>
+            )}
 
-          <Row>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="enumeration"
-                label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
-                name="enumeration"
-                type="text"
-              />
-            </Col>
-            <Col xs={6}>
-              <Field
-                component={TextField}
-                fullWidth
-                id="chronology"
-                label={<FormattedMessage id="ui-receiving.piece.chronology" />}
-                name="chronology"
-                type="text"
-              />
-            </Col>
-          </Row>
+            <form>
+              <Accordion
+                id={PIECE_MODAL_ACCORDION.pieceDetails}
+                label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.pieceDetails]}
+              >
+                <PieceFields
+                  createInventoryValues={createInventoryValues}
+                  instanceId={instanceId}
+                  locationIds={locationIds}
+                  locations={locations}
+                  pieceFormatOptions={pieceFormatOptions}
+                  poLine={poLine}
+                  setLocationValue={mutators.setLocationValue}
+                  onChangeDisplayOnHolding={onChangeDisplayOnHolding}
+                />
+              </Accordion>
 
-          <Row>
-            <Col xs>
-              <FieldSelectFinal
-                dataOptions={pieceFormatOptions}
-                disabled={!isNotReceived}
-                label={<FormattedMessage id="ui-receiving.piece.format" />}
-                name="format"
-                required
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs>
-              <FieldDatepickerFinal
-                labelId="ui-receiving.piece.receiptDate"
-                name="receiptDate"
-                usePortal
-              />
-            </Col>
-            <Col xs>
-              <Field
-                component={TextArea}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.comment" />}
-                name="comment"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <LineLocationsView
-                poLine={poLine}
-                locations={locations}
-              />
-            </Col>
+              <Accordion
+                closedByDefault={isItemFieldsDisabled}
+                id={PIECE_MODAL_ACCORDION.itemDetails}
+                label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.itemDetails]}
+              >
+                <ItemFields disabled={isItemFieldsDisabled} />
+              </Accordion>
+            </form>
 
-            {
-              Boolean(instanceId) && (
-                <Col xs>
-                  <CreateItemField
-                    createInventoryValues={createInventoryValues}
-                    instanceId={instanceId}
-                    label={<FormattedMessage id="ui-receiving.piece.createItem" />}
-                    piece={formValues}
-                  />
-                </Col>
-              )
-            }
-
-            <Col xs>
-              <Field
-                component={Checkbox}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.supplement" />}
-                name="supplement"
-                type="checkbox"
-                vertical
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <FieldInventory
-                instanceId={isLocationRequired ? instanceId : undefined}
-                locationIds={locationIds}
-                locations={locations}
-                holdingName="holdingId"
-                locationName="locationId"
-                onChange={mutators.setLocationValue}
-                disabled={!isNotReceived}
-                required={isLocationRequired}
-              />
-            </Col>
-
-            {
-              isLocationRequired && (
-                <>
-                  <Col xs={3}>
-                    <Field
-                      component={Checkbox}
-                      fullWidth
-                      label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
-                      name="displayOnHolding"
-                      type="checkbox"
-                      vertical
-                      onChange={onChangeDisplayOnHolding}
-                    />
-                  </Col>
-
-                  {
-                    false && (
-                      <Col xs={3}>
-                        <Field
-                          component={Checkbox}
-                          disabled={!formValues.displayOnHolding}
-                          fullWidth
-                          label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
-                          name="discoverySuppress"
-                          type="checkbox"
-                          vertical
-                        />
-                      </Col>
-                    )
-                  }
-                </>
-              )
-            }
-          </Row>
-        </form>
+            {id && (
+              <Accordion
+                closedByDefault
+                id={PIECE_MODAL_ACCORDION.statusChangeLog}
+                label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.statusChangeLog]}
+              >
+                <ReceivingStatusChangeLog piece={formValues} />
+              </Accordion>
+            )}
+          </AccordionSet>
+        </AccordionStatus>
       </HasCommand>
 
       {
@@ -395,6 +368,19 @@ const AddPieceModal = ({
           />
         )
       }
+
+      <DelayClaimModal
+        open={isClaimDelayModalOpen}
+        onCancel={toggleClaimDelayModal}
+        onSubmit={onClaimDelay}
+      />
+
+      <SendClaimModal
+        open={isClaimSendModalOpen}
+        onCancel={toggleClaimSendModal}
+        onSubmit={onClaimSend}
+        initialValues={{ internalNote, externalNote }}
+      />
     </Modal>
   );
 };
@@ -405,6 +391,7 @@ AddPieceModal.propTypes = {
   deletePiece: PropTypes.func.isRequired,
   canDeletePiece: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
+  onUnreceive: PropTypes.func.isRequired,
   form: PropTypes.object,
   values: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
@@ -420,10 +407,16 @@ AddPieceModal.propTypes = {
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   pristine: PropTypes.bool.isRequired,
+  restrictionsByAcqUnit: PropTypes.shape({
+    protectCreate: PropTypes.bool,
+    protectDelete: PropTypes.bool,
+    protectUpdate: PropTypes.bool,
+  }),
 };
 
 AddPieceModal.defaultProps = {
   pieceFormatOptions: [],
+  restrictionsByAcqUnit: {},
 };
 
 export default stripesFinalForm({

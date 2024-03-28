@@ -25,6 +25,7 @@ export function TitleDetailsExpectedActions({
   openReceiveList,
   hasReceive,
   disabled,
+  canAddPiece,
   toggleColumn,
   visibleColumns,
 }) {
@@ -49,7 +50,7 @@ export function TitleDetailsExpectedActions({
             data-test-add-piece-button
             buttonStyle="dropdownItem"
             onClick={openAddPieceModal}
-            disabled={disabled}
+            disabled={!canAddPiece}
           >
             <Icon size="small" icon="plus-sign">
               <FormattedMessage id="ui-receiving.piece.button.addPiece" />
@@ -102,4 +103,5 @@ TitleDetailsExpectedActions.propTypes = {
   toggleColumn: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   disabled: PropTypes.bool,
+  canAddPiece: PropTypes.bool,
 };

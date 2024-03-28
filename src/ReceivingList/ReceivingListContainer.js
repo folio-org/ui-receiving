@@ -1,7 +1,5 @@
-import React, {
-  useCallback,
-} from 'react';
 import PropTypes from 'prop-types';
+import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -89,7 +87,13 @@ const ReceivingListContainer = ({ mutator }) => {
     }, {});
 
     return { orderLinesMap };
-  }, []);
+  }, [
+    invalidReferenceMessage,
+    mutator.lineOrders,
+    mutator.receivingListHoldings,
+    mutator.receivingListLocations,
+    mutator.receivingListOrderLines,
+  ]);
 
   const { pagination, changePage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
   const {

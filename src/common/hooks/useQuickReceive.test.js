@@ -31,7 +31,7 @@ jest.mock('./useReceive', () => ({
 const pieceValues = {
   id: 'pieceId',
   holdingId: 'holdingId',
-  caption: 'v1',
+  displaySummary: 'v1',
 };
 
 describe('useQuickReceive', () => {

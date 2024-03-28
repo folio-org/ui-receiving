@@ -1,10 +1,11 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
+
 import AddPieceModalContainer from './AddPieceModalContainer';
 
 jest.mock('@folio/stripes-acq-components', () => ({
@@ -13,7 +14,14 @@ jest.mock('@folio/stripes-acq-components', () => ({
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
-
+jest.mock('../../common/hooks', () => ({
+  ...jest.requireActual('../../common/hooks'),
+  useUnreceive: jest.fn().mockReturnValue({ unreceive: jest.fn(() => Promise.resolve()) }),
+}));
+jest.mock('../hooks', () => ({
+  ...jest.requireActual('../hooks'),
+  usePieceStatusChangeLog: jest.fn(() => ({ data: [] })),
+}));
 const defaultProps = {
   close: jest.fn(),
   onSubmit: jest.fn(() => Promise.resolve({})),
@@ -39,18 +47,17 @@ const renderAddPieceModalContainer = (props = {}) => render(
 
 describe('AddPieceModalContainer', () => {
   it('should display Edit Piece form', () => {
-    const { getByLabelText, getByText, queryByText } = renderAddPieceModalContainer();
+    const { getByLabelText, getByText } = renderAddPieceModalContainer();
 
     // header is rendered
-    expect(getByText('ui-receiving.piece.caption')).toBeDefined();
-    expect(getByLabelText('ui-receiving.piece.caption')).toBeDefined();
+    expect(getByText('ui-receiving.piece.displaySummary')).toBeDefined();
+    expect(getByLabelText('ui-receiving.piece.displaySummary')).toBeDefined();
     expect(getByText('ui-receiving.piece.copyNumber')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.copyNumber')).toBeDefined();
     expect(getByText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByLabelText('ui-receiving.piece.enumeration')).toBeDefined();
     expect(getByText('ui-receiving.piece.format')).toBeDefined();
     expect(getByText('ui-receiving.piece.receiptDate')).toBeDefined();
-    expect(queryByText('ui-receiving.piece.actions.quickReceive')).toBeTruthy();
     fireEvent.input(getByLabelText('ui-receiving.piece.enumeration'));
   });
 
@@ -63,7 +70,7 @@ describe('AddPieceModalContainer', () => {
       },
     });
 
-    expect(getByLabelText('ui-receiving.piece.caption').disabled).toBeFalsy();
+    expect(getByLabelText('ui-receiving.piece.displaySummary').disabled).toBeFalsy();
     expect(getByLabelText('ui-receiving.piece.copyNumber').disabled).toBeFalsy();
     expect(getByLabelText('ui-receiving.piece.enumeration').disabled).toBeFalsy();
     expect(getByText('stripes-acq-components.piece.pieceFormat.physical')).toBeDefined();
@@ -96,9 +103,7 @@ describe('AddPieceModalContainer', () => {
 
     await user.click(supplement);
 
-    const quickReceiveBtn = await screen.findByRole('button', {
-      name: 'ui-receiving.piece.actions.quickReceive',
-    });
+    const quickReceiveBtn = await screen.findByTestId('quickReceive');
 
     await user.click(quickReceiveBtn);
     expect(defaultProps.onCheckIn).toHaveBeenCalled();

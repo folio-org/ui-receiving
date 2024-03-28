@@ -19,6 +19,7 @@ import {
 
 export function TitleDetailsReceivedActions({
   applyFilters,
+  disabled,
   filters,
   hasUnreceive,
   titleId,
@@ -47,6 +48,7 @@ export function TitleDetailsReceivedActions({
             data-test-title-unreceive-button
             to={`/receiving/unreceive/${titleId}`}
             buttonStyle="dropdownItem"
+            disabled={disabled}
           >
             <FormattedMessage id="ui-receiving.title.details.button.unreceive" />
           </Button>
@@ -74,6 +76,7 @@ export function TitleDetailsReceivedActions({
 
 TitleDetailsReceivedActions.propTypes = {
   applyFilters: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   filters: PropTypes.object.isRequired,
   hasUnreceive: PropTypes.bool.isRequired,
   titleId: PropTypes.string.isRequired,

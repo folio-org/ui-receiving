@@ -1,10 +1,13 @@
-import React from 'react';
+import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 import { FormattedMessage } from 'react-intl';
-import { pick } from 'lodash';
 
+import { NoValue } from '@folio/stripes/components';
 import {
   ORDER_FORMATS,
   PIECE_FORMAT,
+  PIECE_FORMAT_LABELS,
+  PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
 export const TITLE_ACCORDION = {
@@ -12,6 +15,7 @@ export const TITLE_ACCORDION = {
   polDetails: 'polDetails',
   expected: 'expected',
   received: 'received',
+  unreceivable: 'unreceivable',
 };
 
 export const TITLE_ACCORDION_LABELS = {
@@ -19,6 +23,7 @@ export const TITLE_ACCORDION_LABELS = {
   [TITLE_ACCORDION.polDetails]: <FormattedMessage id="ui-receiving.title.polDetails" />,
   [TITLE_ACCORDION.expected]: <FormattedMessage id="ui-receiving.title.expected" />,
   [TITLE_ACCORDION.received]: <FormattedMessage id="ui-receiving.title.received" />,
+  [TITLE_ACCORDION.unreceivable]: <FormattedMessage id="ui-receiving.title.unreceivable" />,
 };
 
 export const ORDER_FORMAT_TO_PIECE_FORMAT = {
@@ -28,20 +33,28 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
 };
 
 export const PIECE_COLUMNS = {
-  caption: 'caption',
+  accessionNumber: 'accessionNumber',
+  displaySummary: 'displaySummary',
+  callNumber: 'callNumber',
   chronology: 'chronology',
   copyNumber: 'copyNumber',
+  displayOnHolding: 'displayOnHolding',
   enumeration: 'enumeration',
+  isCreateItem: 'isCreateItem',
+  itemStatus: 'itemStatus',
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
   comment: 'comment',
   format: 'format',
   request: 'request',
   barcode: 'barcode',
+  location: 'location',
+  status: 'status',
+  supplement: 'supplement',
 };
 
 const PIECE_VISIBLE_COLUMNS = [
-  PIECE_COLUMNS.caption,
+  PIECE_COLUMNS.displaySummary,
   PIECE_COLUMNS.copyNumber,
   PIECE_COLUMNS.enumeration,
   PIECE_COLUMNS.chronology,
@@ -52,7 +65,9 @@ const PIECE_VISIBLE_COLUMNS = [
 export const SORTABLE_COLUMNS = [PIECE_COLUMNS.enumeration, PIECE_COLUMNS.receiptDate, PIECE_COLUMNS.receivedDate];
 
 export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
-  ...PIECE_VISIBLE_COLUMNS,
+  PIECE_COLUMNS.displaySummary,
+  PIECE_COLUMNS.status,
+  ...PIECE_VISIBLE_COLUMNS.slice(1),
   PIECE_COLUMNS.receiptDate,
   PIECE_COLUMNS.request,
 ];
@@ -64,24 +79,46 @@ export const RECEIVED_PIECE_VISIBLE_COLUMNS = [
   PIECE_COLUMNS.request,
 ];
 
+export const UNRECEIVABLE_PIECE_VISIBLE_COLUMNS = [...RECEIVED_PIECE_VISIBLE_COLUMNS];
+
 export const PIECE_COLUMN_MAPPING = {
-  [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
+  arrow: null,
+  selection: null,
+  [PIECE_COLUMNS.accessionNumber]: <FormattedMessage id="ui-receiving.piece.accessionNumber" />,
+  [PIECE_COLUMNS.barcode]: <FormattedMessage id="ui-receiving.piece.barcode" />,
+  [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,
+  [PIECE_COLUMNS.displaySummary]: <FormattedMessage id="ui-receiving.piece.displaySummary" />,
   [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
-  [PIECE_COLUMNS.caption]: <FormattedMessage id="ui-receiving.piece.caption" />,
-  barcode: <FormattedMessage id="ui-receiving.piece.barcode" />,
+  [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
+  [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
+  [PIECE_COLUMNS.displayOnHolding]: <FormattedMessage id="ui-receiving.piece.displayOnHolding" />,
   [PIECE_COLUMNS.enumeration]: <FormattedMessage id="ui-receiving.piece.enumeration" />,
-  format: <FormattedMessage id="ui-receiving.piece.format" />,
+  [PIECE_COLUMNS.format]: <FormattedMessage id="ui-receiving.piece.format" />,
+  [PIECE_COLUMNS.isCreateItem]: <FormattedMessage id="ui-receiving.piece.createItem" />,
+  [PIECE_COLUMNS.location]: <FormattedMessage id="ui-receiving.piece.location" />,
   [PIECE_COLUMNS.receiptDate]: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
   [PIECE_COLUMNS.receivedDate]: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
-  [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
-  request: <FormattedMessage id="ui-receiving.piece.request" />,
-  selection: null,
-  arrow: null,
+  [PIECE_COLUMNS.request]: <FormattedMessage id="ui-receiving.piece.request" />,
+  [PIECE_COLUMNS.status]: <FormattedMessage id="ui-receiving.piece.status" />,
+  [PIECE_COLUMNS.supplement]: <FormattedMessage id="ui-receiving.piece.supplement" />,
+};
+
+export const PIECE_COLUMN_BASE_FORMATTER = {
+  [PIECE_COLUMNS.request]: record => (record.request ? <FormattedMessage id="ui-receiving.piece.request.isOpened" /> : <NoValue />),
+  [PIECE_COLUMNS.format]: ({ format }) => PIECE_FORMAT_LABELS[format],
+  [PIECE_COLUMNS.callNumber]: record => record.callNumber || <NoValue />,
+  [PIECE_COLUMNS.displaySummary]: record => record.displaySummary || <NoValue />,
+  [PIECE_COLUMNS.copyNumber]: record => record.copyNumber || <NoValue />,
+  [PIECE_COLUMNS.barcode]: record => record.barcode || <NoValue />,
+  [PIECE_COLUMNS.status]: record => record.receivingStatus || <NoValue />,
 };
 
 export const EXPECTED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, EXPECTED_PIECE_VISIBLE_COLUMNS);
-
 export const RECEIVED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, RECEIVED_PIECE_VISIBLE_COLUMNS);
+export const UNRECEIVABLE_PIECE_COLUMN_MAPPING = {
+  ...pick(PIECE_COLUMN_MAPPING, UNRECEIVABLE_PIECE_VISIBLE_COLUMNS),
+  [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,
+};
 
 export const MENU_FILTERS = {
   supplement: 'supplement',
@@ -97,3 +134,18 @@ export const SUPPLEMENT_MENU_FILTER_OPTIONS = [
     label: <FormattedMessage id="ui-receiving.filter.nonSupplements" />,
   },
 ];
+
+export const EXPECTED_PIECES_STATUSES = Object.values(omit(PIECE_STATUS, ['received', 'unreceivable']));
+export const EXPECTED_PIECES_SEARCH_VALUE = EXPECTED_PIECES_STATUSES.map(status => `"${status}"`).join(' or ');
+export const PIECE_MODAL_ACCORDION = {
+  metadata: 'metadata',
+  pieceDetails: 'pieceDetails',
+  itemDetails: 'itemDetails',
+  statusChangeLog: 'statusChangeLog',
+};
+
+export const PIECE_MODAL_ACCORDION_LABELS = {
+  [PIECE_MODAL_ACCORDION.pieceDetails]: <FormattedMessage id="ui-receiving.piece.accordion.pieceDetails" />,
+  [PIECE_MODAL_ACCORDION.itemDetails]: <FormattedMessage id="ui-receiving.piece.accordion.itemDetails" />,
+  [PIECE_MODAL_ACCORDION.statusChangeLog]: <FormattedMessage id="ui-receiving.piece.accordion.statusChangeLog" />,
+};

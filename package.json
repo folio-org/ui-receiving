@@ -1,6 +1,6 @@
 {
   "name": "@folio/receiving",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Description for receiving",
   "main": "index.js",
   "repository": "",
@@ -14,6 +14,7 @@
     "route": "/receiving",
     "home": "/receiving",
     "okapiInterfaces": {
+      "acquisition-piece-events": "1.0",
       "acquisitions-units": "1.1",
       "circulation": "9.5 10.0 11.0 12.0 13.0 14.0",
       "configuration": "2.0",
@@ -31,11 +32,12 @@
       "order-lines": "2.0 3.0",
       "orders": "11.0 12.0",
       "organizations.organizations": "1.0",
-      "pieces": "2.0",
-      "receiving": "1.0",
+      "pieces": "3.0",
+      "receiving": "2.0",
       "search": "0.5 0.6 1.0",
       "tags": "1.0",
-      "titles": "1.2"
+      "titles": "1.2",
+      "users": "16.0"
     },
     "optionalOkapiInterfaces": {
       "servint": "2.0 3.0"
@@ -113,10 +115,13 @@
         "displayName": "Receiving: View",
         "visible": true,
         "subPermissions": [
+          "acquisition.piece.events.get",
           "orders.check-in.collection.post",
+          "orders.expect.collection.post",
           "orders.receiving.collection.post",
           "settings.receiving.enabled",
-          "ui-receiving.basic.view"
+          "ui-receiving.basic.view",
+          "users.collection.get"
         ]
       },
       {
@@ -154,6 +159,22 @@
         "subPermissions": [
           "orders.titles.item.delete",
           "ui-receiving.edit"
+        ]
+      },
+      {
+        "permissionName": "ui-receiving.acq-units.assignment.assign",
+        "displayName": "Receiving: Assign acquisition units to new receiving title",
+        "visible": true,
+        "subPermissions": [
+          "titles.acquisitions-units-assignments.assign"
+        ]
+      },
+      {
+        "permissionName": "ui-receiving.acq-units.assignment.manage",
+        "displayName": "Receiving: Manage acquisition units",
+        "visible": true,
+        "subPermissions": [
+          "titles.acquisitions-units-assignments.manage"
         ]
       },
       {
@@ -210,7 +231,7 @@
     "regenerator-runtime": "^0.13.3"
   },
   "dependencies": {
-    "@folio/stripes-acq-components": "~5.0.0",
+    "@folio/stripes-acq-components": "~5.1.0",
     "final-form": "^4.18.2",
     "lodash": "^4.17.5",
     "prop-types": "^15.5.10",

@@ -28,9 +28,11 @@ import {
 } from '@folio/stripes/components';
 import {
   IfPermission,
+  TitleManager,
   useStripes,
 } from '@folio/stripes/core';
 import {
+  ColumnManager,
   ViewMetaData,
   useColumnManager,
 } from '@folio/stripes/smart-components';
@@ -40,6 +42,7 @@ import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
+  useAcqRestrictions,
   useFilters,
   useModalToggle,
 } from '@folio/stripes-acq-components';
@@ -50,17 +53,21 @@ import ReceivedPiecesList from './ReceivedPiecesList';
 import AddPieceModal from './AddPieceModal';
 import {
   EXPECTED_PIECE_COLUMN_MAPPING,
+  EXPECTED_PIECES_SEARCH_VALUE,
   ORDER_FORMAT_TO_PIECE_FORMAT,
   RECEIVED_PIECE_COLUMN_MAPPING,
-  TITLE_ACCORDION_LABELS,
   TITLE_ACCORDION,
+  TITLE_ACCORDION_LABELS,
+  UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from './constants';
 import {
   TitleDetailsExpectedActions,
   TitleDetailsReceivedActions,
+  TitleDetailsUnreceivableActions,
 } from './TitleDetailsActions';
 import Title from './Title';
 import POLDetails from './POLDetails';
+import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
 
@@ -97,6 +104,7 @@ const TitleDetails = ({
   piecesExistance,
   poLine,
   title,
+  onUnreceive,
   vendorsMap,
   getHoldingsItemsAndPieces,
   getPieceValues,
@@ -116,7 +124,9 @@ const TitleDetails = ({
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
-  const poLineLocations = poLine?.locations?.map(({ locationId }) => locationId) ?? [];
+  const poLineLocations = useMemo(() => (
+    poLine?.locations?.map(({ locationId }) => locationId) ?? []
+  ), [poLine?.locations]);
   const poLineLocationIds = useMemo(() => poLineLocations.filter(Boolean), [poLineLocations]);
   const locationIds = useMemo(() => (
     pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
@@ -125,6 +135,9 @@ const TitleDetails = ({
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
+  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(titleId, title.acqUnitIds);
+
+  const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
 
   const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
@@ -152,7 +165,7 @@ const TitleDetails = ({
       name: 'edit',
       handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.edit')) onEdit();
-      }),
+      }, { disabled: isRestrictedByAcqUnit }),
     },
     {
       name: 'expandAllSections',
@@ -278,10 +291,11 @@ const TitleDetails = ({
       : onReceive(values);
   }, [isOrderClosed, confirmReceiving, onCheckIn, getPieceValues, onCreateAnotherPiece]);
 
-  const hasReceive = Boolean(piecesExistance?.[PIECE_STATUS.expected]);
+  const hasReceive = Boolean(piecesExistance?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
   const [isReceivedPiecesLoading, setReceivedPiecesLoading] = useState(false);
+  const [isUnreceivablePiecesLoading, setIsUnreceivablePiecesLoading] = useState(false);
 
   const {
     applyFilters: applyExpectedPiecesFilters,
@@ -297,6 +311,13 @@ const TitleDetails = ({
     changeSearch: changeReceivedPiecesSearch,
     searchQuery: receivedPiecesSearchQuery,
   } = useFilters(noop);
+  const {
+    applyFilters: applyUnreceivablePiecesFilters,
+    applySearch: applyUnreceivablePiecesSearch,
+    filters: unreceivablePiecesFilters,
+    changeSearch: changeUnreceivablePiecesSearch,
+    searchQuery: unreceivablePiecesSearchQuery,
+  } = useFilters(noop);
 
   const expectedPiecesActions = useMemo(
     () => (
@@ -307,7 +328,8 @@ const TitleDetails = ({
         openAddPieceModal={openAddPieceModal}
         openReceiveList={onReceivePieces}
         titleId={titleId}
-        disabled={isPiecesLock}
+        disabled={isPiecesLock || restrictions?.protectUpdate}
+        canAddPiece={!restrictions?.protectCreate}
         toggleColumn={toggleExpectedPiecesColumn}
         visibleColumns={expectedPiecesVisibleColumns}
       />
@@ -316,6 +338,7 @@ const TitleDetails = ({
       applyExpectedPiecesFilters,
       expectedPiecesFilters,
       hasReceive,
+      restrictions,
       openAddPieceModal,
       onReceivePieces,
       titleId,
@@ -332,6 +355,7 @@ const TitleDetails = ({
         applyFilters={applyReceivedPiecesFilters}
         filters={receivedPiecesFilters}
         titleId={titleId}
+        disabled={isRestrictedByAcqUnit}
         hasUnreceive={hasUnreceive}
         toggleColumn={toggleReceivedPiecesColumn}
         visibleColumns={receivedPiecesVisibleColumns}
@@ -339,6 +363,7 @@ const TitleDetails = ({
     ),
     [
       applyReceivedPiecesFilters,
+      isRestrictedByAcqUnit,
       hasUnreceive,
       receivedPiecesFilters,
       receivedPiecesVisibleColumns,
@@ -347,12 +372,25 @@ const TitleDetails = ({
     ],
   );
 
+  const hasUnreceivable = Boolean(piecesExistance?.[PIECE_STATUS.unreceivable]);
+  const renderUnreceivablePiecesActions = (renderColumnsMenu) => (
+    <TitleDetailsUnreceivableActions
+      applyFilters={applyUnreceivablePiecesFilters}
+      filters={unreceivablePiecesFilters}
+      titleId={titleId}
+      disabled={isRestrictedByAcqUnit}
+      hasRecords={hasUnreceivable}
+      renderColumnsMenu={renderColumnsMenu}
+    />
+  );
+
   const lastMenu = (
     <PaneMenu>
       <IfPermission perm="ui-receiving.edit">
         <Button
           onClick={onEdit}
           marginBottom0
+          disabled={isRestrictedByAcqUnit}
           buttonStyle="primary"
         >
           <FormattedMessage id="ui-receiving.title.details.button.edit" />
@@ -376,6 +414,7 @@ const TitleDetails = ({
         onClose={onClose}
         lastMenu={lastMenu}
       >
+        <TitleManager record={title.title} />
         <AccordionStatus ref={accordionStatusRef}>
           <Row end="xs">
             <Col xs={10}>
@@ -394,7 +433,7 @@ const TitleDetails = ({
             </Col>
           </Row>
 
-          <hr />
+          <hr className={css.divider} />
           <Title
             title={title.title}
             instanceId={title.instanceId}
@@ -408,6 +447,7 @@ const TitleDetails = ({
             >
               <ViewMetaData metadata={title.metadata} />
               <TitleInformation
+                acqUnitIds={title.acqUnitIds}
                 claimingActive={title.claimingActive}
                 claimingInterval={title.claimingInterval}
                 contributors={title.contributors}
@@ -506,6 +546,43 @@ const TitleDetails = ({
                 visibleColumns={receivedPiecesVisibleColumns}
               />
             </Accordion>
+
+            <ColumnManager
+              id="unreceivable-pieces-list"
+              columnMapping={UNRECEIVABLE_PIECE_COLUMN_MAPPING}
+            >
+              {({ renderColumnsMenu, visibleColumns }) => (
+                <Accordion
+                  displayWhenClosed={renderUnreceivablePiecesActions(renderColumnsMenu)}
+                  displayWhenOpen={(
+                    <div className={css['accordion-actions']}>
+                      {hasUnreceivable && (
+                        <FilterSearchInput
+                          applyFilters={applyUnreceivablePiecesFilters}
+                          applySearch={applyUnreceivablePiecesSearch}
+                          changeSearch={changeUnreceivablePiecesSearch}
+                          filters={unreceivablePiecesFilters}
+                          isLoading={isUnreceivablePiecesLoading}
+                          searchQuery={unreceivablePiecesSearchQuery}
+                        />
+                      )}
+                      {renderUnreceivablePiecesActions(renderColumnsMenu)}
+                    </div>
+                  )}
+                  id={TITLE_ACCORDION.unreceivable}
+                  label={TITLE_ACCORDION_LABELS[TITLE_ACCORDION.unreceivable]}
+                >
+                  <UnreceivablePiecesList
+                    key={piecesExistance?.key}
+                    filters={unreceivablePiecesFilters}
+                    onLoadingStatusChange={setIsUnreceivablePiecesLoading}
+                    title={title}
+                    selectPiece={openAddPieceModal}
+                    visibleColumns={visibleColumns}
+                  />
+                </Accordion>
+              )}
+            </ColumnManager>
           </AccordionSet>
         </AccordionStatus>
 
@@ -537,6 +614,8 @@ const TitleDetails = ({
             onCheckIn={onQuickReceive}
             onSubmit={onSave}
             poLine={poLine}
+            restrictionsByAcqUnit={restrictions}
+            onUnreceive={onUnreceive}
             getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
         )}
@@ -574,6 +653,7 @@ TitleDetails.propTypes = {
   vendorsMap: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
   getPieceValues: PropTypes.func.isRequired,
+  onUnreceive: PropTypes.func.isRequired,
 };
 
 export default withRouter(TitleDetails);

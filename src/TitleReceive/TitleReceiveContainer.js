@@ -14,7 +14,6 @@ import {
   LINES_API,
   locationsManifest,
   PIECE_FORMAT,
-  PIECE_STATUS,
   pieceResource,
   piecesResource,
   requestsResource,
@@ -32,6 +31,7 @@ import {
   getReceivingPieceItemStatus,
   handleReceiveErrorResponse,
 } from '../common/utils';
+import { EXPECTED_PIECES_SEARCH_VALUE } from '../TitleDetails/constants';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
 
@@ -71,7 +71,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   useEffect(
     () => {
       if (poLineId) {
-        const filterQuery = `titleId=${titleId} and poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.expected}`;
+        const filterQuery = `titleId=${titleId} and poLineId==${poLineId} and receivingStatus==(${EXPECTED_PIECES_SEARCH_VALUE})`;
 
         mutator.pieces.GET({
           params: {

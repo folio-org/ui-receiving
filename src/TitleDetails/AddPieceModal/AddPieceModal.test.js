@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { MemoryRouter } from 'react-router-dom';
 
 import user from '@folio/jest-config-stripes/testing-library/user-event';
@@ -7,8 +8,10 @@ import {
   FieldInventory,
   INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT,
+  PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
+import { usePieceStatusChangeLog } from '../hooks';
 import AddPieceModal from './AddPieceModal';
 
 jest.mock('@folio/stripes-acq-components', () => {
@@ -19,6 +22,14 @@ jest.mock('@folio/stripes-acq-components', () => {
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));
+jest.mock('../../common/hooks', () => ({
+  ...jest.requireActual('../../common/hooks'),
+  useUnreceive: jest.fn().mockReturnValue({ unreceive: jest.fn(() => Promise.resolve()) }),
+}));
+jest.mock('../hooks', () => ({
+  ...jest.requireActual('../hooks'),
+  usePieceStatusChangeLog: jest.fn(),
+}));
 
 const defaultProps = {
   close: jest.fn(),
@@ -49,6 +60,25 @@ const defaultProps = {
 const holding = {
   id: 'holdingId',
 };
+const userData = {
+  id: 'user-1',
+  personal: {
+    lastName: 'Galt',
+    firstName: 'John',
+  },
+};
+const logs = [
+  {
+    eventDate: '2023-12-26T14:08:19.402Z',
+    user: userData,
+    receivingStatus: PIECE_STATUS.received,
+  },
+  {
+    eventDate: '2023-12-25T14:08:18.402Z',
+    user: userData,
+    receivingStatus: PIECE_STATUS.expected,
+  },
+];
 
 const kyMock = {
   get: jest.fn(() => ({
@@ -56,12 +86,16 @@ const kyMock = {
   })),
 };
 
-const renderAddPieceModal = (props = defaultProps) => (render(
+const DATE_FORMAT = 'MM/DD/YYYY';
+const today = moment();
+
+const renderAddPieceModal = (props = {}) => render(
   <AddPieceModal
+    {...defaultProps}
     {...props}
   />,
   { wrapper: MemoryRouter },
-));
+);
 
 const findButton = (name) => screen.findByRole('button', { name });
 
@@ -78,6 +112,9 @@ describe('AddPieceModal', () => {
     FieldInventory.mockClear();
     kyMock.get.mockClear();
     useOkapiKy.mockClear().mockReturnValue(kyMock);
+    usePieceStatusChangeLog
+      .mockClear()
+      .mockReturnValue({ data: logs });
   });
 
   it('should display Add piece modal', () => {
@@ -101,7 +138,6 @@ describe('AddPieceModal', () => {
       const format = PIECE_FORMAT.electronic;
 
       renderAddPieceModal({
-        ...defaultProps,
         createInventoryValues: { [format]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
         initialValues: {
           format,
@@ -115,7 +151,6 @@ describe('AddPieceModal', () => {
 
     it('should not be visible when create inventory does not include holding', () => {
       renderAddPieceModal({
-        ...defaultProps,
         initialValues: {
           format: INVENTORY_RECORDS_TYPE.instance,
         },
@@ -130,7 +165,6 @@ describe('AddPieceModal', () => {
       const format = PIECE_FORMAT.electronic;
 
       renderAddPieceModal({
-        ...defaultProps,
         createInventoryValues: { [format]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
         initialValues: {
           format,
@@ -151,7 +185,6 @@ describe('AddPieceModal', () => {
         });
 
         renderAddPieceModal({
-          ...defaultProps,
           initialValues: {
             id: 'pieceId',
             format: PIECE_FORMAT.physical,
@@ -170,7 +203,6 @@ describe('AddPieceModal', () => {
         kyMock.get.mockReturnValue(({ json: () => Promise.reject(new Error('404')) }));
 
         renderAddPieceModal({
-          ...defaultProps,
           initialValues: {
             id: 'pieceId',
             format: PIECE_FORMAT.physical,
@@ -188,17 +220,121 @@ describe('AddPieceModal', () => {
   });
 
   describe('Create another piece', () => {
-    it('should update footer btns when \'Create another\' is active', async () => {
+    it('should update footer button when \'Create another\' is active', async () => {
       renderAddPieceModal({
-        ...defaultProps,
-        initialValues: { isCreateAnother: true },
+        initialValues: {
+          isCreateAnother: true,
+          receivingStatus: PIECE_STATUS.expected,
+        },
       });
 
-      const saveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
-      const quickReceiveBtn = await findButton('ui-receiving.piece.actions.quickReceive');
+      const saveBtn = await screen.findByTestId('quickReceive');
 
       expect(saveBtn).toBeInTheDocument();
-      expect(quickReceiveBtn.classList.contains('primary')).toBeTruthy();
+    });
+  });
+
+  it('should update piece status', async () => {
+    const onChange = jest.fn();
+
+    renderAddPieceModal({
+      form: {
+        ...defaultProps.form,
+        change: onChange,
+      },
+      hasValidationErrors: false,
+      initialValues: {
+        'id': 'cd3fd1e7-c195-4d8e-af75-525e1039d643',
+        'format': 'Other',
+        'poLineId': 'a92ae36c-e093-4daf-b234-b4c6dc33a258',
+        'titleId': '03329fea-1b5d-43ab-b955-20bcd9ba530d',
+        'holdingId': '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+        'isCreateAnother': false,
+        'isCreateItem': false,
+        receivingStatus: PIECE_STATUS.expected,
+      },
+    });
+
+    const dropdownButton = screen.getByTestId('dropdown-trigger-button');
+
+    await user.click(dropdownButton);
+
+    const unReceiveButton = screen.getByTestId('unReceivable-piece-button');
+
+    await user.click(unReceiveButton);
+
+    expect(defaultProps.onSubmit).toHaveBeenCalled();
+  });
+
+  it('should unreceive piece', async () => {
+    const onUnreceive = jest.fn();
+
+    renderAddPieceModal({
+      onUnreceive,
+      hasValidationErrors: false,
+      initialValues: {
+        'id': 'cd3fd1e7-c195-4d8e-af75-525e1039d643',
+        'format': 'Other',
+        'poLineId': 'a92ae36c-e093-4daf-b234-b4c6dc33a258',
+        'titleId': '03329fea-1b5d-43ab-b955-20bcd9ba530d',
+        'holdingId': '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+        'isCreateAnother': false,
+        'isCreateItem': false,
+        receivingStatus: PIECE_STATUS.received,
+        receivedDate: new Date().toISOString(),
+      },
+    });
+
+    await user.click(screen.getByTestId('dropdown-trigger-button'));
+    const unReceiveButton = await screen.findByTestId('unReceive-piece-button');
+
+    expect(unReceiveButton).toBeInTheDocument();
+    await user.click(unReceiveButton);
+
+    expect(onUnreceive).toHaveBeenCalled();
+  });
+
+  describe('Actions', () => {
+    const initialValues = {
+      format: PIECE_FORMAT.other,
+      holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+    };
+    const date = today.add(3, 'days');
+
+    beforeEach(async () => {
+      renderAddPieceModal({ initialValues });
+
+      await user.click(screen.getByTestId('dropdown-trigger-button'));
+    });
+
+    it('should handle "Delay claim" action', async () => {
+      await user.click(screen.getByTestId('delay-claim-button'));
+      await user.type(screen.getByRole('textbox', { name: 'ui-receiving.modal.delayClaim.field.delayTo' }), date.format(DATE_FORMAT));
+      await user.click(await findButton('stripes-acq-components.FormFooter.save'));
+
+      expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          claimingInterval: 3,
+          receivingStatus: PIECE_STATUS.claimDelayed,
+        }),
+        expect.anything(),
+        expect.anything(),
+      );
+    });
+
+    it('should handle "Send claim" action', async () => {
+      await user.click(screen.getByTestId('send-claim-button'));
+      await user.type(screen.getByRole('textbox', { name: 'ui-receiving.modal.sendClaim.field.claimExpiryDate' }), date.format(DATE_FORMAT));
+      await user.click(await findButton('stripes-acq-components.FormFooter.save'));
+
+      expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          claimingInterval: 3,
+          receivingStatus: PIECE_STATUS.claimSent,
+        }),
+        expect.anything(),
+        expect.anything(),
+      );
     });
   });
 });

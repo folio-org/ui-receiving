@@ -1,11 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  PIECE_STATUS,
-} from '@folio/stripes-acq-components';
-
-import {
+  EXPECTED_PIECES_STATUSES,
   PIECE_COLUMNS,
 } from '../constants';
 import {
@@ -37,7 +33,7 @@ const ExpectedPiecesList = ({
     initialSorting,
     onLoadingStatusChange,
     title,
-    queryParams: { receivingStatus: PIECE_STATUS.expected },
+    queryParams: { receivingStatus: EXPECTED_PIECES_STATUSES },
   });
 
   return (

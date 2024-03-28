@@ -27,11 +27,14 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
+  AcqUnitsField,
   FieldDatepickerFinal,
   FolioFormattedDate,
   FormFooter,
   handleKeyCommand,
+  useAcqRestrictions,
   validateRequired,
+  validateRequiredPositiveNumber,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -41,6 +44,14 @@ import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
 
 const ALLOWED_YEAR_LENGTH = 4;
+const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.assign';
+const MANAGE_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.manage';
+
+const validateClaimingInterval = (value, { claimingActive }) => {
+  if (!claimingActive) return undefined;
+
+  return validateRequired(value) || validateRequiredPositiveNumber(value);
+};
 
 const TitleForm = ({
   handleSubmit,
@@ -57,14 +68,18 @@ const TitleForm = ({
   const accordionStatusRef = useRef();
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
-  const { id, title, metadata } = initialValues;
+  const { id, title, metadata, acqUnitIds } = initialValues;
+  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds);
+
+  const disabled = hasValidationErrors || restrictions?.protectUpdate || isRestrictionsLoading;
+
   const paneFooter = (
     <FormFooter
       handleSubmit={handleSubmit}
       pristine={pristine}
       submitting={submitting}
       onCancel={onCancel}
-      isSubmitDisabled={hasValidationErrors}
+      isSubmitDisabled={disabled}
     />
   );
 
@@ -72,6 +87,7 @@ const TitleForm = ({
   const paneTitle = isEditMode
     ? title
     : <FormattedMessage id="ui-receiving.title.paneTitle.create" />;
+  const isClaimingActive = Boolean(values.claimingActive);
 
   const addInstance = form.mutators.setTitleValue;
   const addLines = form.mutators.setPOLine;
@@ -246,7 +262,7 @@ const TitleForm = ({
                             name="claimingActive"
                             type="checkbox"
                             vertical
-                            validateFields={[]}
+                            validateFields={['claimingInterval']}
                           />
                         </Col>
 
@@ -259,9 +275,25 @@ const TitleForm = ({
                             name="claimingInterval"
                             component={TextField}
                             type="number"
+                            min={1}
                             fullWidth
-                            disabled={!values.claimingActive}
+                            disabled={!isClaimingActive}
+                            required={isClaimingActive}
+                            validate={validateClaimingInterval}
                             validateFields={[]}
+                          />
+                        </Col>
+                        <Col
+                          xs={6}
+                          md={3}
+                        >
+                          <AcqUnitsField
+                            id="title-acq-units"
+                            name="acqUnitIds"
+                            perm={isEditMode ? MANAGE_ACQ_UNITS_PERM : ASSIGN_ACQ_UNITS_PERM}
+                            isEdit={isEditMode}
+                            preselectedUnits={values.acqUnitIds}
+                            isFinal
                           />
                         </Col>
                       </Row>

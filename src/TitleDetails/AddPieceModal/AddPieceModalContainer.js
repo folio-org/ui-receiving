@@ -14,8 +14,10 @@ const AddPieceModalContainer = ({
   close,
   deletePiece,
   canDeletePiece,
+  onUnreceive,
   initialValues,
   instanceId,
+  restrictionsByAcqUnit,
   locations,
   locationIds,
   onCheckIn,
@@ -70,7 +72,9 @@ const AddPieceModalContainer = ({
       onCheckIn={onQuickReceive}
       onSubmit={onSavePiece}
       pieceFormatOptions={pieceFormatOptions}
+      onUnreceive={onUnreceive}
       poLine={poLine}
+      restrictionsByAcqUnit={restrictionsByAcqUnit}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
     />
   );
@@ -88,6 +92,12 @@ AddPieceModalContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   poLine: PropTypes.object.isRequired,
   getHoldingsItemsAndPieces: PropTypes.func.isRequired,
+  onUnreceive: PropTypes.func.isRequired,
+  restrictionsByAcqUnit: PropTypes.shape({
+    protectCreate: PropTypes.bool,
+    protectDelete: PropTypes.bool,
+    protectUpdate: PropTypes.bool,
+  }),
 };
 
 export default AddPieceModalContainer;

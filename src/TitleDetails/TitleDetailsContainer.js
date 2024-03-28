@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import { useCallback, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
@@ -20,18 +20,19 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import {
-  titleResource,
-} from '../common/resources';
+import { titleResource } from '../common/resources';
 import {
   usePieceMutator,
   useQuickReceive,
+  useUnreceive,
 } from '../common/hooks';
 import {
   handleCommonErrors,
   handleReceiveErrorResponse,
   getPieceById,
+  handleUnrecieveErrorResponse,
 } from '../common/utils';
+import { EXPECTED_PIECES_SEARCH_VALUE } from './constants';
 import TitleDetails from './TitleDetails';
 
 const TitleDetailsContainer = ({ location, history, mutator, match }) => {
@@ -47,12 +48,13 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   const { mutatePiece } = usePieceMutator();
   const { quickReceive } = useQuickReceive();
+  const { unreceive } = useUnreceive();
 
   const hasPieces = useCallback((lineId, status) => (
     mutator.pieces.GET({
       params: {
         limit: 1,
-        query: `titleId==${titleId} and poLineId==${lineId} and receivingStatus==${status}`,
+        query: `titleId==${titleId} and poLineId==${lineId} and receivingStatus==(${status})`,
       },
     })
       .then(data => Boolean(data.length))
@@ -61,22 +63,20 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [titleId]);
 
-  const fetchReceivingResources = useCallback(
-    (lineId) => {
-      setPiecesExistance();
+  const fetchReceivingResources = useCallback((lineId) => {
+    setPiecesExistance();
 
-      Promise.all([
-        hasPieces(lineId, PIECE_STATUS.expected),
-        hasPieces(lineId, PIECE_STATUS.received),
-      ])
-        .then(existances => setPiecesExistance(existances.reduce(
-          (acc, existance) => ({ ...acc, ...existance, key: new Date() }),
-          {},
-        )))
-        .catch(() => setPiecesExistance({}));
-    },
-    [hasPieces],
-  );
+    return Promise.all([
+      hasPieces(lineId, EXPECTED_PIECES_SEARCH_VALUE),
+      hasPieces(lineId, PIECE_STATUS.received),
+      hasPieces(lineId, PIECE_STATUS.unreceivable),
+    ])
+      .then(existances => setPiecesExistance(existances.reduce(
+        (acc, existance) => ({ ...acc, ...existance, key: new Date() }),
+        {},
+      )))
+      .catch(() => setPiecesExistance({}));
+  }, [hasPieces]);
 
   const getHoldingsItemsAndPieces = useCallback((holdingId, params = {}) => {
     const holdingsPieces = mutator.pieces.GET({
@@ -104,7 +104,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
         items: itemsInHolding,
       }))
       .catch(() => ({}));
-  }, []);
+  }, [mutator.items, mutator.pieces]);
 
   useEffect(
     () => {
@@ -267,6 +267,18 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     ).finally(() => fetchReceivingResources(poLine.id));
   }, [fetchReceivingResources, poLine.id, showCallout, mutatePiece]);
 
+  const onUnreceive = useCallback((pieces) => {
+    return unreceive(pieces)
+      .then(async () => {
+        await fetchReceivingResources(poLine.id);
+        showCallout({
+          messageId: 'ui-receiving.title.actions.unreceive.success',
+          type: 'success',
+        });
+      })
+      .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems: pieces }));
+  }, [fetchReceivingResources, poLine.id, showCallout, unreceive]);
+
   if (isLoading || !(locations || vendorsMap)) {
     return (
       <LoadingPane
@@ -291,6 +303,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       vendorsMap={vendorsMap}
       getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
       getPieceValues={getPieceById(mutator.orderPieces)}
+      onUnreceive={onUnreceive}
     />
   );
 };

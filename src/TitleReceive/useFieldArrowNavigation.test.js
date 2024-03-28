@@ -3,7 +3,7 @@ import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
 const fieldSetName = 'pieces';
-const getFieldName = idx => `${fieldSetName}[${idx}].caption`;
+const getFieldName = idx => `${fieldSetName}[${idx}].displaySummary`;
 const createEvent = options => ({
   preventDefault: jest.fn(),
   stopPropagation: jest.fn(),

@@ -14,7 +14,7 @@ export const EXPORT_TITLE_FIELDS = {
 };
 
 export const EXPORT_PIECE_FIELDS = {
-  caption: 'Caption',
+  displaySummary: 'Display summary',
   copyNumber: 'Copy number',
   enumeration: 'Enumeration',
   chronology: 'Chronology',
@@ -27,6 +27,9 @@ export const EXPORT_PIECE_FIELDS = {
   supplement: 'Supplement',
   displayOnHolding: 'Display on holding',
   itemHRID: 'Item HRID',
+  receivingStatus: 'Receiving status',
+  internalNote: 'Internal note',
+  externalNote: 'External note',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {

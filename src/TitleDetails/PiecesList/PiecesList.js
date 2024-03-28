@@ -1,6 +1,5 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { noop } from 'lodash';
 
 import {
@@ -12,31 +11,23 @@ import {
   acqRowFormatter,
   FolioFormattedDate,
   PrevNextPagination,
-  PIECE_FORMAT_LABELS,
   useSorting,
 } from '@folio/stripes-acq-components';
 
 import {
+  PIECE_COLUMN_BASE_FORMATTER,
   PIECE_COLUMNS,
   PIECE_COLUMN_MAPPING,
   SORTABLE_COLUMNS,
 } from '../constants';
 
 const formatter = {
-  [PIECE_COLUMNS.copyNumber]: piece => piece.copyNumber || <NoValue />,
-  [PIECE_COLUMNS.caption]: piece => piece.caption || <NoValue />,
+  ...PIECE_COLUMN_BASE_FORMATTER,
   [PIECE_COLUMNS.enumeration]: piece => piece.enumeration || <NoValue />,
   [PIECE_COLUMNS.chronology]: piece => piece.chronology || <NoValue />,
-  [PIECE_COLUMNS.format]: piece => PIECE_FORMAT_LABELS[piece.format],
   [PIECE_COLUMNS.receiptDate]: piece => <FolioFormattedDate value={piece.receiptDate} />,
   [PIECE_COLUMNS.receivedDate]: piece => <FolioFormattedDate value={piece.receivedDate} utc={false} />,
   [PIECE_COLUMNS.comment]: piece => piece.comment || <NoValue />,
-  [PIECE_COLUMNS.barcode]: piece => piece.barcode || <NoValue />,
-  [PIECE_COLUMNS.request]: piece => (
-    piece.request
-      ? <FormattedMessage id="ui-receiving.piece.request.isOpened" />
-      : <NoValue />
-  ),
   selection: () => <Icon icon="caret-right" />,
   arrow: (record) => <Icon data-testid={`arrow-${record.rowIndex}`} icon="caret-right" />,
 };

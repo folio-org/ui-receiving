@@ -16,8 +16,9 @@ const defaultProps = {
   toggleColumn: jest.fn(),
 };
 
-const renderTitleDetailsExpectedActions = (props = defaultProps) => (render(
+const renderTitleDetailsExpectedActions = (props = {}) => (render(
   <TitleDetailsExpectedActions
+    {...defaultProps}
     {...props}
   />,
 ));
@@ -44,7 +45,7 @@ describe('TitleDetailsExpectedActions', () => {
 
   it('should call openAddPieceModal when add piece button is pressed and actions are not disabled', async () => {
     defaultProps.openAddPieceModal.mockClear();
-    renderTitleDetailsExpectedActions();
+    renderTitleDetailsExpectedActions({ canAddPiece: true });
 
     await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
     await user.click(screen.getByTestId('add-piece-button'));

@@ -17,6 +17,15 @@ jest.mock('@folio/stripes-components/lib/Commander', () => ({
   expandAllSections: jest.fn(),
   collapseAllSections: jest.fn(),
 }));
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useAcqRestrictions: jest.fn().mockReturnValue({
+    restrictions: {
+      protectUpdate: false,
+    },
+    isLoading: false,
+  }),
+}));
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
   useHistory: jest.fn(),
@@ -71,6 +80,35 @@ describe('TitleForm', () => {
 
     expect(claimingActiveField).not.toBeChecked();
     expect(claimingIntervalField).toHaveValue(null);
+  });
+
+  it('should validate \'Claiming interval\' field', async () => {
+    renderTitleForm();
+
+    const claimingActiveField = screen.getByRole('checkbox', { name: 'ui-receiving.title.claimingActive' });
+    const claimingIntervalField = screen.getByLabelText('ui-receiving.title.claimingInterval');
+
+    // Shouldn't be required if "Claiming active" unchecked
+    expect(claimingIntervalField).not.toBeRequired();
+    expect(claimingIntervalField).toBeValid();
+
+    await user.click(claimingActiveField);
+    expect(claimingIntervalField).toBeRequired();
+    expect(claimingIntervalField).not.toBeValid();
+
+    await user.type(claimingIntervalField, '-2');
+    expect(claimingIntervalField).toHaveValue(-2);
+    expect(claimingIntervalField).not.toBeValid();
+
+    await user.clear(claimingIntervalField);
+    await user.type(claimingIntervalField, '0');
+    expect(claimingIntervalField).toHaveValue(0);
+    expect(claimingIntervalField).not.toBeValid();
+
+    await user.clear(claimingIntervalField);
+    await user.type(claimingIntervalField, '69');
+    expect(claimingIntervalField).toHaveValue(69);
+    expect(claimingIntervalField).toBeValid();
   });
 
   describe('Close form', () => {
