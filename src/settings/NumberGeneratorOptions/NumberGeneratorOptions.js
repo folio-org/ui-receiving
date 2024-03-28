@@ -6,6 +6,7 @@ import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { ConfigManager } from '@folio/stripes/smart-components';
 
 import NumberGeneratorOptionsForm from './NumberGeneratorOptionsForm';
+import { NUM_GEN_CONFIG_SETTING } from '../../common/constants';
 
 class NumberGeneratorOptions extends React.Component {
   static propTypes = {
@@ -46,7 +47,7 @@ class NumberGeneratorOptions extends React.Component {
   render() {
     return (
       <this.connectedConfigManager
-        configName="number_generator"
+        configName={NUM_GEN_CONFIG_SETTING}
         getInitialValues={this.getInitialValues}
         label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions" />}
         moduleName="RECEIVING"

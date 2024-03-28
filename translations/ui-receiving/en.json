@@ -63,6 +63,13 @@
   "numberGenerator.generateAccessionAndCallNumber": "Generate accession and call number",
   "numberGenerator.generateAccessionAndCallNumberWarning": "Both accession number and call number will be filled from this action, using a sequence from the Inventory: Accession number generator.",
   "numberGenerator.generateItemBarcode": "Generate item barcode",
+  "numberGenerator.generateForRow": "Generate numbers for row {rowIndex}",
+  "numberGenerator.generateNumbers": "Generate numbers",
+  "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead.",
+  "numberGenerator.accessionNumberSequence": "Accession number sequence",
+  "numberGenerator.barcodeSequence": "Barcode sequence",
+  "numberGenerator.callNumberSequence": "Call number sequence",
+  "numberGenerator.accessionAndCallNumberSequence": "Accession and call number sequence",
 
   "search.keyword": "Keyword",
   "search.title": "Title (Receiving titles)",

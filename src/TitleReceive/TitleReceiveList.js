@@ -1,7 +1,7 @@
 import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
-import { useCallback, useMemo } from 'react';
-import { Field } from 'react-final-form';
+import { useCallback, useMemo, useState } from 'react';
+import { Field, useForm } from 'react-final-form';
 import {
   FormattedMessage,
   useIntl,
@@ -9,11 +9,13 @@ import {
 
 import {
   Checkbox,
+  IconButton,
   InfoPopover,
   MultiColumnList,
   NoValue,
   TextArea,
   TextField,
+  Tooltip,
 } from '@folio/stripes/components';
 import {
   FieldDatepickerFinal,
@@ -29,6 +31,10 @@ import {
   PIECE_COLUMNS,
 } from '../TitleDetails/constants';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
+
+import NumberGeneratorModal from './NumberGeneratorModal';
+import { ACCESSION_NUMBER_SETTING, BARCODE_SETTING, CALL_NUMBER_SETTING, NUM_GEN_CONFIG_SETTING, USE_BOTH, USE_GENERATOR } from '../common/constants';
+import { useConfigurationQuery } from '../common/hooks';
 
 const visibleColumns = [
   'checked',
@@ -50,11 +56,16 @@ const visibleColumns = [
   PIECE_COLUMNS.supplement,
 ];
 
+const ACCESSION_NUMBER_FIELD_NAME = (field, index) => `${field}[${index}].accessionNumber`;
+const BARCODE_FIELD_NAME = (field, index) => `${field}[${index}].barcode`;
+const CALL_NUMBER_FIELD_NAME = (field, index) => `${field}[${index}].callNumber`;
+
 const columnWidths = {
   location: '250px',
 };
 
 const getResultFormatter = ({
+  configs,
   createInventoryValues,
   field,
   fieldsValue,
@@ -63,6 +74,7 @@ const getResultFormatter = ({
   locations,
   poLineLocationIds,
   selectLocation,
+  setNumberGeneratorModalRecord,
 }) => ({
   checked: record => (
     <Field
@@ -111,9 +123,9 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.accessionNumber]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].accessionNumber`}
+      name={ACCESSION_NUMBER_FIELD_NAME(field, record.rowIndex)}
       component={TextField}
-      disabled={!record.itemId && !record.isCreateItem}
+      disabled={(!record.itemId && !record.isCreateItem) || configs[ACCESSION_NUMBER_SETTING] === USE_GENERATOR}
       marginBottom0
       fullWidth
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.accessionNumber' })}
@@ -121,9 +133,9 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.barcode]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].barcode`}
+      name={BARCODE_FIELD_NAME(field, record.rowIndex)}
       component={TextField}
-      disabled={!record.itemId && !record.isCreateItem}
+      disabled={(!record.itemId && !record.isCreateItem) || configs[BARCODE_SETTING] === USE_GENERATOR}
       marginBottom0
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.barcode' })}
       fullWidth
@@ -172,9 +184,9 @@ const getResultFormatter = ({
   [PIECE_COLUMNS.itemStatus]: ({ itemStatus }) => getItemStatusLabel(itemStatus),
   [PIECE_COLUMNS.callNumber]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].callNumber`}
+      name={CALL_NUMBER_FIELD_NAME(field, record.rowIndex)}
       component={TextField}
-      disabled={!record.itemId && !record.isCreateItem}
+      disabled={(!record.itemId && !record.isCreateItem) || configs[CALL_NUMBER_SETTING] === USE_GENERATOR}
       marginBottom0
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.callNumber' })}
       fullWidth
@@ -202,6 +214,27 @@ const getResultFormatter = ({
       type="checkbox"
     />
   ),
+  actions: record => (
+    <Tooltip
+      id={`generate-numbers-btn-${record.rowIndex}`}
+      text={
+        <FormattedMessage
+          id="ui-receiving.numberGenerator.generateForRow"
+          values={{ rowIndex: record.rowIndex + 1 }}
+        />
+      }
+    >
+      {({ ref, ariaIds }) => (
+        <IconButton
+          ref={ref}
+          aria-labelledby={ariaIds.text}
+          disabled={(!record.itemId && !record.isCreateItem)}
+          icon="number-generator"
+          onClick={() => setNumberGeneratorModalRecord(record)}
+        />
+      )}
+    </Tooltip>
+  ),
 });
 
 const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
@@ -219,6 +252,7 @@ const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
     </>
   ),
   ...PIECE_COLUMN_MAPPING,
+  actions: <FormattedMessage id="ui-receiving.button.actions" />,
 });
 
 export const TitleReceiveList = ({
@@ -226,12 +260,17 @@ export const TitleReceiveList = ({
   props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll, locations, poLineLocationIds },
 }) => {
   const intl = useIntl();
+  const { change } = useForm();
+  const { configs } = useConfigurationQuery(NUM_GEN_CONFIG_SETTING);
+
+  const [numberGeneratorModalRecord, setNumberGeneratorModalRecord] = useState();
 
   const field = fields.name;
 
   const { onKeyDown: onFieldKeyDown } = useFieldArrowNavigation(field, []);
 
   const cellFormatters = useMemo(() => getResultFormatter({
+    configs,
     createInventoryValues,
     field,
     fieldsValue: fields.value,
@@ -240,7 +279,9 @@ export const TitleReceiveList = ({
     locations,
     poLineLocationIds,
     selectLocation,
+    setNumberGeneratorModalRecord,
   }), [
+    configs,
     createInventoryValues,
     field,
     fields.value,
@@ -267,18 +308,53 @@ export const TitleReceiveList = ({
     onKeyDown: onFieldKeyDown,
   }), [onFieldKeyDown]);
 
+  const visibleColumnsWithActions = useMemo(() => {
+    const vcwa = [...visibleColumns];
+
+    if (
+      configs[ACCESSION_NUMBER_SETTING] === USE_GENERATOR ||
+      configs[ACCESSION_NUMBER_SETTING] === USE_BOTH ||
+      configs[BARCODE_SETTING] === USE_GENERATOR ||
+      configs[BARCODE_SETTING] === USE_BOTH ||
+      configs[CALL_NUMBER_SETTING] === USE_GENERATOR ||
+      configs[CALL_NUMBER_SETTING] === USE_BOTH
+    ) {
+      // Actions only valid if at least one of the number generator settings is useGenerator or useBoth
+      vcwa.push('actions');
+    }
+
+    return vcwa;
+  }, [configs]);
+
   return (
-    <MultiColumnList
-      rowProps={rowProps}
-      columnMapping={columnMapping}
-      columnWidths={columnWidths}
-      contentData={fields.value}
-      formatter={cellFormatters}
-      id="title-receive-list"
-      interactive={false}
-      totalCount={fields.value.length}
-      visibleColumns={visibleColumns}
-    />
+    <>
+      <MultiColumnList
+        rowProps={rowProps}
+        columnMapping={columnMapping}
+        columnWidths={columnWidths}
+        contentData={fields.value}
+        formatter={cellFormatters}
+        id="title-receive-list"
+        interactive={false}
+        totalCount={fields.value.length}
+        visibleColumns={visibleColumnsWithActions}
+      />
+      <NumberGeneratorModal
+        configs={configs}
+        numberGeneratorModalRecord={numberGeneratorModalRecord}
+        open={!!numberGeneratorModalRecord}
+        onClose={() => setNumberGeneratorModalRecord()}
+        onGenerateAccessionNumber={val => {
+          change(ACCESSION_NUMBER_FIELD_NAME(field, numberGeneratorModalRecord.rowIndex), val);
+        }}
+        onGenerateBarcode={val => {
+          change(BARCODE_FIELD_NAME(field, numberGeneratorModalRecord.rowIndex), val);
+        }}
+        onGenerateCallNumber={val => {
+          change(CALL_NUMBER_FIELD_NAME(field, numberGeneratorModalRecord.rowIndex), val);
+        }}
+      />
+    </>
   );
 };
 

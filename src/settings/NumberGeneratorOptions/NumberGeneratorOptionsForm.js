@@ -3,12 +3,21 @@ import { Field, useFormState } from 'react-final-form';
 
 import { Button, Checkbox, Col, InfoPopover, Label, Layout, MessageBanner, RadioButton, Row } from '@folio/stripes/components';
 import css from './NumberGeneratorOptions.css';
+import {
+  ACCESSION_NUMBER_SETTING,
+  BARCODE_SETTING,
+  CALL_NUMBER_SETTING,
+  USE_ACCESSION_NUMBER_FOR_CALL_NUMBER,
+  USE_BOTH,
+  USE_GENERATOR,
+  USE_TEXT_FIELD,
+} from '../../common/constants';
 
 const NumberGeneratorOptionsForm = () => {
   const { values } = useFormState();
   const disableUseForBothFields =
-    (values?.accessionNumberGeneratorSetting ?? 'useTextField') === 'useTextField' ||
-    (values?.callNumberGeneratorSetting ?? 'useTextField') === 'useTextField';
+    (values?.accessionNumberGeneratorSetting ?? USE_TEXT_FIELD) === USE_TEXT_FIELD ||
+    (values?.callNumberGeneratorSetting ?? USE_TEXT_FIELD) === USE_TEXT_FIELD;
 
   const disableAccessionNumberAndCallNumberOffOptions = !!values?.useAccessionNumberForCallNumber;
 
@@ -31,27 +40,27 @@ const NumberGeneratorOptionsForm = () => {
             </Label>
             <Field
               component={RadioButton}
-              id="useTextFieldBarcode"
+              id={`${USE_TEXT_FIELD}Barcode`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useTextFieldForBarcode" />}
-              name="barcodeGeneratorSetting"
+              name={BARCODE_SETTING}
               type="radio"
-              value="useTextField"
+              value={USE_TEXT_FIELD}
             />
             <Field
               component={RadioButton}
-              id="useBothBarcode"
+              id={`${USE_BOTH}Barcode`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useBothForBarcode" />}
-              name="barcodeGeneratorSetting"
+              name={BARCODE_SETTING}
               type="radio"
-              value="useBoth"
+              value={USE_BOTH}
             />
             <Field
               component={RadioButton}
-              id="useGeneratorBarcode"
+              id={`${USE_GENERATOR}Barcode`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useGeneratorForBarcode" />}
-              name="barcodeGeneratorSetting"
+              name={BARCODE_SETTING}
               type="radio"
-              value="useGenerator"
+              value={USE_GENERATOR}
             />
           </div>
         </Col>
@@ -65,31 +74,31 @@ const NumberGeneratorOptionsForm = () => {
             <Field
               component={RadioButton}
               disabled={disableAccessionNumberAndCallNumberOffOptions}
-              id="useTextFieldAccessionNumber"
+              id={`${USE_TEXT_FIELD}AccessionNumber`}
               label={
                 <div className={disableAccessionNumberAndCallNumberOffOptions ? css.greyLabel : null}>
                   <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useTextFieldForAccessionNumber" />
                 </div>
               }
-              name="accessionNumberGeneratorSetting"
+              name={ACCESSION_NUMBER_SETTING}
               type="radio"
-              value="useTextField"
+              value={USE_TEXT_FIELD}
             />
             <Field
               component={RadioButton}
-              id="useBothAccessionNumber"
+              id={`${USE_BOTH}AccessionNumber`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useBothForAccessionNumber" />}
-              name="accessionNumberGeneratorSetting"
+              name={ACCESSION_NUMBER_SETTING}
               type="radio"
-              value="useBoth"
+              value={USE_BOTH}
             />
             <Field
               component={RadioButton}
-              id="useGeneratorAccessionNumber"
+              id={`${USE_GENERATOR}AccessionNumber`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useGeneratorForAccessionNumber" />}
-              name="accessionNumberGeneratorSetting"
+              name={ACCESSION_NUMBER_SETTING}
               type="radio"
-              value="useGenerator"
+              value={USE_GENERATOR}
             />
           </div>
         </Col>
@@ -104,31 +113,31 @@ const NumberGeneratorOptionsForm = () => {
               className={disableAccessionNumberAndCallNumberOffOptions ? css.greyLabel : null}
               component={RadioButton}
               disabled={disableAccessionNumberAndCallNumberOffOptions}
-              id="useTextFieldCallNumber"
+              id={`${USE_TEXT_FIELD}CallNumber`}
               label={
                 <div className={disableAccessionNumberAndCallNumberOffOptions ? css.greyLabel : null}>
                   <FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useTextFieldForCallNumber" />
                 </div>
               }
-              name="callNumberGeneratorSetting"
+              name={CALL_NUMBER_SETTING}
               type="radio"
-              value="useTextField"
+              value={USE_TEXT_FIELD}
             />
             <Field
               component={RadioButton}
-              id="useBothCallNumber"
+              id={`${USE_BOTH}CallNumber`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useBothForCallNumber" />}
-              name="callNumberGeneratorSetting"
+              name={CALL_NUMBER_SETTING}
               type="radio"
-              value="useBoth"
+              value={USE_BOTH}
             />
             <Field
               component={RadioButton}
-              id="useGeneratorCallNumber"
+              id={`${USE_GENERATOR}CallNumber`}
               label={<FormattedMessage id="ui-receiving.settings.numberGeneratorOptions.useGeneratorForCallNumber" />}
-              name="callNumberGeneratorSetting"
+              name={CALL_NUMBER_SETTING}
               type="radio"
-              value="useGenerator"
+              value={USE_GENERATOR}
             />
           </div>
         </Col>
@@ -171,7 +180,7 @@ const NumberGeneratorOptionsForm = () => {
                   />
                 </>
               }
-              name="useAccessionNumberForCallNumber"
+              name={USE_ACCESSION_NUMBER_FOR_CALL_NUMBER}
               type="checkbox"
             />
             {disableUseForBothFields &&
