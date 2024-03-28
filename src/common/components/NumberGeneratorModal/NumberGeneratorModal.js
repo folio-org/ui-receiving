@@ -26,11 +26,11 @@ import {
   USE_ACCESSION_NUMBER_FOR_CALL_NUMBER,
   USE_BOTH,
   USE_GENERATOR,
-} from '../../common/constants';
+} from '../../constants';
 
 const NumberGeneratorModal = ({
   configs,
-  numberGeneratorModalRecord,
+  modalLabel,
   onClose,
   onGenerateAccessionNumber,
   onGenerateBarcode,
@@ -73,14 +73,17 @@ const NumberGeneratorModal = ({
     // Only generate the numbers which have a selected sequence
     if (selectedAccessionNumberSequence) {
       generateAccessionNumber();
+      setSelectedAccessionNumberSequence();
     }
 
     if (selectedBarcodeSequence) {
       generateBarcode();
+      setSelectedBarcodeSequence();
     }
 
     if (selectedCallNumberSequence) {
       generateCallNumber();
+      setSelectedCallNumberSequence();
     }
   };
 
@@ -160,12 +163,7 @@ const NumberGeneratorModal = ({
           </Button>
         </ModalFooter>
       }
-      label={
-        <FormattedMessage
-          id="ui-receiving.numberGenerator.generateForRow"
-          values={{ rowIndex: (numberGeneratorModalRecord?.rowIndex ?? 0) + 1 }}
-        />
-      }
+      label={modalLabel}
       onClose={onClose}
       open={open}
     >
@@ -194,7 +192,7 @@ NumberGeneratorModal.propTypes = {
     [BARCODE_SETTING]: PropTypes.string,
     [CALL_NUMBER_SETTING]: PropTypes.string,
   }).isRequired,
-  numberGeneratorModalRecord: PropTypes.object.isRequired,
+  modalLabel: PropTypes.node.isRequired,
   onClose: PropTypes.func.isRequired,
   onGenerateAccessionNumber: PropTypes.func.isRequired,
   onGenerateBarcode: PropTypes.func.isRequired,

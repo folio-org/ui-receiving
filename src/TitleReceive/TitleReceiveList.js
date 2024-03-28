@@ -25,14 +25,13 @@ import {
   PIECE_FORMAT_LABELS,
 } from '@folio/stripes-acq-components';
 
-import { CreateItemField } from '../common/components';
+import { CreateItemField, NumberGeneratorButton, NumberGeneratorModal } from '../common/components';
 import {
   PIECE_COLUMN_MAPPING,
   PIECE_COLUMNS,
 } from '../TitleDetails/constants';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
-import NumberGeneratorModal from './NumberGeneratorModal';
 import { ACCESSION_NUMBER_SETTING, BARCODE_SETTING, CALL_NUMBER_SETTING, NUM_GEN_CONFIG_SETTING, USE_BOTH, USE_GENERATOR } from '../common/constants';
 import { useConfigurationQuery } from '../common/hooks';
 
@@ -215,25 +214,17 @@ const getResultFormatter = ({
     />
   ),
   actions: record => (
-    <Tooltip
-      id={`generate-numbers-btn-${record.rowIndex}`}
-      text={
+    <NumberGeneratorButton
+      disabled={(!record.itemId && !record.isCreateItem)}
+      onClick={() => setNumberGeneratorModalRecord(record)}
+      tooltipId={`generate-numbers-btn-${record.rowIndex}`}
+      tooltipLabel={
         <FormattedMessage
           id="ui-receiving.numberGenerator.generateForRow"
           values={{ rowIndex: record.rowIndex + 1 }}
         />
       }
-    >
-      {({ ref, ariaIds }) => (
-        <IconButton
-          ref={ref}
-          aria-labelledby={ariaIds.text}
-          disabled={(!record.itemId && !record.isCreateItem)}
-          icon="number-generator"
-          onClick={() => setNumberGeneratorModalRecord(record)}
-        />
-      )}
-    </Tooltip>
+    />
   ),
 });
 
@@ -341,7 +332,12 @@ export const TitleReceiveList = ({
       />
       <NumberGeneratorModal
         configs={configs}
-        numberGeneratorModalRecord={numberGeneratorModalRecord}
+        modalLabel={
+          <FormattedMessage
+            id="ui-receiving.numberGenerator.generateForRow"
+            values={{ rowIndex: (numberGeneratorModalRecord?.rowIndex ?? 0) + 1 }}
+          />
+        }
         open={!!numberGeneratorModalRecord}
         onClose={() => setNumberGeneratorModalRecord()}
         onGenerateAccessionNumber={val => {
