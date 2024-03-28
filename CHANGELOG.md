@@ -2,6 +2,9 @@
 
 ## 5.1.0 (IN PROGRESS)
 
+* UIREC-269: Receiving Settings options for using the number generator for item barcode, accession number and call number
+* UIREC-279: Creating item barcode, accession number, call number using number generators in Receiving App
+* UIREC-284: Settings options for number generator - accessing number equals call number (Receiving)
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
 * Visual padding in Third Pane of Receiving App. Refs UIREC-338.
 
