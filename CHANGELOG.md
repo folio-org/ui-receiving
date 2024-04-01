@@ -3,6 +3,10 @@
 ## 5.1.0 (IN PROGRESS)
 
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
+
+## [5.0.1](https://github.com/folio-org/ui-receiving/tree/v5.0.1) (2024-04-01)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.0...v5.0.1)
+
 * Visual padding in Third Pane of Receiving App. Refs UIREC-338.
 
 ## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-21)
