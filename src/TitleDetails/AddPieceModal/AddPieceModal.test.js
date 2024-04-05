@@ -2,7 +2,12 @@ import moment from 'moment';
 import { MemoryRouter } from 'react-router-dom';
 
 import user from '@folio/jest-config-stripes/testing-library/user-event';
-import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 import {
   FieldInventory,
@@ -157,6 +162,44 @@ describe('AddPieceModal', () => {
       });
 
       expect(screen.queryByText('ui-receiving.piece.displayOnHolding')).toBeNull();
+    });
+
+    it('should display `Display to public` checkbox', async () => {
+      renderAddPieceModal({
+        createInventoryValues: { [PIECE_FORMAT.physical]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
+        initialValues: {
+          format: PIECE_FORMAT.physical,
+        },
+      });
+
+      expect(screen.getByText('ui-receiving.piece.displayOnHolding')).toBeDefined();
+
+      await user.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
+
+      const displayToPublic = await screen.findByLabelText('ui-receiving.piece.displayToPublic');
+
+      expect(displayToPublic).toBeInTheDocument();
+    });
+
+    it('should hide `Display to public` checkbox', async () => {
+      renderAddPieceModal({
+        createInventoryValues: { [PIECE_FORMAT.physical]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
+        initialValues: {
+          format: PIECE_FORMAT.physical,
+          displayOnHolding: true,
+          displayToPublic: true,
+        },
+      });
+
+      const displayOnHolding = screen.getByLabelText('ui-receiving.piece.displayOnHolding');
+
+      await user.click(displayOnHolding);
+
+      await waitFor(() => {
+        expect(displayOnHolding).not.toBeChecked();
+      });
+
+      expect(screen.queryByLabelText('ui-receiving.piece.displayToPublic')).toBeNull();
     });
   });
 
