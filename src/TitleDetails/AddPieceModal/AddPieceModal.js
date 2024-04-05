@@ -135,7 +135,10 @@ const AddPieceModal = ({
   const onChangeDisplayOnHolding = ({ target: { checked } }) => {
     change('displayOnHolding', checked);
 
-    if (!checked) change('discoverySuppress', checked);
+    if (!checked) {
+      change('discoverySuppress', checked);
+      change('displayToPublic', checked);
+    }
   };
 
   const checkHoldingAbandonment = useCallback((holdingId) => {
