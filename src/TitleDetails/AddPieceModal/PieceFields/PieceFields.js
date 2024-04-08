@@ -37,7 +37,7 @@ export const PieceFields = ({
 
   const isNotReceived = values.receivingStatus !== PIECE_STATUS.received;
   const isLocationRequired = includes(createInventoryValues[values.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
-  const showDisplayToPublic = values.displayOnHolding;
+  const isDisplayToPublic = values.displayOnHolding;
 
   // https://issues.folio.org/browse/UIREC-208
   const isDiscoverySuppressEnabled = false;
@@ -192,20 +192,20 @@ export const PieceFields = ({
         {isLocationRequired && (
           <>
             {isDiscoverySuppressEnabled && (
-            <Col
-              xs={6}
-              md={3}
-            >
-              <Field
-                component={Checkbox}
-                disabled={!values.displayOnHolding}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
-                name="discoverySuppress"
-                type="checkbox"
-                vertical
-              />
-            </Col>
+              <Col
+                xs={6}
+                md={3}
+              >
+                <Field
+                  component={Checkbox}
+                  disabled={!values.displayOnHolding}
+                  fullWidth
+                  label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
+                  name="discoverySuppress"
+                  type="checkbox"
+                  vertical
+                />
+              </Col>
             )}
 
             <Col
@@ -224,7 +224,7 @@ export const PieceFields = ({
             </Col>
 
             {
-              showDisplayToPublic && (
+              isDisplayToPublic && (
                 <Col
                   xs={6}
                   md={3}
