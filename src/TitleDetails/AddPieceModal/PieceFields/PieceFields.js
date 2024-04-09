@@ -37,6 +37,7 @@ export const PieceFields = ({
 
   const isNotReceived = values.receivingStatus !== PIECE_STATUS.received;
   const isLocationRequired = includes(createInventoryValues[values.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
+  const isDisplayToPublic = values.displayOnHolding;
 
   // https://issues.folio.org/browse/UIREC-208
   const isDiscoverySuppressEnabled = false;
@@ -190,21 +191,6 @@ export const PieceFields = ({
 
         {isLocationRequired && (
           <>
-            <Col
-              xs={6}
-              md={3}
-            >
-              <Field
-                component={Checkbox}
-                fullWidth
-                label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
-                name="displayOnHolding"
-                type="checkbox"
-                vertical
-                onChange={onChangeDisplayOnHolding}
-              />
-            </Col>
-
             {isDiscoverySuppressEnabled && (
               <Col
                 xs={6}
@@ -221,6 +207,39 @@ export const PieceFields = ({
                 />
               </Col>
             )}
+
+            <Col
+              xs={6}
+              md={3}
+            >
+              <Field
+                component={Checkbox}
+                fullWidth
+                label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
+                name="displayOnHolding"
+                type="checkbox"
+                vertical
+                onChange={onChangeDisplayOnHolding}
+              />
+            </Col>
+
+            {
+              isDisplayToPublic && (
+                <Col
+                  xs={6}
+                  md={3}
+                >
+                  <Field
+                    component={Checkbox}
+                    fullWidth
+                    label={<FormattedMessage id="ui-receiving.piece.displayToPublic" />}
+                    name="displayToPublic"
+                    type="checkbox"
+                    vertical
+                  />
+                </Col>
+              )
+            }
           </>
         )}
       </Row>

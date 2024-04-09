@@ -3,6 +3,7 @@
 ## 5.1.0 (IN PROGRESS)
 
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
+* Add "Display to public" toggle on piece form. Refs UIREC-333.
 * Add additional receiving filters to support reporting requirements. Refs UIREC-341.
 
 ## [5.0.1](https://github.com/folio-org/ui-receiving/tree/v5.0.1) (2024-04-01)
