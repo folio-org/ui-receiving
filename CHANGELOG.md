@@ -6,6 +6,11 @@
 * UIREC-279: Creating item barcode, accession number, call number using number generators in Receiving App
 * UIREC-284: Settings options for number generator - accessing number equals call number (Receiving)
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
+* Add "Display to public" toggle on piece form. Refs UIREC-333.
+
+## [5.0.1](https://github.com/folio-org/ui-receiving/tree/v5.0.1) (2024-04-01)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.0...v5.0.1)
+
 * Visual padding in Third Pane of Receiving App. Refs UIREC-338.
 
 ## [5.0.0](https://github.com/folio-org/ui-receiving/tree/v5.0.0) (2024-03-21)
