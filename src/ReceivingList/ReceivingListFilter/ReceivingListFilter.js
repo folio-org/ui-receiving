@@ -16,6 +16,7 @@ import {
   ORDER_TYPE_OPTIONS,
   PIECE_STATUS_OPTIONS,
   PluggableOrganizationFilter,
+  PluggableUserFilter,
 } from '@folio/stripes-acq-components';
 
 import { FILTERS } from '../constants';
@@ -143,6 +144,78 @@ const ReceivingListFilter = ({
         activeFilters={activeFilters[FILTERS.RECEIPT_DUE]}
         labelId="ui-receiving.title.receiptDue"
         name={FILTERS.RECEIPT_DUE}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <PluggableUserFilter
+        id={FILTERS.CREATED_BY}
+        activeFilters={activeFilters[FILTERS.CREATED_BY]}
+        labelId="ui-receiving.filter.createdBy"
+        name={FILTERS.CREATED_BY}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <AcqDateRangeFilter
+        id={FILTERS.DATE_CREATED}
+        activeFilters={activeFilters[FILTERS.DATE_CREATED]}
+        labelId="ui-receiving.filter.dateCreated"
+        name={FILTERS.DATE_CREATED}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <PluggableUserFilter
+        id={FILTERS.UPDATED_BY}
+        activeFilters={activeFilters[FILTERS.UPDATED_BY]}
+        labelId="ui-receiving.filter.updatedBy"
+        name={FILTERS.UPDATED_BY}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <AcqDateRangeFilter
+        id={FILTERS.DATE_UPDATED}
+        activeFilters={activeFilters[FILTERS.DATE_UPDATED]}
+        labelId="ui-receiving.filter.dateUpdated"
+        name={FILTERS.DATE_UPDATED}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <PluggableUserFilter
+        id={FILTERS.PIECE_CREATED_BY}
+        activeFilters={activeFilters[FILTERS.PIECE_CREATED_BY]}
+        labelId="ui-receiving.filter.piece.createdBy"
+        name={FILTERS.PIECE_CREATED_BY}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <AcqDateRangeFilter
+        id={FILTERS.PIECE_DATE_CREATED}
+        activeFilters={activeFilters[FILTERS.PIECE_DATE_CREATED]}
+        labelId="ui-receiving.filter.piece.dateCreated"
+        name={FILTERS.PIECE_DATE_CREATED}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <PluggableUserFilter
+        id={FILTERS.PIECE_UPDATED_BY}
+        activeFilters={activeFilters[FILTERS.PIECE_UPDATED_BY]}
+        labelId="ui-receiving.filter.piece.updatedBy"
+        name={FILTERS.PIECE_UPDATED_BY}
+        onChange={adaptedApplyFilters}
+        disabled={disabled}
+      />
+
+      <AcqDateRangeFilter
+        id={FILTERS.PIECE_DATE_UPDATED}
+        activeFilters={activeFilters[FILTERS.PIECE_DATE_UPDATED]}
+        labelId="ui-receiving.filter.piece.dateUpdated"
+        name={FILTERS.PIECE_DATE_UPDATED}
         onChange={adaptedApplyFilters}
         disabled={disabled}
       />

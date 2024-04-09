@@ -95,6 +95,10 @@ export const buildTitlesQuery = (queryParams) => {
       return getKeywordQuery(query);
     },
     {
+      [FILTERS.DATE_CREATED]: buildDateRangeQuery.bind(null, [FILTERS.DATE_CREATED]),
+      [FILTERS.DATE_UPDATED]: buildDateRangeQuery.bind(null, [FILTERS.DATE_UPDATED]),
+      [FILTERS.PIECE_DATE_CREATED]: buildDateRangeQuery.bind(null, [FILTERS.PIECE_DATE_CREATED]),
+      [FILTERS.PIECE_DATE_UPDATED]: buildDateRangeQuery.bind(null, [FILTERS.PIECE_DATE_UPDATED]),
       [FILTERS.EXPECTED_RECEIPT_DATE]: buildDateRangeQuery.bind(null, [FILTERS.EXPECTED_RECEIPT_DATE]),
       [FILTERS.RECEIVED_DATE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIVED_DATE]),
       [FILTERS.RECEIPT_DUE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIPT_DUE]),
