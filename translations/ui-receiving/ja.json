@@ -165,7 +165,7 @@
     "filter.nonSupplements": "Non supplements",
     "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed.",
     "filter.rush": "至急",
-    "exportSettings.error": "Failed to load data for export results (CSV)",
+    "exportSettings.error": "エクスポート結果（CSV）のデータ読み込みに失敗しました。",
     "exportSettings.export": "Export",
     "exportSettings.export.all": "All",
     "exportSettings.label": "Export settings",
@@ -239,5 +239,6 @@
     "piece.statusChangeLog.column.interval": "Interval",
     "systemUser.label": "System",
     "errors.barcodeIsNotUnique": "Barcode must be unique, piece and item data could not be updated.",
-    "document.title.search": "受入 - {query} - 検索"
+    "document.title.search": "受入 - {query} - 検索",
+    "piece.displayToPublic": "Display to public"
 }

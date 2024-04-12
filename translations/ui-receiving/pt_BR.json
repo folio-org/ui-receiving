@@ -148,7 +148,7 @@
     "piece.enumeration": "Enumeração",
     "piece.chronology": "Cronologia",
     "piece.displayOnHolding": "Exibição na coleção",
-    "piece.discoverySuppress": "Ocultar na ferramenta de descoberta",
+    "piece.discoverySuppress": "Ocultar da descoberta",
     "piece.lineLocations": "Localização das linhas de pedido",
     "piece.delete.deleteHoldingsAndItem.message": "Esta peça está conectada aos registros em inventário. Não há outros itens ligados ao registro de coleção relacionado. Após apagar esta peça, você gostaria que o FOLIO apagasse a coleção?",
     "shortcut.receive": "Receber peças/Receber rápido",
@@ -183,14 +183,14 @@
     "permission.create": "Recebimento: Exibir, editar, criar",
     "permission.delete": "Recebimento: Ver, editar, excluir",
     "permission.exportCSV": "Recebimento: Exportar resultados de pesquisa",
-    "errors.createItemForPieceIsNotAllowedError": "Não é permitido criar item para formato de peça. Favor verificar o valor \"criar inventário\" na linha do pedido de compra",
+    "errors.createItemForPieceIsNotAllowedError": "Não é permitido criar item para formato de peça. Favor verificar o valor \"criar registro de inventário\" na linha do pedido de compra",
     "errors.createPiecePendingOrderError": "Não é possível criar uma peça para pedido pendente. Favor abrir pedido",
     "errors.forbiddenDeleteSystemValues": "Não é possível excluir os valores do sistema",
     "errors.forbiddenDeleteUsedValue": "Este valor não pode ser excluído",
     "errors.holdingsByIdNotFoundError": "Coleção com IDs não encontrados",
     "errors.locationIdAndHoldingIdAbsentError": "Uma referência de coelção ou localização deve estar presente",
     "errors.mayBeLinkToEitherHoldingOrLocationError": "Existe um Id de coleção e Id de localização já apresentados",
-    "errors.missingHoldingsSourceId": "Coleção não encontrada no inventário",
+    "errors.missingHoldingsSourceId": "Registro de Coleção não encontrada no App Inventário",
     "errors.multipleNonPackageTitles": "A linha do pedido de compra sem pacote não deve conter mais de uma referência de título",
     "errors.partiallyReturnedCollection": "O registro da peça já foi recebido",
     "errors.pgException": "Ocorreu um erro de banco de dados durante o processamento da solicitação",
@@ -239,5 +239,6 @@
     "piece.statusChangeLog.column.interval": "Intervalo",
     "systemUser.label": "Sistema",
     "errors.barcodeIsNotUnique": "O código de barras deve ser único, os dados da peça e do item não podem ser atualizados.",
-    "document.title.search": "Recebimento - {query} - Pesquisa"
+    "document.title.search": "Recebimento - {query} - Pesquisa",
+    "piece.displayToPublic": "Exibir ao público"
 }

@@ -239,5 +239,6 @@
     "piece.statusChangeLog.column.interval": "Interval",
     "systemUser.label": "System",
     "errors.barcodeIsNotUnique": "Barcode must be unique, piece and item data could not be updated.",
-    "document.title.search": "Receiving - {query} - Search"
+    "document.title.search": "Receiving - {query} - Search",
+    "piece.displayToPublic": "Display to public"
 }
