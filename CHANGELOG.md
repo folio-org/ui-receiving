@@ -2,6 +2,8 @@
 
 ## 5.1.0 (IN PROGRESS)
 
+* Add additional receiving filters to support reporting requirements. Refs UIREC-341.
+
 ## [5.0.1](https://github.com/folio-org/ui-receiving/tree/v5.0.1) (2024-04-01)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.0...v5.0.1)
 

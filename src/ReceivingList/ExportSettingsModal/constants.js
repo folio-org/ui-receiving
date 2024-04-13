@@ -11,6 +11,10 @@ export const EXPORT_TITLE_FIELDS = {
   vendor: 'Vendor',
   requester: 'Requester',
   rush: 'Rush',
+  createdBy: 'Created by',
+  dateCreated: 'Date created',
+  updatedBy: 'Updated by',
+  dateUpdated: 'Date updated',
 };
 
 export const EXPORT_PIECE_FIELDS = {
@@ -30,6 +34,10 @@ export const EXPORT_PIECE_FIELDS = {
   receivingStatus: 'Receiving status',
   internalNote: 'Internal note',
   externalNote: 'External note',
+  pieceCreatedBy: 'Created by (Piece)',
+  pieceDateCreated: 'Date created (Piece)',
+  pieceUpdatedBy: 'Updated by (Piece)',
+  pieceDateUpdated: 'Date updated (Piece)',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {

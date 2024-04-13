@@ -69,6 +69,10 @@ export const createExportReport = (
       vendor: vendorsMap[order?.vendor]?.name,
       requester: poLine?.requester,
       rush: poLine?.rush,
+      createdBy: titleData.metadata?.createdByUserId,
+      dateCreated: formatDate(titleData.metadata?.createdDate, intl),
+      updatedBy: titleData.metadata?.updatedByUserId,
+      dateUpdated: formatDate(titleData.metadata?.updatedDate, intl),
     };
   };
 
@@ -92,6 +96,10 @@ export const createExportReport = (
       receivingStatus: pieceData.receivingStatus,
       internalNote: pieceData.internalNote,
       externalNote: pieceData.externalNote,
+      pieceCreatedBy: pieceData.metadata?.createdByUserId,
+      pieceDateCreated: formatDate(pieceData.metadata?.createdDate, intl),
+      pieceUpdatedBy: pieceData.metadata?.updatedByUserId,
+      pieceDateUpdated: formatDate(pieceData.metadata?.updatedDate, intl),
     };
   };
 
