@@ -110,14 +110,14 @@ export const fetchLocationsExportData = (ky) => async (piecesData) => {
 export const fetchUsersExportData = (ky) => (titles = [], piecesData = []) => {
   const titlesMetadata = titles.map(({ metadata }) => metadata);
   const piecesMetadata = piecesData.map(({ metadata }) => metadata);
-  const itemIds = mapUniqElements(
+  const userIds = mapUniqElements(
     [...titlesMetadata, ...piecesMetadata],
     (metadata) => [metadata?.createdByUserId, metadata?.updatedByUserId],
   );
 
   return fetchExportDataByIds({
     api: USERS_API,
-    ids: itemIds,
+    ids: userIds,
     ky,
     records: 'users',
   });
