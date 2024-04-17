@@ -12,6 +12,7 @@ import {
   fetchPOLinesExportData,
   fetchPurchaseOrdesExportData,
   fetchVendorsExportData,
+  fetchUsersExportData,
 } from './fetchExportResources';
 import { getExportData } from './getExportData';
 
@@ -47,6 +48,7 @@ describe('getExportData', () => {
     fetchPOLinesExportData.mockClear().mockReturnValue(async () => mockPOLines);
     fetchPurchaseOrdesExportData.mockClear().mockReturnValue(async () => mockPOs);
     fetchVendorsExportData.mockClear().mockReturnValue(async () => mockVendors);
+    fetchUsersExportData.mockClear().mockReturnValue(async () => {});
   });
 
   it('should return fetch and export data for each field', async () => {

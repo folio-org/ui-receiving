@@ -22,6 +22,7 @@ export const createExportReport = (
     purchaseOrdersMap,
     titles,
     vendorsMap,
+    usersMap = {},
   },
   {
     intl,
@@ -69,9 +70,9 @@ export const createExportReport = (
       vendor: vendorsMap[order?.vendor]?.name,
       requester: poLine?.requester,
       rush: poLine?.rush,
-      createdBy: titleData.metadata?.createdByUserId,
+      createdBy: usersMap[titleData.metadata?.createdByUserId]?.username,
       dateCreated: formatDate(titleData.metadata?.createdDate, intl),
-      updatedBy: titleData.metadata?.updatedByUserId,
+      updatedBy: usersMap[titleData.metadata?.updatedByUserId]?.username,
       dateUpdated: formatDate(titleData.metadata?.updatedDate, intl),
     };
   };
@@ -96,9 +97,9 @@ export const createExportReport = (
       receivingStatus: pieceData.receivingStatus,
       internalNote: pieceData.internalNote,
       externalNote: pieceData.externalNote,
-      pieceCreatedBy: pieceData.metadata?.createdByUserId,
+      pieceCreatedBy: usersMap[pieceData.metadata?.createdByUserId]?.username,
       pieceDateCreated: formatDate(pieceData.metadata?.createdDate, intl),
-      pieceUpdatedBy: pieceData.metadata?.updatedByUserId,
+      pieceUpdatedBy: usersMap[pieceData.metadata?.updatedByUserId]?.username,
       pieceDateUpdated: formatDate(pieceData.metadata?.updatedDate, intl),
     };
   };

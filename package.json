@@ -117,7 +117,8 @@
           "orders.receiving.collection.post",
           "settings.receiving.enabled",
           "ui-receiving.basic.view",
-          "users.collection.get"
+          "users.collection.get",
+          "usergroups.collection.get"
         ]
       },
       {

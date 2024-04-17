@@ -17,6 +17,7 @@ import {
   fetchPOLinesExportData,
   fetchPurchaseOrdesExportData,
   fetchVendorsExportData,
+  fetchUsersExportData,
 } from './fetchExportResources';
 import { mapUniqElements } from './mapUniqElements';
 
@@ -76,6 +77,7 @@ export const getExportData = (ky) => async ({
       records: 'pieces',
     });
 
+    const usersData = fetchConfigs.users ? await fetchUsersExportData(ky)(titles, piecesData) : [];
     const itemsData = fetchConfigs.items ? await fetchItemsExportData(ky)(piecesData) : [];
     const {
       holdings = [],
@@ -86,6 +88,7 @@ export const getExportData = (ky) => async ({
       holdingsMap: keyById(holdings),
       itemsMap: keyById(itemsData),
       locationsMap: keyById(locations),
+      usersMap: keyById(usersData),
       pieces: piecesData,
     };
   };

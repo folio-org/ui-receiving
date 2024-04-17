@@ -7,6 +7,7 @@ import {
   LOCATIONS_API,
   ORDERS_API,
   VENDORS_API,
+  USERS_API,
 } from '@folio/stripes-acq-components';
 
 import { HOLDINGS_API } from '../../../common/constants';
@@ -104,4 +105,20 @@ export const fetchLocationsExportData = (ky) => async (piecesData) => {
   });
 
   return { holdings, locations };
+};
+
+export const fetchUsersExportData = (ky) => (titles = [], piecesData = []) => {
+  const titlesMetadata = titles.map(({ metadata }) => metadata);
+  const piecesMetadata = piecesData.map(({ metadata }) => metadata);
+  const userIds = mapUniqElements(
+    [...titlesMetadata, ...piecesMetadata],
+    (metadata) => [metadata?.createdByUserId, metadata?.updatedByUserId],
+  );
+
+  return fetchExportDataByIds({
+    api: USERS_API,
+    ids: userIds,
+    ky,
+    records: 'users',
+  });
 };

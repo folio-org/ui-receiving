@@ -72,4 +72,5 @@ export const FETCH_CONFIGS_MAP = {
   poLines: ['orderType', 'location', 'requester', 'rush', 'vendor'],
   purchaseOrders: ['orderType', 'vendor'],
   vendors: ['vendor'],
+  users: ['dateCreated', 'dateUpdated', 'pieceDateCreated', 'pieceDateUpdated'],
 };

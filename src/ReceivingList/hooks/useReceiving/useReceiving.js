@@ -1,10 +1,12 @@
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router';
 import queryString from 'query-string';
+import moment from 'moment';
 
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 import {
   getFiltersCount,
@@ -21,11 +23,17 @@ export const useReceiving = ({
 }) => {
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'receivings-list' });
+  const { timezone } = useStripes();
 
   const { search } = useLocation();
   const queryParams = queryString.parse(search);
-  const query = buildTitlesQuery(queryParams);
   const filtersCount = getFiltersCount(queryParams);
+
+  moment.tz.setDefault(timezone);
+
+  const query = buildTitlesQuery(queryParams);
+
+  moment.tz.setDefault();
 
   const defaultSearchParams = {
     query,
