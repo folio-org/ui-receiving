@@ -22,7 +22,7 @@ export const createExportReport = (
     purchaseOrdersMap,
     titles,
     vendorsMap,
-    usersMap,
+    usersMap = {},
   },
   {
     intl,
