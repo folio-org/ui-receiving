@@ -91,7 +91,7 @@ const params = {
       receivingStatus: 'Expected',
     },
   ],
-  // usersMap: {},
+  usersMap: {},
 };
 
 const intl = { formatMessage: jest.fn(), formatDate: jest.fn() };
