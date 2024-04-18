@@ -7,6 +7,7 @@ import {
 
 import {
   formatDate,
+  formatDateTime,
   getHoldingLocationName,
 } from '@folio/stripes-acq-components';
 
@@ -71,9 +72,9 @@ export const createExportReport = (
       requester: poLine?.requester,
       rush: poLine?.rush,
       createdBy: usersMap[titleData.metadata?.createdByUserId]?.username,
-      dateCreated: formatDate(titleData.metadata?.createdDate, intl),
+      dateCreated: formatDateTime(titleData.metadata?.createdDate, intl),
       updatedBy: usersMap[titleData.metadata?.updatedByUserId]?.username,
-      dateUpdated: formatDate(titleData.metadata?.updatedDate, intl),
+      dateUpdated: formatDateTime(titleData.metadata?.updatedDate, intl),
     };
   };
 
@@ -98,9 +99,9 @@ export const createExportReport = (
       internalNote: pieceData.internalNote,
       externalNote: pieceData.externalNote,
       pieceCreatedBy: usersMap[pieceData.metadata?.createdByUserId]?.username,
-      pieceDateCreated: formatDate(pieceData.metadata?.createdDate, intl),
+      pieceDateCreated: formatDateTime(pieceData.metadata?.createdDate, intl),
       pieceUpdatedBy: usersMap[pieceData.metadata?.updatedByUserId]?.username,
-      pieceDateUpdated: formatDate(pieceData.metadata?.updatedDate, intl),
+      pieceDateUpdated: formatDateTime(pieceData.metadata?.updatedDate, intl),
     };
   };
 

@@ -12,9 +12,9 @@ export const EXPORT_TITLE_FIELDS = {
   requester: 'Requester',
   rush: 'Rush',
   createdBy: 'Created by',
-  dateCreated: 'Date created',
+  dateCreated: 'Created on',
   updatedBy: 'Updated by',
-  dateUpdated: 'Date updated',
+  dateUpdated: 'Updated on',
 };
 
 export const EXPORT_PIECE_FIELDS = {
@@ -35,9 +35,9 @@ export const EXPORT_PIECE_FIELDS = {
   internalNote: 'Internal note',
   externalNote: 'External note',
   pieceCreatedBy: 'Created by (Piece)',
-  pieceDateCreated: 'Date created (Piece)',
+  pieceDateCreated: 'Created on (Piece)',
   pieceUpdatedBy: 'Updated by (Piece)',
-  pieceDateUpdated: 'Date updated (Piece)',
+  pieceDateUpdated: 'Updated on (Piece)',
 };
 
 export const EXPORT_SETTINGS_FIELDS = {
