@@ -2,7 +2,12 @@
 
 ## 5.1.0 (IN PROGRESS)
 
-## [5.0.2](https://github.com/folio-org/ui-receiving/tree/v5.0.1) (2024-04-18)
+## [5.0.3](https://github.com/folio-org/ui-receiving/tree/v5.0.3) (2024-04-18)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.2...v5.0.3)
+
+* use datetime instead of date for csv metadata. Refs UIREC-341.
+
+## [5.0.2](https://github.com/folio-org/ui-receiving/tree/v5.0.2) (2024-04-18)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.1...v5.0.2)
 
 * Add additional receiving filters to support reporting requirements. Refs UIREC-341.
