@@ -2,6 +2,8 @@
 
 ## 5.1.0 (IN PROGRESS)
 
+* Receiving: Order line "Holdings permanent location" reference is not synchronized with Holdings record changes made in inventory. Refs UIREC-356.
+
 ## [5.0.3](https://github.com/folio-org/ui-receiving/tree/v5.0.3) (2024-04-18)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.2...v5.0.3)
 
