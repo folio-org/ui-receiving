@@ -3,6 +3,7 @@ import moment from 'moment';
 import { DATE_FORMAT } from '@folio/stripes-acq-components';
 
 const indexes = [
+  'barcode',
   'displaySummary',
   'chronology',
   'comment',
