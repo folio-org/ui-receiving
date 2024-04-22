@@ -11,7 +11,7 @@ describe('makeKeywordQueryBuilder', () => {
       const dateFormat = 'MM/DD/YYYY';
 
       expect(makeKeywordQueryBuilder(dateFormat)(searchQuery)).toEqual(
-        `displaySummary=="*${searchQuery}*" or chronology=="*${searchQuery}*" or comment=="*${searchQuery}*" or ` +
+        `barcode=="*${searchQuery}*" or displaySummary=="*${searchQuery}*" or chronology=="*${searchQuery}*" or comment=="*${searchQuery}*" or ` +
         `copyNumber=="*${searchQuery}*" or enumeration=="*${searchQuery}*" or ` +
         `receiptDate=="*${searchByDate(dateFormat, searchQuery)}*" or receivedDate=="*${searchByDate(dateFormat, searchQuery)}*"`,
       );
