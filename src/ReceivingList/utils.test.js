@@ -222,5 +222,11 @@ describe('ReceivingList utils', () => {
       expect(titlesQuery.includes('eresource.materialType')).toBeFalsy();
       expect(titlesQuery.includes('physical.materialType')).toBeTruthy();
     });
+
+    it('should return search query based on location filter', () => {
+      const query = buildTitlesQuery({ [FILTERS.LOCATION]: 'locationId' });
+
+      expect(query).toContain('(poLine.locations=="*locationId*" or poLine.searchLocationIds=="*locationId*")');
+    });
   });
 });
