@@ -115,6 +115,8 @@
           "orders.check-in.collection.post",
           "orders.expect.collection.post",
           "orders.receiving.collection.post",
+          "orders.routing-lists.collection.get",
+          "orders.routing-lists.item.get",
           "settings.receiving.enabled",
           "ui-receiving.basic.view",
           "users.collection.get",
@@ -135,6 +137,7 @@
           "inventory-storage.nature-of-content-terms.collection.get",
           "inventory.instances.collection.get",
           "inventory.instances.item.get",
+          "orders.routing-lists.item.put",
           "orders.titles.item.put",
           "search.instances.collection.get",
           "search.facets.collection.get"
@@ -146,6 +149,7 @@
         "visible": true,
         "subPermissions": [
           "orders.titles.item.post",
+          "orders.routing-lists.item.post",
           "ui-receiving.edit"
         ]
       },
@@ -155,6 +159,7 @@
         "visible": true,
         "subPermissions": [
           "orders.titles.item.delete",
+          "orders.routing-lists.item.delete",
           "ui-receiving.edit"
         ]
       },

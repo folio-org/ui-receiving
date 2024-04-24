@@ -42,6 +42,7 @@ import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
+  RoutingList,
   useAcqRestrictions,
   useFilters,
   useModalToggle,
@@ -546,6 +547,8 @@ const TitleDetails = ({
                 visibleColumns={receivedPiecesVisibleColumns}
               />
             </Accordion>
+
+            <RoutingList poLineId={poLineId} />
 
             <ColumnManager
               id="unreceivable-pieces-list"
