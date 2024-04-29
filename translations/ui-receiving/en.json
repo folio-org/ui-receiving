@@ -207,6 +207,7 @@
   "piece.createItem": "Create item",
   "piece.externalNote": "External note",
   "piece.format": "Piece format",
+  "piece.isBound": "Bound",
   "piece.itemStatus.Available": "Available",
   "piece.itemStatus.In process": "In process",
   "piece.itemStatus.In transit": "In transit",

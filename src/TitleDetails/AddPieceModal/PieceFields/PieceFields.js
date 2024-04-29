@@ -23,6 +23,8 @@ import {
   LineLocationsView,
 } from '../../../common/components';
 
+import css from './PieceFields.css';
+
 export const PieceFields = ({
   createInventoryValues,
   instanceId,
@@ -240,6 +242,21 @@ export const PieceFields = ({
                 </Col>
               )
             }
+
+            <Col
+              xs={6}
+              md={3}
+            >
+              <Field
+                component={Checkbox}
+                className={css.control}
+                fullWidth
+                label={<FormattedMessage id="ui-receiving.piece.isBound" />}
+                name="isBound"
+                type="checkbox"
+                vertical
+              />
+            </Col>
           </>
         )}
       </Row>

@@ -4,7 +4,8 @@
 
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
 * Add "Display to public" toggle on piece form. Refs UIREC-333.
-* Add RoutingList component. Refs UIREC-328.
+* Add `<RoutingList>` component. Refs UIREC-328.
+* Add the "Bound" flag for the receiving piece form. Refs UIREC-263.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)
