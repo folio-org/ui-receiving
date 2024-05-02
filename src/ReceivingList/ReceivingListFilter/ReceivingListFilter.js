@@ -90,7 +90,7 @@ const ReceivingListFilter = ({
 
       <LocationFilterContainer
         id={`filter-${FILTERS.LOCATION}`}
-        activeFilter={activeFilters[FILTERS.LOCATION] && activeFilters[FILTERS.LOCATION][0]}
+        activeFilter={activeFilters[FILTERS.LOCATION]}
         disabled={disabled}
         labelId="ui-receiving.filter.location"
         name={FILTERS.LOCATION}

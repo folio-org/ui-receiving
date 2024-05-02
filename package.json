@@ -38,6 +38,9 @@
       "titles": "1.2",
       "users": "16.0"
     },
+    "optionalOkapiInterfaces": {
+      "consortia": "1.0"
+    },
     "queryResource": "query",
     "icons": [
       {
@@ -85,7 +88,11 @@
           "orders.pieces.collection.get",
           "orders.po-lines.item.get",
           "organizations.organizations.collection.get",
-          "tags.collection.get"
+          "tags.collection.get",
+          "consortia.publications.item.get",
+          "consortia.publications.item.post",
+          "consortia.publications-results.item.get",
+          "consortia.user-tenants.collection.get"
         ]
       },
       {
