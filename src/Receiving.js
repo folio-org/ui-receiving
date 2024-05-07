@@ -1,3 +1,5 @@
+import Proptypes from 'prop-types';
+
 import {
   Switch,
   Route,
@@ -27,6 +29,8 @@ import { TitleExpectContainer } from './TitleExpect';
 import { TitleReceiveContainer } from './TitleReceive';
 import { TitleUnreceiveContainer } from './TitleUnreceive';
 
+import Settings from './settings';
+
 const receivingCommands = [
   {
     name: 'receive',
@@ -41,8 +45,10 @@ const receivingCommands = [
 ];
 const shortcutCommands = [...receivingCommands, ...defaultKeyboardShortcuts];
 
-const Receiving = () => {
+const Receiving = (props) => {
   const [isOpen, toggleModal] = useModalToggle();
+  const { showSettings } = props;
+
   const focusSearchField = () => {
     const el = document.getElementById('input-record-search');
 
@@ -62,6 +68,10 @@ const Receiving = () => {
       handler: handleKeyCommand(toggleModal),
     },
   ];
+
+  if (showSettings) {
+    return <Settings {...props} />;
+  }
 
   return (
     <>
@@ -137,6 +147,10 @@ const Receiving = () => {
       )}
     </>
   );
+};
+
+Receiving.propTypes = {
+  showSettings: Proptypes.bool,
 };
 
 export default Receiving;
