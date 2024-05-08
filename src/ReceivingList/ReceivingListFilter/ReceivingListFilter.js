@@ -26,6 +26,7 @@ const applyFiltersAdapter = (applyFilters) => ({ name, values }) => applyFilters
 const ReceivingListFilter = ({
   activeFilters,
   applyFilters,
+  centralOrdering = false,
   disabled,
 }) => {
   const adaptedApplyFilters = useCallback((data) => applyFiltersAdapter(applyFilters)(data), [applyFilters]);
@@ -95,6 +96,7 @@ const ReceivingListFilter = ({
         labelId="ui-receiving.filter.location"
         name={FILTERS.LOCATION}
         onChange={adaptedApplyFilters}
+        crossTenant={centralOrdering}
       />
 
       <AcqCheckboxFilter
@@ -226,6 +228,7 @@ const ReceivingListFilter = ({
 ReceivingListFilter.propTypes = {
   activeFilters: PropTypes.object.isRequired,
   applyFilters: PropTypes.func.isRequired,
+  centralOrdering: PropTypes.bool,
   disabled: PropTypes.bool.isRequired,
 };
 

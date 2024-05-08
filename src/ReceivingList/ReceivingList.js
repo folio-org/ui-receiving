@@ -83,6 +83,7 @@ const getResultsFormatter = ({ search }) => ({
 });
 
 const ReceivingList = ({
+  centralOrdering = false,
   history,
   isLoading,
   location,
@@ -197,6 +198,7 @@ const ReceivingList = ({
               activeFilters={filters}
               applyFilters={applyFilters}
               disabled={isLoading}
+              centralOrdering={centralOrdering}
             />
           </FiltersPane>
         )}
@@ -265,6 +267,7 @@ const ReceivingList = ({
 };
 
 ReceivingList.propTypes = {
+  centralOrdering: PropTypes.bool,
   onNeedMoreData: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
   titlesCount: PropTypes.number,

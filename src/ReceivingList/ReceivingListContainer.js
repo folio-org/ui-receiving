@@ -2,11 +2,16 @@ import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
-import { stripesConnect } from '@folio/stripes/core';
+import {
+  checkIfUserInCentralTenant,
+  stripesConnect,
+  useStripes,
+} from '@folio/stripes/core';
 import {
   getHoldingLocationName,
   locationsManifest,
   RESULT_COUNT_INCREMENT,
+  useCentralOrderingSettings,
   usePagination,
 } from '@folio/stripes-acq-components';
 
@@ -30,6 +35,7 @@ const resetData = () => {};
 
 const ReceivingListContainer = ({ mutator }) => {
   const intl = useIntl();
+  const stripes = useStripes();
 
   const invalidReferenceMessage = intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' });
 
@@ -103,6 +109,10 @@ const ReceivingListContainer = ({ mutator }) => {
     totalRecords,
   } = useReceiving({ pagination, fetchReferences });
 
+  const { enabled: isCentralOrderingEnabled } = useCentralOrderingSettings({
+    enabled: checkIfUserInCentralTenant(stripes),
+  });
+
   return (
     <ReceivingList
       onNeedMoreData={changePage}
@@ -112,6 +122,7 @@ const ReceivingListContainer = ({ mutator }) => {
       titles={titles}
       pagination={pagination}
       query={query}
+      centralOrdering={isCentralOrderingEnabled}
     />
   );
 };
