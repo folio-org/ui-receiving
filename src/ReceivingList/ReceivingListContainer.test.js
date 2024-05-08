@@ -6,6 +6,7 @@ import { useReceiving } from './hooks';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
+  useCentralOrderingSettings: jest.fn(() => ({ enabled: false })),
   usePagination: () => ({}),
 }));
 jest.mock('./ReceivingList', () => jest.fn().mockReturnValue('ReceivingList'));
