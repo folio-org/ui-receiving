@@ -54,7 +54,6 @@ const buildContextProviderMock = (Context, value) => ({ children }) => {
 const defaultProps = {
   activeFilters: {},
   applyFilters: jest.fn(),
-  centralOrdering: false,
   disabled: false,
 };
 
