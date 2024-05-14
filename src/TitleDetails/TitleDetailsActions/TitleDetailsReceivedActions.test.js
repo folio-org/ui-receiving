@@ -1,9 +1,15 @@
-import React from 'react';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 
-import { RECEIVED_PIECE_VISIBLE_COLUMNS } from '../constants';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+
+import {
+  MENU_FILTERS,
+  RECEIVED_PIECE_VISIBLE_COLUMNS,
+} from '../constants';
 import { TitleDetailsReceivedActions } from './TitleDetailsReceivedActions';
 
 const defaultProps = {
@@ -37,7 +43,9 @@ describe('TitleDetailsReceivedActions filters', () => {
     renderTitleDetailsReceivedActions({ ...defaultProps, disabled: true });
 
     await user.click(screen.getByText('ui-receiving.filter.supplements'));
+    expect(defaultProps.applyFilters).toHaveBeenCalledWith(MENU_FILTERS.supplement, ['true']);
 
-    expect(defaultProps.applyFilters).toHaveBeenCalled();
+    await user.click(screen.getByText('ui-receiving.filter.bound'));
+    expect(defaultProps.applyFilters).toHaveBeenCalledWith(MENU_FILTERS.bound, ['true']);
   });
 });
