@@ -55,6 +55,7 @@ import AddPieceModal from './AddPieceModal';
 import {
   EXPECTED_PIECE_COLUMN_MAPPING,
   EXPECTED_PIECES_SEARCH_VALUE,
+  MENU_FILTERS,
   ORDER_FORMAT_TO_PIECE_FORMAT,
   RECEIVED_PIECE_COLUMN_MAPPING,
   TITLE_ACCORDION,
@@ -311,7 +312,7 @@ const TitleDetails = ({
     filters: receivedPiecesFilters,
     changeSearch: changeReceivedPiecesSearch,
     searchQuery: receivedPiecesSearchQuery,
-  } = useFilters(noop);
+  } = useFilters(noop, { [MENU_FILTERS.bound]: ['false'] });
   const {
     applyFilters: applyUnreceivablePiecesFilters,
     applySearch: applyUnreceivablePiecesSearch,

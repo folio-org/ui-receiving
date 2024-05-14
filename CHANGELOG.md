@@ -7,6 +7,7 @@
 * Add `<RoutingList>` component. Refs UIREC-328.
 * Add the "Bound" flag for the receiving piece form. Refs UIREC-263.
 * Adjust the location filter to support filtering of receiving titles by multiple PO line locations or holdings. Refs UIREC-358.
+* Add filter by "Bound" status for the received pieces list. Refs UIREC-264.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

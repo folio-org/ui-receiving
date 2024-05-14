@@ -62,6 +62,8 @@
   "filter.rush": "Rush",
   "filter.supplements": "Supplements",
   "filter.nonSupplements": "Non supplements",
+  "filter.bound": "Bound",
+  "filter.notBound": "Not bound",
   "filter.createdBy": "Created by",
   "filter.updatedBy": "Updated by",
   "filter.dateCreated": "Date created",

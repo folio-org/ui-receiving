@@ -1,8 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
-import { CheckboxFilter, ColumnManagerMenu } from '@folio/stripes/smart-components';
+import {
+  CheckboxFilter,
+  ColumnManagerMenu,
+} from '@folio/stripes/smart-components';
 import { FilterMenu } from '@folio/stripes-acq-components';
 import {
   Button,
@@ -12,6 +17,7 @@ import {
 } from '@folio/stripes/components';
 
 import {
+  BOUND_MENU_FILTER_OPTIONS,
   MENU_FILTERS,
   RECEIVED_PIECE_COLUMN_MAPPING,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
@@ -60,6 +66,12 @@ export function TitleDetailsReceivedActions({
             name={`received-${MENU_FILTERS.supplement}`}
             onChange={({ values }) => applyFilters(MENU_FILTERS.supplement, values)}
             selectedValues={filters[MENU_FILTERS.supplement]}
+          />
+          <CheckboxFilter
+            dataOptions={BOUND_MENU_FILTER_OPTIONS}
+            name={`received-${MENU_FILTERS.bound}`}
+            onChange={({ values }) => applyFilters(MENU_FILTERS.bound, values)}
+            selectedValues={filters[MENU_FILTERS.bound]}
           />
         </FilterMenu>
 

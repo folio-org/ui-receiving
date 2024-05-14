@@ -121,6 +121,7 @@ export const UNRECEIVABLE_PIECE_COLUMN_MAPPING = {
 };
 
 export const MENU_FILTERS = {
+  bound: 'isBound',
   supplement: 'supplement',
 };
 
@@ -132,6 +133,17 @@ export const SUPPLEMENT_MENU_FILTER_OPTIONS = [
   {
     value: 'false',
     label: <FormattedMessage id="ui-receiving.filter.nonSupplements" />,
+  },
+];
+
+export const BOUND_MENU_FILTER_OPTIONS = [
+  {
+    value: 'true',
+    label: <FormattedMessage id="ui-receiving.filter.bound" />,
+  },
+  {
+    value: 'false',
+    label: <FormattedMessage id="ui-receiving.filter.notBound" />,
   },
 ];
 
