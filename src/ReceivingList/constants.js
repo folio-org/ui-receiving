@@ -4,6 +4,7 @@ import {
 
 export const FILTERS = {
   ACQUISITIONS_UNIT: 'purchaseOrder.acqUnitIds',
+  BINDERY_ACTIVE: 'poLine.details.isBinderyActive',
   CREATED_BY: 'metadata.createdByUserId',
   DATE_CREATED: 'metadata.createdDate',
   DATE_UPDATED: 'metadata.updatedDate',

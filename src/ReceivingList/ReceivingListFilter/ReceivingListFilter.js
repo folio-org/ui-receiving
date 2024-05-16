@@ -126,6 +126,15 @@ const ReceivingListFilter = ({
         onChange={adaptedApplyFilters}
       />
 
+      <BooleanFilter
+        id={`filter-${FILTERS.BINDERY_ACTIVE}`}
+        activeFilters={activeFilters[FILTERS.BINDERY_ACTIVE]}
+        disabled={disabled}
+        labelId="ui-receiving.filter.isBinderyActive"
+        name={FILTERS.BINDERY_ACTIVE}
+        onChange={adaptedApplyFilters}
+      />
+
       <AcqDateRangeFilter
         activeFilters={activeFilters[FILTERS.RECEIVED_DATE]}
         labelId="ui-receiving.piece.receivedDate"

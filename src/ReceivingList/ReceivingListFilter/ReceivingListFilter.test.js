@@ -77,13 +77,14 @@ describe('ReceivingListFilter', () => {
   it('should display receiving filters', async () => {
     renderReceivingListFilter();
 
-    expect(screen.getByText('ui-receiving.filter.orderStatus')).toBeDefined();
-    expect(screen.getByText('ui-receiving.filter.vendor')).toBeDefined();
-    expect(screen.getByText('ui-receiving.filter.orderType')).toBeDefined();
-    expect(screen.getByText('ui-receiving.filter.materialType')).toBeDefined();
-    expect(screen.getByText('ui-receiving.filter.orderFormat')).toBeDefined();
-    expect(screen.getByText('ui-receiving.filter.location')).toBeDefined();
-    expect(screen.getByText('ui-receiving.filter.rush')).toBeDefined();
+    expect(screen.getByText('ui-receiving.filter.orderStatus')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.vendor')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.orderType')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.materialType')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.orderFormat')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.location')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.rush')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.filter.isBinderyActive')).toBeInTheDocument();
   });
 
   describe('ECS mode', () => {

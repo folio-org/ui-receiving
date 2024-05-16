@@ -60,6 +60,7 @@
   "filter.location": "Location",
   "filter.receivingStatus": "Receiving status",
   "filter.rush": "Rush",
+  "filter.isBinderyActive": "Bindery active",
   "filter.supplements": "Supplements",
   "filter.nonSupplements": "Non supplements",
   "filter.bound": "Bound",
