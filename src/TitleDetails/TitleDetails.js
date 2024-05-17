@@ -133,6 +133,9 @@ const TitleDetails = ({
   const locationIds = useMemo(() => (
     pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
   ), [poLineLocationIds, pieceLocationId]);
+  const numberOfPhysicalUnits = useMemo(() => {
+    return poLine?.locations?.reduce((acc, { quantityPhysical }) => acc + quantityPhysical, 0);
+  }, [poLine?.locations]);
   const vendor = vendorsMap[order.vendor];
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
@@ -549,7 +552,11 @@ const TitleDetails = ({
               />
             </Accordion>
 
-            <RoutingList poLineId={poLineId} />
+            <RoutingList
+              poLineId={poLineId}
+              allowedNumberOfRoutingLists={numberOfPhysicalUnits}
+              createButtonLabel={<FormattedMessage id="ui-orders.routing.list.accordion.create.button" />}
+            />
 
             <ColumnManager
               id="unreceivable-pieces-list"

@@ -9,6 +9,7 @@
 * Adjust the location filter to support filtering of receiving titles by multiple PO line locations or holdings. Refs UIREC-358.
 * Add filter by "Bound" status for the received pieces list. Refs UIREC-264.
 * Add bindery active facet to receiving. Refs UIREC-323.
+* Add RoutingList behavior in receiving. Refs UIREC-299.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

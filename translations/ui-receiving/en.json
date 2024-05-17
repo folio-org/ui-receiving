@@ -131,6 +131,7 @@
   "title.orderType": "Order type",
   "title.package": "Package",
   "title.polDetails": "POL details",
+  "title.hasRouting": "This title has routing.",
   "title.polNumber": "POL number",
   "title.productIds.add": "Add product ID and type",
   "title.productIds.productId": "Product ID",

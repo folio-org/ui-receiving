@@ -7,6 +7,7 @@ import {
   Checkbox,
   Col,
   KeyValue,
+  MessageBanner,
   NoValue,
   Row,
 } from '@folio/stripes/components';
@@ -14,6 +15,7 @@ import {
 import {
   FolioFormattedDate,
   ORDER_FORMATS,
+  useRoutingList,
 } from '@folio/stripes-acq-components';
 
 const POLDetails = ({
@@ -30,6 +32,8 @@ const POLDetails = ({
   vendor,
   checkinItems = false,
 }) => {
+  const { routingLists } = useRoutingList(poLineId);
+
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
   const showMaterialSupplier = orderFormat !== ORDER_FORMATS.electronicResource;
   const poLineNumberValue = (
@@ -46,6 +50,15 @@ const POLDetails = ({
 
   return (
     <>
+      {routingLists.length && (
+        <Row>
+          <Col xs={12}>
+            <MessageBanner type="warning">
+              <FormattedMessage id="ui-receiving.title.hasRouting" />
+            </MessageBanner>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col
           data-test-title-po-line-number
