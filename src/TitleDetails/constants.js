@@ -8,6 +8,7 @@ import {
   PIECE_FORMAT,
   PIECE_FORMAT_LABELS,
   PIECE_STATUS,
+  ROUTING_LIST_API,
 } from '@folio/stripes-acq-components';
 
 export const TITLE_ACCORDION = {
@@ -198,3 +199,5 @@ export const PIECE_MODAL_ACCORDION_LABELS = {
   [PIECE_MODAL_ACCORDION.itemDetails]: <FormattedMessage id="ui-receiving.piece.accordion.itemDetails" />,
   [PIECE_MODAL_ACCORDION.statusChangeLog]: <FormattedMessage id="ui-receiving.piece.accordion.statusChangeLog" />,
 };
+
+export const CREATE_ROUTING_LIST_ROUTE = `${ROUTING_LIST_API}/create`;

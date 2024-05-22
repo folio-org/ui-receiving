@@ -15,7 +15,7 @@ import {
 import {
   FolioFormattedDate,
   ORDER_FORMATS,
-  useRoutingList,
+  useRoutingLists,
 } from '@folio/stripes-acq-components';
 
 const POLDetails = ({
@@ -32,7 +32,7 @@ const POLDetails = ({
   vendor,
   checkinItems = false,
 }) => {
-  const { routingLists } = useRoutingList(poLineId);
+  const { routingLists } = useRoutingLists(poLineId);
 
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
   const showMaterialSupplier = orderFormat !== ORDER_FORMATS.electronicResource;

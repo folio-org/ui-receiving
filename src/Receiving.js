@@ -20,7 +20,17 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import {
+  RECEIVING_ROUTE,
+  RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE_EDIT,
+  RECEIVING_ROUTE_EXPECT,
+  RECEIVING_ROUTE_RECEIVE,
+  RECEIVING_ROUTE_UNRECEIVE,
+  ROUTING_LIST_ROUTE,
+} from './constants';
 import { ReceivingListContainer } from './ReceivingList';
+import { RoutingList } from './TitleDetails';
 import { TitleFormContainer } from './TitleForm';
 import { TitleEditContainer } from './TitleEdit';
 import { TitleExpectContainer } from './TitleExpect';
@@ -103,28 +113,32 @@ const Receiving = () => {
           </AppContextMenu>
           <Switch>
             <Route
-              path="/receiving/:id/edit"
+              component={RoutingList}
+              path={ROUTING_LIST_ROUTE}
+            />
+            <Route
               component={TitleEditContainer}
+              path={RECEIVING_ROUTE_EDIT}
             />
             <Route
               component={TitleFormContainer}
-              path="/receiving/create"
+              path={RECEIVING_ROUTE_CREATE}
             />
             <Route
               component={TitleReceiveContainer}
-              path="/receiving/receive/:id"
+              path={RECEIVING_ROUTE_RECEIVE}
             />
             <Route
               component={TitleUnreceiveContainer}
-              path="/receiving/unreceive/:id"
+              path={RECEIVING_ROUTE_UNRECEIVE}
             />
             <Route
               component={TitleExpectContainer}
-              path="/receiving/expect/:id"
+              path={RECEIVING_ROUTE_EXPECT}
             />
             <Route
               component={ReceivingListContainer}
-              path="/receiving"
+              path={RECEIVING_ROUTE}
             />
           </Switch>
         </HasCommand>

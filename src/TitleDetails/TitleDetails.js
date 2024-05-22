@@ -1,13 +1,21 @@
-import React, { useCallback, useMemo, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import {
   get,
   noop,
   omit,
 } from 'lodash';
-import { FormattedMessage, useIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
+import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
   Accordion,
@@ -42,12 +50,13 @@ import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
-  RoutingList,
+  RoutingListAccordion,
   useAcqRestrictions,
   useFilters,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { ROUTING_LIST_ROUTE } from '../constants';
 import TitleInformation from './TitleInformation';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';
@@ -126,6 +135,7 @@ const TitleDetails = ({
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const pieceLocationId = pieceValues.locationId;
+  const showRoutingList = orderFormat === ORDER_FORMATS.PEMix || orderFormat === ORDER_FORMATS.physicalResource;
   const poLineLocations = useMemo(() => (
     poLine?.locations?.map(({ locationId }) => locationId) ?? []
   ), [poLine?.locations]);
@@ -551,12 +561,17 @@ const TitleDetails = ({
                 visibleColumns={receivedPiecesVisibleColumns}
               />
             </Accordion>
-
-            <RoutingList
-              poLineId={poLineId}
-              allowedNumberOfRoutingLists={numberOfPhysicalUnits}
-              createButtonLabel={<FormattedMessage id="ui-orders.routing.list.accordion.create.button" />}
-            />
+            {
+              showRoutingList && (
+                <RoutingListAccordion
+                  canPrint
+                  poLineId={poLineId}
+                  allowedNumberOfRoutingLists={numberOfPhysicalUnits}
+                  createButtonLabel={<FormattedMessage id="ui-orders.routing.list.accordion.create.button" />}
+                  routingListUrl={ROUTING_LIST_ROUTE}
+                />
+              )
+            }
 
             <ColumnManager
               id="unreceivable-pieces-list"
