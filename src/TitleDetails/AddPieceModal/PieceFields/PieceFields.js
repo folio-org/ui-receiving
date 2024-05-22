@@ -24,6 +24,7 @@ import {
 } from '../../../common/components';
 
 import css from './PieceFields.css';
+import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
 export const PieceFields = ({
   createInventoryValues,
@@ -56,7 +57,7 @@ export const PieceFields = ({
             fullWidth
             id="displaySummary"
             label={<FormattedMessage id="ui-receiving.piece.displaySummary" />}
-            name="displaySummary"
+            name={PIECE_FORM_FIELD_NAMES.displaySummary}
             type="text"
           />
         </Col>
@@ -69,7 +70,7 @@ export const PieceFields = ({
             fullWidth
             id="copyNumber"
             label={<FormattedMessage id="ui-receiving.piece.copyNumber" />}
-            name="copyNumber"
+            name={PIECE_FORM_FIELD_NAMES.copyNumber}
             type="text"
           />
         </Col>
@@ -82,7 +83,7 @@ export const PieceFields = ({
             fullWidth
             id="enumeration"
             label={<FormattedMessage id="ui-receiving.piece.enumeration" />}
-            name="enumeration"
+            name={PIECE_FORM_FIELD_NAMES.enumeration}
             type="text"
           />
         </Col>
@@ -95,7 +96,7 @@ export const PieceFields = ({
             fullWidth
             id="chronology"
             label={<FormattedMessage id="ui-receiving.piece.chronology" />}
-            name="chronology"
+            name={PIECE_FORM_FIELD_NAMES}
             type="text"
           />
         </Col>
@@ -110,7 +111,7 @@ export const PieceFields = ({
             dataOptions={pieceFormatOptions}
             disabled={!isNotReceived}
             label={<FormattedMessage id="ui-receiving.piece.format" />}
-            name="format"
+            name={PIECE_FORM_FIELD_NAMES.format}
             required
           />
         </Col>
@@ -120,7 +121,7 @@ export const PieceFields = ({
         >
           <FieldDatepickerFinal
             labelId="ui-receiving.piece.receiptDate"
-            name="receiptDate"
+            name={PIECE_FORM_FIELD_NAMES.receiptDate}
             usePortal
           />
         </Col>
@@ -132,7 +133,7 @@ export const PieceFields = ({
             component={TextArea}
             fullWidth
             label={<FormattedMessage id="ui-receiving.piece.comment" />}
-            name="comment"
+            name={PIECE_FORM_FIELD_NAMES.comment}
           />
         </Col>
       </Row>
@@ -146,7 +147,7 @@ export const PieceFields = ({
             component={TextArea}
             fullWidth
             label={<FormattedMessage id="ui-receiving.piece.internalNote" />}
-            name="internalNote"
+            name={PIECE_FORM_FIELD_NAMES.internalNote}
           />
         </Col>
         <Col
@@ -157,7 +158,7 @@ export const PieceFields = ({
             component={TextArea}
             fullWidth
             label={<FormattedMessage id="ui-receiving.piece.externalNote" />}
-            name="externalNote"
+            name={PIECE_FORM_FIELD_NAMES.externalNote}
           />
         </Col>
       </Row>
@@ -185,7 +186,7 @@ export const PieceFields = ({
             component={Checkbox}
             fullWidth
             label={<FormattedMessage id="ui-receiving.piece.supplement" />}
-            name="supplement"
+            name={PIECE_FORM_FIELD_NAMES.supplement}
             type="checkbox"
             vertical
           />
@@ -203,7 +204,7 @@ export const PieceFields = ({
                   disabled={!values.displayOnHolding}
                   fullWidth
                   label={<FormattedMessage id="ui-receiving.piece.discoverySuppress" />}
-                  name="discoverySuppress"
+                  name={PIECE_FORM_FIELD_NAMES.discoverySuppress}
                   type="checkbox"
                   vertical
                 />
@@ -218,7 +219,7 @@ export const PieceFields = ({
                 component={Checkbox}
                 fullWidth
                 label={<FormattedMessage id="ui-receiving.piece.displayOnHolding" />}
-                name="displayOnHolding"
+                name={PIECE_FORM_FIELD_NAMES.displayOnHolding}
                 type="checkbox"
                 vertical
                 onChange={onChangeDisplayOnHolding}
@@ -235,7 +236,7 @@ export const PieceFields = ({
                     component={Checkbox}
                     fullWidth
                     label={<FormattedMessage id="ui-receiving.piece.displayToPublic" />}
-                    name="displayToPublic"
+                    name={PIECE_FORM_FIELD_NAMES.displayToPublic}
                     type="checkbox"
                     vertical
                   />
@@ -252,7 +253,7 @@ export const PieceFields = ({
                 className={css.control}
                 fullWidth
                 label={<FormattedMessage id="ui-receiving.piece.isBound" />}
-                name="isBound"
+                name={PIECE_FORM_FIELD_NAMES.isBound}
                 type="checkbox"
                 vertical
               />
@@ -279,8 +280,8 @@ export const PieceFields = ({
             instanceId={isLocationRequired ? instanceId : undefined}
             locationIds={locationIds}
             locations={locations}
-            holdingName="holdingId"
-            locationName="locationId"
+            holdingName={PIECE_FORM_FIELD_NAMES.holdingId}
+            locationName={PIECE_FORM_FIELD_NAMES.locationId}
             onChange={setLocationValue}
             disabled={!isNotReceived}
             required={isLocationRequired}

@@ -11,6 +11,8 @@ import {
 } from '@folio/stripes/components';
 import { getItemStatusLabel } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../../constants';
+
 export const ItemFields = ({ disabled }) => {
   const { values } = useFormState();
 
@@ -22,7 +24,7 @@ export const ItemFields = ({ disabled }) => {
           md={3}
         >
           <Field
-            name="barcode"
+            name={PIECE_FORM_FIELD_NAMES.barcode}
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.barcode" />}
             disabled={disabled}
@@ -34,7 +36,7 @@ export const ItemFields = ({ disabled }) => {
           md={3}
         >
           <Field
-            name="callNumber"
+            name={PIECE_FORM_FIELD_NAMES.callNumber}
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.callNumber" />}
             disabled={disabled}
@@ -46,7 +48,7 @@ export const ItemFields = ({ disabled }) => {
           md={3}
         >
           <Field
-            name="accessionNumber"
+            name={PIECE_FORM_FIELD_NAMES.accessionNumber}
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.accessionNumber" />}
             disabled={disabled}

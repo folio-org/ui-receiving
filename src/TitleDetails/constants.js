@@ -32,6 +32,43 @@ export const ORDER_FORMAT_TO_PIECE_FORMAT = {
   [ORDER_FORMATS.other]: PIECE_FORMAT.other,
 };
 
+export const PIECE_FORM_FIELD_NAMES = {
+  accessionNumber: 'accessionNumber',
+  barcode: 'barcode',
+  callNumber: 'callNumber',
+  chronology: 'chronology',
+  claimingInterval: 'claimingInterval',
+  comment: 'comment',
+  copyNumber: 'copyNumber',
+  deleteHolding: 'deleteHolding',
+  discoverySuppress: 'discoverySuppress',
+  displayOnHolding: 'displayOnHolding',
+  displaySummary: 'displaySummary',
+  displayToPublic: 'displayToPublic',
+  enumeration: 'enumeration',
+  externalNote: 'externalNote',
+  format: 'format',
+  holdingId: 'holdingId',
+  internalNote: 'internalNote',
+  isBound: 'isBound',
+  isCreateAnother: 'isCreateAnother',
+  isCreateItem: 'isCreateItem',
+  locationId: 'locationId',
+  receiptDate: 'receiptDate',
+  receivingStatus: 'receivingStatus',
+  supplement: 'supplement',
+};
+
+export const PIECE_FORM_CHECKBOX_FIELD_NAMES = [
+  PIECE_FORM_FIELD_NAMES.discoverySuppress,
+  PIECE_FORM_FIELD_NAMES.displayOnHolding,
+  PIECE_FORM_FIELD_NAMES.displayToPublic,
+  PIECE_FORM_FIELD_NAMES.isBound,
+  PIECE_FORM_FIELD_NAMES.isCreateAnother,
+  PIECE_FORM_FIELD_NAMES.isCreateItem,
+  PIECE_FORM_FIELD_NAMES.supplement,
+];
+
 export const PIECE_COLUMNS = {
   accessionNumber: 'accessionNumber',
   displaySummary: 'displaySummary',

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import {
@@ -18,6 +17,8 @@ import {
   INVENTORY_RECORDS_TYPE,
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
+
+import { PIECE_FORM_FIELD_NAMES } from '../../../TitleDetails/constants';
 
 function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
   const { format, itemId, holdingsRecordId, receivingStatus } = piece;
@@ -70,7 +71,7 @@ CreateItemField.propTypes = {
 };
 
 CreateItemField.defaultProps = {
-  name: 'isCreateItem',
+  name: PIECE_FORM_FIELD_NAMES.isCreateItem,
 };
 
 export default CreateItemField;

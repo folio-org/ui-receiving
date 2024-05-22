@@ -1,6 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
-import { omit } from 'lodash';
+import {
+  useCallback,
+  useMemo,
+} from 'react';
 
 import {
   ORDER_FORMATS,
@@ -8,6 +11,10 @@ import {
   PIECE_FORMAT,
 } from '@folio/stripes-acq-components';
 
+import {
+  PIECE_FORM_CHECKBOX_FIELD_NAMES,
+  PIECE_FORM_FIELD_NAMES,
+} from '../constants';
 import AddPieceModal from './AddPieceModal';
 
 const AddPieceModalContainer = ({
@@ -42,7 +49,7 @@ const AddPieceModalContainer = ({
   };
 
   const onQuickReceive = useCallback((formValues) => (
-    onCheckIn(omit(formValues, 'isCreateAnother'), formValues.isCreateAnother)
+    onCheckIn(omit(formValues, PIECE_FORM_FIELD_NAMES.isCreateAnother), formValues.isCreateAnother)
   ), [onCheckIn]);
 
   const orderFormat = poLine?.orderFormat;
@@ -51,12 +58,11 @@ const AddPieceModalContainer = ({
     : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues.format);
 
   const initialCheckboxValues = useMemo(() => (
-    ['discoverySuppress', 'isCreateAnother', 'isCreateItem', 'supplement']
-      .reduce((acc, key) => {
-        acc[key] = Boolean(initialValues[key]);
+    PIECE_FORM_CHECKBOX_FIELD_NAMES.reduce((acc, key) => {
+      acc[key] = Boolean(initialValues[key]);
 
-        return acc;
-      }, {})
+      return acc;
+    }, {})
   ), [initialValues]);
 
   return (

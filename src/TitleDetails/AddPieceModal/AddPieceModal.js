@@ -37,6 +37,7 @@ import {
 import { HOLDINGS_API } from '../../common/constants';
 import { getClaimingIntervalFromDate } from '../../common/utils';
 import {
+  PIECE_FORM_FIELD_NAMES,
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
 } from '../constants';
@@ -94,7 +95,7 @@ const AddPieceModal = ({
     This param should be reset to `false` after the component init.
   */
   useEffect(() => {
-    change('isCreateAnother', false);
+    change(PIECE_FORM_FIELD_NAMES.isCreateAnother, false);
   }, [change]);
 
   const labelId = id ? 'ui-receiving.piece.addPieceModal.editTitle' : 'ui-receiving.piece.addPieceModal.title';
@@ -133,11 +134,11 @@ const AddPieceModal = ({
   }, [enumeration, close, deletePiece, id]);
 
   const onChangeDisplayOnHolding = ({ target: { checked } }) => {
-    change('displayOnHolding', checked);
+    change(PIECE_FORM_FIELD_NAMES.displayOnHolding, checked);
 
     if (!checked) {
-      change('discoverySuppress', checked);
-      change('displayToPublic', checked);
+      change(PIECE_FORM_FIELD_NAMES.discoverySuppress, checked);
+      change(PIECE_FORM_FIELD_NAMES.displayToPublic, checked);
     }
   };
 
@@ -174,17 +175,17 @@ const AddPieceModal = ({
   }, [checkHoldingAbandonment, getState, handleSubmit, id, initialHoldingId, toggleDeleteHoldingsConfirmation]);
 
   const onCreateAnotherPiece = useCallback((e) => {
-    change('isCreateAnother', true);
+    change(PIECE_FORM_FIELD_NAMES.isCreateAnother, true);
     onSave(e);
   }, [change, onSave]);
 
   const onDeleteHoldings = useCallback(() => {
-    change('deleteHolding', true);
+    change(PIECE_FORM_FIELD_NAMES.deleteHolding, true);
     handleSubmit();
   }, [change, handleSubmit]);
 
   const onStatusChange = useCallback((status) => {
-    change('receivingStatus', status);
+    change(PIECE_FORM_FIELD_NAMES.receivingStatus, status);
     onSave();
   }, [change, onSave]);
 
@@ -200,13 +201,13 @@ const AddPieceModal = ({
   [close, onUnreceive, formValues]);
 
   const onClaimDelay = useCallback(({ claimingDate }) => {
-    change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
+    change(PIECE_FORM_FIELD_NAMES.claimingInterval, getClaimingIntervalFromDate(claimingDate));
     onStatusChange(PIECE_STATUS.claimDelayed);
   }, [change, onStatusChange]);
 
   const onClaimSend = useCallback(({ claimingDate, ...rest }) => {
     batch(() => {
-      change('claimingInterval', getClaimingIntervalFromDate(claimingDate));
+      change(PIECE_FORM_FIELD_NAMES.claimingInterval, getClaimingIntervalFromDate(claimingDate));
       Object.entries(rest).forEach(([field, value]) => change(field, value));
     });
     onStatusChange(PIECE_STATUS.claimSent);
