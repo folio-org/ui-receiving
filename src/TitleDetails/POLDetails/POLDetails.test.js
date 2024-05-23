@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 
 import { render, cleanup } from '@folio/jest-config-stripes/testing-library/react';
-import { useRoutingList } from '@folio/stripes-acq-components';
+import { useRoutingLists } from '@folio/stripes-acq-components';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
@@ -11,7 +11,7 @@ import POLDetails from './POLDetails';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
-  useRoutingList: jest.fn(),
+  useRoutingLists: jest.fn(),
 }));
 
 const renderPOLDetails = ({
@@ -62,7 +62,7 @@ const polDetails = {
 
 describe('Given POL details', () => {
   beforeEach(() => {
-    useRoutingList.mockReturnValue({ routingLists: [], isLoading: false });
+    useRoutingLists.mockReturnValue({ routingLists: [], isLoading: false });
   });
   afterEach(cleanup);
 
@@ -80,7 +80,7 @@ describe('Given POL details', () => {
   });
 
   it('should display RoutingList component if there is a routingList', () => {
-    useRoutingList.mockReturnValue({ routingLists: ['test'] });
+    useRoutingLists.mockReturnValue({ routingLists: ['test'] });
     const { getByText } = renderPOLDetails(polDetails);
 
     expect(getByText('ui-receiving.title.hasRouting')).toBeDefined();

@@ -28,7 +28,7 @@ jest.mock('@folio/stripes-components/lib/Commander', () => ({
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
-  RoutingList: jest.fn().mockReturnValue('RoutingList'),
+  RoutingListAccordion: jest.fn().mockReturnValue('RoutingListAccordion'),
 }));
 jest.mock('./TitleInformation', () => jest.fn().mockReturnValue('TitleInformation'));
 jest.mock('./ReceivedPiecesList', () => jest.fn().mockReturnValue('ReceivedPiecesList'));
