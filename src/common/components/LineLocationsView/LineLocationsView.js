@@ -21,7 +21,7 @@ const LineLocationsView = ({ poLine, locations }) => {
     const lineLocations = poLine.locations.map(({ holdingId, locationId }) => (
       holdingId
         ? holdings.length && holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap)
-        : (locationsMap[locationId].name && `${locationsMap[locationId].name} (${locationsMap[locationId].code})`) || ''
+        : (locationsMap[locationId]?.name && `${locationsMap[locationId].name} (${locationsMap[locationId].code})`) || ''
     ));
 
     return lineLocations.filter(Boolean).join(', ');

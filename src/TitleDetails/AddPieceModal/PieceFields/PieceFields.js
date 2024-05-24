@@ -96,7 +96,7 @@ export const PieceFields = ({
             fullWidth
             id="chronology"
             label={<FormattedMessage id="ui-receiving.piece.chronology" />}
-            name={PIECE_FORM_FIELD_NAMES}
+            name={PIECE_FORM_FIELD_NAMES.chronology}
             type="text"
           />
         </Col>
