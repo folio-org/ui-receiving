@@ -11,6 +11,7 @@ import {
 
 import { ROUTING_LIST_ROUTE } from '../../constants';
 import {
+  FALLBACK_ROUTE,
   ROUTING_LIST_CREATE_ROUTE,
   ROUTING_LIST_EDIT_ROUTE,
   ROUTING_LIST_VIEW_ROUTE,
@@ -21,20 +22,20 @@ export function RoutingList() {
     <Switch>
       <Route
         path={ROUTING_LIST_CREATE_ROUTE}
-        component={RoutingListCreate}
+        render={() => <RoutingListCreate fallbackPath={FALLBACK_ROUTE} />}
       />
       <Route
         path={ROUTING_LIST_VIEW_ROUTE}
         render={() => (
           <RoutingListView
+            fallbackPath={FALLBACK_ROUTE}
             routingListUrl={ROUTING_LIST_ROUTE}
-            moduleName="receiving"
           />
         )}
       />
       <Route
         path={ROUTING_LIST_EDIT_ROUTE}
-        component={RoutingListEdit}
+        render={() => <RoutingListEdit fallbackPath={FALLBACK_ROUTE} />}
       />
     </Switch>
   );
