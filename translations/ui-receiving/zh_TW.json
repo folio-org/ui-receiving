@@ -249,5 +249,9 @@
     "filter.piece.updatedBy": "最後更新(作品)：",
     "filter.piece.dateCreated": "建立日期(作品)",
     "filter.piece.dateUpdated": "更新日期(作品)",
-    "piece.isBound": "Bound"
+    "piece.isBound": "Bound",
+    "filter.bound": "Bound",
+    "filter.notBound": "Not bound",
+    "filter.isBinderyActive": "Bindery active",
+    "title.hasRouting": "This title has routing."
 }

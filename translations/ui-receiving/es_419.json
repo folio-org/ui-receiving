@@ -249,5 +249,9 @@
     "filter.piece.updatedBy": "Updated by (Piece)",
     "filter.piece.dateCreated": "Fecha de creación (Pieza)",
     "filter.piece.dateUpdated": "Fecha de actualización (Pieza)",
-    "piece.isBound": "Bound"
+    "piece.isBound": "Bound",
+    "filter.bound": "Bound",
+    "filter.notBound": "Not bound",
+    "filter.isBinderyActive": "Bindery active",
+    "title.hasRouting": "Este título tiene enrutamiento."
 }
