@@ -14,14 +14,10 @@ import {
 import { FILTERS } from '../constants';
 import ReceivingListFilter from './ReceivingListFilter';
 
-jest.mock('@folio/stripes-acq-components/lib/consortia/contexts', () => ({
-  ...jest.requireActual('@folio/stripes-acq-components/lib/consortia/contexts'),
-  ConsortiumLocationsContextProvider: jest.fn(),
-}));
-
 jest.mock('@folio/stripes-acq-components/lib/contexts', () => ({
   ...jest.requireActual('@folio/stripes-acq-components/lib/contexts'),
   LocationsContextProvider: jest.fn(),
+  ConsortiumLocationsContextProvider: jest.fn(),
 }));
 
 const locations = [
