@@ -144,7 +144,7 @@
     "piece.actions.delete.deleteItem": "Usuń egzemplarz",
     "piece.actions.delete.deleteHoldings": "Usuń zasoby",
     "piece.actions.delete.deleteHoldingsAndItem": "Delete Holdings and Item",
-    "piece.copyNumber": "Copy number",
+    "piece.copyNumber": "Liczba kopii",
     "piece.enumeration": "Enumeration",
     "piece.chronology": "Chronology",
     "piece.displayOnHolding": "Display on holding",
@@ -161,7 +161,7 @@
     "title.receivingWorkflow.synchronized": "Synchronized order and receipt quantity",
     "piece.actions.saveAndClose": "Zapisz i zamknij",
     "piece.actions.createAnother": "Utwórz kolejny",
-    "filter.supplements": "Supplements",
+    "filter.supplements": "Dodatki",
     "filter.nonSupplements": "Non supplements",
     "piece.itemStatus.info": "When receiving pieces that have connected items. A connected item with the status of \"Order closed\" or \"On order\" will be updated to a status of \"In process\". Items in other statuses will not have their status changed.",
     "filter.rush": "Rush",
@@ -249,5 +249,9 @@
     "filter.piece.updatedBy": "Updated by (Piece)",
     "filter.piece.dateCreated": "Date created (Piece)",
     "filter.piece.dateUpdated": "Date updated (Piece)",
-    "piece.isBound": "Bound"
+    "piece.isBound": "Bound",
+    "filter.bound": "Bound",
+    "filter.notBound": "Not bound",
+    "filter.isBinderyActive": "Bindery active",
+    "title.hasRouting": "This title has routing."
 }

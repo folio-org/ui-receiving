@@ -249,5 +249,9 @@
     "filter.piece.updatedBy": "Aktualizoval (kus)",
     "filter.piece.dateCreated": "Datum vytvoření (kus)",
     "filter.piece.dateUpdated": "Datum aktualizace (kus)",
-    "piece.isBound": "Vázaný"
+    "piece.isBound": "Vázaný",
+    "filter.bound": "Vázaný",
+    "filter.notBound": "Not bound",
+    "filter.isBinderyActive": "Bindery active",
+    "title.hasRouting": "Tento název má směrování."
 }

@@ -249,5 +249,9 @@
     "filter.piece.updatedBy": "Atualizado por (Piece)",
     "filter.piece.dateCreated": "Data de criação (Peça)",
     "filter.piece.dateUpdated": "Data de atualização (peça)",
-    "piece.isBound": "Vinculado"
+    "piece.isBound": "Vinculado",
+    "filter.bound": "Vinculado",
+    "filter.notBound": "Não vinculado",
+    "filter.isBinderyActive": "Encadernação ativa",
+    "title.hasRouting": "Este título tem roteamento."
 }
