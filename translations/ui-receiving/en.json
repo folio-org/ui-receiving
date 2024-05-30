@@ -173,7 +173,6 @@
   "piece.actions.edit.deleteHoldings.message":"This piece is connected to records in inventory. After this edit there will be no other pieces OR items connected to the related Holdings record. After making this change would you like FOLIO to delete the Holdings?",
   "piece.actions.load.error": "Failed to load pieces",
   "piece.actions.quickReceive":"Quick receive",
-  "piece.actions.saveAndClose":"Save & close",
   "piece.actions.createAnother":"Create another",
   "piece.actions.unreceive.confirm": "Confirm",
   "piece.actions.unreceive.heading":"Unreceiving piece",
