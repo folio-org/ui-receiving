@@ -50,7 +50,7 @@ const POLDetails = ({
 
   return (
     <>
-      {routingLists.length && (
+      {Boolean(routingLists.length) && (
         <Row>
           <Col xs={12}>
             <MessageBanner type="warning">
