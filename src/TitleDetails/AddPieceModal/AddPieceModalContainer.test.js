@@ -82,7 +82,7 @@ describe('AddPieceModalContainer', () => {
     renderAddPieceModalContainer();
 
     const saveBtn = await screen.findByRole('button', {
-      name: 'ui-receiving.piece.actions.saveAndClose',
+      name: 'stripes-components.saveAndClose',
     });
 
     await user.click(saveBtn);

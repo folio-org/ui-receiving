@@ -11,6 +11,7 @@
 * Add bindery active facet to receiving. Refs UIREC-323.
 * Add RoutingList behavior in receiving. Refs UIREC-299.
 * Print routing list from receiving app. Refs UIREC-268.
+* Use Save & close button label stripes-component translation key .Refs UIREC-335.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

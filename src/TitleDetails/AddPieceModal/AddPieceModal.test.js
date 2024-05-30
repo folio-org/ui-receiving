@@ -216,7 +216,7 @@ describe('AddPieceModal', () => {
         },
       });
 
-      await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
+      await user.click(await findButton('stripes-components.saveAndClose'));
       expect(defaultProps.onSubmit).toHaveBeenCalled();
     });
 
@@ -236,7 +236,7 @@ describe('AddPieceModal', () => {
         });
 
         await createNewHoldingForThePiece();
-        await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
+        await user.click(await findButton('stripes-components.saveAndClose'));
 
         expect(await screen.findByText('ui-receiving.piece.actions.edit.deleteHoldings.message')).toBeInTheDocument();
         expect(defaultProps.onSubmit).not.toHaveBeenCalled();
@@ -254,7 +254,7 @@ describe('AddPieceModal', () => {
         });
 
         await createNewHoldingForThePiece();
-        await user.click(await findButton('ui-receiving.piece.actions.saveAndClose'));
+        await user.click(await findButton('stripes-components.saveAndClose'));
 
         expect(screen.queryByText('ui-receiving.piece.actions.edit.deleteHoldings.message')).not.toBeInTheDocument();
         expect(defaultProps.onSubmit).toHaveBeenCalled();

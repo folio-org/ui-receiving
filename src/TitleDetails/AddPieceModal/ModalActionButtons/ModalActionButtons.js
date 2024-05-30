@@ -41,7 +41,7 @@ export const ModalActionButtons = ({
     onUnreceivePiece,
     status,
   });
-  const saveButtonLabelId = 'ui-receiving.piece.actions.saveAndClose';
+  const saveButtonLabelId = 'stripes-components.saveAndClose';
   const isSaveDisabled = actionsDisabled[PIECE_ACTION_NAMES.saveAndClose];
 
   if (actionMenu.length === 0) {
