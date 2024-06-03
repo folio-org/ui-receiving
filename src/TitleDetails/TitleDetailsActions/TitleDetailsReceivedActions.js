@@ -23,6 +23,7 @@ import {
   RECEIVED_PIECE_COLUMN_MAPPING,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
 } from '../constants';
+import { RECEIVING_BIND_PIECES_BASE_ROUTE } from '../../constants';
 
 export function TitleDetailsReceivedActions({
   applyFilters,
@@ -64,7 +65,7 @@ export function TitleDetailsReceivedActions({
           </Button>
           <Button
             data-testid="bind-pieces-button"
-            to={`/receiving/bind-piece/${titleId}`}
+            to={`${RECEIVING_BIND_PIECES_BASE_ROUTE}/${titleId}`}
             buttonStyle="dropdownItem"
             disabled={isBindPiecesButtonDisabled}
           >
