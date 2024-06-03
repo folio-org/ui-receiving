@@ -144,7 +144,7 @@ const TitleDetails = ({
     pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
   ), [poLineLocationIds, pieceLocationId]);
   const numberOfPhysicalUnits = useMemo(() => {
-    return poLine?.locations?.reduce((acc, { quantityPhysical }) => acc + quantityPhysical, 0);
+    return poLine?.locations?.reduce((acc, { quantityPhysical = 0 }) => acc + quantityPhysical, 0);
   }, [poLine?.locations]);
   const vendor = vendorsMap[order.vendor];
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];

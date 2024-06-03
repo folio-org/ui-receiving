@@ -122,6 +122,7 @@
           "orders.expect.collection.post",
           "orders.receiving.collection.post",
           "orders.routing-lists.collection.get",
+          "orders.routing-lists-template.item.get",
           "orders.routing-lists.item.get",
           "settings.receiving.enabled",
           "ui-receiving.basic.view",
