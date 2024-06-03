@@ -34,7 +34,7 @@ describe('TitleDetailsReceivedActions', () => {
 
     await user.click(screen.getByTestId('received-pieces-action-dropdown'));
 
-    expect(screen.getByText('ui-receiving.title.details.button.unreceive')).toBeDefined();
+    expect(screen.getByTestId('bind-pieces-button')).toBeInTheDocument();
   });
 });
 

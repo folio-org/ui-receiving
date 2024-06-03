@@ -4,7 +4,6 @@ export * from './usePaginatedPieces';
 export * from './usePieceMutator';
 export * from './usePieces';
 export * from './usePiecesExpect';
-export * from './usePOLine';
 export * from './useQuickReceive';
 export * from './useReceive';
 export * from './useTitle';

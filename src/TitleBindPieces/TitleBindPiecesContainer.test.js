@@ -1,27 +1,31 @@
 import { MemoryRouter } from 'react-router-dom';
 
 import {
-  act,
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
+import { useTitle } from '../common/hooks';
 import {
   usePOLine,
-  useTitle,
-} from '../common/hooks';
-import { useUnboundPieces } from './hooks';
+  useUnboundPieces,
+} from './hooks';
 import TitleBindPieces from './TitleBindPieces';
 import TitleBindPiecesContainer from './TitleBindPiecesContainer';
 
-jest.mock('./TitleBindPieces', () => jest.fn().mockReturnValue('TitleBindPieces'));
+jest.mock('@folio/stripes/core', () => ({
+  stripesConnect: jest.fn(Component => (props) => (
+    <Component {...props} />
+  )),
+}));
 
+jest.mock('./TitleBindPieces', () => jest.fn().mockReturnValue('TitleBindPieces'));
 jest.mock('../common/hooks', () => ({
-  usePOLine: jest.fn(),
   useTitle: jest.fn(),
 }));
 jest.mock('./hooks', () => ({
   useUnboundPieces: jest.fn(),
+  usePOLine: jest.fn(),
 }));
 
 const mockTitle = { title: 'Title', id: '001', poLineId: '002' };
@@ -39,18 +43,16 @@ const historyMock = {
   location: locationMock,
 };
 
-const renderTitleBindPiecesContainer = () => (render(
+const renderTitleBindPiecesContainer = () => render(
   <TitleBindPiecesContainer
     history={historyMock}
     location={locationMock}
     match={{ params: { id: '001' }, path: 'path', url: 'url' }}
   />,
   { wrapper: MemoryRouter },
-));
+);
 
 describe('TitleBindPiecesContainer', () => {
-  let mutator;
-
   beforeEach(() => {
     TitleBindPieces.mockClear();
     historyMock.push.mockClear();
@@ -60,17 +62,13 @@ describe('TitleBindPiecesContainer', () => {
   });
 
   it('should display title unreceive', async () => {
-    await act(async () => {
-      renderTitleBindPiecesContainer();
-    });
+    renderTitleBindPiecesContainer();
 
     expect(screen.getByText('TitleBindPieces')).toBeDefined();
   });
 
   it('should load all data', async () => {
-    await act(async () => {
-      renderTitleBindPiecesContainer();
-    });
+    renderTitleBindPiecesContainer();
 
     expect(usePOLine).toHaveBeenCalled();
     expect(useTitle).toHaveBeenCalled();
@@ -78,7 +76,7 @@ describe('TitleBindPiecesContainer', () => {
   });
 
   it('should redirect to title details when TitleBindPieces is cancelled', async () => {
-    await act(async () => renderTitleBindPiecesContainer());
+    renderTitleBindPiecesContainer();
 
     TitleBindPieces.mock.calls[0][0].onCancel();
 

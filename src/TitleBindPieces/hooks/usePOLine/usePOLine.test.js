@@ -3,13 +3,13 @@ import {
   QueryClientProvider,
 } from 'react-query';
 
+import { LINES_API } from '@folio/stripes-acq-components';
 import {
   renderHook,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { TITLES_API } from '../../constants';
 import { usePOLine } from './usePOLine';
 
 const queryClient = new QueryClient();
@@ -40,7 +40,7 @@ describe('useTitle', () => {
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
-    expect(result.current.title).toEqual(title);
-    expect(getMock).toHaveBeenCalledWith(`${TITLES_API}/${title.id}`, expect.objectContaining({}));
+    expect(result.current.poLine).toEqual(title);
+    expect(getMock).toHaveBeenCalledWith(`${LINES_API}/${title.id}`, expect.objectContaining({}));
   });
 });

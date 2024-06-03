@@ -7,12 +7,12 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
+import { useTitle } from '../common/hooks';
+
 import {
   usePOLine,
-  useTitle,
-} from '../common/hooks';
-
-import { useUnboundPieces } from './hooks';
+  useUnboundPieces,
+} from './hooks';
 import TitleBindPieces from './TitleBindPieces';
 
 function TitleBindPiecesContainer({ history, location, match }) {

@@ -26,7 +26,7 @@ describe('useLoanTypes', () => {
     useOkapiKy.mockClear().mockReturnValue({
       get: () => ({
         json: () => ({
-          loanTypes: [loanType],
+          loantypes: [loanType],
         }),
       }),
     });

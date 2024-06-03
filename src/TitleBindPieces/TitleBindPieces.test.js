@@ -1,3 +1,7 @@
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
@@ -8,6 +12,10 @@ import TitleBindPieces from './TitleBindPieces';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
   HasCommand: jest.fn(({ children }) => <div>{children}</div>),
+}));
+
+jest.mock('./TitleBindPiecesCreateItemForm', () => ({
+  TitleBindPiecesCreateItemForm: jest.fn(() => 'TitleBindPiecesCreateItemForm'),
 }));
 
 const initialValues = {
@@ -28,12 +36,22 @@ const defaultProps = {
   initialValues,
 };
 
-const renderTitleBindPieces = (props = defaultProps) => (render(
+const queryClient = new QueryClient();
+
+const wrapper = ({ children }) => (
+  <MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  </MemoryRouter>
+);
+
+const renderTitleBindPieces = (props = defaultProps) => render(
   <TitleBindPieces
     {...props}
   />,
-  { wrapper: MemoryRouter },
-));
+  { wrapper },
+);
 
 describe('TitleBindPieces', () => {
   it('should display title TitleBindPieces', () => {
