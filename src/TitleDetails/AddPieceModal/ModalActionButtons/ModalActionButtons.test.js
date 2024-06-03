@@ -24,7 +24,7 @@ describe('ModalActionButtons', () => {
   it('should render component', () => {
     renderComponent({ status: 'status' });
 
-    expect(screen.getByText('ui-receiving.piece.actions.saveAndClose')).toBeInTheDocument();
+    expect(screen.getByText('stripes-components.saveAndClose')).toBeInTheDocument();
   });
 
   it('should call `onSave` function when save button clicked', async () => {

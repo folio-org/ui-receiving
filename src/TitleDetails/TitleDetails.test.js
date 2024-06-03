@@ -155,7 +155,7 @@ describe('TitleDetails', () => {
       });
 
       const saveBtn = await screen.findByRole('button', {
-        name: 'ui-receiving.piece.actions.saveAndClose',
+        name: 'stripes-components.saveAndClose',
       });
 
       user.selectOptions(formatSelection, ['Electronic']);
