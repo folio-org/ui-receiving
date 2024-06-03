@@ -154,6 +154,7 @@ const TitleDetails = ({
 
   const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
+  const isBinderyActive = get(poLine, 'details.isBinderyActive', false);
 
   const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
   const acknowledgeNoteModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.receivingNoteModal.title' });
@@ -372,18 +373,20 @@ const TitleDetails = ({
         titleId={titleId}
         disabled={isRestrictedByAcqUnit}
         hasUnreceive={hasUnreceive}
+        isBindPiecesButtonDisabled={!isBinderyActive}
         toggleColumn={toggleReceivedPiecesColumn}
         visibleColumns={receivedPiecesVisibleColumns}
       />
     ),
     [
       applyReceivedPiecesFilters,
+      receivedPiecesFilters,
+      titleId,
       isRestrictedByAcqUnit,
       hasUnreceive,
-      receivedPiecesFilters,
-      receivedPiecesVisibleColumns,
-      titleId,
+      isBinderyActive,
       toggleReceivedPiecesColumn,
+      receivedPiecesVisibleColumns,
     ],
   );
 

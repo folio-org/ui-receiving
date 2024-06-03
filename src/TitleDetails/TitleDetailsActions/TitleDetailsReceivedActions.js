@@ -13,6 +13,7 @@ import {
   Button,
   Dropdown,
   DropdownMenu,
+  Icon,
   MenuSection,
 } from '@folio/stripes/components';
 
@@ -26,6 +27,7 @@ import {
 export function TitleDetailsReceivedActions({
   applyFilters,
   disabled,
+  isBindPiecesButtonDisabled = false,
   filters,
   hasUnreceive,
   titleId,
@@ -56,7 +58,19 @@ export function TitleDetailsReceivedActions({
             buttonStyle="dropdownItem"
             disabled={disabled}
           >
-            <FormattedMessage id="ui-receiving.title.details.button.unreceive" />
+            <Icon icon="cancel">
+              <FormattedMessage id="ui-receiving.title.details.button.unreceive" />
+            </Icon>
+          </Button>
+          <Button
+            data-testid="bind-pieces-button"
+            to={`/receiving/bind-piece/${titleId}`}
+            buttonStyle="dropdownItem"
+            disabled={isBindPiecesButtonDisabled}
+          >
+            <Icon icon="report">
+              <FormattedMessage id="ui-receiving.title.details.button.bindPieces" />
+            </Icon>
           </Button>
         </MenuSection>
 
@@ -91,6 +105,7 @@ TitleDetailsReceivedActions.propTypes = {
   disabled: PropTypes.bool,
   filters: PropTypes.object.isRequired,
   hasUnreceive: PropTypes.bool.isRequired,
+  isBindPiecesButtonDisabled: PropTypes.bool,
   titleId: PropTypes.string.isRequired,
   toggleColumn: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,

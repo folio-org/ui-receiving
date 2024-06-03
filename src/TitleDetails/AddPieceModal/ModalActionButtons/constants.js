@@ -55,7 +55,7 @@ export const PIECE_ACTIONS = ({
   onReceive,
   onUnreceivePiece,
 }) => ({
-  delayClaim: (
+  [PIECE_ACTION_NAMES.delayClaim]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.delayClaim]}
       buttonStyle="dropdownItem"
@@ -67,7 +67,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  delete: isEditMode ? (
+  [PIECE_ACTION_NAMES.delete]: isEditMode ? (
     <Button
       onClick={onDelete}
       buttonStyle="dropdownItem"
@@ -79,7 +79,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ) : null,
-  expect: (
+  [PIECE_ACTION_NAMES.expect]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.expect]}
       buttonStyle="dropdownItem"
@@ -91,7 +91,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  quickReceive: (
+  [PIECE_ACTION_NAMES.quickReceive]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.quickReceive]}
       data-testid="quickReceive"
@@ -103,7 +103,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  saveAndCreate: (
+  [PIECE_ACTION_NAMES.saveAndCreate]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.saveAndCreate]}
       buttonStyle="dropdownItem"
@@ -115,7 +115,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  sendClaim: (
+  [PIECE_ACTION_NAMES.sendClaim]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.sendClaim]}
       buttonStyle="dropdownItem"
@@ -127,7 +127,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  unReceive: (
+  [PIECE_ACTION_NAMES.unReceive]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceive]}
       buttonStyle="dropdownItem"
@@ -139,7 +139,7 @@ export const PIECE_ACTIONS = ({
       </Icon>
     </Button>
   ),
-  unReceivable: (
+  [PIECE_ACTION_NAMES.unReceivable]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceivable]}
       buttonStyle="dropdownItem"

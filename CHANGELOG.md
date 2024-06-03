@@ -11,6 +11,7 @@
 * Add bindery active facet to receiving. Refs UIREC-323.
 * Add RoutingList behavior in receiving. Refs UIREC-299.
 * Print routing list from receiving app. Refs UIREC-268.
+* Add full screen Bind items page. Refs UIREC-321.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)
