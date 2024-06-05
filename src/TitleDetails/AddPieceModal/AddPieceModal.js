@@ -31,6 +31,7 @@ import {
   ModalFooter,
   PIECE_STATUS,
   handleKeyCommand,
+  useCentralOrderingContext,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
@@ -89,6 +90,8 @@ const AddPieceModal = ({
     metadata,
     receivingStatus,
   } = formValues;
+
+  const { isCentralOrderingEnabled } = useCentralOrderingContext();
 
   /*
     When the "saveAndCreate" action is triggered, `isCreateAnother` is passed as an initial value to apply validations.
@@ -320,6 +323,7 @@ const AddPieceModal = ({
                 label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.pieceDetails]}
               >
                 <PieceFields
+                  centralOrdering={isCentralOrderingEnabled}
                   createInventoryValues={createInventoryValues}
                   instanceId={instanceId}
                   locationIds={locationIds}

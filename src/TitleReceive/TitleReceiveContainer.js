@@ -12,11 +12,12 @@ import {
   itemsResource,
   LIMIT_MAX,
   LINES_API,
-  locationsManifest,
   PIECE_FORMAT,
   pieceResource,
   piecesResource,
   requestsResource,
+  useCentralOrderingContext,
+  useLocationsQuery,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -37,15 +38,22 @@ import OpenedRequestsModal from './OpenedRequestsModal';
 
 function TitleReceiveContainer({ history, location, match, mutator }) {
   const showCallout = useShowCallout();
+  const { isCentralOrderingEnabled } = useCentralOrderingContext();
+
   const titleId = match.params.id;
   const [pieces, setPieces] = useState();
   const [title, setTitle] = useState();
   const [poLine, setPoLine] = useState();
-  const [locations, setLocations] = useState();
+
   const poLineId = title?.poLineId;
   const instanceId = title?.instanceId;
 
   const { receive } = useReceive();
+
+  const {
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   useEffect(
     () => {
@@ -85,14 +93,6 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [titleId, poLineId],
-  );
-
-  useEffect(
-    () => {
-      mutator.locations.GET().then(setLocations);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
   );
 
   const onCancel = useCallback(
@@ -153,7 +153,9 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     [poLine],
   );
 
-  if (!(pieces && poLine && title && locations)) {
+  const isLoading = !(pieces && poLine && title) || isLocationsLoading;
+
+  if (isLoading) {
     return (
       <Paneset>
         <LoadingPane />
@@ -167,6 +169,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   return (
     <>
       <TitleReceive
+        centralOrdering={isCentralOrderingEnabled}
         createInventoryValues={createInventoryValues}
         initialValues={initialValues}
         instanceId={instanceId}
@@ -202,10 +205,6 @@ TitleReceiveContainer.manifest = Object.freeze({
   items: itemsResource,
   requests: requestsResource,
   piece: pieceResource,
-  locations: {
-    ...locationsManifest,
-    fetch: false,
-  },
 });
 
 TitleReceiveContainer.propTypes = {

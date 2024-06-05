@@ -57,6 +57,7 @@ export const PIECE_FORM_FIELD_NAMES = {
   locationId: 'locationId',
   receiptDate: 'receiptDate',
   receivingStatus: 'receivingStatus',
+  receivingTenantId: 'receivingTenantId',
   supplement: 'supplement',
 };
 

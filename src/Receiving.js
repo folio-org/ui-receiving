@@ -16,6 +16,7 @@ import {
 } from '@folio/stripes/components';
 import {
   AcqKeyboardShortcutsModal,
+  CentralOrderingContextProvider,
   handleKeyCommand,
   useModalToggle,
 } from '@folio/stripes-acq-components';
@@ -76,7 +77,7 @@ const Receiving = () => {
   ];
 
   return (
-    <>
+    <CentralOrderingContextProvider>
       <CommandList commands={shortcutCommands}>
         <HasCommand
           commands={shortcuts}
@@ -155,7 +156,7 @@ const Receiving = () => {
           onClose={toggleModal}
         />
       )}
-    </>
+    </CentralOrderingContextProvider>
   );
 };
 

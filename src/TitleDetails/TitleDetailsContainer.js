@@ -11,11 +11,12 @@ import {
   LIMIT_MAX,
   LINES_API,
   LoadingPane,
-  locationsManifest,
   ORDERS_API,
   organizationsManifest,
   pieceResource,
   piecesResource,
+  useCentralOrderingContext,
+  useLocationsQuery,
   useShowCallout,
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
@@ -37,14 +38,21 @@ import TitleDetails from './TitleDetails';
 
 const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const titleId = match.params.id;
+
   const showCallout = useShowCallout();
+  const { isCentralOrderingEnabled } = useCentralOrderingContext();
+
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
   const [piecesExistance, setPiecesExistance] = useState();
   const [order, setOrder] = useState({});
-  const [locations, setLocations] = useState();
   const [vendorsMap, setVendorsMap] = useState();
+
+  const {
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   const { mutatePiece } = usePieceMutator();
   const { quickReceive } = useQuickReceive();
@@ -153,14 +161,6 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [fetchReceivingResources, showCallout, titleId],
   );
-
-  useEffect(() => {
-    setLocations();
-
-    mutator.locations.GET().then(setLocations);
-  },
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  []);
 
   const onClose = useCallback(
     () => {
@@ -279,7 +279,13 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems: pieces }));
   }, [fetchReceivingResources, poLine.id, showCallout, unreceive]);
 
-  if (isLoading || !(locations || vendorsMap)) {
+  const isDataLoading = (
+    isLoading
+    || !(locations || vendorsMap)
+    || isLocationsLoading
+  );
+
+  if (isDataLoading) {
     return (
       <LoadingPane
         id="pane-title-details"
@@ -290,6 +296,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   return (
     <TitleDetails
+      centralOrdering={isCentralOrderingEnabled}
       deletePiece={deletePiece}
       locations={locations}
       onAddPiece={onAddPiece}
@@ -327,10 +334,6 @@ TitleDetailsContainer.manifest = Object.freeze({
   orderPieces: pieceResource,
   pieces: piecesResource,
   items: itemsResource,
-  locations: {
-    ...locationsManifest,
-    fetch: false,
-  },
   vendors: {
     ...organizationsManifest,
     fetch: false,

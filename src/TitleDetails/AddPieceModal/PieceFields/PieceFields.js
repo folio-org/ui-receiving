@@ -11,6 +11,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import {
+  ConsortiumFieldInventory,
   FieldDatepickerFinal,
   FieldInventory,
   FieldSelectFinal,
@@ -27,6 +28,7 @@ import css from './PieceFields.css';
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
 export const PieceFields = ({
+  centralOrdering = false,
   createInventoryValues,
   instanceId,
   locationIds,
@@ -44,6 +46,10 @@ export const PieceFields = ({
 
   // https://issues.folio.org/browse/UIREC-208
   const isDiscoverySuppressEnabled = false;
+
+  const FieldInventoryComponent = centralOrdering
+    ? ConsortiumFieldInventory
+    : FieldInventory;
 
   return (
     <>
@@ -268,15 +274,18 @@ export const PieceFields = ({
           md={3}
         >
           <LineLocationsView
+            centralOrdering={centralOrdering}
+            instanceId={instanceId}
             poLine={poLine}
             locations={locations}
           />
         </Col>
         <Col
-          xs={6}
-          md={3}
+          xs={centralOrdering ? 12 : 6}
+          md={centralOrdering ? 6 : 3}
         >
-          <FieldInventory
+          <FieldInventoryComponent
+            affiliationName={PIECE_FORM_FIELD_NAMES.receivingTenantId}
             instanceId={isLocationRequired ? instanceId : undefined}
             locationIds={locationIds}
             locations={locations}
@@ -293,6 +302,7 @@ export const PieceFields = ({
 };
 
 PieceFields.propTypes = {
+  centralOrdering: PropTypes.bool,
   createInventoryValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
