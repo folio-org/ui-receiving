@@ -13,6 +13,8 @@
 * Print routing list from receiving app. Refs UIREC-268.
 * Use Save & close button label stripes-component translation key .Refs UIREC-335.
 * Add full screen Bind items page. Refs UIREC-321.
+* Implement binding button behavior. Refs UIREC-353.
+* Transfer requests for items to be bound. Refs UIREC-354.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

@@ -1,4 +1,5 @@
 export const ACQ_AUDIT_API = 'audit-data/acquisition';
+export const BIND_PIECES_API = 'orders/bind-pieces';
 export const CHECKIN_API = 'orders/check-in';
 export const EXPECT_API = 'orders/expect';
 export const HOLDINGS_API = 'holdings-storage/holdings';

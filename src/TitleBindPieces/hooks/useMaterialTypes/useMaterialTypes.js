@@ -1,17 +1,18 @@
 import { useQuery } from 'react-query';
 
 import {
-  useNamespace,
-  useOkapiKy,
-} from '@folio/stripes/core';
-import {
   LIMIT_MAX,
   MATERIAL_TYPE_API,
 } from '@folio/stripes-acq-components';
+import {
+  useNamespace,
+  useOkapiKy,
+} from '@folio/stripes/core';
 
 export const DEFAULT_VALUE = [];
 
 export const useMaterialTypes = (options = {}) => {
+  const { enabled = true, ...restOptions } = options;
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'material-types' });
 
@@ -24,8 +25,8 @@ export const useMaterialTypes = (options = {}) => {
     [namespace],
     () => ky.get(MATERIAL_TYPE_API, { searchParams }).json(),
     {
-      enabled: true,
-      ...options,
+      enabled,
+      ...restOptions,
     },
   );
 

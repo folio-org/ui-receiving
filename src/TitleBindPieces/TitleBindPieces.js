@@ -17,19 +17,28 @@ import stripesFinalForm from '@folio/stripes/final-form';
 
 import { TitleBindPiecesList } from './TitleBindPiecesList';
 import { TitleBindPiecesCreateItemForm } from './TitleBindPiecesCreateItemForm';
+import { isRequiredFieldsFilled } from './utils';
 
 const FIELD_NAME = 'receivedItems';
 
 const TitleBindPieces = ({
   form,
   handleSubmit,
+  locations,
   onCancel,
   paneTitle,
   pristine,
   submitting,
   values,
+  onSubmit,
 }) => {
-  const disabled = useMemo(() => values[FIELD_NAME].every(({ checked }) => !checked), [values]);
+  const disabled = useMemo(() => {
+    if (!isRequiredFieldsFilled(values)) {
+      return true;
+    }
+
+    return values[FIELD_NAME].every(({ checked }) => !checked);
+  }, [values]);
 
   const paneFooter = (
     <FormFooter
@@ -51,7 +60,7 @@ const TitleBindPieces = ({
   ];
 
   return (
-    <form>
+    <form onSubmit={() => onSubmit(values)}>
       <HasCommand
         commands={shortcuts}
         isWithinScope={checkScope}
@@ -65,7 +74,11 @@ const TitleBindPieces = ({
             onClose={onCancel}
             paneTitle={paneTitle}
           >
-            <TitleBindPiecesCreateItemForm onChange={form.change} />
+            <TitleBindPiecesCreateItemForm
+              onChange={form.change}
+              instanceId={values.instanceId}
+              locations={locations}
+            />
             <FieldArray
               id={FIELD_NAME}
               name={FIELD_NAME}
@@ -81,6 +94,8 @@ const TitleBindPieces = ({
 
 TitleBindPieces.propTypes = {
   form: PropTypes.object,
+  locations: PropTypes.arrayOf(PropTypes.object),
+  onSubmit: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,

@@ -3,9 +3,12 @@ import {
   QueryClientProvider,
 } from 'react-query';
 import { MemoryRouter } from 'react-router-dom';
-import { render } from '@folio/jest-config-stripes/testing-library/react';
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { HasCommand } from '@folio/stripes/components';
 
 import TitleBindPieces from './TitleBindPieces';
@@ -55,22 +58,22 @@ const renderTitleBindPieces = (props = defaultProps) => render(
 
 describe('TitleBindPieces', () => {
   it('should display title TitleBindPieces', () => {
-    const { getByText } = renderTitleBindPieces();
+    renderTitleBindPieces();
 
-    expect(getByText(defaultProps.paneTitle)).toBeDefined();
+    expect(screen.getByText(defaultProps.paneTitle)).toBeDefined();
   });
 
   it('should display pane footer', () => {
-    const { getByText } = renderTitleBindPieces();
+    renderTitleBindPieces();
 
-    expect(getByText('stripes-acq-components.FormFooter.cancel')).toBeDefined();
-    expect(getByText('ui-receiving.title.details.button.bind')).toBeDefined();
+    expect(screen.getByText('stripes-acq-components.FormFooter.cancel')).toBeDefined();
+    expect(screen.getByText('ui-receiving.title.details.button.bind')).toBeDefined();
   });
 
   it('should close Title TitleBindPieces', async () => {
-    const { getByText } = renderTitleBindPieces();
+    renderTitleBindPieces();
 
-    await user.click(getByText('stripes-acq-components.FormFooter.cancel'));
+    await user.click(screen.getByText('stripes-acq-components.FormFooter.cancel'));
 
     expect(defaultProps.onCancel).toHaveBeenCalled();
   });

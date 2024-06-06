@@ -18,7 +18,7 @@ import { getHydratedPieces } from '../../utils';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 
-export const useTitleHydratedPieces = ({ receivingStatus, titleId } = {}) => {
+export const useTitleHydratedPieces = ({ receivingStatus, titleId, searchQuery = '' } = {}) => {
   const ky = useOkapiKy();
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
@@ -38,7 +38,7 @@ export const useTitleHydratedPieces = ({ receivingStatus, titleId } = {}) => {
   } = usePieces(
     {
       searchParams: {
-        query: `titleId=${titleId} and poLineId==${orderLine?.id} and receivingStatus==${receivingStatus}`,
+        query: `titleId=${titleId} and poLineId==${orderLine?.id} and receivingStatus==${receivingStatus}` + (searchQuery ? ` and ${searchQuery}` : ''),
       },
     },
     { enabled: Boolean(titleId && orderLine?.id && receivingStatus) },
@@ -76,6 +76,7 @@ export const useTitleHydratedPieces = ({ receivingStatus, titleId } = {}) => {
     const holdingLocations = await batchFetch(mutatorAdapter(LOCATIONS_API, 'locations'), [...new Set([...holdingLocationIds, ...locationIds])]);
 
     return {
+      holdingLocations,
       pieces: hydratedPieces,
       pieceLocationMap: keyBy(holdingLocations, 'id'),
       pieceHoldingMap: keyBy(holdings, 'id'),
@@ -92,6 +93,7 @@ export const useTitleHydratedPieces = ({ receivingStatus, titleId } = {}) => {
     isLoading: isLoading || isReferenceDataLoading,
     orderLine,
     pieces: data?.pieces,
+    holdingLocations: data?.holdingLocations,
     title,
     pieceLocationMap: data?.pieceLocationMap,
     pieceHoldingMap: data?.pieceHoldingMap,

@@ -1,36 +1,54 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import { Field } from 'react-final-form';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
+import {
+  validateRequired,
+  FieldInventory,
+} from '@folio/stripes-acq-components';
 import {
   Col,
   Row,
   Select,
   TextField,
 } from '@folio/stripes/components';
-import { LocationLookup, LocationSelection } from '@folio/stripes/smart-components';
 
-import { TITLE_BIND_PIECES_FILED_NAMES } from '../constants';
+import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import { useLoanTypes, useMaterialTypes } from '../hooks';
+import { buildOptions } from '../utils';
 
-function buildOptions(items) {
-  return items.map(({ id, name }) => ({
-    label: name,
-    value: id,
-  }));
-}
-
-export const TitleBindPiecesCreateItemForm = ({ onChange }) => {
+export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations }) => {
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
+  const intl = useIntl();
 
-  const materialTypesOptions = useMemo(() => buildOptions(materialTypes), [materialTypes]);
-  const loanTypesOptions = useMemo(() => buildOptions(loanTypes), [loanTypes]);
+  const materialTypesOptions = useMemo(() => {
+    const emptyOption = [{
+      label: intl.formatMessage({ id: 'ui-receiving.piece.materialTypeId.empty' }),
+      value: null,
+    }];
+
+    return emptyOption.concat(buildOptions(materialTypes, intl));
+  }, [materialTypes, intl]);
+
+  const loanTypesOptions = useMemo(() => {
+    const emptyOption = [{
+      label: intl.formatMessage({ id: 'ui-receiving.piece.permanentLoanTypeId.empty' }),
+      value: null,
+    }];
+
+    return emptyOption.concat(buildOptions(loanTypes, intl));
+  }, [loanTypes, intl]);
 
   const onLocationSelected = (location) => {
-    onChange(TITLE_BIND_PIECES_FILED_NAMES.permanentLocation, location?.id);
+    onChange(PIECE_FORM_FIELD_NAMES.permanentLocationId, location?.id);
   };
+
+  const locationIds = useMemo(() => locations.map(({ id }) => id), [locations]);
 
   return (
     <Row>
@@ -41,9 +59,9 @@ export const TitleBindPiecesCreateItemForm = ({ onChange }) => {
         <Field
           component={TextField}
           fullWidth
-          id={TITLE_BIND_PIECES_FILED_NAMES.barcode}
+          id={PIECE_FORM_FIELD_NAMES.barcode}
           label={<FormattedMessage id="ui-receiving.piece.barcode" />}
-          name={TITLE_BIND_PIECES_FILED_NAMES.barcode}
+          name={PIECE_FORM_FIELD_NAMES.barcode}
           type="text"
         />
       </Col>
@@ -54,9 +72,9 @@ export const TitleBindPiecesCreateItemForm = ({ onChange }) => {
         <Field
           component={TextField}
           fullWidth
-          id={TITLE_BIND_PIECES_FILED_NAMES.callNumber}
+          id={PIECE_FORM_FIELD_NAMES.callNumber}
           label={<FormattedMessage id="ui-receiving.piece.callNumber" />}
-          name={TITLE_BIND_PIECES_FILED_NAMES.callNumber}
+          name={PIECE_FORM_FIELD_NAMES.callNumber}
           type="text"
         />
       </Col>
@@ -68,10 +86,11 @@ export const TitleBindPiecesCreateItemForm = ({ onChange }) => {
           component={Select}
           fullWidth
           required
+          validate={validateRequired}
           dataOptions={materialTypesOptions}
-          id={TITLE_BIND_PIECES_FILED_NAMES.materialType}
-          label={<FormattedMessage id="ui-receiving.piece.materialType" />}
-          name={TITLE_BIND_PIECES_FILED_NAMES.materialType}
+          id={PIECE_FORM_FIELD_NAMES.materialTypeId}
+          label={<FormattedMessage id="ui-receiving.piece.materialTypeId" />}
+          name={PIECE_FORM_FIELD_NAMES.materialTypeId}
         />
       </Col>
       <Col
@@ -82,27 +101,26 @@ export const TitleBindPiecesCreateItemForm = ({ onChange }) => {
           component={Select}
           fullWidth
           required
+          validate={validateRequired}
           dataOptions={loanTypesOptions}
-          id={TITLE_BIND_PIECES_FILED_NAMES.permanentLoanType}
-          label={<FormattedMessage id="ui-receiving.piece.permanentLoanType" />}
-          name={TITLE_BIND_PIECES_FILED_NAMES.permanentLoanType}
+          id={PIECE_FORM_FIELD_NAMES.permanentLoanTypeId}
+          label={<FormattedMessage id="ui-receiving.piece.permanentLoanTypeId" />}
+          name={PIECE_FORM_FIELD_NAMES.permanentLoanTypeId}
         />
       </Col>
       <Col
         xs={6}
         md={3}
       >
-        <Field
-          label={<FormattedMessage id="ui-receiving.piece.permanentLocation" />}
-          name={TITLE_BIND_PIECES_FILED_NAMES.permanentLocation}
-          id={TITLE_BIND_PIECES_FILED_NAMES.permanentLocation}
-          component={LocationSelection}
-          onSelect={onLocationSelected}
-          fullWidth
-          marginBottom0
+        <FieldInventory
+          instanceId={instanceId}
+          locationIds={locationIds}
+          locations={locations}
+          holdingName={PIECE_FORM_FIELD_NAMES.locationId}
+          locationName={PIECE_FORM_FIELD_NAMES.locationId}
+          onChange={onLocationSelected}
           required
         />
-        <LocationLookup onLocationSelected={onLocationSelected} />
       </Col>
     </Row>
   );
@@ -110,4 +128,6 @@ export const TitleBindPiecesCreateItemForm = ({ onChange }) => {
 
 TitleBindPiecesCreateItemForm.propTypes = {
   onChange: PropTypes.func.isRequired,
+  instanceId: PropTypes.string.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object),
 };
