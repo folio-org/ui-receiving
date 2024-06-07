@@ -13,8 +13,8 @@ import {
 import {
   PIECE_COLUMN_MAPPING,
   VISIBLE_COLUMNS,
-} from './constants';
-import { getPieceColumnFormatter } from './utils';
+} from '../constants';
+import { getPieceColumnFormatter } from '../utils';
 
 export const TitleBindPiecesList = ({ fields, props: { toggleCheckedAll } }) => {
   const intl = useIntl();

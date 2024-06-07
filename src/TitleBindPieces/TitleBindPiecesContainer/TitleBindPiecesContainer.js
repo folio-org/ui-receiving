@@ -1,6 +1,7 @@
 import {
   useCallback,
   useRef,
+  useState,
 } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
@@ -13,18 +14,24 @@ import {
   LoadingPane,
   Paneset,
 } from '@folio/stripes/components';
-import { stripesConnect } from '@folio/stripes/core';
+import {
+  stripesConnect,
+  stripesShape,
+} from '@folio/stripes/core';
 
-import { useTitleHydratedPieces } from '../common/hooks';
+import { useTitleHydratedPieces } from '../../common/hooks';
 
-import { useBindPiecesMutation } from './hooks';
-import TitleBindPieces from './TitleBindPieces';
-import { TitleBindPiecesConfirmationModal } from './TitleBindPiecesConfirmationModal';
+import { TRANSFER_REQUEST_ACTIONS } from '../constants';
+import { useBindPiecesMutation } from '../hooks';
+import TitleBindPieces from '../TitleBindPieces';
+import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
 
-function TitleBindPiecesContainer({ history, location, match }) {
+function TitleBindPiecesContainer({ history, location, match, stripes }) {
+  const currentTenantId = stripes.user?.user?.id;
   const titleId = match.params.id;
   const showCallout = useShowCallout();
   const [open, toggleOpen] = useToggle(false);
+  const [showDeleteMessage, setDeleteMessage] = useState(false);
   const bindPieceData = useRef(null);
 
   const { bindPieces } = useBindPiecesMutation();
@@ -64,6 +71,12 @@ function TitleBindPiecesContainer({ history, location, match }) {
   const onConfirm = (requestsAction) => {
     toggleOpen();
 
+    if (requestsAction === TRANSFER_REQUEST_ACTIONS.cancel) {
+      setDeleteMessage(false);
+
+      return null;
+    }
+
     return bindItems({
       ...bindPieceData.current,
       requestsAction,
@@ -72,8 +85,8 @@ function TitleBindPiecesContainer({ history, location, match }) {
 
   const onSubmit = async (values) => {
     const selectedItems = values.receivedItems.filter(({ checked }) => checked);
-    const hasOpenRequests = selectedItems.some(({ itemId, request }) => itemId && request);
-    // TODO https://folio-org.atlassian.net/browse/UIREC-353  5. Bind button (ECS-enabled system, items associated, at least one request, bound item to go to different tenant than requests)
+    const openRequests = selectedItems.filter(({ itemId, request }) => itemId && request);
+
     const requestData = {
       poLineId: orderLine.id,
       bindPieceIds: selectedItems.map(({ id }) => id),
@@ -82,7 +95,10 @@ function TitleBindPiecesContainer({ history, location, match }) {
       },
     };
 
-    if (hasOpenRequests) {
+    if (openRequests?.length) {
+      const hasDifferentRequesterId = openRequests.some(({ request }) => request?.requesterId !== currentTenantId);
+
+      setDeleteMessage(hasDifferentRequesterId);
       bindPieceData.current = requestData;
       toggleOpen();
     } else {
@@ -115,6 +131,7 @@ function TitleBindPiecesContainer({ history, location, match }) {
         id="confirm-binding-modal"
         onCancel={toggleOpen}
         onConfirm={onConfirm}
+        showDeleteMessage={showDeleteMessage}
         open={open}
       />
     </>
@@ -125,6 +142,7 @@ TitleBindPiecesContainer.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
+  stripes: stripesShape.isRequired,
 };
 
 export default stripesConnect(TitleBindPiecesContainer);

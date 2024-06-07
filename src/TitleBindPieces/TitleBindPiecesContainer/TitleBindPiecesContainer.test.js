@@ -5,9 +5,9 @@ import {
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import { useTitle } from '../common/hooks';
-import TitleBindPieces from './TitleBindPieces';
-import TitleBindPiecesContainer from './TitleBindPiecesContainer';
+import { useTitleHydratedPieces } from '../../common/hooks';
+import TitleBindPieces from '../TitleBindPieces';
+import TitleBindPiecesContainer from '.';
 
 jest.mock('@folio/stripes/core', () => ({
   stripesConnect: jest.fn(Component => (props) => (
@@ -16,8 +16,8 @@ jest.mock('@folio/stripes/core', () => ({
 }));
 
 jest.mock('./TitleBindPieces', () => jest.fn().mockReturnValue('TitleBindPieces'));
-jest.mock('../common/hooks', () => ({
-  useTitle: jest.fn(),
+jest.mock('../../common/hooks', () => ({
+  useTitleHydratedPieces: jest.fn(),
 }));
 
 const mockTitle = { title: 'Title', id: '001', poLineId: '002' };
@@ -47,7 +47,7 @@ describe('TitleBindPiecesContainer', () => {
   beforeEach(() => {
     TitleBindPieces.mockClear();
     historyMock.push.mockClear();
-    useTitle.mockClear().mockReturnValue({ title: mockTitle, isLoading: false });
+    useTitleHydratedPieces.mockClear().mockReturnValue({ title: mockTitle, isLoading: false });
   });
 
   it('should display title unreceive', async () => {

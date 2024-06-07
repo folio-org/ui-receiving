@@ -14,24 +14,36 @@ export const TitleBindPiecesConfirmationModal = ({
   onCancel,
   onConfirm,
   open,
+  showDeleteMessage = false,
 }) => {
+  const modalAction = showDeleteMessage ? 'delete' : 'transfer';
   const footer = (
     <ModalFooter>
+      {
+        !showDeleteMessage && (
+          <>
+            <Button
+              marginBottom0
+              buttonStyle="primary"
+              id={`clickable-${id}-transfer`}
+              onClick={() => onConfirm(TRANSFER_REQUEST_ACTIONS.transfer)}
+            >
+              <FormattedMessage id="ui-receiving.bind.pieces.modal.button.transfer" />
+            </Button>
+            <Button
+              marginBottom0
+              buttonStyle="default"
+              id={`clickable-${id}-not-transfer`}
+              onClick={() => onConfirm(TRANSFER_REQUEST_ACTIONS.notTransfer)}
+            >
+              <FormattedMessage id="ui-receiving.bind.pieces.modal.button.not.transfer" />
+            </Button>
+          </>
+        )
+      }
+
       <Button
-        buttonStyle="primary"
-        id={`clickable-${id}-transfer`}
-        onClick={() => onConfirm(TRANSFER_REQUEST_ACTIONS.transfer)}
-      >
-        <FormattedMessage id="ui-receiving.bind.pieces.modal.button.transfer" />
-      </Button>
-      <Button
-        buttonStyle="default"
-        id={`clickable-${id}-not-transfer`}
-        onClick={() => onConfirm(TRANSFER_REQUEST_ACTIONS.notTransfer)}
-      >
-        <FormattedMessage id="ui-receiving.bind.pieces.modal.button.not.transfer" />
-      </Button>
-      <Button
+        marginBottom0
         buttonStyle="default"
         id={`clickable-${id}-cancel`}
         onClick={() => onConfirm(TRANSFER_REQUEST_ACTIONS.cancel)}
@@ -46,20 +58,21 @@ export const TitleBindPiecesConfirmationModal = ({
       open={open}
       onClose={onCancel}
       id={id}
-      label={<FormattedMessage id="ui-receiving.bind.pieces.modal.heading" />}
+      showHeader={false}
       aria-labelledby={id}
       scope="module"
       size="small"
       footer={footer}
     >
-      <FormattedMessage id="ui-receiving.bind.pieces.modal.message" />
+      <FormattedMessage id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`} />
     </Modal>
   );
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
-  open: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
+  showDeleteMessage: PropTypes.bool,
 };
