@@ -31,7 +31,7 @@ function TitleBindPiecesContainer({ history, location, match, stripes }) {
   const titleId = match.params.id;
   const showCallout = useShowCallout();
   const [open, toggleOpen] = useToggle(false);
-  const [showDeleteMessage, setDeleteMessage] = useState(false);
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const bindPieceData = useRef(null);
 
   const { bindPieces, isBinding } = useBindPiecesMutation();
@@ -72,7 +72,7 @@ function TitleBindPiecesContainer({ history, location, match, stripes }) {
     toggleOpen();
 
     if (requestsAction === TRANSFER_REQUEST_ACTIONS.cancel) {
-      setDeleteMessage(false);
+      setShowDeleteMessage(false);
 
       return null;
     }
@@ -98,7 +98,7 @@ function TitleBindPiecesContainer({ history, location, match, stripes }) {
     if (openRequests?.length) {
       const hasDifferentRequesterId = openRequests.some(({ request }) => request?.requesterId !== currentTenantId);
 
-      setDeleteMessage(hasDifferentRequesterId);
+      setShowDeleteMessage(hasDifferentRequesterId);
       bindPieceData.current = requestData;
       toggleOpen();
     } else {
