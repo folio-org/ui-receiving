@@ -3,7 +3,10 @@ import {
   QueryClientProvider,
 } from 'react-query';
 
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  renderHook,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
 import { BIND_PIECES_API } from '../../../common/constants';
@@ -54,7 +57,7 @@ describe('useRoutingListMutation', () => {
   });
 
   it('should call `bindPieces` mutation', async () => {
-    const { result, waitFor } = renderHook(() => useBindPiecesMutation(), { wrapper });
+    const { result } = renderHook(() => useBindPiecesMutation(), { wrapper });
 
     await result.current.bindPieces(mockRequestData);
     await waitFor(() => expect(result.current.isLoading).toBeFalsy());
