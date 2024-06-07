@@ -1,1 +1,1 @@
-export { default as TitleBindPiecesContainer } from './TitleBindPiecesContainer';
+export { TitleBindPiecesContainer } from './TitleBindPiecesContainer';

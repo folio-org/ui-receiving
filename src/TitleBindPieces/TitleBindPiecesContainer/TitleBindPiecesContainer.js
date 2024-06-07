@@ -34,7 +34,7 @@ function TitleBindPiecesContainer({ history, location, match, stripes }) {
   const [showDeleteMessage, setDeleteMessage] = useState(false);
   const bindPieceData = useRef(null);
 
-  const { bindPieces } = useBindPiecesMutation();
+  const { bindPieces, isBinding } = useBindPiecesMutation();
 
   const {
     isLoading,
@@ -126,6 +126,7 @@ function TitleBindPiecesContainer({ history, location, match, stripes }) {
         paneTitle={paneTitle}
         instanceId={title.instanceId}
         locations={holdingLocations}
+        isLoading={isBinding}
       />
       <TitleBindPiecesConfirmationModal
         id="confirm-binding-modal"

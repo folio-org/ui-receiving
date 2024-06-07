@@ -31,6 +31,7 @@ const TitleBindPieces = ({
   submitting,
   values,
   onSubmit,
+  isLoading,
 }) => {
   const disabled = useMemo(() => {
     if (!isRequiredFieldsFilled(values)) {
@@ -47,7 +48,7 @@ const TitleBindPieces = ({
       label={<FormattedMessage id="ui-receiving.title.details.button.bind" />}
       onCancel={onCancel}
       pristine={pristine}
-      submitting={submitting}
+      submitting={submitting || isLoading}
     />
   );
 
@@ -94,6 +95,7 @@ const TitleBindPieces = ({
 
 TitleBindPieces.propTypes = {
   form: PropTypes.object,
+  isLoading: PropTypes.bool,
   locations: PropTypes.arrayOf(PropTypes.object),
   onSubmit: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
