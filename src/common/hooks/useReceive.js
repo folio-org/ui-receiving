@@ -26,6 +26,7 @@ export const useReceive = (options = {}) => {
           displayOnHolding: piece.displayOnHolding,
           enumeration: piece.enumeration,
           supplement: piece.supplement,
+          receivingTenantId: piece.receivingTenantId,
           locationId: piece.locationId || null,
           holdingId: piece.holdingId || null,
           createItem: piece.isCreateItem,
