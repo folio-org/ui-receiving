@@ -21,14 +21,12 @@ export const useLoanTypes = (options = {}) => {
     query: 'cql.allRecords=1 sortby name',
   };
 
-  const { isLoading, data = {} } = useQuery(
-    [namespace],
-    () => ky.get(LOAN_TYPES_API, { searchParams }).json(),
-    {
-      enabled,
-      ...restOptions,
-    },
-  );
+  const { isLoading, data = {} } = useQuery({
+    queryKey: [namespace],
+    queryFn: () => ky.get(LOAN_TYPES_API, { searchParams }).json(),
+    enabled,
+    ...restOptions,
+  });
 
   return ({
     loanTypes: data.loantypes || DEFAULT_VALUE,

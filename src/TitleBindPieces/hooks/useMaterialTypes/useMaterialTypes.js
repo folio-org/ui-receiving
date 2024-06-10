@@ -21,14 +21,12 @@ export const useMaterialTypes = (options = {}) => {
     query: 'cql.allRecords=1 sortby name',
   };
 
-  const { isLoading, data = {} } = useQuery(
-    [namespace],
-    () => ky.get(MATERIAL_TYPE_API, { searchParams }).json(),
-    {
-      enabled,
-      ...restOptions,
-    },
-  );
+  const { isLoading, data = {} } = useQuery({
+    queryKey: [namespace],
+    queryFn: () => ky.get(MATERIAL_TYPE_API, { searchParams }).json(),
+    enabled,
+    ...restOptions,
+  });
 
   return ({
     materialTypes: data.mtypes || DEFAULT_VALUE,
