@@ -10,10 +10,8 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import {
-  PIECE_COLUMN_MAPPING,
-  VISIBLE_COLUMNS,
-} from '../constants';
+import { PIECE_COLUMN_MAPPING } from '../../TitleDetails/constants';
+import { VISIBLE_COLUMNS } from '../constants';
 import { getPieceColumnFormatter } from '../utils';
 
 export const TitleBindPiecesList = ({ fields, props: { toggleCheckedAll } }) => {

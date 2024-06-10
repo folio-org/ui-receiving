@@ -1,16 +1,8 @@
-import get from 'lodash/get';
 import { Field } from 'react-final-form';
 
 import { Checkbox } from '@folio/stripes/components';
 
-import {
-  COLUMN_FORMATTER,
-  REQUIRED_FIELDS,
-} from './constants';
-
-export const isRequiredFieldsFilled = (values) => {
-  return REQUIRED_FIELDS.every(field => get(values, field));
-};
+import { COLUMN_FORMATTER } from './constants';
 
 export const buildOptions = (items) => {
   return items.map(({ id, name }) => ({

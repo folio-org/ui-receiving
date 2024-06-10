@@ -74,6 +74,7 @@ export const PIECE_COLUMNS = {
   accessionNumber: 'accessionNumber',
   displaySummary: 'displaySummary',
   callNumber: 'callNumber',
+  checked: 'checked',
   chronology: 'chronology',
   copyNumber: 'copyNumber',
   displayOnHolding: 'displayOnHolding',

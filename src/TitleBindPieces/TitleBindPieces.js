@@ -15,9 +15,8 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
-import { TitleBindPiecesList } from './TitleBindPiecesList';
 import { TitleBindPiecesCreateItemForm } from './TitleBindPiecesCreateItemForm';
-import { isRequiredFieldsFilled } from './utils';
+import { TitleBindPiecesList } from './TitleBindPiecesList';
 
 const FIELD_NAME = 'receivedItems';
 
@@ -30,25 +29,24 @@ const TitleBindPieces = ({
   pristine,
   submitting,
   values,
-  onSubmit,
   isLoading,
 }) => {
   const disabled = useMemo(() => {
-    if (!isRequiredFieldsFilled(values)) {
+    if (!form.getState().valid) {
       return true;
     }
 
     return values[FIELD_NAME].every(({ checked }) => !checked);
-  }, [values]);
+  }, [form, values]);
 
   const paneFooter = (
     <FormFooter
       handleSubmit={handleSubmit}
-      isSubmitDisabled={disabled}
+      isSubmitDisabled={disabled || isLoading}
       label={<FormattedMessage id="ui-receiving.title.details.button.bind" />}
       onCancel={onCancel}
       pristine={pristine}
-      submitting={submitting || isLoading}
+      submitting={submitting}
     />
   );
 
@@ -61,7 +59,7 @@ const TitleBindPieces = ({
   ];
 
   return (
-    <form onSubmit={() => onSubmit(values)}>
+    <form onSubmit={handleSubmit}>
       <HasCommand
         commands={shortcuts}
         isWithinScope={checkScope}
@@ -97,7 +95,6 @@ TitleBindPieces.propTypes = {
   form: PropTypes.object,
   isLoading: PropTypes.bool,
   locations: PropTypes.arrayOf(PropTypes.object),
-  onSubmit: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,

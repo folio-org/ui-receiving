@@ -3,30 +3,8 @@ import {
   ITEM_STATUS,
 } from '@folio/stripes-acq-components';
 import { NoValue } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
 
-export const PIECE_COLUMNS = {
-  displaySummary: 'displaySummary',
-  checked: 'checked',
-  enumeration: 'enumeration',
-  chronology: 'chronology',
-  copyNumber: 'copyNumber',
-  accessionNumber: 'accessionNumber',
-  barcode: 'barcode',
-  itemStatus: 'itemStatus',
-  callNumber: 'callNumber',
-};
-
-export const PIECE_COLUMN_MAPPING = {
-  [PIECE_COLUMNS.displaySummary]: <FormattedMessage id="ui-receiving.piece.displaySummary" />,
-  [PIECE_COLUMNS.enumeration]: <FormattedMessage id="ui-receiving.piece.enumeration" />,
-  [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
-  [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
-  [PIECE_COLUMNS.accessionNumber]: <FormattedMessage id="ui-receiving.piece.accessionNumber" />,
-  [PIECE_COLUMNS.barcode]: <FormattedMessage id="ui-receiving.piece.barcode" />,
-  [PIECE_COLUMNS.itemStatus]: <FormattedMessage id="ui-receiving.piece.itemStatus" />,
-  [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,
-};
+import { PIECE_COLUMNS } from '../TitleDetails/constants';
 
 export const VISIBLE_COLUMNS = [
   PIECE_COLUMNS.checked,
@@ -58,12 +36,6 @@ export const PIECE_FORM_FIELD_NAMES = {
   permanentLoanTypeId: 'bindItem.permanentLoanTypeId',
   locationId: 'bindItem.locationId',
 };
-
-export const REQUIRED_FIELDS = [
-  PIECE_FORM_FIELD_NAMES.materialTypeId,
-  PIECE_FORM_FIELD_NAMES.permanentLoanTypeId,
-  PIECE_FORM_FIELD_NAMES.locationId,
-];
 
 export const TRANSFER_REQUEST_ACTIONS = {
   cancel: 'Cancel',

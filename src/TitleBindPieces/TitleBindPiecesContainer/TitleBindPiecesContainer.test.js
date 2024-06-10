@@ -9,7 +9,7 @@ import { useTitleHydratedPieces } from '../../common/hooks';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
-import TitleBindPiecesContainer from './TitleBindPiecesContainer';
+import { TitleBindPiecesContainer } from './TitleBindPiecesContainer';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
@@ -40,19 +40,7 @@ const historyMock = {
 };
 
 const renderTitleBindPiecesContainer = () => render(
-  <TitleBindPiecesContainer
-    history={historyMock}
-    location={locationMock}
-    match={{ params: { id: '001' }, path: 'path', url: 'url' }}
-    stripes={{
-      clone: jest.fn(),
-      user: {
-        user: {
-          id: '001',
-        },
-      },
-    }}
-  />,
+  <TitleBindPiecesContainer />,
   { wrapper: MemoryRouter },
 );
 

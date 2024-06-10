@@ -3,7 +3,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import {
+  useHistory,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 
 import {
   useShowCallout,
@@ -14,22 +18,23 @@ import {
   LoadingPane,
   Paneset,
 } from '@folio/stripes/components';
-import {
-  stripesConnect,
-  stripesShape,
-} from '@folio/stripes/core';
+import { useStripes } from '@folio/stripes/core';
 
 import { useTitleHydratedPieces } from '../../common/hooks';
-
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
 
-function TitleBindPiecesContainer({ history, location, match, stripes }) {
-  const currentTenantId = stripes.user?.user?.id;
-  const titleId = match.params.id;
+export const TitleBindPiecesContainer = () => {
+  const stripes = useStripes();
+  const history = useHistory();
+  const location = useLocation();
   const showCallout = useShowCallout();
+
+  const { id: titleId } = useParams();
+  const currentTenantId = stripes.user?.user?.id;
+
   const [open, toggleOpen] = useToggle(false);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const bindPieceData = useRef(null);
@@ -137,13 +142,4 @@ function TitleBindPiecesContainer({ history, location, match, stripes }) {
       />
     </>
   );
-}
-
-TitleBindPiecesContainer.propTypes = {
-  history: ReactRouterPropTypes.history.isRequired,
-  location: ReactRouterPropTypes.location.isRequired,
-  match: ReactRouterPropTypes.match.isRequired,
-  stripes: stripesShape.isRequired,
 };
-
-export default stripesConnect(TitleBindPiecesContainer);
