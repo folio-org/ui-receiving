@@ -1,4 +1,7 @@
-import { MemoryRouter } from 'react-router-dom';
+import {
+  MemoryRouter,
+  useHistory,
+} from 'react-router-dom';
 
 import {
   render,
@@ -11,23 +14,26 @@ import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesContainer } from './TitleBindPiecesContainer';
 
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  stripesConnect: jest.fn(Component => (props) => (
-    <Component {...props} />
-  )),
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: jest.fn(),
 }));
+
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   LoadingPane: jest.fn().mockReturnValue('Loading'),
 }));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useStripes: jest.fn().mockReturnValue({ user: { user: { id: '001' } } }),
+}));
 
+jest.mock('../../common/hooks', () => ({
+  useTitleHydratedPieces: jest.fn(),
+}));
 jest.mock('../TitleBindPieces', () => jest.fn().mockReturnValue('TitleBindPieces'));
 jest.mock('../hooks', () => ({
   useBindPiecesMutation: jest.fn().mockReturnValue({ bindPieces: jest.fn(), isBinding: false }),
-}));
-jest.mock('../../common/hooks', () => ({
-  useTitleHydratedPieces: jest.fn(),
 }));
 
 const mockTitle = { title: 'Title', id: '001', poLineId: '002' };
@@ -47,7 +53,7 @@ const renderTitleBindPiecesContainer = () => render(
 describe('TitleBindPiecesContainer', () => {
   beforeEach(() => {
     TitleBindPieces.mockClear();
-    historyMock.push.mockClear();
+    useHistory.mockClear().mockReturnValue(historyMock);
     useTitleHydratedPieces
       .mockClear()
       .mockReturnValue({
