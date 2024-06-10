@@ -30,6 +30,7 @@
       "nature-of-content-terms": "1.0",
       "order-lines": "2.0 3.0",
       "orders": "11.0 12.0",
+      "orders-storage.settings": "1.0",
       "organizations.organizations": "1.0",
       "pieces": "3.0",
       "receiving": "2.0",
@@ -39,7 +40,8 @@
       "users": "16.0"
     },
     "optionalOkapiInterfaces": {
-      "consortia": "1.0"
+      "consortia": "1.0",
+      "consortium-search": "1.0"
     },
     "queryResource": "query",
     "icons": [
@@ -74,6 +76,7 @@
           "acquisitions-units.units.collection.get",
           "circulation.requests.collection.get",
           "configuration.entries.collection.get",
+          "consortium-search.holdings.collection.get",
           "inventory-storage.contributor-name-types.collection.get",
           "inventory-storage.holdings.collection.get",
           "inventory-storage.holdings.item.post",
@@ -109,6 +112,8 @@
           "orders.po-lines.collection.get",
           "orders.titles.collection.get",
           "orders.titles.item.get",
+          "orders-storage.settings.collection.get",
+          "orders-storage.settings.item.get",
           "ui-receiving.third-party-services"
         ]
       },
