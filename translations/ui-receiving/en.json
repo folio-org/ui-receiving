@@ -109,6 +109,7 @@
   "title.actions.unreceive.success": "Unreceiving successful",
 
   "title.accessProvider": "Access provider",
+  "title.boundItems": "Bound items",
   "title.closedOrderMessage": "Purchase order is closed - {reason}",
   "title.changePieceQuantityMessage": "Adding or removing pieces from this record will update the purchase order line quantity and location detail and in turn the estimated price.",
   "title.receivingWorkflow": "Receiving workflow",

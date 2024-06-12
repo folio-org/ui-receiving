@@ -57,10 +57,6 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { ROUTING_LIST_ROUTE } from '../constants';
-import TitleInformation from './TitleInformation';
-import ExpectedPiecesList from './ExpectedPiecesList';
-import ReceivedPiecesList from './ReceivedPiecesList';
-import AddPieceModal from './AddPieceModal';
 import {
   EXPECTED_PIECE_COLUMN_MAPPING,
   EXPECTED_PIECES_SEARCH_VALUE,
@@ -71,13 +67,18 @@ import {
   TITLE_ACCORDION_LABELS,
   UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from './constants';
+import AddPieceModal from './AddPieceModal';
+import { BoundPiecesList } from './BoundPiecesList';
+import ExpectedPiecesList from './ExpectedPiecesList';
+import POLDetails from './POLDetails';
+import ReceivedPiecesList from './ReceivedPiecesList';
+import Title from './Title';
 import {
   TitleDetailsExpectedActions,
   TitleDetailsReceivedActions,
   TitleDetailsUnreceivableActions,
 } from './TitleDetailsActions';
-import Title from './Title';
-import POLDetails from './POLDetails';
+import TitleInformation from './TitleInformation';
 import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
@@ -342,6 +343,7 @@ const TitleDetails = ({
     changeSearch: changeUnreceivablePiecesSearch,
     searchQuery: unreceivablePiecesSearchQuery,
   } = useFilters(noop);
+  const { filters: boundPiecesFilters } = useFilters(noop, { [MENU_FILTERS.bound]: ['true'] });
 
   const expectedPiecesActions = useMemo(
     () => (
@@ -620,6 +622,18 @@ const TitleDetails = ({
                 </Accordion>
               )}
             </ColumnManager>
+
+            <Accordion
+              id={TITLE_ACCORDION.boundItems}
+              label={TITLE_ACCORDION_LABELS.boundItems}
+            >
+              <BoundPiecesList
+                key={piecesExistance?.key}
+                id="bound-pieces-list"
+                filters={boundPiecesFilters}
+                title={title}
+              />
+            </Accordion>
           </AccordionSet>
         </AccordionStatus>
 
