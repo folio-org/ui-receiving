@@ -149,6 +149,7 @@
           "inventory-storage.nature-of-content-terms.collection.get",
           "inventory.instances.collection.get",
           "inventory.instances.item.get",
+          "orders.bind-pieces.collection.post",
           "orders.routing-lists.item.delete",
           "orders.routing-lists.item.put",
           "orders.routing-lists.item.post",
