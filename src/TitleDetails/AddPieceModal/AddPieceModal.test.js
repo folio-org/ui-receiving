@@ -206,6 +206,22 @@ describe('AddPieceModal', () => {
 
       expect(screen.queryByLabelText('ui-receiving.piece.displayToPublic')).toBeNull();
     });
+
+    it('should `Bound` checkbox must be disabled if the pieces status is not `Received`', async () => {
+      renderAddPieceModal({
+        createInventoryValues: { [PIECE_FORMAT.physical]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
+        initialValues: {
+          format: PIECE_FORMAT.physical,
+          displayOnHolding: true,
+          displayToPublic: true,
+          receivingStatus: PIECE_STATUS.expected,
+        },
+      });
+
+      const boundCheckbox = screen.getByLabelText('ui-receiving.piece.isBound');
+
+      expect(boundCheckbox).toBeDisabled();
+    });
   });
 
   describe('Save piece', () => {
