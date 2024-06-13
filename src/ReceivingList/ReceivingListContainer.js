@@ -1,28 +1,15 @@
-import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
 import {
-  checkIfUserInCentralTenant,
-  stripesConnect,
-  useStripes,
-} from '@folio/stripes/core';
-import {
   getHoldingLocationName,
-  locationsManifest,
   RESULT_COUNT_INCREMENT,
-  useCentralOrderingSettings,
   usePagination,
 } from '@folio/stripes-acq-components';
 
-import {
-  titlesResource,
-  orderLinesResource,
-  ordersResource,
-  holdingsResource,
-} from '../common/resources';
 import ReceivingList from './ReceivingList';
 
+import { useReceivingSearchContext } from '../contexts';
 import { useReceiving } from './hooks';
 import {
   fetchLinesOrders,
@@ -33,17 +20,23 @@ import {
 
 const resetData = () => {};
 
-const ReceivingListContainer = ({ mutator }) => {
+const ReceivingListContainer = () => {
   const intl = useIntl();
-  const stripes = useStripes();
+
+  const {
+    isCentralOrderingEnabled,
+    targetTenant,
+  } = useReceivingSearchContext();
 
   const invalidReferenceMessage = intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' });
 
-  const fetchReferences = useCallback(async titlesResponse => {
-    const orderLinesResponse = await fetchTitleOrderLines(mutator.receivingListOrderLines, titlesResponse, {});
-    const holdingsResponse = await fetchOrderLineHoldings(mutator.receivingListHoldings, orderLinesResponse);
+  const fetchReferences = useCallback(async (titles, ky) => {
+    const l = await fetchTitleOrderLines(ky, titles, {});
+    // TODO: remove: dev purposes
+    const orderLinesResponse = l.filter(Boolean);
+    const holdingsResponse = await fetchOrderLineHoldings(ky, orderLinesResponse);
     const locationsResponse = await fetchOrderLineLocations(
-      mutator.receivingListLocations,
+      ky,
       [
         ...orderLinesResponse,
         ...holdingsResponse
@@ -53,7 +46,7 @@ const ReceivingListContainer = ({ mutator }) => {
       ],
       {},
     );
-    const linesOrdersResponse = await fetchLinesOrders(mutator.lineOrders, orderLinesResponse, {});
+    const linesOrdersResponse = await fetchLinesOrders(ky, orderLinesResponse, {});
 
     const locationsMap = locationsResponse.reduce((acc, locationItem) => {
       acc[locationItem.id] = locationItem;
@@ -93,13 +86,7 @@ const ReceivingListContainer = ({ mutator }) => {
     }, {});
 
     return { orderLinesMap };
-  }, [
-    invalidReferenceMessage,
-    mutator.lineOrders,
-    mutator.receivingListHoldings,
-    mutator.receivingListLocations,
-    mutator.receivingListOrderLines,
-  ]);
+  }, [invalidReferenceMessage]);
 
   const { pagination, changePage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
   const {
@@ -107,10 +94,13 @@ const ReceivingListContainer = ({ mutator }) => {
     query,
     titles,
     totalRecords,
-  } = useReceiving({ pagination, fetchReferences });
-
-  const { enabled: isCentralOrderingEnabled } = useCentralOrderingSettings({
-    enabled: checkIfUserInCentralTenant(stripes),
+  } = useReceiving({
+    pagination,
+    fetchReferences,
+    options: {
+      tenantId: targetTenant,
+      enabled: Boolean(targetTenant),
+    },
   });
 
   return (
@@ -127,16 +117,4 @@ const ReceivingListContainer = ({ mutator }) => {
   );
 };
 
-ReceivingListContainer.manifest = Object.freeze({
-  receivingListTitles: titlesResource,
-  receivingListOrderLines: orderLinesResource,
-  receivingListLocations: locationsManifest,
-  receivingListHoldings: holdingsResource,
-  lineOrders: ordersResource,
-});
-
-ReceivingListContainer.propTypes = {
-  mutator: PropTypes.object.isRequired,
-};
-
-export default stripesConnect(ReceivingListContainer);
+export default ReceivingListContainer;

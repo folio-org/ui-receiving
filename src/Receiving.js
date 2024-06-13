@@ -31,6 +31,7 @@ import {
   RECEIVING_ROUTE_UNRECEIVE,
   ROUTING_LIST_ROUTE,
 } from './constants';
+import { ReceivingSearchContextProvider } from './contexts';
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleBindPiecesContainer } from './TitleBindPieces';
 import { RoutingList } from './TitleDetails';
@@ -78,84 +79,86 @@ const Receiving = () => {
 
   return (
     <CentralOrderingContextProvider>
-      <CommandList commands={shortcutCommands}>
-        <HasCommand
-          commands={shortcuts}
-          isWithinScope={checkScope}
-          scope={document.body}
-        >
-          <AppContextMenu>
-            {handleToggle => (
-              <NavList>
-                <NavListSection>
-                  <NavListItem
-                    id="receiving-app-search-item"
-                    to={{
-                      pathname: '/receiving',
-                      state: { resetFilters: true },
-                    }}
-                    onClick={() => {
-                      handleToggle();
-                      focusSearchField();
-                    }}
-                  >
-                    <FormattedMessage id="ui-receiving.appMenu.receivingAppSearch" />
-                  </NavListItem>
-                  <NavListItem
-                    id="keyboard-shortcuts-item"
-                    onClick={() => {
-                      handleToggle();
-                      toggleModal();
-                    }}
-                  >
-                    <FormattedMessage id="stripes-acq-components.appMenu.keyboardShortcuts" />
-                  </NavListItem>
-                </NavListSection>
-              </NavList>
-            )}
-          </AppContextMenu>
-          <Switch>
-            <Route
-              component={RoutingList}
-              path={ROUTING_LIST_ROUTE}
-            />
-            <Route
-              component={TitleEditContainer}
-              path={RECEIVING_ROUTE_EDIT}
-            />
-            <Route
-              component={TitleFormContainer}
-              path={RECEIVING_ROUTE_CREATE}
-            />
-            <Route
-              component={TitleReceiveContainer}
-              path={RECEIVING_ROUTE_RECEIVE}
-            />
-            <Route
-              component={TitleUnreceiveContainer}
-              path={RECEIVING_ROUTE_UNRECEIVE}
-            />
-            <Route
-              component={TitleBindPiecesContainer}
-              path={RECEIVING_BIND_PIECES_ROUTE}
-            />
-            <Route
-              component={TitleExpectContainer}
-              path={RECEIVING_ROUTE_EXPECT}
-            />
-            <Route
-              component={ReceivingListContainer}
-              path={RECEIVING_ROUTE}
-            />
-          </Switch>
-        </HasCommand>
-      </CommandList>
-      {isOpen && (
-        <AcqKeyboardShortcutsModal
-          commands={receivingCommands}
-          onClose={toggleModal}
-        />
-      )}
+      <ReceivingSearchContextProvider>
+        <CommandList commands={shortcutCommands}>
+          <HasCommand
+            commands={shortcuts}
+            isWithinScope={checkScope}
+            scope={document.body}
+          >
+            <AppContextMenu>
+              {handleToggle => (
+                <NavList>
+                  <NavListSection>
+                    <NavListItem
+                      id="receiving-app-search-item"
+                      to={{
+                        pathname: '/receiving',
+                        state: { resetFilters: true },
+                      }}
+                      onClick={() => {
+                        handleToggle();
+                        focusSearchField();
+                      }}
+                    >
+                      <FormattedMessage id="ui-receiving.appMenu.receivingAppSearch" />
+                    </NavListItem>
+                    <NavListItem
+                      id="keyboard-shortcuts-item"
+                      onClick={() => {
+                        handleToggle();
+                        toggleModal();
+                      }}
+                    >
+                      <FormattedMessage id="stripes-acq-components.appMenu.keyboardShortcuts" />
+                    </NavListItem>
+                  </NavListSection>
+                </NavList>
+              )}
+            </AppContextMenu>
+            <Switch>
+              <Route
+                component={RoutingList}
+                path={ROUTING_LIST_ROUTE}
+              />
+              <Route
+                component={TitleEditContainer}
+                path={RECEIVING_ROUTE_EDIT}
+              />
+              <Route
+                component={TitleFormContainer}
+                path={RECEIVING_ROUTE_CREATE}
+              />
+              <Route
+                component={TitleReceiveContainer}
+                path={RECEIVING_ROUTE_RECEIVE}
+              />
+              <Route
+                component={TitleUnreceiveContainer}
+                path={RECEIVING_ROUTE_UNRECEIVE}
+              />
+              <Route
+                component={TitleBindPiecesContainer}
+                path={RECEIVING_BIND_PIECES_ROUTE}
+              />
+              <Route
+                component={TitleExpectContainer}
+                path={RECEIVING_ROUTE_EXPECT}
+              />
+              <Route
+                component={ReceivingListContainer}
+                path={RECEIVING_ROUTE}
+              />
+            </Switch>
+          </HasCommand>
+        </CommandList>
+        {isOpen && (
+          <AcqKeyboardShortcutsModal
+            commands={receivingCommands}
+            onClose={toggleModal}
+          />
+        )}
+      </ReceivingSearchContextProvider>
     </CentralOrderingContextProvider>
   );
 };

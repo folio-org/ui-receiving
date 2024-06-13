@@ -43,6 +43,7 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { AffiliationsNavigation } from '../common/components';
 import TitleDetailsContainer from '../TitleDetails';
 import { ExportSettingsModal } from './ExportSettingsModal';
 import { ReceivingListActionMenu } from './ReceivingListActionMenu';
@@ -177,6 +178,8 @@ const ReceivingList = ({
             id="receiving-filters-pane"
             toggleFilters={toggleFilters}
           >
+            <AffiliationsNavigation />
+
             <SingleSearchForm
               applySearch={applySearch}
               changeSearch={changeSearch}

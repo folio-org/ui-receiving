@@ -1,14 +1,18 @@
 import { uniq, compact, flatten } from 'lodash';
 
 import {
-  LIMIT_MAX,
-  batchFetch,
+  batchRequest,
   buildArrayFieldQuery,
   buildDateRangeQuery,
   buildDateTimeRangeQuery,
   buildFilterQuery,
   buildSortingQuery,
   connectQuery,
+  HOLDINGS_API,
+  LIMIT_MAX,
+  LINES_API,
+  LOCATIONS_API,
+  ORDERS_API,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -19,23 +23,27 @@ import {
   getKeywordQuery,
 } from './ReceivingListSearchConfig';
 
-export const fetchTitleOrderLines = (mutator, titles, fetchedOrderLinesMap) => {
+export const fetchTitleOrderLines = (ky, titles, fetchedOrderLinesMap) => {
   const orderLinesQuery = titles
     .filter(title => !fetchedOrderLinesMap[title.poLineId])
     .map(title => `id==${title.poLineId}`)
     .join(' or ');
 
+  const searchParams = {
+    limit: LIMIT_MAX,
+    query: orderLinesQuery,
+  };
+
   return orderLinesQuery
-    ? mutator.GET({
-      params: {
-        limit: LIMIT_MAX,
-        query: orderLinesQuery,
-      },
-    })
+    ? (
+      ky.get(LINES_API, { searchParams })
+        .json()
+        .then(({ poLines }) => poLines)
+    )
     : Promise.resolve([]);
 };
 
-export const fetchOrderLineHoldings = (mutator, orderLines) => {
+export const fetchOrderLineHoldings = (ky, orderLines) => {
   const holdingstoFetch = orderLines
     .reduce((acc, orderLine) => {
       return [...acc, ...(orderLine.locations || [])];
@@ -44,11 +52,18 @@ export const fetchOrderLineHoldings = (mutator, orderLines) => {
     .filter(Boolean);
 
   return holdingstoFetch.length
-    ? batchFetch(mutator, uniq(holdingstoFetch))
+    ? batchRequest(
+      ({ params: searchParams }) => (
+        ky.get(HOLDINGS_API, { searchParams })
+          .json()
+          .then(({ holdingsRecords }) => holdingsRecords)
+      ),
+      uniq(holdingstoFetch),
+    )
     : Promise.resolve([]);
 };
 
-export const fetchOrderLineLocations = (mutator, orderLines, fetchedLocationsMap) => {
+export const fetchOrderLineLocations = (ky, orderLines, fetchedLocationsMap) => {
   const unfetchedLocations = orderLines
     .reduce((acc, orderLine) => {
       return [...acc, ...(orderLine.locations || []).filter(({ locationId }) => !fetchedLocationsMap[locationId])];
@@ -56,7 +71,14 @@ export const fetchOrderLineLocations = (mutator, orderLines, fetchedLocationsMap
     .map(({ locationId }) => locationId);
 
   return unfetchedLocations.length
-    ? batchFetch(mutator, uniq(unfetchedLocations))
+    ? batchRequest(
+      ({ params: searchParams }) => (
+        ky.get(LOCATIONS_API, { searchParams })
+          .json()
+          .then(({ locations }) => locations)
+      ),
+      uniq(unfetchedLocations),
+    )
     : Promise.resolve([]);
 };
 
@@ -119,13 +141,20 @@ export const buildTitlesQuery = (queryParams) => {
   return connectQuery(filterQuery, sortingQuery);
 };
 
-export const fetchLinesOrders = (mutator, lines, fetchedOrdersMap) => {
+export const fetchLinesOrders = (ky, lines, fetchedOrdersMap) => {
   const unfetched = lines
     .filter(({ purchaseOrderId }) => !fetchedOrdersMap[purchaseOrderId])
     .map(({ purchaseOrderId }) => purchaseOrderId)
     .filter(Boolean);
 
   return unfetched.length
-    ? batchFetch(mutator, uniq(unfetched))
+    ? batchRequest(
+      ({ params: searchParams }) => (
+        ky.get(ORDERS_API, { searchParams })
+          .json()
+          .then(({ purchaseOrders }) => purchaseOrders)
+      ),
+      uniq(unfetched),
+    )
     : Promise.resolve([]);
 };
