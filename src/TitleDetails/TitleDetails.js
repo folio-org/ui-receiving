@@ -118,7 +118,7 @@ const TitleDetails = ({
   poLine,
   title,
   onUnreceive,
-  vendorsMap,
+  vendorsMap = {},
   getHoldingsItemsAndPieces,
   getPieceValues,
 }) => {
@@ -148,7 +148,7 @@ const TitleDetails = ({
   const numberOfPhysicalUnits = useMemo(() => {
     return poLine?.locations?.reduce((acc, { quantityPhysical = 0 }) => acc + quantityPhysical, 0);
   }, [poLine?.locations]);
-  const vendor = vendorsMap[order.vendor];
+  const vendor = vendorsMap[order?.vendor];
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
