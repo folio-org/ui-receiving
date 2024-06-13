@@ -1,8 +1,12 @@
-import { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import {
+  useCallback,
+  useRef,
+} from 'react';
 
 import { useShowCallout } from '@folio/stripes-acq-components';
 
+import { useReceivingSearchContext } from '../../contexts';
 import {
   EXPORT_FIELDS_PARAMS,
   EXPORT_SETTINGS_FIELDS,
@@ -16,14 +20,19 @@ import {
 import ExportSettingsModal from './ExportSettingsModal';
 
 export const ExportSettingsModalContainer = ({
-  onCancel,
+  onCancel: onCancelProp,
   query,
 }) => {
+  const abortControllerRef = useRef(new AbortController());
   const showCallout = useShowCallout();
+  const { targetTenant } = useReceivingSearchContext();
   const {
     runExportCSV,
     isLoading,
-  } = usePiecesExportCSV();
+  } = usePiecesExportCSV({
+    tenantId: targetTenant,
+    signal: abortControllerRef.current.signal,
+  });
 
   const initialValues = {
     [EXPORT_SETTINGS_FIELDS.exportTitleFields]: EXPORT_FIELDS_PARAMS.all,
@@ -38,9 +47,18 @@ export const ExportSettingsModalContainer = ({
       exportFields,
       query,
     })
-      .catch(() => showCallout({ messageId: 'ui-receiving.exportSettings.error', type: 'error' }))
-      .finally(onCancel);
-  }, [onCancel, runExportCSV, showCallout, query]);
+      .then(onCancelProp)
+      .catch(() => {
+        if (!abortControllerRef.current.signal.aborted) {
+          showCallout({ messageId: 'ui-receiving.exportSettings.error', type: 'error' });
+        }
+      });
+  }, [onCancelProp, runExportCSV, showCallout, query]);
+
+  const onCancel = useCallback(() => {
+    abortControllerRef.current.abort();
+    onCancelProp();
+  }, [onCancelProp]);
 
   return (
     <ExportSettingsModal
