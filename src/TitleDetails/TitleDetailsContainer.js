@@ -42,7 +42,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
   const showCallout = useShowCallout();
   const { isCentralOrderingEnabled } = useCentralOrderingContext();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
   const [piecesExistance, setPiecesExistance] = useState();
