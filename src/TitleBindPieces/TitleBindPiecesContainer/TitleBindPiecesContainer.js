@@ -43,7 +43,7 @@ export const TitleBindPiecesContainer = () => {
 
   const {
     isLoading,
-    holdingLocations,
+    holdingLocations = [],
     orderLine,
     pieces = [],
     title,
