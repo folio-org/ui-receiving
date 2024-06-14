@@ -383,7 +383,7 @@ const TitleDetails = ({
         titleId={titleId}
         disabled={isRestrictedByAcqUnit}
         hasUnreceive={hasUnreceive}
-        isBindPiecesButtonDisabled={!isBinderyActive}
+        isBindPiecesButtonVisible={isBinderyActive}
         toggleColumn={toggleReceivedPiecesColumn}
         visibleColumns={receivedPiecesVisibleColumns}
       />
