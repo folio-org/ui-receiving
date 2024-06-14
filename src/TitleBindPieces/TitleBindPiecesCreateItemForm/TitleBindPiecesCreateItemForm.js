@@ -45,7 +45,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
   }, [loanTypes, intl]);
 
   const onLocationSelected = (location) => {
-    onChange(PIECE_FORM_FIELD_NAMES.permanentLocationId, location?.id);
+    onChange(PIECE_FORM_FIELD_NAMES.locationId, location?.id);
   };
 
   const locationIds = useMemo(() => locations.map(({ id }) => id), [locations]);
