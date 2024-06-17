@@ -24,7 +24,7 @@ export const COLUMN_FORMATTER = (hasViewInventoryPermissions, instanceId) => {
       if (!hasViewInventoryPermissions) return barcode;
 
       if (instanceId && holdingsRecordId && itemId) {
-        return <TextLink target="blank" to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{barcode}</TextLink>;
+        return <TextLink target="_blank" to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{barcode}</TextLink>;
       }
 
       return barcode;
