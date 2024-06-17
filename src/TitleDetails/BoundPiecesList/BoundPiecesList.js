@@ -75,6 +75,6 @@ export const BoundPiecesList = ({
 
 BoundPiecesList.propTypes = {
   filters: PropTypes.object.isRequired,
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   title: PropTypes.object.isRequired,
 };
