@@ -1,0 +1,1 @@
+export { TitleBindPiecesContainer } from './TitleBindPiecesContainer';

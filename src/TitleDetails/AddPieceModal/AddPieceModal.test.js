@@ -14,6 +14,7 @@ import {
   INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT,
   PIECE_STATUS,
+  useCentralOrderingContext,
 } from '@folio/stripes-acq-components';
 
 import { usePieceStatusChangeLog } from '../hooks';
@@ -23,6 +24,7 @@ jest.mock('@folio/stripes-acq-components', () => {
   return {
     ...jest.requireActual('@folio/stripes-acq-components'),
     FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
+    useCentralOrderingContext: jest.fn(),
   };
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
@@ -116,6 +118,9 @@ describe('AddPieceModal', () => {
     defaultProps.getHoldingsItemsAndPieces.mockClear();
     FieldInventory.mockClear();
     kyMock.get.mockClear();
+    useCentralOrderingContext
+      .mockClear()
+      .mockReturnValue({ isCentralOrderingEnabled: false });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
     usePieceStatusChangeLog
       .mockClear()

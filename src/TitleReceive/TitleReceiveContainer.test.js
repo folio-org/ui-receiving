@@ -1,7 +1,13 @@
-import React from 'react';
-import { act, render, cleanup, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
+
+import {
+  act,
+  render,
+  cleanup,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
+import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import {
   useReceive,
@@ -9,6 +15,11 @@ import {
 import TitleReceiveContainer from './TitleReceiveContainer';
 import TitleReceive from './TitleReceive';
 
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
+  useLocationsQuery: jest.fn(),
+}));
 jest.mock('../common/hooks', () => ({
   useReceive: jest.fn().mockReturnValue({}),
 }));
@@ -59,10 +70,6 @@ describe('TitleReceiveContainer', () => {
       poLine: {
         GET: jest.fn().mockReturnValue(Promise.resolve(mockPoLine)),
       },
-      locations: {
-        GET: jest.fn().mockReturnValue(Promise.resolve([])),
-        reset: jest.fn(),
-      },
       requests: {
         GET: jest.fn(),
         reset: jest.fn(),
@@ -75,6 +82,9 @@ describe('TitleReceiveContainer', () => {
 
     TitleReceive.mockClear();
     historyMock.push.mockClear();
+    useLocationsQuery
+      .mockClear()
+      .mockReturnValue({ locations: [{ id: 'locationId' }] });
   });
 
   afterEach(cleanup);
@@ -112,7 +122,7 @@ describe('TitleReceiveContainer', () => {
       renderTitleReceiveContainer(mutator);
     });
 
-    expect(mutator.locations.GET).toHaveBeenCalled();
+    expect(useLocationsQuery).toHaveBeenCalled();
   });
 
   it('should load all data', async () => {
@@ -123,7 +133,6 @@ describe('TitleReceiveContainer', () => {
     expect(mutator.title.GET).toHaveBeenCalled();
     expect(mutator.pieces.GET).toHaveBeenCalled();
     expect(mutator.poLine.GET).toHaveBeenCalled();
-    expect(mutator.locations.GET).toHaveBeenCalled();
   });
 
   it('should redirect to title details when receive is cancelled', async () => {

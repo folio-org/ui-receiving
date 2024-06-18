@@ -57,6 +57,7 @@ export const PIECE_FORM_FIELD_NAMES = {
   locationId: 'locationId',
   receiptDate: 'receiptDate',
   receivingStatus: 'receivingStatus',
+  receivingTenantId: 'receivingTenantId',
   supplement: 'supplement',
 };
 
@@ -74,6 +75,7 @@ export const PIECE_COLUMNS = {
   accessionNumber: 'accessionNumber',
   displaySummary: 'displaySummary',
   callNumber: 'callNumber',
+  checked: 'checked',
   chronology: 'chronology',
   copyNumber: 'copyNumber',
   displayOnHolding: 'displayOnHolding',

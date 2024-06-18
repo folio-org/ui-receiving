@@ -1,7 +1,14 @@
-import React from 'react';
-import { act, render } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
+import {
+  act,
+  render,
+} from '@folio/jest-config-stripes/testing-library/react';
+import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import {
   usePieceMutator,
@@ -11,6 +18,11 @@ import {
 import TitleDetails from './TitleDetails';
 import TitleDetailsContainer from './TitleDetailsContainer';
 
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
+  useLocationsQuery: jest.fn(),
+}));
 jest.mock('../common/hooks', () => ({
   usePieceMutator: jest.fn().mockReturnValue({}),
   useQuickReceive: jest.fn().mockReturnValue({}),
@@ -54,10 +66,6 @@ const mutator = {
   requests: {
     GET: jest.fn(),
   },
-  locations: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(locations)),
-    reset: jest.fn(),
-  },
   vendors: {
     GET: jest.fn().mockReturnValue(Promise.resolve(vendors)),
     reset: jest.fn(),
@@ -86,6 +94,9 @@ const renderTitleDetailsContainer = () => render(
 describe('TitleDetailsContainer', () => {
   beforeEach(() => {
     TitleDetails.mockClear();
+    useLocationsQuery
+      .mockClear()
+      .mockReturnValue({ locations });
   });
 
   it('should load all data', async () => {
@@ -97,7 +108,6 @@ describe('TitleDetailsContainer', () => {
     expect(mutator.purchaseOrder.GET).toHaveBeenCalled();
     expect(mutator.pieces.GET).toHaveBeenCalled();
     expect(mutator.poLine.GET).toHaveBeenCalled();
-    expect(mutator.locations.GET).toHaveBeenCalled();
     expect(mutator.vendors.GET).toHaveBeenCalled();
   });
 

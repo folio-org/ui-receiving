@@ -16,11 +16,13 @@ import {
 } from '@folio/stripes/components';
 import {
   AcqKeyboardShortcutsModal,
+  CentralOrderingContextProvider,
   handleKeyCommand,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
 import {
+  RECEIVING_BIND_PIECES_ROUTE,
   RECEIVING_ROUTE,
   RECEIVING_ROUTE_CREATE,
   RECEIVING_ROUTE_EDIT,
@@ -30,6 +32,7 @@ import {
   ROUTING_LIST_ROUTE,
 } from './constants';
 import { ReceivingListContainer } from './ReceivingList';
+import { TitleBindPiecesContainer } from './TitleBindPieces';
 import { RoutingList } from './TitleDetails';
 import { TitleFormContainer } from './TitleForm';
 import { TitleEditContainer } from './TitleEdit';
@@ -74,7 +77,7 @@ const Receiving = () => {
   ];
 
   return (
-    <>
+    <CentralOrderingContextProvider>
       <CommandList commands={shortcutCommands}>
         <HasCommand
           commands={shortcuts}
@@ -133,6 +136,10 @@ const Receiving = () => {
               path={RECEIVING_ROUTE_UNRECEIVE}
             />
             <Route
+              component={TitleBindPiecesContainer}
+              path={RECEIVING_BIND_PIECES_ROUTE}
+            />
+            <Route
               component={TitleExpectContainer}
               path={RECEIVING_ROUTE_EXPECT}
             />
@@ -149,7 +156,7 @@ const Receiving = () => {
           onClose={toggleModal}
         />
       )}
-    </>
+    </CentralOrderingContextProvider>
   );
 };
 

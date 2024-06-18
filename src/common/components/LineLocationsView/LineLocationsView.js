@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -8,12 +8,16 @@ import {
 } from '@folio/stripes/components';
 import {
   getHoldingLocationName,
-  useLineHoldings,
+  useInstanceHoldingsQuery,
 } from '@folio/stripes-acq-components';
 
-const LineLocationsView = ({ poLine, locations }) => {
-  const lineHoldingIds = poLine.locations.map(({ holdingId }) => holdingId).filter(Boolean);
-  const { holdings, isLoading } = useLineHoldings(lineHoldingIds);
+const LineLocationsView = ({
+  centralOrdering = false,
+  instanceId,
+  poLine,
+  locations,
+}) => {
+  const { holdings, isLoading } = useInstanceHoldingsQuery(instanceId, { consortium: centralOrdering });
 
   const locationsToDisplay = useMemo(() => {
     const locationsMap = locations.reduce((acc, l) => ({ ...acc, [l.id]: l }), {});
@@ -38,6 +42,8 @@ const LineLocationsView = ({ poLine, locations }) => {
 };
 
 LineLocationsView.propTypes = {
+  centralOrdering: PropTypes.bool,
+  instanceId: PropTypes.string,
   poLine: PropTypes.object.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

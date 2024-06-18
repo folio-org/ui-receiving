@@ -1,15 +1,12 @@
-import React from 'react';
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { useInstanceHoldingsQuery } from '@folio/stripes-acq-components';
 
 import LineLocationsView from './LineLocationsView';
 
 jest.mock('@folio/stripes-acq-components', () => {
   return {
     ...jest.requireActual('@folio/stripes-acq-components'),
-    useLineHoldings: jest.fn().mockReturnValue({
-      isLoading: false,
-      holdings: [{ id: 'holdingId', permanentLocationId: '001' }],
-    }),
+    useInstanceHoldingsQuery: jest.fn(),
   };
 });
 
@@ -25,6 +22,15 @@ const renderLineLocationsView = (props = defaultProps) => (render(
 ));
 
 describe('LineLocationsView', () => {
+  beforeEach(() => {
+    useInstanceHoldingsQuery
+      .mockClear()
+      .mockReturnValue({
+        isLoading: false,
+        holdings: [{ id: 'holdingId', permanentLocationId: '001' }],
+      });
+  });
+
   it('should display holding locations', () => {
     renderLineLocationsView();
 

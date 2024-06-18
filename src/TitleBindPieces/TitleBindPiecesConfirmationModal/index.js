@@ -1,0 +1,1 @@
+export { TitleBindPiecesConfirmationModal } from './TitleBindPiecesConfirmationModal';

@@ -29,6 +29,7 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
   RoutingListAccordion: jest.fn().mockReturnValue('RoutingListAccordion'),
+  useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
 }));
 jest.mock('./TitleInformation', () => jest.fn().mockReturnValue('TitleInformation'));
 jest.mock('./ReceivedPiecesList', () => jest.fn().mockReturnValue('ReceivedPiecesList'));

@@ -16,6 +16,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import {
+  ConsortiumFieldInventory,
   FieldDatepickerFinal,
   FieldInventory,
   getItemStatusLabel,
@@ -27,6 +28,7 @@ import { CreateItemField } from '../common/components';
 import {
   PIECE_COLUMN_MAPPING,
   PIECE_COLUMNS,
+  PIECE_FORM_FIELD_NAMES,
 } from '../TitleDetails/constants';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
@@ -55,6 +57,7 @@ const columnWidths = {
 };
 
 const getResultFormatter = ({
+  centralOrdering,
   createInventoryValues,
   field,
   fieldsValue,
@@ -156,8 +159,13 @@ const getResultFormatter = ({
     const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
     const isHolding = includes(createInventoryValues[record.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
 
+    const FieldInventoryComponent = centralOrdering
+      ? ConsortiumFieldInventory
+      : FieldInventory;
+
     return (
-      <FieldInventory
+      <FieldInventoryComponent
+        affiliationName={`${field}[${record.rowIndex}].${PIECE_FORM_FIELD_NAMES.receivingTenantId}`}
         instanceId={isHolding ? instanceId : undefined}
         locationIds={locationIds}
         locations={locations}
@@ -223,7 +231,15 @@ const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
 
 export const TitleReceiveList = ({
   fields,
-  props: { createInventoryValues, instanceId, selectLocation, toggleCheckedAll, locations, poLineLocationIds },
+  props: {
+    centralOrdering,
+    createInventoryValues,
+    instanceId,
+    selectLocation,
+    toggleCheckedAll,
+    locations,
+    poLineLocationIds,
+  },
 }) => {
   const intl = useIntl();
 
@@ -232,6 +248,7 @@ export const TitleReceiveList = ({
   const { onKeyDown: onFieldKeyDown } = useFieldArrowNavigation(field, []);
 
   const cellFormatters = useMemo(() => getResultFormatter({
+    centralOrdering,
     createInventoryValues,
     field,
     fieldsValue: fields.value,
@@ -241,6 +258,7 @@ export const TitleReceiveList = ({
     poLineLocationIds,
     selectLocation,
   }), [
+    centralOrdering,
     createInventoryValues,
     field,
     fields.value,
@@ -285,6 +303,7 @@ export const TitleReceiveList = ({
 TitleReceiveList.propTypes = {
   fields: PropTypes.object.isRequired,
   props: PropTypes.shape({
+    centralOrdering: PropTypes.bool,
     createInventoryValues: PropTypes.object.isRequired,
     instanceId: PropTypes.string,
     selectLocation: PropTypes.func.isRequired,

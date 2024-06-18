@@ -1,0 +1,1 @@
+export { TitleBindPiecesList } from './TitleBindPiecesList';

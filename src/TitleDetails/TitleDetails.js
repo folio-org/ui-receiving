@@ -82,7 +82,7 @@ import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
 
-function getNewPieceValues(titleId, poLine) {
+function getNewPieceValues(titleId, poLine, centralOrdering) {
   const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate: physical?.expectedReceiptDate, poLineId, titleId };
 
@@ -90,7 +90,7 @@ function getNewPieceValues(titleId, poLine) {
     initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
   }
 
-  if (locations.length === 1) {
+  if (locations.length === 1 && !centralOrdering) {
     initialValuesPiece.locationId = locations[0].locationId;
     initialValuesPiece.holdingId = locations[0].holdingId;
   }
@@ -103,6 +103,7 @@ function getNewPieceValues(titleId, poLine) {
 }
 
 const TitleDetails = ({
+  centralOrdering = false,
   deletePiece,
   history,
   location,
@@ -154,6 +155,7 @@ const TitleDetails = ({
 
   const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
+  const isBinderyActive = get(poLine, 'details.isBinderyActive', false);
 
   const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
   const acknowledgeNoteModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.receivingNoteModal.title' });
@@ -194,7 +196,7 @@ const TitleDetails = ({
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
-      setPieceValues(piece || getNewPieceValues(title.id, poLine));
+      setPieceValues(piece || getNewPieceValues(title.id, poLine, centralOrdering));
       setConfirmAcknowledgeNote(() => toggleAddPieceModal);
 
       return (
@@ -203,7 +205,14 @@ const TitleDetails = ({
           : toggleAddPieceModal()
       );
     },
-    [poLine, title.id, title.isAcknowledged, toggleAcknowledgeNote, toggleAddPieceModal],
+    [
+      centralOrdering,
+      poLine,
+      title.id,
+      title.isAcknowledged,
+      toggleAcknowledgeNote,
+      toggleAddPieceModal,
+    ],
   );
 
   const openEditReceivedPieceModal = useCallback(
@@ -372,18 +381,20 @@ const TitleDetails = ({
         titleId={titleId}
         disabled={isRestrictedByAcqUnit}
         hasUnreceive={hasUnreceive}
+        isBindPiecesButtonDisabled={!isBinderyActive}
         toggleColumn={toggleReceivedPiecesColumn}
         visibleColumns={receivedPiecesVisibleColumns}
       />
     ),
     [
       applyReceivedPiecesFilters,
+      receivedPiecesFilters,
+      titleId,
       isRestrictedByAcqUnit,
       hasUnreceive,
-      receivedPiecesFilters,
-      receivedPiecesVisibleColumns,
-      titleId,
+      isBinderyActive,
       toggleReceivedPiecesColumn,
+      receivedPiecesVisibleColumns,
     ],
   );
 
@@ -664,6 +675,7 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
+  centralOrdering: PropTypes.bool,
   deletePiece: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,

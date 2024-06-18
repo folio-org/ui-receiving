@@ -1,7 +1,11 @@
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
-import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+} from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
@@ -11,6 +15,7 @@ import AddPieceModalContainer from './AddPieceModalContainer';
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn(() => 'FieldInventory'),
+  useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView',
   () => jest.fn().mockReturnValue('LineLocationsView'));

@@ -1,6 +1,6 @@
 # Change history for ui-receiving
 
-## 5.1.0 (IN PROGRESS)
+## 6.0.0 (IN PROGRESS)
 
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
 * Add "Display to public" toggle on piece form. Refs UIREC-333.
@@ -12,6 +12,10 @@
 * Add RoutingList behavior in receiving. Refs UIREC-299.
 * Print routing list from receiving app. Refs UIREC-268.
 * Use Save & close button label stripes-component translation key .Refs UIREC-335.
+* Add full screen Bind items page. Refs UIREC-321.
+* Implement binding button behavior. Refs UIREC-353.
+* Transfer requests for items to be bound. Refs UIREC-354.
+* *BREAKING* ECS - Add the affiliation dropdown to the piece form and full-screen receiving view. Refs UIREC-365.
 * Bump up `holdings-storage` interface. Refs UIREC-366.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
