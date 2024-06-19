@@ -16,6 +16,7 @@
 * Implement binding button behavior. Refs UIREC-353.
 * Transfer requests for items to be bound. Refs UIREC-354.
 * *BREAKING* ECS - Add the affiliation dropdown to the piece form and full-screen receiving view. Refs UIREC-365.
+* Bump up `holdings-storage` interface. Refs UIREC-366.
 * Add Bound items accordion in receiving. Refs UIREC-322.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
