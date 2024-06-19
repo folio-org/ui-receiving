@@ -12,9 +12,9 @@ import { PIECE_COLUMN_MAPPING } from '../constants';
 import { usePiecesList } from '../hooks';
 import {
   BOUND_ITEMS_LIMIT,
-  COLUMN_FORMATTER,
   VISIBLE_COLUMNS,
 } from './constants';
+import { getColumnFormatter } from './utils';
 
 export const BoundPiecesList = ({
   filters,
@@ -43,7 +43,7 @@ export const BoundPiecesList = ({
 
   const hasViewInventoryPermissions = stripes.hasPerm('ui-inventory.instance.view');
   const formatter = useMemo(() => {
-    return COLUMN_FORMATTER(hasViewInventoryPermissions, title?.instanceId);
+    return getColumnFormatter(hasViewInventoryPermissions, title?.instanceId);
   }, [hasViewInventoryPermissions, title?.instanceId]);
 
   if (!pieces) return null;
