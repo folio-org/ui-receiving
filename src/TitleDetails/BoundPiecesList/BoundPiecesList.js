@@ -1,41 +1,33 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import {
+  useMemo,
+  useState,
+} from 'react';
 
 import {
   acqRowFormatter,
   PrevNextPagination,
 } from '@folio/stripes-acq-components';
-import { MultiColumnList } from '@folio/stripes/components';
+import {
+  Loading,
+  MultiColumnList,
+} from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
 import { PIECE_COLUMN_MAPPING } from '../constants';
-import { usePiecesList } from '../hooks';
 import {
   BOUND_ITEMS_LIMIT,
   VISIBLE_COLUMNS,
 } from './constants';
+import { useItemsList } from './hooks';
 import { getColumnFormatter } from './utils';
 
-export const BoundPiecesList = ({
-  filters,
-  id,
-  title,
-}) => {
+export const BoundPiecesList = ({ id, title }) => {
   const stripes = useStripes();
-  const {
-    isFetching,
-    pagination,
-    pieces,
-    setPagination,
-    totalRecords,
-  } = usePiecesList({
-    filters,
-    limit: BOUND_ITEMS_LIMIT,
-    title,
-    queryParams: {
-      isBound: true,
-    },
-  });
+  const [pagination, setPagination] = useState({ limit: BOUND_ITEMS_LIMIT, offset: 0 });
+  const { isFetching, items } = useItemsList({ titleId: title.id, poLineId: title.poLineId });
+
+  const totalCount = items.length;
 
   const onPageChange = newPagination => {
     setPagination({ ...newPagination, timestamp: new Date() });
@@ -46,14 +38,14 @@ export const BoundPiecesList = ({
     return getColumnFormatter(hasViewInventoryPermissions, title?.instanceId);
   }, [hasViewInventoryPermissions, title?.instanceId]);
 
-  if (!pieces) return null;
+  if (isFetching) return <Loading />;
 
   return (
     <>
       <MultiColumnList
         id={id}
-        contentData={pieces}
-        totalCount={totalRecords}
+        contentData={items}
+        totalCount={totalCount}
         columnMapping={PIECE_COLUMN_MAPPING}
         visibleColumns={VISIBLE_COLUMNS}
         formatter={formatter}
@@ -61,10 +53,10 @@ export const BoundPiecesList = ({
         rowFormatter={acqRowFormatter}
       />
 
-      {pieces.length > 0 && (
+      {totalCount > 0 && (
         <PrevNextPagination
           {...pagination}
-          totalCount={totalRecords}
+          totalCount={totalCount}
           disabled={isFetching}
           onChange={onPageChange}
         />
@@ -74,7 +66,6 @@ export const BoundPiecesList = ({
 };
 
 BoundPiecesList.propTypes = {
-  filters: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   title: PropTypes.object.isRequired,
 };

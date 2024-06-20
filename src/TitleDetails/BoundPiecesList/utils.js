@@ -9,14 +9,14 @@ import { PIECE_COLUMNS } from '../constants';
 export const getColumnFormatter = (hasViewInventoryPermissions, instanceId) => {
   return ({
     [PIECE_COLUMNS.barcode]: record => {
-      const { barcode, itemId, holdingsRecordId } = record;
+      const { barcode, id, holdingsRecordId } = record;
 
       if (!barcode) return <NoValue />;
 
       if (!hasViewInventoryPermissions) return barcode;
 
-      if (instanceId && holdingsRecordId && itemId) {
-        return <TextLink target="_blank" to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{barcode}</TextLink>;
+      if (instanceId && holdingsRecordId && id) {
+        return <TextLink target="_blank" to={`/inventory/view/${instanceId}/${holdingsRecordId}/${id}`}>{barcode}</TextLink>;
       }
 
       return barcode;
