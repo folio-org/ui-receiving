@@ -7,8 +7,8 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
-import { usePaginatedPieces } from '../../common/hooks';
 import { BoundPiecesList } from './BoundPiecesList';
+import { useItemsList } from './hooks';
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -18,11 +18,11 @@ jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useStripes: jest.fn().mockReturnValue({ hasPerm: jest.fn().mockReturnValue(true) }),
 }));
-jest.mock('../../common/hooks', () => ({
-  usePaginatedPieces: jest.fn(),
+jest.mock('./hooks', () => ({
+  useItemsList: jest.fn(),
 }));
 
-const pieces = [{
+const items = [{
   barcode: 'v1',
   isBound: true,
   displaySummary: 'Electronic item',
@@ -42,9 +42,8 @@ const renderBoundPiecesList = (props = {}) => (render(
 
 describe('BoundPiecesList', () => {
   beforeEach(() => {
-    usePaginatedPieces.mockClear().mockReturnValue({
-      pieces,
-      totalCount: pieces.length,
+    useItemsList.mockClear().mockReturnValue({
+      items,
       isFetching: false,
     });
   });
@@ -59,17 +58,17 @@ describe('BoundPiecesList', () => {
     expect(screen.getByText('ui-receiving.piece.barcode')).toBeInTheDocument();
     expect(screen.getByText('ui-receiving.piece.status')).toBeInTheDocument();
 
-    expect(screen.getByText(pieces[0].barcode)).toBeInTheDocument();
+    expect(screen.getByText(items[0].barcode)).toBeInTheDocument();
   });
 
   it('should render barcode link', () => {
-    usePaginatedPieces.mockClear().mockReturnValue({
-      pieces: [{
-        ...pieces[0],
+    useItemsList.mockClear().mockReturnValue({
+      items: [{
+        ...items[0],
+        id: 'id',
         itemId: 'itemId',
         holdingsRecordId: 'holdingsRecordId',
       }],
-      totalCount: pieces.length,
       isFetching: false,
     });
 
@@ -78,13 +77,12 @@ describe('BoundPiecesList', () => {
     expect(screen.getByText('ui-receiving.piece.barcode')).toBeInTheDocument();
     expect(screen.getByTestId('textLink')).toBeInTheDocument();
 
-    expect(screen.getByText(pieces[0].barcode)).toBeInTheDocument();
+    expect(screen.getByText(items[0].barcode)).toBeInTheDocument();
   });
 
   it('should not render component when pieces are not fetched', () => {
-    usePaginatedPieces.mockReturnValue({
-      pieces: null,
-      totalCount: 0,
+    useItemsList.mockReturnValue({
+      items: [],
       isFetching: false,
     });
 
