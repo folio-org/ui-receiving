@@ -17,7 +17,7 @@ export const useItemsList = ({ titleId, poLineId, options = {} }) => {
   const { enabled = true, ...otherOptions } = options;
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'bound-items-list' });
-  const boundItemsQuery = `titleId==${titleId} and poLineId==${poLineId} and isBound==true sortby receivedDate`;
+  const boundItemsQuery = `titleId==${titleId} and poLineId==${poLineId} and isBound==true`;
 
   const searchParams = {
     limit: LIMIT_MAX,
@@ -51,5 +51,6 @@ export const useItemsList = ({ titleId, poLineId, options = {} }) => {
     isFetching,
     refetch,
     items: data,
+    totalRecords: data.length,
   });
 };

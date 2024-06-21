@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
-import {
-  useMemo,
-  useState,
-} from 'react';
+import { useMemo } from 'react';
 
 import {
   acqRowFormatter,
   PrevNextPagination,
+  useLocalPagination,
 } from '@folio/stripes-acq-components';
 import {
   Loading,
@@ -22,12 +20,10 @@ import {
 import { useItemsList } from './hooks';
 import { getColumnFormatter } from './utils';
 
-export const BoundPiecesList = ({ id, title }) => {
+export const BoundItemsList = ({ id, title }) => {
   const stripes = useStripes();
-  const [pagination, setPagination] = useState({ limit: BOUND_ITEMS_LIMIT, offset: 0 });
-  const { isFetching, items } = useItemsList({ titleId: title.id, poLineId: title.poLineId });
-
-  const totalCount = items.length;
+  const { isFetching, items, totalRecords } = useItemsList({ titleId: title.id, poLineId: title.poLineId });
+  const { paginatedData, pagination, setPagination } = useLocalPagination(items, BOUND_ITEMS_LIMIT);
 
   const onPageChange = newPagination => {
     setPagination({ ...newPagination, timestamp: new Date() });
@@ -44,8 +40,8 @@ export const BoundPiecesList = ({ id, title }) => {
     <>
       <MultiColumnList
         id={id}
-        contentData={items}
-        totalCount={totalCount}
+        contentData={paginatedData}
+        totalCount={totalRecords}
         columnMapping={PIECE_COLUMN_MAPPING}
         visibleColumns={VISIBLE_COLUMNS}
         formatter={formatter}
@@ -53,10 +49,10 @@ export const BoundPiecesList = ({ id, title }) => {
         rowFormatter={acqRowFormatter}
       />
 
-      {totalCount > 0 && (
+      {totalRecords > 0 && (
         <PrevNextPagination
           {...pagination}
-          totalCount={totalCount}
+          totalCount={totalRecords}
           disabled={isFetching}
           onChange={onPageChange}
         />
@@ -65,7 +61,7 @@ export const BoundPiecesList = ({ id, title }) => {
   );
 };
 
-BoundPiecesList.propTypes = {
+BoundItemsList.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.object.isRequired,
 };

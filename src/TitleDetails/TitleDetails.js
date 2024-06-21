@@ -68,7 +68,7 @@ import {
   UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from './constants';
 import AddPieceModal from './AddPieceModal';
-import { BoundPiecesList } from './BoundPiecesList';
+import { BoundItemsList } from './BoundItemsList';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import POLDetails from './POLDetails';
 import ReceivedPiecesList from './ReceivedPiecesList';
@@ -343,7 +343,7 @@ const TitleDetails = ({
     changeSearch: changeUnreceivablePiecesSearch,
     searchQuery: unreceivablePiecesSearchQuery,
   } = useFilters(noop);
-  const { filters: boundPiecesFilters } = useFilters(noop, { [MENU_FILTERS.bound]: ['true'] });
+  const { filters: boundItemsFilters } = useFilters(noop, { [MENU_FILTERS.bound]: ['true'] });
 
   const expectedPiecesActions = useMemo(
     () => (
@@ -627,10 +627,10 @@ const TitleDetails = ({
               id={TITLE_ACCORDION.boundItems}
               label={TITLE_ACCORDION_LABELS.boundItems}
             >
-              <BoundPiecesList
+              <BoundItemsList
                 key={piecesExistance?.key}
-                id="bound-pieces-list"
-                filters={boundPiecesFilters}
+                id="bound-items-list"
+                filters={boundItemsFilters}
                 title={title}
               />
             </Accordion>

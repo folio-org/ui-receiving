@@ -7,7 +7,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
-import { BoundPiecesList } from './BoundPiecesList';
+import { BoundItemsList } from './BoundPiecesList';
 import { useItemsList } from './hooks';
 
 jest.mock('@folio/stripes/components', () => ({
@@ -29,10 +29,10 @@ const items = [{
   status: { name: 'Available' },
 }];
 
-const renderBoundPiecesList = (props = {}) => (render(
+const renderBoundItemsList = (props = {}) => (render(
   <IntlProvider locale="en">
-    <BoundPiecesList
-      id="boundPiecesListId"
+    <BoundItemsList
+      id="BoundItemsListId"
       filters={{}}
       title={{ id: 'titleId' }}
       {...props}
@@ -40,18 +40,19 @@ const renderBoundPiecesList = (props = {}) => (render(
   </IntlProvider>,
 ));
 
-describe('BoundPiecesList', () => {
+describe('BoundItemsList', () => {
   beforeEach(() => {
     useItemsList.mockClear().mockReturnValue({
       items,
       isFetching: false,
+      totalRecords: items.length,
     });
   });
 
   afterEach(cleanup);
 
   it('should render component', () => {
-    renderBoundPiecesList();
+    renderBoundItemsList();
 
     expect(screen.getByText('ui-receiving.piece.callNumber')).toBeInTheDocument();
     expect(screen.getByText('ui-receiving.piece.displaySummary')).toBeInTheDocument();
@@ -70,9 +71,10 @@ describe('BoundPiecesList', () => {
         holdingsRecordId: 'holdingsRecordId',
       }],
       isFetching: false,
+      totalRecords: items.length,
     });
 
-    renderBoundPiecesList({ title: { instanceId: 'instanceId' } });
+    renderBoundItemsList({ title: { instanceId: 'instanceId' } });
 
     expect(screen.getByText('ui-receiving.piece.barcode')).toBeInTheDocument();
     expect(screen.getByTestId('textLink')).toBeInTheDocument();
@@ -84,9 +86,10 @@ describe('BoundPiecesList', () => {
     useItemsList.mockReturnValue({
       items: [],
       isFetching: false,
+      totalRecords: 0,
     });
 
-    renderBoundPiecesList();
+    renderBoundItemsList();
 
     expect(screen.queryByText('ui-receiving.piece.displaySummary')).not.toBeInTheDocument();
   });
