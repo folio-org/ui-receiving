@@ -7,7 +7,7 @@ import { IntlProvider } from 'react-intl';
 
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
-import { BoundItemsList } from './BoundPiecesList';
+import { BoundItemsList } from './BoundItemsList';
 import { useItemsList } from './hooks';
 
 jest.mock('@folio/stripes/components', () => ({
