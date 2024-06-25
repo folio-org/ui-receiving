@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 import '@folio/stripes-acq-components/test/jest/__mock__';
 
 import { BoundItemsList } from './BoundItemsList';
-import { useItemsList } from './hooks';
+import { useBoundItems } from './hooks';
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -19,7 +19,7 @@ jest.mock('@folio/stripes/core', () => ({
   useStripes: jest.fn().mockReturnValue({ hasPerm: jest.fn().mockReturnValue(true) }),
 }));
 jest.mock('./hooks', () => ({
-  useItemsList: jest.fn(),
+  useBoundItems: jest.fn(),
 }));
 
 const items = [{
@@ -42,7 +42,7 @@ const renderBoundItemsList = (props = {}) => (render(
 
 describe('BoundItemsList', () => {
   beforeEach(() => {
-    useItemsList.mockClear().mockReturnValue({
+    useBoundItems.mockClear().mockReturnValue({
       items,
       isFetching: false,
       totalRecords: items.length,
@@ -63,7 +63,7 @@ describe('BoundItemsList', () => {
   });
 
   it('should render barcode link', () => {
-    useItemsList.mockClear().mockReturnValue({
+    useBoundItems.mockClear().mockReturnValue({
       items: [{
         ...items[0],
         id: 'id',
@@ -83,7 +83,7 @@ describe('BoundItemsList', () => {
   });
 
   it('should not render component when pieces are not fetched', () => {
-    useItemsList.mockReturnValue({
+    useBoundItems.mockReturnValue({
       items: [],
       isFetching: false,
       totalRecords: 0,

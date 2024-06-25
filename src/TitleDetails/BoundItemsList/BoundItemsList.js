@@ -17,12 +17,12 @@ import {
   BOUND_ITEMS_LIMIT,
   VISIBLE_COLUMNS,
 } from './constants';
-import { useItemsList } from './hooks';
+import { useBoundItems } from './hooks';
 import { getColumnFormatter } from './utils';
 
 export const BoundItemsList = ({ id, title }) => {
   const stripes = useStripes();
-  const { isFetching, items, totalRecords } = useItemsList({ titleId: title.id, poLineId: title.poLineId });
+  const { isFetching, items, totalRecords } = useBoundItems({ titleId: title.id, poLineId: title.poLineId });
   const { paginatedData, pagination, setPagination } = useLocalPagination(items, BOUND_ITEMS_LIMIT);
 
   const onPageChange = newPagination => {

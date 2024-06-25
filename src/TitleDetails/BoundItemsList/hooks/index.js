@@ -1,1 +1,1 @@
-export { useItemsList } from './useItemsList';
+export { useBoundItems } from './useBoundItems';
