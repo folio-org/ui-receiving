@@ -50,7 +50,7 @@ export const TitleBindPiecesContainer = () => {
   } = useTitleHydratedPieces({
     titleId,
     receivingStatus: PIECE_STATUS.received,
-    searchQuery: 'isBound==false',
+    searchQuery: 'isBound==false and format==Physical',
   });
 
   const onCancel = useCallback(() => {
