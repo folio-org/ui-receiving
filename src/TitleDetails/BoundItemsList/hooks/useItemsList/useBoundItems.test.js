@@ -9,7 +9,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { useItemsList } from './useItemsList';
+import { useBoundItems } from './useBoundItems';
 
 const queryClient = new QueryClient();
 
@@ -32,7 +32,7 @@ const items = [{
   id: 'id',
 }];
 
-describe('useItemsList', () => {
+describe('useBoundItems', () => {
   const getMock = jest.fn((url) => ({
     json: () => {
       if (url.includes('pieces')) {
@@ -50,7 +50,7 @@ describe('useItemsList', () => {
   });
 
   it('should fetch items by id', async () => {
-    const { result } = renderHook(() => useItemsList(params), { wrapper });
+    const { result } = renderHook(() => useBoundItems(params), { wrapper });
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 

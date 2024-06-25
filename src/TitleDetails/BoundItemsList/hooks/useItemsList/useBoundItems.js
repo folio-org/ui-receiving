@@ -13,7 +13,7 @@ import {
 
 const DEFAULT_DATA = [];
 
-export const useItemsList = ({ titleId, poLineId, options = {} }) => {
+export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
   const { enabled = true, ...otherOptions } = options;
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'bound-items-list' });
