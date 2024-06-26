@@ -4,9 +4,7 @@ import {
   EXPECTED_PIECES_STATUSES,
   PIECE_COLUMNS,
 } from '../constants';
-import {
-  usePiecesList,
-} from '../hooks';
+import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 
 const ExpectedPiecesList = ({

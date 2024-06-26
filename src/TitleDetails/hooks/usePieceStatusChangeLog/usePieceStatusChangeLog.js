@@ -18,10 +18,15 @@ import { isSyntheticUser } from '../../../common/utils';
 const DEFAULT_DATA = [];
 
 export const usePieceStatusChangeLog = (pieceId, options = {}) => {
-  const ky = useOkapiKy();
+  const {
+    enabled = true,
+    targetId,
+    ...queryOptions
+  } = options;
+
+  const ky = useOkapiKy({ tenant: targetId });
   const [namespace] = useNamespace();
 
-  const { enabled = true, ...queryOptions } = options;
   const searchParams = {
     limit: LIMIT_MAX,
   };
@@ -31,7 +36,7 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
     isLoading,
     isFetching,
   } = useQuery(
-    [namespace, pieceId],
+    [namespace, pieceId, targetId],
     async () => {
       const { pieceAuditEvents } = await ky.get(`${PIECE_AUDIT_API}/${pieceId}/status-change-history`, { searchParams }).json();
 

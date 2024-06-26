@@ -11,10 +11,12 @@ import {
 import { usePieceMutator } from './usePieceMutator';
 import { useReceive } from './useReceive';
 
-export const useQuickReceive = () => {
-  const ky = useOkapiKy();
-  const { mutatePiece } = usePieceMutator();
-  const { receive } = useReceive();
+export const useQuickReceive = (options = {}) => {
+  const { tenantId } = options;
+
+  const ky = useOkapiKy({ tenant: tenantId });
+  const { mutatePiece } = usePieceMutator({ tenantId });
+  const { receive } = useReceive({ tenantId });
 
   const quickReceive = useCallback((pieceValues) => {
     return mutatePiece({ piece: pieceValues })

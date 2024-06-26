@@ -66,9 +66,9 @@ const TitleDetailsContainer = ({
     locations,
   } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
-  const { mutatePiece } = usePieceMutator();
-  const { quickReceive } = useQuickReceive();
-  const { unreceive } = useUnreceive();
+  const { mutatePiece } = usePieceMutator({ tenantId });
+  const { quickReceive } = useQuickReceive({ tenantId });
+  const { unreceive } = useUnreceive({ tenantId });
 
   const hasPieces = useCallback((lineId, status) => (
     mutator.pieces.GET({
@@ -358,6 +358,7 @@ TitleDetailsContainer.manifest = Object.freeze({
     ...piecesResource,
     tenant: '!{tenantId}',
   },
+  // TODO: fetch from all related tenants
   items: {
     ...itemsResource,
     tenant: '!{tenantId}',

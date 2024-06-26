@@ -1,16 +1,14 @@
-import {
-  useMutation,
-} from 'react-query';
+import { useMutation } from 'react-query';
 
 import { useOkapiKy } from '@folio/stripes/core';
-import {
-  ORDER_PIECES_API,
-} from '@folio/stripes-acq-components';
+import { ORDER_PIECES_API } from '@folio/stripes-acq-components';
 
 import { getDehydratedPiece } from '../utils';
 
-export const usePieceMutator = (mutatorOptions = {}) => {
-  const ky = useOkapiKy();
+export const usePieceMutator = (mOptions = {}) => {
+  const { tenantId, ...mutatorOptions } = mOptions;
+
+  const ky = useOkapiKy({ tenant: tenantId });
 
   const { mutateAsync } = useMutation({
     mutationFn: ({ piece: pieceValues, options = {} }) => {

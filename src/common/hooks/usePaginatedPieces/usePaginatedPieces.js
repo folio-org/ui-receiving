@@ -76,17 +76,17 @@ export const usePaginatedPieces = ({
     crossTenant,
     enabled = true,
     instanceId,
-    targetTenantId,
+    tenantId,
     ...queryOptions
   } = options;
 
   const stripes = useStripes();
-  const ky = useOkapiKy({ tenant: targetTenantId });
+  const ky = useOkapiKy({ tenant: tenantId });
 
-  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId: targetTenantId });
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId });
   const { fetchPieceItems } = usePieceItemsFetch({
     instanceId,
-    tenantId: crossTenant ? getConsortiumCentralTenantId(stripes) : targetTenantId,
+    tenantId: crossTenant ? getConsortiumCentralTenantId(stripes) : tenantId,
   });
 
   const [namespace] = useNamespace({ key: `${queryParams.receivingStatus}-pieces-list` });

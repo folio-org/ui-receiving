@@ -6,7 +6,9 @@ import { RECEIVE_API } from '../constants';
 import { unreceivePieces } from '../utils';
 
 export const useUnreceive = (options = {}) => {
-  const ky = useOkapiKy();
+  const { tenantId, ...mutationOptions } = options;
+
+  const ky = useOkapiKy({ tenant: tenantId });
 
   const mutator = {
     POST: (pieces) => ky.post(RECEIVE_API, { json: pieces })
@@ -15,7 +17,7 @@ export const useUnreceive = (options = {}) => {
 
   const { mutateAsync } = useMutation({
     mutationFn: (pieces) => unreceivePieces(pieces, mutator),
-    ...options,
+    ...mutationOptions,
   });
 
   return {
