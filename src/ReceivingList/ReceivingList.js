@@ -45,7 +45,9 @@ import {
 
 import { AffiliationsNavigation } from '../common/components';
 import {
+  CENTRAL_RECEIVING_ROUTE,
   CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE,
   RECEIVING_ROUTE_CREATE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
@@ -78,8 +80,8 @@ const columnMapping = {
   'orderWorkflow': <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
 };
 
-const getResultsFormatter = ({ search }) => ({
-  'title': data => <TextLink to={`/receiving/${data.id}/view${search}`}>{data.title}</TextLink>,
+const getResultsFormatter = ({ isCentralRouting, search }) => ({
+  'title': data => <TextLink to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${data.id}/view${search}`}>{data.title}</TextLink>,
   'poLine.physical.expectedReceiptDate': data => <FolioFormattedDate value={get(data, 'poLine.physical.expectedReceiptDate')} />,
   'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : <NoValue />),
   'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
@@ -235,7 +237,7 @@ const ReceivingList = ({
                 contentData={titles}
                 visibleColumns={visibleColumns}
                 columnMapping={columnMapping}
-                formatter={getResultsFormatter({ search: location.search })}
+                formatter={getResultsFormatter({ search: location.search, isCentralRouting })}
                 loading={isLoading}
                 onNeedMoreData={onNeedMoreData}
                 sortOrder={sortingField}

@@ -18,12 +18,18 @@ import {
 } from '@folio/stripes/components';
 
 import {
+  CENTRAL_RECEIVING_BIND_PIECES_BASE_ROUTE,
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_BIND_PIECES_BASE_ROUTE,
+  RECEIVING_ROUTE,
+} from '../../constants';
+import { useReceivingSearchContext } from '../../contexts';
+import {
   BOUND_MENU_FILTER_OPTIONS,
   MENU_FILTERS,
   RECEIVED_PIECE_COLUMN_MAPPING,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
 } from '../constants';
-import { RECEIVING_BIND_PIECES_BASE_ROUTE } from '../../constants';
 
 export function TitleDetailsReceivedActions({
   applyFilters,
@@ -36,6 +42,7 @@ export function TitleDetailsReceivedActions({
   visibleColumns,
 }) {
   const intl = useIntl();
+  const { isCentralRouting } = useReceivingSearchContext();
 
   if (!hasUnreceive) return null;
 
@@ -55,7 +62,7 @@ export function TitleDetailsReceivedActions({
         >
           <Button
             data-test-title-unreceive-button
-            to={`/receiving/unreceive/${titleId}`}
+            to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/unreceive/${titleId}`}
             buttonStyle="dropdownItem"
             disabled={disabled}
           >
@@ -65,7 +72,7 @@ export function TitleDetailsReceivedActions({
           </Button>
           <Button
             data-testid="bind-pieces-button"
-            to={`${RECEIVING_BIND_PIECES_BASE_ROUTE}/${titleId}`}
+            to={`${isCentralRouting ? CENTRAL_RECEIVING_BIND_PIECES_BASE_ROUTE : RECEIVING_BIND_PIECES_BASE_ROUTE}/${titleId}`}
             buttonStyle="dropdownItem"
             disabled={isBindPiecesButtonDisabled}
           >

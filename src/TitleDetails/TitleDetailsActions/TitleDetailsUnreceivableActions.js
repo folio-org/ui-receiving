@@ -11,6 +11,11 @@ import { CheckboxFilter } from '@folio/stripes/smart-components';
 import { FilterMenu } from '@folio/stripes-acq-components';
 
 import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../../constants';
+import { useReceivingSearchContext } from '../../contexts';
+import {
   MENU_FILTERS,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
 } from '../constants';
@@ -24,6 +29,7 @@ export function TitleDetailsUnreceivableActions({
   renderColumnsMenu,
 }) {
   const intl = useIntl();
+  const { isCentralRouting } = useReceivingSearchContext();
 
   if (!hasRecords) return null;
 
@@ -42,7 +48,7 @@ export function TitleDetailsUnreceivableActions({
           id="unreceivable-pieces-menu-actions"
         >
           <Button
-            to={`/receiving/expect/${titleId}`}
+            to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/expect/${titleId}`}
             buttonStyle="dropdownItem"
             disabled={disabled}
           >

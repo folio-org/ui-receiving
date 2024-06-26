@@ -1,7 +1,6 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import {
   Button,
@@ -10,12 +9,19 @@ import {
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
 
+import {
+  CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE_CREATE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
+
 export const ReceivingListActionMenu = ({
   onToggle,
   titlesCount,
   toggleExportModal,
 }) => {
   const location = useLocation();
+  const { isCentralRouting } = useReceivingSearchContext();
 
   return (
     <MenuSection id="receiving-list-actions">
@@ -27,7 +33,7 @@ export const ReceivingListActionMenu = ({
               aria-label={ariaLabel}
               buttonStyle="dropdownItem"
               to={{
-                pathname: '/receiving/create',
+                pathname: isCentralRouting ? CENTRAL_RECEIVING_ROUTE_CREATE : RECEIVING_ROUTE_CREATE,
                 search: location.search,
               }}
               marginBottom0
