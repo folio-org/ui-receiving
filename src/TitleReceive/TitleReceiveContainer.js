@@ -36,6 +36,10 @@ import {
   getReceivingPieceItemStatus,
   handleReceiveErrorResponse,
 } from '../common/utils';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import { EXPECTED_PIECES_SEARCH_VALUE } from '../TitleDetails/constants';
 import TitleReceive from './TitleReceive';
@@ -46,6 +50,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const {
     crossTenant,
     isCentralOrderingEnabled,
+    isCentralRouting,
   } = useReceivingSearchContext();
 
   const titleId = match.params.id;
@@ -106,11 +111,11 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const onCancel = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/${titleId}/view`,
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
         search: location.search,
       });
     },
-    [history, titleId, location.search],
+    [history, isCentralRouting, titleId, location.search],
   );
   const [receivedPiecesWithRequests, setReceivedPiecesWithRequests] = useState([]);
   const closeOpenedRequestsModal = useCallback(

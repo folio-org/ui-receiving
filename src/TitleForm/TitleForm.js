@@ -38,8 +38,11 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  SECTIONS,
-} from './constants';
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
+import { SECTIONS } from './constants';
 import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
 
@@ -71,6 +74,8 @@ const TitleForm = ({
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata, acqUnitIds } = initialValues;
   const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds);
+
+  const { isCentralRouting } = useReceivingSearchContext();
 
   const disabled = hasValidationErrors || restrictions?.protectUpdate || isRestrictionsLoading;
 
@@ -122,7 +127,7 @@ const TitleForm = ({
     },
     {
       name: 'search',
-      handler: handleKeyCommand(() => history.push('/receiving')),
+      handler: handleKeyCommand(() => history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE)),
     },
   ];
 

@@ -20,6 +20,11 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titlesResource } from '../common/resources';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleForm from './TitleForm';
 
 function TitleFormContainer({
@@ -35,6 +40,8 @@ function TitleFormContainer({
   const showCallout = useShowCallout();
   const intl = useIntl();
 
+  const { isCentralRouting } = useReceivingSearchContext();
+
   useEffect(() => {
     mutator.identifierTypes.GET()
       .then(setIdentifierTypes)
@@ -47,10 +54,10 @@ function TitleFormContainer({
 
   const onCancel = useCallback(
     () => history.push({
-      pathname: '/receiving',
+      pathname: isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE,
       search: location.search,
     }),
-    [history, location.search],
+    [history, isCentralRouting, location.search],
   );
   const onSubmit = useCallback(
     ({ poLine, ...newTitle }) => {
@@ -66,7 +73,7 @@ function TitleFormContainer({
           });
 
           history.push({
-            pathname: `/receiving/${id}/view`,
+            pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${id}/view`,
             search: location.search,
           });
         })
@@ -91,7 +98,7 @@ function TitleFormContainer({
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [history, showCallout, titleId, location.search, intl],
+    [history, isCentralRouting, showCallout, titleId, location.search, intl],
   );
 
   if (!identifierTypes || !contributorNameTypes) {

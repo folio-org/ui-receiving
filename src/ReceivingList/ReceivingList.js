@@ -44,6 +44,11 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { AffiliationsNavigation } from '../common/components';
+import {
+  CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE_CREATE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleDetailsContainer from '../TitleDetails';
 import { ExportSettingsModal } from './ExportSettingsModal';
 import { ReceivingListActionMenu } from './ReceivingListActionMenu';
@@ -100,6 +105,7 @@ const ReceivingList = ({
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
+  const { isCentralRouting } = useReceivingSearchContext();
 
   const [
     filters,
@@ -153,7 +159,7 @@ const ReceivingList = ({
       name: 'new',
       handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.create')) {
-          history.push('/receiving/create');
+          history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE_CREATE : RECEIVING_ROUTE_CREATE);
         }
       }),
     },

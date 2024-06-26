@@ -22,6 +22,11 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titleResource } from '../common/resources';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleForm from '../TitleForm/TitleForm';
 
 function TitleEditContainer({
@@ -38,6 +43,8 @@ function TitleEditContainer({
   const [identifierTypes, setIdentifierTypes] = useState();
   const [contributorNameTypes, setContributorNameTypes] = useState();
   const intl = useIntl();
+
+  const { isCentralRouting } = useReceivingSearchContext();
 
   useEffect(() => {
     mutator.identifierTypes.GET()
@@ -66,14 +73,14 @@ function TitleEditContainer({
 
   const onCancel = useCallback(
     () => {
-      const pathname = location.state?.backPathname || `/receiving/${titleId}/view`;
+      const pathname = location.state?.backPathname || `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`;
 
       history.push({
         pathname,
         search: location.search,
       });
     },
-    [history, titleId, location.search, location.state],
+    [history, isCentralRouting, titleId, location.search, location.state],
   );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars

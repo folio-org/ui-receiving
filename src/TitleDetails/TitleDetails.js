@@ -56,7 +56,14 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import { ROUTING_LIST_ROUTE } from '../constants';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE,
+  RECEIVING_ROUTE_CREATE,
+  ROUTING_LIST_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleInformation from './TitleInformation';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import ReceivedPiecesList from './ReceivedPiecesList';
@@ -132,6 +139,8 @@ const TitleDetails = ({
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
 
+  const { isCentralRouting } = useReceivingSearchContext();
+
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
@@ -174,7 +183,7 @@ const TitleDetails = ({
       name: 'new',
       handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.create')) {
-          history.push('/receiving/create');
+          history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE_CREATE : RECEIVING_ROUTE_CREATE);
         }
       }),
     },
@@ -226,11 +235,11 @@ const TitleDetails = ({
   const goToReceiveList = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/receive/${titleId}`,
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
         search: location.search,
       });
     },
-    [titleId, history, location.search],
+    [titleId, history, isCentralRouting, location.search],
   );
 
   const openReceiveList = useCallback(

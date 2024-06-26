@@ -14,7 +14,6 @@ import {
   ORDERS_API,
   organizationsManifest,
   piecesResource,
-  useCentralOrderingContext,
   useLocationsQuery,
   useShowCallout,
   PIECE_STATUS,
@@ -32,6 +31,11 @@ import {
   getPieceById,
   handleUnrecieveErrorResponse,
 } from '../common/utils';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import { EXPECTED_PIECES_SEARCH_VALUE } from './constants';
 import TitleDetails from './TitleDetails';
 
@@ -45,7 +49,10 @@ const TitleDetailsContainer = ({
   const titleId = match.params.id;
 
   const showCallout = useShowCallout();
-  const { isCentralOrderingEnabled } = useCentralOrderingContext();
+  const {
+    isCentralOrderingEnabled,
+    isCentralRouting,
+  } = useReceivingSearchContext();
 
   const [isLoading, setIsLoading] = useState();
   const [title, setTitle] = useState({});
@@ -173,19 +180,19 @@ const TitleDetailsContainer = ({
   const onClose = useCallback(
     () => {
       history.push({
-        pathname: '/receiving',
+        pathname: isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE,
         search: location.search,
       });
     },
-    [location.search, history],
+    [location.search, history, isCentralRouting],
   );
 
   const onEdit = useCallback(
     () => history.push({
-      pathname: `/receiving/${title.id}/edit`,
+      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${title.id}/edit`,
       search: location.search,
     }),
-    [history, title.id, location.search],
+    [history, isCentralRouting, title.id, location.search],
   );
 
   const onAddPiece = useCallback(
@@ -290,7 +297,8 @@ const TitleDetailsContainer = ({
   const isDataLoading = (
     isLoading
     || !(locations || vendorsMap)
-    || isLocationsLoading
+    // TODO: resolve
+    // || isLocationsLoading
     || !tenantId
   );
 

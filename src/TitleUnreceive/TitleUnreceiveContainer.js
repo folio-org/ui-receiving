@@ -34,6 +34,11 @@ import {
   handleUnrecieveErrorResponse,
   unreceivePieces,
 } from '../common/utils';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleUnreceive from './TitleUnreceive';
 
 function TitleUnreceiveContainer({
@@ -51,6 +56,8 @@ function TitleUnreceiveContainer({
   const [pieceLocationMap, setPieceLocationMap] = useState();
   const [pieceHoldingMap, setPieceHoldingMap] = useState();
   const poLineId = title?.poLineId;
+
+  const { isCentralRouting } = useReceivingSearchContext();
 
   useEffect(
     () => {
@@ -116,11 +123,11 @@ function TitleUnreceiveContainer({
   const onCancel = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/${titleId}/view`,
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
         search: location.search,
       });
     },
-    [history, titleId, location.search],
+    [history, isCentralRouting, titleId, location.search],
   );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars

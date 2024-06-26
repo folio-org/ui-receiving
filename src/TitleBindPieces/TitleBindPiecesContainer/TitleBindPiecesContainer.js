@@ -21,7 +21,12 @@ import {
 import { useStripes } from '@folio/stripes/core';
 
 import { useTitleHydratedPieces } from '../../common/hooks';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../../constants';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
+import { useReceivingSearchContext } from '../../contexts';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
@@ -31,6 +36,7 @@ export const TitleBindPiecesContainer = () => {
   const history = useHistory();
   const location = useLocation();
   const showCallout = useShowCallout();
+  const { isCentralRouting } = useReceivingSearchContext();
 
   const { id: titleId } = useParams();
   const currentTenantId = stripes.user?.user?.id;
@@ -55,10 +61,10 @@ export const TitleBindPiecesContainer = () => {
 
   const onCancel = useCallback(() => {
     history.push({
-      pathname: `/receiving/${titleId}/view`,
+      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
       search: location.search,
     });
-  }, [history, titleId, location.search]);
+  }, [history, isCentralRouting, titleId, location.search]);
 
   const bindItems = (requestData) => {
     return bindPieces(requestData)
