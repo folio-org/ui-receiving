@@ -24,7 +24,13 @@ import {
 import { titleResource } from '../common/resources';
 import TitleForm from '../TitleForm/TitleForm';
 
-function TitleEditContainer({ history, location, match, mutator }) {
+function TitleEditContainer({
+  history,
+  location,
+  match,
+  mutator,
+  tenantId,
+}) {
   const titleId = match.params.id;
   const [title, setTitle] = useState();
   const showCallout = useShowCallout();
@@ -129,6 +135,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
       initialValues={initialValues}
       onCancel={onCancel}
       onSubmit={onSubmit}
+      tenantId={tenantId}
     />
   );
 }
@@ -138,21 +145,25 @@ TitleEditContainer.manifest = Object.freeze({
     ...contributorNameTypesManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   editTitle: {
     ...titleResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   editTitlePOLine: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   identifierTypes: {
     ...identifierTypesManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
 });
 
@@ -161,6 +172,7 @@ TitleEditContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };
 
 export default stripesConnect(TitleEditContainer);

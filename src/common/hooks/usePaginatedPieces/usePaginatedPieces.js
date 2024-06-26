@@ -3,11 +3,12 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 import {
   batchRequest,
+  getConsortiumCentralTenantId,
   makeQueryBuilder,
-  ITEMS_API,
   ORDER_PIECES_API,
   REQUESTS_API,
   useLocaleDateFormat,
@@ -15,6 +16,10 @@ import {
 
 import { getPieceStatusFromItem } from '../../utils';
 import { makeKeywordQueryBuilder } from './searchConfigs';
+import {
+  fetchConsortiumPieceItems,
+  fetchLocalPieceItems,
+} from './util';
 
 export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'cql.allRecords=1',
@@ -22,13 +27,14 @@ export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'sortby receiptDate',
 );
 
-const usePieceRequestsFetch = () => {
-  const ky = useOkapiKy();
+const usePieceRequestsFetch = ({ tenantId }) => {
+  const ky = useOkapiKy({ tenant: tenantId });
 
-  const fetchPieceRequests = pieces => {
+  // TODO: integrate loading of requests from several tenants after implementation MODORDERS-1138
+  const fetchPieceRequests = ({ pieces, signal }) => {
     return batchRequest(
       async ({ params: searchParams }) => {
-        const { requests = [] } = await ky.get(REQUESTS_API, { searchParams }).json();
+        const { requests = [] } = await ky.get(REQUESTS_API, { searchParams, signal }).json();
 
         return requests;
       },
@@ -47,18 +53,15 @@ const usePieceRequestsFetch = () => {
   return { fetchPieceRequests };
 };
 
-const usePieceItemsFetch = () => {
-  const ky = useOkapiKy();
+const usePieceItemsFetch = ({ instanceId, tenantId }) => {
+  const ky = useOkapiKy({ tenant: tenantId });
 
-  const fetchPieceItems = pieces => {
-    return batchRequest(
-      async ({ params: searchParams }) => {
-        const { items = [] } = await ky.get(ITEMS_API, { searchParams }).json();
+  const fetchPieceItems = ({ pieces, crossTenant, signal }) => {
+    const kyExtended = ky.extend({ signal });
 
-        return items;
-      },
-      pieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId),
-    );
+    return crossTenant
+      ? fetchConsortiumPieceItems(kyExtended, { instanceId, pieces })
+      : fetchLocalPieceItems(kyExtended, { pieces });
   };
 
   return { fetchPieceItems };
@@ -69,9 +72,23 @@ export const usePaginatedPieces = ({
   queryParams = {},
   options = {},
 }) => {
-  const ky = useOkapiKy();
-  const { fetchPieceRequests } = usePieceRequestsFetch();
-  const { fetchPieceItems } = usePieceItemsFetch();
+  const {
+    crossTenant,
+    enabled = true,
+    instanceId,
+    targetTenantId,
+    ...queryOptions
+  } = options;
+
+  const stripes = useStripes();
+  const ky = useOkapiKy({ tenant: targetTenantId });
+
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId: targetTenantId });
+  const { fetchPieceItems } = usePieceItemsFetch({
+    instanceId,
+    tenantId: crossTenant ? getConsortiumCentralTenantId(stripes) : targetTenantId,
+  });
+
   const [namespace] = useNamespace({ key: `${queryParams.receivingStatus}-pieces-list` });
   const localeDateFormat = useLocaleDateFormat();
 
@@ -84,14 +101,14 @@ export const usePaginatedPieces = ({
   };
 
   const queryKey = [namespace, pagination.timestamp, pagination.limit, pagination.offset];
-  const queryFn = async () => {
+  const queryFn = async ({ signal }) => {
     const { pieces, totalRecords } = await ky
-      .get(ORDER_PIECES_API, { searchParams })
+      .get(ORDER_PIECES_API, { searchParams, signal })
       .json();
 
     const [requests, items] = await Promise.all([
-      fetchPieceRequests(pieces),
-      fetchPieceItems(pieces),
+      fetchPieceRequests({ pieces, crossTenant, signal }),
+      fetchPieceItems({ pieces, crossTenant, signal }),
     ]);
 
     const itemsMap = items.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
@@ -111,18 +128,16 @@ export const usePaginatedPieces = ({
     };
   };
   const defaultOptions = {
-    enabled: Boolean(pagination.timestamp),
+    enabled: enabled && Boolean(pagination.timestamp),
     keepPreviousData: true,
   };
 
-  const { isFetching, data } = useQuery(
+  const { isFetching, data } = useQuery({
     queryKey,
     queryFn,
-    {
-      ...defaultOptions,
-      ...options,
-    },
-  );
+    ...defaultOptions,
+    ...queryOptions,
+  });
 
   return ({
     ...data,

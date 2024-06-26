@@ -12,8 +12,12 @@ import {
 export const DEFAULT_VALUE = [];
 
 export const useMaterialTypes = (options = {}) => {
-  const { enabled = true, ...restOptions } = options;
-  const ky = useOkapiKy();
+  const {
+    enabled = true,
+    tenantId,
+    ...restOptions
+  } = options;
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace({ key: 'material-types' });
 
   const searchParams = {

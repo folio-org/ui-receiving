@@ -24,8 +24,10 @@ const ReceivingListContainer = () => {
   const intl = useIntl();
 
   const {
+    crossTenant,
     isCentralOrderingEnabled,
-    targetTenant,
+    isTargetTenantCentral,
+    targetTenantId,
   } = useReceivingSearchContext();
 
   const invalidReferenceMessage = intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' });
@@ -98,13 +100,16 @@ const ReceivingListContainer = () => {
     pagination,
     fetchReferences,
     options: {
-      tenantId: targetTenant,
-      enabled: Boolean(targetTenant),
+      tenantId: targetTenantId,
+      enabled: Boolean(targetTenantId),
     },
   });
 
+  const filtersStorageKey = `@folio/receiving/${isCentralOrderingEnabled && isTargetTenantCentral ? 'central/' : ''}filters`;
+
   return (
     <ReceivingList
+      key={targetTenantId}
       onNeedMoreData={changePage}
       resetData={resetData}
       titlesCount={totalRecords}
@@ -112,7 +117,9 @@ const ReceivingListContainer = () => {
       titles={titles}
       pagination={pagination}
       query={query}
-      centralOrdering={isCentralOrderingEnabled}
+      crossTenant={crossTenant}
+      tenantId={targetTenantId}
+      filtersStorageKey={filtersStorageKey}
     />
   );
 };

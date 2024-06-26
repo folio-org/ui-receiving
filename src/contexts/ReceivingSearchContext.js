@@ -1,100 +1,138 @@
 import PropTypes from 'prop-types';
-import queryString from 'query-string';
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import {
-  checkIfUserInCentralTenant,
-  useStripes,
-} from '@folio/stripes/core';
+import { useStripes } from '@folio/stripes/core';
 import {
   CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH,
+  isTenantConsortiumCentral,
   getConsortiumCentralTenantId,
-  useCentralOrderingSettings,
+  useCentralOrderingContext,
   useDefaultReceivingSearchSettings,
 } from '@folio/stripes-acq-components';
 
+import { CONSORTIUM_TENANT_TYPE } from '../common/constants';
+import {
+  RECEIVING_ROUTE,
+  CENTRAL_RECEIVING_ROUTE,
+} from '../constants';
+
 export const ReceivingSearchContext = createContext();
 
+const { central, member } = CONSORTIUM_TENANT_TYPE;
+
 const getTargetTenantId = (
-  { value } = {},
-  activeTenantQueryParam,
+  defaultReceivingSearchSetting,
   activeTenantId,
   centralTenantId,
 ) => {
   const resolversMap = {
-    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationOnly]: activeTenantId,
-    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralOnly]: centralTenantId,
-    /*
-      When moving between applications, the search for a specific application can be saved,
-      so to correctly direct data retrieval requests, it is necessary to store and extract the active tenant from the search.
-    */
-    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralDefault]: activeTenantQueryParam || centralTenantId,
-    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationDefault]: activeTenantQueryParam || activeTenantId,
+    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationOnly]: [activeTenantId, member],
+    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralOnly]: [centralTenantId, central],
+    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralDefault]: [centralTenantId, central],
+    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationDefault]: [activeTenantId, central],
   };
 
-  return resolversMap[value] || activeTenantId;
+  return resolversMap[defaultReceivingSearchSetting] || [activeTenantId, member];
 };
 
-const getActiveSegment = (targetTenant, centralTenantId) => {
-  if (!targetTenant) return null;
+const getActiveSegment = (targetTenantId, centralTenantId) => {
+  if (!targetTenantId) return null;
 
-  return targetTenant === centralTenantId ? 'central' : 'member';
+  return targetTenantId === centralTenantId ? central : member;
 };
 
 // TODO: specify ECS mode
 export const ReceivingSearchContextProvider = ({ children }) => {
   const stripes = useStripes();
-  const location = useLocation();
+  const history = useHistory();
 
   const activeTenantId = stripes.okapi.tenant;
   const centralTenantId = getConsortiumCentralTenantId(stripes);
 
-  const [targetTenant, setTargetTenant] = useState();
+  const [targetTenantId, setTargetTenantId] = useState();
 
-  const {
-    enabled: isCentralOrderingEnabled,
-    isLoading: isCentralOrderingSettingsLoading,
-  } = useCentralOrderingSettings({
-    // TODO: recheck
-    enabled: checkIfUserInCentralTenant(stripes),
-  });
+  const { isCentralOrderingEnabled } = useCentralOrderingContext();
 
   const {
     data,
     isDefaultReceivingSearchSettingsLoading,
-  } = useDefaultReceivingSearchSettings({
-    onSuccess: (setting) => {
-      const { activeTenant } = queryString.parse(location.search);
+  } = useDefaultReceivingSearchSettings({ enabled: isCentralOrderingEnabled });
 
-      setTargetTenant(getTargetTenantId(setting, activeTenant, activeTenantId, centralTenantId));
-    },
-    enabled: isCentralOrderingEnabled,
-  });
+  const defaultReceivingSearchSetting = data?.value;
 
-  const isLoading = isCentralOrderingSettingsLoading || isDefaultReceivingSearchSettingsLoading;
+  useEffect(() => {
+    const { pathname, ...rest } = history.location;
 
-  const value = useMemo(() => ({
-    activeSegment: getActiveSegment(targetTenant, centralTenantId),
+    const [targetTenantIdToSet, tenantType] = getTargetTenantId(
+      defaultReceivingSearchSetting,
+      activeTenantId,
+      centralTenantId,
+    );
+
+    setTargetTenantId(targetTenantIdToSet);
+
+    const isCentralRoute = pathname.startsWith(CENTRAL_RECEIVING_ROUTE);
+    const shouldRedirect = tenantType === central ? !isCentralRoute : isCentralRoute;
+
+    if (shouldRedirect) {
+      const [activeRoute, targetRoute] = {
+        member: [CENTRAL_RECEIVING_ROUTE, RECEIVING_ROUTE],
+        central: [RECEIVING_ROUTE, CENTRAL_RECEIVING_ROUTE],
+      }[tenantType];
+
+      history.replace({
+        pathname: pathname.replace(activeRoute, targetRoute),
+        ...rest,
+      });
+    }
+  }, [
     activeTenantId,
     centralTenantId,
-    defaultReceivingSearchSetting: data?.value,
+    defaultReceivingSearchSetting,
+    history,
     isCentralOrderingEnabled,
+  ]);
+
+  const isLoading = isDefaultReceivingSearchSettingsLoading;
+  const isTargetTenantCentral = isTenantConsortiumCentral(stripes, targetTenantId);
+  const isTargetTenantForeign = targetTenantId !== activeTenantId;
+  const crossTenant = isCentralOrderingEnabled && isTargetTenantCentral;
+  const isCentralRouting = crossTenant && [
+    CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationDefault,
+    CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralDefault,
+  ].includes(defaultReceivingSearchSetting);
+
+  const value = useMemo(() => ({
+    activeSegment: getActiveSegment(targetTenantId, centralTenantId),
+    activeTenantId,
+    centralTenantId,
+    crossTenant,
+    defaultReceivingSearchSetting,
+    isCentralOrderingEnabled,
+    isCentralRouting,
     isLoading,
-    setTargetTenant,
-    targetTenant,
+    isTargetTenantCentral,
+    isTargetTenantForeign,
+    setTargetTenantId,
+    targetTenantId,
   }), [
     activeTenantId,
     centralTenantId,
-    data?.value,
+    crossTenant,
+    defaultReceivingSearchSetting,
     isCentralOrderingEnabled,
+    isCentralRouting,
     isLoading,
-    targetTenant,
+    isTargetTenantCentral,
+    isTargetTenantForeign,
+    targetTenantId,
   ]);
 
   return (

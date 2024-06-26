@@ -25,12 +25,12 @@ export const ExportSettingsModalContainer = ({
 }) => {
   const abortControllerRef = useRef(new AbortController());
   const showCallout = useShowCallout();
-  const { targetTenant } = useReceivingSearchContext();
+  const { targetTenantId } = useReceivingSearchContext();
   const {
     runExportCSV,
     isLoading,
   } = usePiecesExportCSV({
-    tenantId: targetTenant,
+    tenantId: targetTenantId,
     signal: abortControllerRef.current.signal,
   });
 

@@ -1,4 +1,3 @@
-import omit from 'lodash/omit';
 import moment from 'moment';
 import queryString from 'query-string';
 import { useQuery } from 'react-query';
@@ -31,7 +30,7 @@ export const useReceiving = ({
   const { timezone } = useStripes();
 
   const { search } = useLocation();
-  const queryParams = omit(queryString.parse(search), ['activeTenant']);
+  const queryParams = queryString.parse(search);
   const filtersCount = getFiltersCount(queryParams);
 
   moment.tz.setDefault(timezone);
@@ -46,7 +45,7 @@ export const useReceiving = ({
     offset: pagination.offset,
   };
 
-  const queryKey = [namespace, pagination.timestamp, pagination.limit, pagination.offset];
+  const queryKey = [namespace, pagination.timestamp, pagination.limit, pagination.offset, tenantId];
   const queryFn = async ({ signal }) => {
     if (!filtersCount) {
       return { titles: [], totalRecords: 0 };
@@ -65,9 +64,13 @@ export const useReceiving = ({
       poLine: orderLinesMap[title.poLineId],
     }));
 
+    console.log('titles', titles);
+    console.log('titlesResult', titlesResult);
+
     return {
       query,
-      titles: titlesResult,
+      // TODO: remove filter
+      titles: titlesResult.filter(Boolean),
       totalRecords,
     };
   };

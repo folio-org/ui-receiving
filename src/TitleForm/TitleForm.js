@@ -63,6 +63,7 @@ const TitleForm = ({
   values,
   identifierTypes,
   contributorNameTypes,
+  tenantId,
 }) => {
   const history = useHistory();
   const accordionStatusRef = useRef();
@@ -173,6 +174,7 @@ const TitleForm = ({
                             type="text"
                             validate={validateRequired}
                           />
+                          {/* TODO: update plugin to support tenantId prop */}
                           <Pluggable
                             aria-haspopup="true"
                             dataKey="instances"
@@ -180,6 +182,7 @@ const TitleForm = ({
                             searchLabel={<FormattedMessage id="ui-receiving.title.titleLookUp" />}
                             selectInstance={addInstance}
                             type="find-instance"
+                            tenantId={tenantId}
                           >
                             <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
                           </Pluggable>
@@ -293,6 +296,7 @@ const TitleForm = ({
                             perm={isEditMode ? MANAGE_ACQ_UNITS_PERM : ASSIGN_ACQ_UNITS_PERM}
                             isEdit={isEditMode}
                             preselectedUnits={values.acqUnitIds}
+                            tenantId={tenantId}
                             isFinal
                           />
                         </Col>
@@ -327,6 +331,7 @@ const TitleForm = ({
                             type="text"
                             validate={validateRequired}
                           />
+                          {/* TODO: update plugin to support tenantId prop */}
                           <Pluggable
                             addLines={addLines}
                             aria-haspopup="true"
@@ -335,6 +340,7 @@ const TitleForm = ({
                             searchButtonStyle="link"
                             searchLabel={<FormattedMessage id="ui-receiving.title.lineLookUp" />}
                             type="find-po-line"
+                            tenantId={tenantId}
                           >
                             <FormattedMessage id="ui-receiving.find-po-line-plugin-unavailable" />
                           </Pluggable>
@@ -380,15 +386,16 @@ const TitleForm = ({
 };
 
 TitleForm.propTypes = {
+  contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
   handleSubmit: PropTypes.func.isRequired,
+  hasValidationErrors: PropTypes.bool.isRequired,
+  identifierTypes: PropTypes.arrayOf(PropTypes.object),
   form: PropTypes.object,  // form object to get initialValues
   onCancel: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  tenantId: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,  // current form values
-  identifierTypes: PropTypes.arrayOf(PropTypes.object),
-  contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
-  hasValidationErrors: PropTypes.bool.isRequired,
 };
 
 export default stripesFinalForm({

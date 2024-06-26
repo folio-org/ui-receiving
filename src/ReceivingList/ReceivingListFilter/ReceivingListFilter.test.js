@@ -95,7 +95,7 @@ describe('ReceivingListFilter', () => {
 
     it('should render locations filter with selected options', () => {
       const { container } = renderReceivingListFilter({
-        centralOrdering: true,
+        crossTenant: true,
         activeFilters: { [FILTERS.LOCATION]: locationsECS.map(({ id }) => id) },
       });
 

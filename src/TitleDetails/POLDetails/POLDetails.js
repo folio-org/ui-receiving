@@ -1,6 +1,5 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import {
@@ -18,6 +17,8 @@ import {
   useRoutingLists,
 } from '@folio/stripes-acq-components';
 
+import { useReceivingSearchContext } from '../../contexts';
+
 const POLDetails = ({
   accessProvider,
   expectedReceiptDate,
@@ -32,21 +33,24 @@ const POLDetails = ({
   vendor,
   checkinItems = false,
 }) => {
+  const { isTargetTenantForeign } = useReceivingSearchContext();
   const { routingLists } = useRoutingLists(poLineId);
 
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
   const showMaterialSupplier = orderFormat !== ORDER_FORMATS.electronicResource;
-  const poLineNumberValue = (
-    <Link
-      data-testid="titlePOLineLink"
-      to={{
-        pathname: `/orders/lines/view/${poLineId}`,
-        search: `?qindex=poLineNumber&query=${poLineNumber}`,
-      }}
-    >
-      {poLineNumber}
-    </Link>
-  );
+  const poLineNumberValue = isTargetTenantForeign
+    ? poLineNumber
+    : (
+      <Link
+        data-testid="titlePOLineLink"
+        to={{
+          pathname: `/orders/lines/view/${poLineId}`,
+          search: `?qindex=poLineNumber&query=${poLineNumber}`,
+        }}
+      >
+        {poLineNumber}
+      </Link>
+    );
 
   return (
     <>

@@ -23,12 +23,12 @@ import {
   CreateItemField,
   LineLocationsView,
 } from '../../../common/components';
-
-import css from './PieceFields.css';
+import { useReceivingSearchContext } from '../../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
+import css from './PieceFields.css';
+
 export const PieceFields = ({
-  centralOrdering = false,
   createInventoryValues,
   instanceId,
   locationIds,
@@ -38,6 +38,7 @@ export const PieceFields = ({
   setLocationValue,
   onChangeDisplayOnHolding,
 }) => {
+  const { crossTenant } = useReceivingSearchContext();
   const { values } = useFormState();
 
   const isNotReceived = values.receivingStatus !== PIECE_STATUS.received;
@@ -47,7 +48,7 @@ export const PieceFields = ({
   // https://issues.folio.org/browse/UIREC-208
   const isDiscoverySuppressEnabled = false;
 
-  const FieldInventoryComponent = centralOrdering
+  const FieldInventoryComponent = crossTenant
     ? ConsortiumFieldInventory
     : FieldInventory;
 
@@ -274,15 +275,15 @@ export const PieceFields = ({
           md={3}
         >
           <LineLocationsView
-            centralOrdering={centralOrdering}
+            crossTenant={crossTenant}
             instanceId={instanceId}
             poLine={poLine}
             locations={locations}
           />
         </Col>
         <Col
-          xs={centralOrdering ? 12 : 6}
-          md={centralOrdering ? 6 : 3}
+          xs={crossTenant ? 12 : 6}
+          md={crossTenant ? 6 : 3}
         >
           <FieldInventoryComponent
             affiliationName={PIECE_FORM_FIELD_NAMES.receivingTenantId}
@@ -302,7 +303,6 @@ export const PieceFields = ({
 };
 
 PieceFields.propTypes = {
-  centralOrdering: PropTypes.bool,
   createInventoryValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,

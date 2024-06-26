@@ -38,7 +38,7 @@ import {
   useFiltersReset,
   useFiltersToogle,
   useItemToView,
-  useLocationFilters,
+  useLocalStorageFilters,
   useLocationSorting,
   useModalToggle,
 } from '@folio/stripes-acq-components';
@@ -84,20 +84,23 @@ const getResultsFormatter = ({ search }) => ({
 });
 
 const ReceivingList = ({
-  centralOrdering = false,
+  crossTenant = false,
   history,
   isLoading,
   location,
+  filtersStorageKey,
   match,
   onNeedMoreData,
   pagination,
   query,
   resetData,
+  tenantId,
   titles,
   titlesCount,
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
+
   const [
     filters,
     searchQuery,
@@ -107,7 +110,7 @@ const ReceivingList = ({
     resetFilters,
     changeIndex,
     searchIndex,
-  ] = useLocationFilters(location, history, resetData);
+  ] = useLocalStorageFilters(filtersStorageKey, location, history, resetData);
   const [
     sortingField,
     sortingDirection,
@@ -201,7 +204,8 @@ const ReceivingList = ({
               activeFilters={filters}
               applyFilters={applyFilters}
               disabled={isLoading}
-              centralOrdering={centralOrdering}
+              crossTenant={crossTenant}
+              tenantId={tenantId}
             />
           </FiltersPane>
         )}
@@ -262,7 +266,12 @@ const ReceivingList = ({
 
         <Route
           path={`${match.path}/:id/view`}
-          component={TitleDetailsContainer}
+          render={(props) => (
+            <TitleDetailsContainer
+              tenantId={tenantId}
+              {...props}
+            />
+          )}
         />
       </PersistedPaneset>
     </HasCommand>
@@ -270,17 +279,19 @@ const ReceivingList = ({
 };
 
 ReceivingList.propTypes = {
-  centralOrdering: PropTypes.bool,
-  onNeedMoreData: PropTypes.func.isRequired,
-  resetData: PropTypes.func.isRequired,
-  titlesCount: PropTypes.number,
-  isLoading: PropTypes.bool,
-  titles: PropTypes.arrayOf(PropTypes.object),
+  crossTenant: PropTypes.bool,
+  filtersStorageKey: PropTypes.string.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
+  isLoading: PropTypes.bool,
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
+  onNeedMoreData: PropTypes.func.isRequired,
   pagination: PropTypes.object.isRequired,
   query: PropTypes.string,
+  resetData: PropTypes.func.isRequired,
+  tenantId: PropTypes.string.isRequired,
+  titles: PropTypes.arrayOf(PropTypes.object),
+  titlesCount: PropTypes.number,
 };
 
 ReceivingList.defaultProps = {

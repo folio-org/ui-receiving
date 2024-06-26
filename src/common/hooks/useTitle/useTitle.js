@@ -7,21 +7,24 @@ import {
 
 import { TITLES_API } from '../../constants';
 
-export const useTitle = (titleId) => {
-  const ky = useOkapiKy();
+export const useTitle = (titleId, options = {}) => {
+  const {
+    enabled = true,
+    tenantId,
+  } = options;
+
+  const ky = useOkapiKy({ tenantId });
   const [namespace] = useNamespace('receiving-title');
 
   const {
     data,
     isFetching,
     isLoading,
-  } = useQuery(
-    [namespace, titleId],
-    ({ signal }) => ky.get(`${TITLES_API}/${titleId}`, { signal }).json(),
-    {
-      enabled: Boolean(titleId),
-    },
-  );
+  } = useQuery({
+    queryKey: [namespace, titleId, tenantId],
+    queryFn: ({ signal }) => ky.get(`${TITLES_API}/${titleId}`, { signal }).json(),
+    enabled: enabled && Boolean(titleId),
+  });
 
   return ({
     title: data,

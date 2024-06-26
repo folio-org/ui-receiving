@@ -1,7 +1,3 @@
-import {
-  Switch,
-  Route,
-} from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import { AppContextMenu } from '@folio/stripes/core';
@@ -21,25 +17,8 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import {
-  RECEIVING_BIND_PIECES_ROUTE,
-  RECEIVING_ROUTE,
-  RECEIVING_ROUTE_CREATE,
-  RECEIVING_ROUTE_EDIT,
-  RECEIVING_ROUTE_EXPECT,
-  RECEIVING_ROUTE_RECEIVE,
-  RECEIVING_ROUTE_UNRECEIVE,
-  ROUTING_LIST_ROUTE,
-} from './constants';
 import { ReceivingSearchContextProvider } from './contexts';
-import { ReceivingListContainer } from './ReceivingList';
-import { TitleBindPiecesContainer } from './TitleBindPieces';
-import { RoutingList } from './TitleDetails';
-import { TitleFormContainer } from './TitleForm';
-import { TitleEditContainer } from './TitleEdit';
-import { TitleExpectContainer } from './TitleExpect';
-import { TitleReceiveContainer } from './TitleReceive';
-import { TitleUnreceiveContainer } from './TitleUnreceive';
+import { ReceivingRoutes } from './ReceivingRoutes';
 
 const receivingCommands = [
   {
@@ -116,40 +95,8 @@ const Receiving = () => {
                 </NavList>
               )}
             </AppContextMenu>
-            <Switch>
-              <Route
-                component={RoutingList}
-                path={ROUTING_LIST_ROUTE}
-              />
-              <Route
-                component={TitleEditContainer}
-                path={RECEIVING_ROUTE_EDIT}
-              />
-              <Route
-                component={TitleFormContainer}
-                path={RECEIVING_ROUTE_CREATE}
-              />
-              <Route
-                component={TitleReceiveContainer}
-                path={RECEIVING_ROUTE_RECEIVE}
-              />
-              <Route
-                component={TitleUnreceiveContainer}
-                path={RECEIVING_ROUTE_UNRECEIVE}
-              />
-              <Route
-                component={TitleBindPiecesContainer}
-                path={RECEIVING_BIND_PIECES_ROUTE}
-              />
-              <Route
-                component={TitleExpectContainer}
-                path={RECEIVING_ROUTE_EXPECT}
-              />
-              <Route
-                component={ReceivingListContainer}
-                path={RECEIVING_ROUTE}
-              />
-            </Switch>
+
+            <ReceivingRoutes />
           </HasCommand>
         </CommandList>
         {isOpen && (

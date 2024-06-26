@@ -22,7 +22,13 @@ import {
 import { titlesResource } from '../common/resources';
 import TitleForm from './TitleForm';
 
-function TitleFormContainer({ history, location, match, mutator }) {
+function TitleFormContainer({
+  history,
+  location,
+  match,
+  mutator,
+  tenantId,
+}) {
   const titleId = match.params.id;
   const [identifierTypes, setIdentifierTypes] = useState();
   const [contributorNameTypes, setContributorNameTypes] = useState();
@@ -103,6 +109,7 @@ function TitleFormContainer({ history, location, match, mutator }) {
       initialValues={{}}
       onCancel={onCancel}
       onSubmit={onSubmit}
+      tenantId={tenantId}
     />
   );
 }
@@ -112,16 +119,19 @@ TitleFormContainer.manifest = Object.freeze({
     ...contributorNameTypesManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   identifierTypes: {
     ...identifierTypesManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   titles: {
     ...titlesResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
 });
 
@@ -130,6 +140,7 @@ TitleFormContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };
 
 export default stripesConnect(TitleFormContainer);

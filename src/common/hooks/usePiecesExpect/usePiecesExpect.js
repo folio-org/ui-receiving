@@ -4,8 +4,8 @@ import { useOkapiKy } from '@folio/stripes/core';
 
 import { EXPECT_API } from '../../constants';
 
-export const usePiecesExpect = () => {
-  const ky = useOkapiKy();
+export const usePiecesExpect = ({ tenantId }) => {
+  const ky = useOkapiKy({ tenant: tenantId });
 
   const { isLoading, mutateAsync } = useMutation({
     mutationFn: (pieces) => {

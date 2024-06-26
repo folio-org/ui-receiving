@@ -82,7 +82,7 @@ import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
 
-function getNewPieceValues(titleId, poLine, centralOrdering) {
+function getNewPieceValues(titleId, poLine, crossTenant) {
   const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate: physical?.expectedReceiptDate, poLineId, titleId };
 
@@ -90,7 +90,7 @@ function getNewPieceValues(titleId, poLine, centralOrdering) {
     initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
   }
 
-  if (locations.length === 1 && !centralOrdering) {
+  if (locations.length === 1 && !crossTenant) {
     initialValuesPiece.locationId = locations[0].locationId;
     initialValuesPiece.holdingId = locations[0].holdingId;
   }
@@ -103,7 +103,7 @@ function getNewPieceValues(titleId, poLine, centralOrdering) {
 }
 
 const TitleDetails = ({
-  centralOrdering = false,
+  crossTenant = false,
   deletePiece,
   history,
   location,
@@ -117,7 +117,7 @@ const TitleDetails = ({
   poLine,
   title,
   onUnreceive,
-  vendorsMap,
+  vendorsMap = {},
   getHoldingsItemsAndPieces,
   getPieceValues,
 }) => {
@@ -147,7 +147,7 @@ const TitleDetails = ({
   const numberOfPhysicalUnits = useMemo(() => {
     return poLine?.locations?.reduce((acc, { quantityPhysical = 0 }) => acc + quantityPhysical, 0);
   }, [poLine?.locations]);
-  const vendor = vendorsMap[order.vendor];
+  const vendor = vendorsMap[order?.vendor];
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
@@ -196,7 +196,7 @@ const TitleDetails = ({
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
-      setPieceValues(piece || getNewPieceValues(title.id, poLine, centralOrdering));
+      setPieceValues(piece || getNewPieceValues(title.id, poLine, crossTenant));
       setConfirmAcknowledgeNote(() => toggleAddPieceModal);
 
       return (
@@ -206,7 +206,7 @@ const TitleDetails = ({
       );
     },
     [
-      centralOrdering,
+      crossTenant,
       poLine,
       title.id,
       title.isAcknowledged,
@@ -675,7 +675,7 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
-  centralOrdering: PropTypes.bool,
+  crossTenant: PropTypes.bool,
   deletePiece: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,

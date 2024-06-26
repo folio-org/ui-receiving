@@ -1,12 +1,8 @@
-import queryString from 'query-string';
 import {
   useCallback,
   useMemo,
 } from 'react';
-import {
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import {
   ButtonGroup,
@@ -17,7 +13,12 @@ import {
   useCurrentUserTenants,
 } from '@folio/stripes-acq-components';
 
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../../../constants';
 import { useReceivingSearchContext } from '../../../contexts';
+import { CONSORTIUM_TENANT_TYPE } from '../../constants';
 
 const { centralDefault, activeAffiliationDefault } = CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH;
 
@@ -27,7 +28,6 @@ const getTenantName = (tenants = [], tenantId) => {
 
 export const AffiliationsNavigation = () => {
   const history = useHistory();
-  const { pathname, search } = useLocation();
   const currUserTenants = useCurrentUserTenants();
 
   const {
@@ -35,7 +35,8 @@ export const AffiliationsNavigation = () => {
     activeTenantId,
     centralTenantId,
     defaultReceivingSearchSetting,
-    setTargetTenant,
+    setTargetTenantId,
+    targetTenantId,
   } = useReceivingSearchContext();
 
   const [centralTenantName, activeTenantName] = useMemo(() => {
@@ -56,21 +57,21 @@ export const AffiliationsNavigation = () => {
     && (centralTenantName && activeTenantName)
   );
 
-  const onSegmentSelect = useCallback((tenantId) => {
-    const { activeTenant, ...queryParams } = queryString.parse(search);
+  const onSegmentSelect = useCallback((segment, tenantId) => {
+    if (targetTenantId !== tenantId) {
+      setTargetTenantId(tenantId);
 
-    if (activeTenant !== tenantId) {
-      setTargetTenant(tenantId);
-      history.push({
-        pathname,
-        search: queryString.stringify({ activeTenant: tenantId, ...queryParams }),
-      });
+      const pathname = {
+        [CONSORTIUM_TENANT_TYPE.member]: RECEIVING_ROUTE,
+        [CONSORTIUM_TENANT_TYPE.central]: CENTRAL_RECEIVING_ROUTE,
+      }[segment];
+
+      history.push({ pathname });
     }
   }, [
     history,
-    pathname,
-    search,
-    setTargetTenant,
+    setTargetTenantId,
+    targetTenantId,
   ]);
 
   if (!isNavigationVisible) return null;
@@ -79,15 +80,15 @@ export const AffiliationsNavigation = () => {
     <ButtonGroup fullWidth>
       <Button
         id="central-tenant-btn"
-        buttonStyle={`${activeSegment === 'central' ? 'primary' : 'default'}`}
-        onClick={() => onSegmentSelect(centralTenantId)}
+        buttonStyle={`${activeSegment === CONSORTIUM_TENANT_TYPE.central ? 'primary' : 'default'}`}
+        onClick={() => onSegmentSelect(CONSORTIUM_TENANT_TYPE.central, centralTenantId)}
       >
         {centralTenantName}
       </Button>
       <Button
         id="active-tenant-btn"
-        buttonStyle={`${activeSegment === 'member' ? 'primary' : 'default'}`}
-        onClick={() => onSegmentSelect(activeTenantId)}
+        buttonStyle={`${activeSegment === CONSORTIUM_TENANT_TYPE.member ? 'primary' : 'default'}`}
+        onClick={() => onSegmentSelect(CONSORTIUM_TENANT_TYPE.member, activeTenantId)}
       >
         {activeTenantName}
       </Button>

@@ -15,13 +15,15 @@ import {
   usePiecesExpect,
   useTitleHydratedPieces,
 } from '../common/hooks';
+import { useReceivingSearchContext } from '../contexts';
 import TitleExpect from './TitleExpect';
 
 export function TitleExpectContainer({ history, location, match }) {
-  const showCallout = useShowCallout();
   const titleId = match.params.id;
+  const showCallout = useShowCallout();
+  const { targetTenantId } = useReceivingSearchContext();
 
-  const { expectPieces } = usePiecesExpect();
+  const { expectPieces } = usePiecesExpect({ tenantId: targetTenantId });
   const {
     isLoading,
     orderLine,
@@ -30,6 +32,7 @@ export function TitleExpectContainer({ history, location, match }) {
     pieces,
     title,
   } = useTitleHydratedPieces({
+    tenantId: targetTenantId,
     titleId,
     receivingStatus: PIECE_STATUS.unreceivable,
   });

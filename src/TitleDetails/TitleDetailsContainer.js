@@ -13,7 +13,6 @@ import {
   LoadingPane,
   ORDERS_API,
   organizationsManifest,
-  pieceResource,
   piecesResource,
   useCentralOrderingContext,
   useLocationsQuery,
@@ -36,18 +35,24 @@ import {
 import { EXPECTED_PIECES_SEARCH_VALUE } from './constants';
 import TitleDetails from './TitleDetails';
 
-const TitleDetailsContainer = ({ location, history, mutator, match }) => {
+const TitleDetailsContainer = ({
+  history,
+  location,
+  match,
+  mutator,
+  tenantId,
+}) => {
   const titleId = match.params.id;
 
   const showCallout = useShowCallout();
   const { isCentralOrderingEnabled } = useCentralOrderingContext();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState();
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
   const [piecesExistance, setPiecesExistance] = useState();
   const [order, setOrder] = useState({});
-  const [vendorsMap, setVendorsMap] = useState();
+  const [vendorsMap, setVendorsMap] = useState({});
 
   const {
     isLoading: isLocationsLoading,
@@ -96,6 +101,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
       records: undefined,
     });
 
+    // TODO: fetch from related tenants in central ordering and for central tenant
     const holdingsItems = mutator.items.GET({
       params: {
         limit: `${LIMIT_MAX}`,
@@ -116,50 +122,52 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   useEffect(
     () => {
-      setIsLoading(true);
-      setTitle({});
-      setPoLine({});
-      setOrder({});
-      setVendorsMap();
+      if (tenantId) {
+        setIsLoading(true);
+        setTitle({});
+        setPoLine({});
+        setOrder({});
+        setVendorsMap();
 
-      mutator.title.GET()
-        .then(response => {
-          setTitle(response);
+        mutator.title.GET()
+          .then(response => {
+            setTitle(response);
 
-          return mutator.poLine.GET({
-            path: `${LINES_API}/${response.poLineId}`,
+            return mutator.poLine.GET({
+              path: `${LINES_API}/${response.poLineId}`,
+            });
+          })
+          .then(line => {
+            setPoLine(line);
+
+            const orderPromise = mutator.purchaseOrder.GET({
+              path: `${ORDERS_API}/${line.purchaseOrderId}`,
+            });
+
+            return Promise.all([orderPromise, line, fetchReceivingResources(line.id)]);
+          })
+          .then(([orderResp, line]) => {
+            setOrder(orderResp);
+
+            const vendorsIds = [...new Set(
+              [orderResp.vendor, line?.physical?.materialSupplier, line?.eresource?.accessProvider].filter(Boolean),
+            )];
+
+            return batchFetch(mutator.vendors, vendorsIds);
+          })
+          .then(vendorsResp => {
+            setVendorsMap(vendorsResp.reduce((acc, v) => ({ ...acc, [v.id]: v.name }), {}));
+          })
+          .catch(() => {
+            showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' });
+          })
+          .finally(() => {
+            setIsLoading(false);
           });
-        })
-        .then(line => {
-          setPoLine(line);
-
-          const orderPromise = mutator.purchaseOrder.GET({
-            path: `${ORDERS_API}/${line.purchaseOrderId}`,
-          });
-
-          return Promise.all([orderPromise, line, fetchReceivingResources(line.id)]);
-        })
-        .then(([orderResp, line]) => {
-          setOrder(orderResp);
-
-          const vendorsIds = [...new Set(
-            [orderResp.vendor, line?.physical?.materialSupplier, line?.eresource?.accessProvider].filter(Boolean),
-          )];
-
-          return batchFetch(mutator.vendors, vendorsIds);
-        })
-        .then(vendorsResp => {
-          setVendorsMap(vendorsResp.reduce((acc, v) => ({ ...acc, [v.id]: v.name }), {}));
-        })
-        .catch(() => {
-          showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' });
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchReceivingResources, showCallout, titleId],
+    [fetchReceivingResources, showCallout, titleId, tenantId],
   );
 
   const onClose = useCallback(
@@ -283,6 +291,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
     isLoading
     || !(locations || vendorsMap)
     || isLocationsLoading
+    || !tenantId
   );
 
   if (isDataLoading) {
@@ -296,7 +305,7 @@ const TitleDetailsContainer = ({ location, history, mutator, match }) => {
 
   return (
     <TitleDetails
-      centralOrdering={isCentralOrderingEnabled}
+      crossTenant={isCentralOrderingEnabled}
       deletePiece={deletePiece}
       locations={locations}
       onAddPiece={onAddPiece}
@@ -320,24 +329,36 @@ TitleDetailsContainer.manifest = Object.freeze({
     ...titleResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   poLine: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   purchaseOrder: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
-  orderPieces: pieceResource,
-  pieces: piecesResource,
-  items: itemsResource,
+  orderPieces: {
+    tenant: '!{tenantId}',
+  },
+  pieces: {
+    ...piecesResource,
+    tenant: '!{tenantId}',
+  },
+  items: {
+    ...itemsResource,
+    tenant: '!{tenantId}',
+  },
   vendors: {
     ...organizationsManifest,
     fetch: false,
     accumulate: true,
+    tenant: '!{tenantId}',
   },
 });
 
@@ -346,6 +367,7 @@ TitleDetailsContainer.propTypes = {
   match: ReactRouterPropTypes.match.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   mutator: PropTypes.object.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };
 
 export default withRouter(stripesConnect(TitleDetailsContainer));

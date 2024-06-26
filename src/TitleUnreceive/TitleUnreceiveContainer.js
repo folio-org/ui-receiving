@@ -1,5 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -32,7 +36,13 @@ import {
 } from '../common/utils';
 import TitleUnreceive from './TitleUnreceive';
 
-function TitleUnreceiveContainer({ history, location, match, mutator }) {
+function TitleUnreceiveContainer({
+  history,
+  location,
+  match,
+  mutator,
+  tenantId,
+}) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
   const [pieces, setPieces] = useState();
@@ -158,13 +168,20 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     ...titleResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
-  pieces: piecesResource,
+  pieces: {
+    ...piecesResource,
+    tenant: '!{tenantId}',
+  },
   poLine: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
+
+  // TODO: fetch from related tenants
   items: itemsResource,
   requests: requestsResource,
   locations: {
@@ -175,7 +192,11 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     ...holdingsResource,
     fetch: false,
   },
-  unreceive: receivingResource,
+
+  unreceive: {
+    ...receivingResource,
+    tenant: '!{tenantId}',
+  },
 });
 
 TitleUnreceiveContainer.propTypes = {
@@ -183,6 +204,7 @@ TitleUnreceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };
 
 export default stripesConnect(TitleUnreceiveContainer);

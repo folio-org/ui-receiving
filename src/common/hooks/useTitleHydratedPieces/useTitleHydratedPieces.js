@@ -18,25 +18,31 @@ import { getHydratedPieces } from '../../utils';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 
-export const useTitleHydratedPieces = ({ receivingStatus, titleId, searchQuery = '' } = {}) => {
-  const ky = useOkapiKy();
+export const useTitleHydratedPieces = ({
+  receivingStatus,
+  tenantId,
+  titleId,
+  searchQuery = '',
+} = {}) => {
+  const ky = useOkapiKy({ tenantId });
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
   const {
     title,
     isLoading: isTitleLoading,
-  } = useTitle(titleId);
+  } = useTitle(titleId, { tenantId });
 
   const {
     orderLine,
     isLoading: isOrderLineLoading,
-  } = useOrderLine(title?.poLineId);
+  } = useOrderLine(title?.poLineId, { tenantId });
 
   const {
     pieces,
     isLoading: isPiecesLoading,
   } = usePieces(
     {
+      tenantId,
       searchParams: {
         query: `titleId=${titleId} and poLineId==${orderLine?.id} and receivingStatus==${receivingStatus}` + (searchQuery ? ` and ${searchQuery}` : ''),
       },
@@ -59,6 +65,7 @@ export const useTitleHydratedPieces = ({ receivingStatus, titleId, searchQuery =
       },
     });
 
+    // TODO: fetch requests, holdings and items from related tenants in the central ordering
     const hydratedPieces = await getHydratedPieces(
       pieces,
       mutatorAdapter(REQUESTS_API, 'requests'),

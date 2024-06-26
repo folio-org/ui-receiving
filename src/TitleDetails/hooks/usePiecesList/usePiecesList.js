@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
-import { noop } from 'lodash';
+import {
+  useEffect,
+  useState,
+} from 'react';
+import noop from 'lodash/noop';
 
 import { usePaginatedPieces } from '../../../common/hooks';
+import { useReceivingSearchContext } from '../../../contexts';
 
 const RESULT_COUNT_INCREMENT = 30;
 
@@ -12,6 +16,11 @@ export const usePiecesList = ({
   queryParams = {},
   title,
 }) => {
+  const {
+    crossTenant,
+    targetTenantId,
+  } = useReceivingSearchContext();
+
   const [sorting, setSorting] = useState(initialSorting);
   const [pagination, setPagination] = useState({ limit: RESULT_COUNT_INCREMENT });
   const {
@@ -26,6 +35,11 @@ export const usePiecesList = ({
       ...queryParams,
       ...filters,
       ...sorting,
+    },
+    options: {
+      crossTenant,
+      instanceId: title?.instanceId,
+      tenantId: targetTenantId,
     },
   });
 
