@@ -139,7 +139,10 @@ const TitleDetails = ({
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
 
-  const { isCentralRouting } = useReceivingSearchContext();
+  const {
+    isCentralRouting,
+    targetTenantId,
+  } = useReceivingSearchContext();
 
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
@@ -493,6 +496,7 @@ const TitleDetails = ({
                 subscriptionFrom={title.subscriptionFrom}
                 subscriptionInterval={title.subscriptionInterval}
                 subscriptionTo={title.subscriptionTo}
+                tenantId={targetTenantId}
               />
             </Accordion>
 
@@ -589,6 +593,7 @@ const TitleDetails = ({
                   allowedNumberOfRoutingLists={numberOfPhysicalUnits}
                   createButtonLabel={<FormattedMessage id="ui-orders.routing.list.accordion.create.button" />}
                   routingListUrl={ROUTING_LIST_ROUTE}
+                  tenantId={targetTenantId}
                 />
               )
             }

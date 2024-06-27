@@ -33,8 +33,11 @@ const POLDetails = ({
   vendor,
   checkinItems = false,
 }) => {
-  const { isTargetTenantForeign } = useReceivingSearchContext();
-  const { routingLists } = useRoutingLists(poLineId);
+  const {
+    isTargetTenantForeign,
+    targetTenantId,
+  } = useReceivingSearchContext();
+  const { routingLists } = useRoutingLists(poLineId, { tenantId: targetTenantId });
 
   const showAccessProvider = orderFormat === ORDER_FORMATS.electronicResource || orderFormat === ORDER_FORMATS.PEMix;
   const showMaterialSupplier = orderFormat !== ORDER_FORMATS.electronicResource;

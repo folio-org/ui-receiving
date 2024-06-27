@@ -20,11 +20,11 @@ const DEFAULT_DATA = [];
 export const usePieceStatusChangeLog = (pieceId, options = {}) => {
   const {
     enabled = true,
-    targetId,
+    tenantId,
     ...queryOptions
   } = options;
 
-  const ky = useOkapiKy({ tenant: targetId });
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace();
 
   const searchParams = {
@@ -36,13 +36,13 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
     isLoading,
     isFetching,
   } = useQuery(
-    [namespace, pieceId, targetId],
-    async () => {
-      const { pieceAuditEvents } = await ky.get(`${PIECE_AUDIT_API}/${pieceId}/status-change-history`, { searchParams }).json();
+    [namespace, pieceId, tenantId],
+    async ({ signal }) => {
+      const { pieceAuditEvents } = await ky.get(`${PIECE_AUDIT_API}/${pieceId}/status-change-history`, { searchParams, signal }).json();
 
       const userIds = [...pieceAuditEvents.reduce((acc, { userId }) => acc.add(userId), new Set())];
       const users = await batchRequest(
-        ({ params }) => ky.get(USERS_API, { searchParams: params }).json(),
+        ({ params }) => ky.get(USERS_API, { searchParams: params, signal }).json(),
         userIds,
       ).then(responses => responses.flatMap((response) => response.users));
       const usersMap = keyBy(users, 'id');

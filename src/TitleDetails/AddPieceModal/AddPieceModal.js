@@ -142,6 +142,7 @@ const AddPieceModal = ({
     }
   };
 
+  // TODO: create adapter for central ordering enabled
   const checkHoldingAbandonment = useCallback((holdingId) => {
     return ky.get(`${HOLDINGS_API}/${holdingId}`)
       .json()
