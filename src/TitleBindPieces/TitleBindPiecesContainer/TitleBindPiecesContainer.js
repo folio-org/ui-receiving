@@ -12,6 +12,7 @@ import {
 import {
   useShowCallout,
   useToggle,
+  PIECE_FORMAT,
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 import {
@@ -49,14 +50,14 @@ export const TitleBindPiecesContainer = () => {
 
   const {
     isLoading,
-    holdingLocations,
+    holdingLocations = [],
     orderLine,
     pieces = [],
     title,
   } = useTitleHydratedPieces({
     titleId,
     receivingStatus: PIECE_STATUS.received,
-    searchQuery: 'isBound==false',
+    searchQuery: `isBound==false and format==${PIECE_FORMAT.physical}`,
   });
 
   const onCancel = useCallback(() => {

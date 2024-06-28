@@ -263,6 +263,7 @@ export const PieceFields = ({
                 name={PIECE_FORM_FIELD_NAMES.isBound}
                 type="checkbox"
                 vertical
+                disabled={isNotReceived}
               />
             </Col>
           </>

@@ -54,7 +54,7 @@ const TitleDetailsContainer = ({
     isCentralRouting,
   } = useReceivingSearchContext();
 
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState({});
   const [poLine, setPoLine] = useState({});
   const [piecesExistance, setPiecesExistance] = useState();

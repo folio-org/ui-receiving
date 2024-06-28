@@ -34,7 +34,7 @@ import {
 export function TitleDetailsReceivedActions({
   applyFilters,
   disabled,
-  isBindPiecesButtonDisabled = false,
+  isBindPiecesButtonVisible = true,
   filters,
   hasUnreceive,
   titleId,
@@ -70,16 +70,19 @@ export function TitleDetailsReceivedActions({
               <FormattedMessage id="ui-receiving.title.details.button.unreceive" />
             </Icon>
           </Button>
-          <Button
-            data-testid="bind-pieces-button"
-            to={`${isCentralRouting ? CENTRAL_RECEIVING_BIND_PIECES_BASE_ROUTE : RECEIVING_BIND_PIECES_BASE_ROUTE}/${titleId}`}
-            buttonStyle="dropdownItem"
-            disabled={isBindPiecesButtonDisabled}
-          >
-            <Icon icon="report">
-              <FormattedMessage id="ui-receiving.title.details.button.bindPieces" />
-            </Icon>
-          </Button>
+          {
+            isBindPiecesButtonVisible && (
+              <Button
+                data-testid="bind-pieces-button"
+                to={`${isCentralRouting ? CENTRAL_RECEIVING_BIND_PIECES_BASE_ROUTE : RECEIVING_BIND_PIECES_BASE_ROUTE}/${titleId}`}
+                buttonStyle="dropdownItem"
+              >
+                <Icon icon="report">
+                  <FormattedMessage id="ui-receiving.title.details.button.bindPieces" />
+                </Icon>
+              </Button>
+            )
+          }
         </MenuSection>
 
         <FilterMenu prefix="received-pieces">
@@ -113,7 +116,7 @@ TitleDetailsReceivedActions.propTypes = {
   disabled: PropTypes.bool,
   filters: PropTypes.object.isRequired,
   hasUnreceive: PropTypes.bool.isRequired,
-  isBindPiecesButtonDisabled: PropTypes.bool,
+  isBindPiecesButtonVisible: PropTypes.bool,
   titleId: PropTypes.string.isRequired,
   toggleColumn: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,

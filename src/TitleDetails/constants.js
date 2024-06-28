@@ -12,17 +12,19 @@ import {
 } from '@folio/stripes-acq-components';
 
 export const TITLE_ACCORDION = {
+  boundItems: 'boundItems',
+  expected: 'expected',
   information: 'information',
   polDetails: 'polDetails',
-  expected: 'expected',
   received: 'received',
   unreceivable: 'unreceivable',
 };
 
 export const TITLE_ACCORDION_LABELS = {
+  [TITLE_ACCORDION.boundItems]: <FormattedMessage id="ui-receiving.title.boundItems" />,
+  [TITLE_ACCORDION.expected]: <FormattedMessage id="ui-receiving.title.expected" />,
   [TITLE_ACCORDION.information]: <FormattedMessage id="ui-receiving.title.information" />,
   [TITLE_ACCORDION.polDetails]: <FormattedMessage id="ui-receiving.title.polDetails" />,
-  [TITLE_ACCORDION.expected]: <FormattedMessage id="ui-receiving.title.expected" />,
   [TITLE_ACCORDION.received]: <FormattedMessage id="ui-receiving.title.received" />,
   [TITLE_ACCORDION.unreceivable]: <FormattedMessage id="ui-receiving.title.unreceivable" />,
 };
@@ -140,6 +142,7 @@ export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.receivedDate]: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
   [PIECE_COLUMNS.request]: <FormattedMessage id="ui-receiving.piece.request" />,
   [PIECE_COLUMNS.status]: <FormattedMessage id="ui-receiving.piece.status" />,
+  [PIECE_COLUMNS.itemStatus]: <FormattedMessage id="ui-receiving.piece.status" />,
   [PIECE_COLUMNS.supplement]: <FormattedMessage id="ui-receiving.piece.supplement" />,
 };
 

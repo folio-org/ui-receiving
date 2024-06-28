@@ -119,7 +119,7 @@ export const usePaginatedPieces = ({
       pieces: pieces.map((piece) => ({
         ...piece,
         itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
-        barcode: itemsMap[piece.itemId]?.barcode,
+        barcode: piece?.barcode || itemsMap[piece.itemId]?.barcode,
         callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
         itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
         request: requestsMap[piece.itemId],

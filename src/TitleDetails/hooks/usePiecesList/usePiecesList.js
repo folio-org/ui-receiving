@@ -12,6 +12,7 @@ const RESULT_COUNT_INCREMENT = 30;
 export const usePiecesList = ({
   filters = {},
   initialSorting,
+  limit = RESULT_COUNT_INCREMENT,
   onLoadingStatusChange = noop,
   queryParams = {},
   title,
@@ -22,7 +23,7 @@ export const usePiecesList = ({
   } = useReceivingSearchContext();
 
   const [sorting, setSorting] = useState(initialSorting);
-  const [pagination, setPagination] = useState({ limit: RESULT_COUNT_INCREMENT });
+  const [pagination, setPagination] = useState({ limit });
   const {
     pieces,
     totalRecords,

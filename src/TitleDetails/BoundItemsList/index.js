@@ -1,0 +1,1 @@
+export { BoundItemsList } from './BoundItemsList';
