@@ -36,7 +36,7 @@ const getTargetTenantId = (
     [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationOnly]: [activeTenantId, member],
     [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralOnly]: [centralTenantId, central],
     [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.centralDefault]: [centralTenantId, central],
-    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationDefault]: [activeTenantId, central],
+    [CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH.activeAffiliationDefault]: [activeTenantId, member],
   };
 
   return resolversMap[defaultReceivingSearchSetting] || [activeTenantId, member];
@@ -83,8 +83,8 @@ export const ReceivingSearchContextProvider = ({ children }) => {
 
     if (shouldRedirect) {
       const [activeRoute, targetRoute] = {
-        member: [CENTRAL_RECEIVING_ROUTE, RECEIVING_ROUTE],
-        central: [RECEIVING_ROUTE, CENTRAL_RECEIVING_ROUTE],
+        [member]: [CENTRAL_RECEIVING_ROUTE, RECEIVING_ROUTE],
+        [central]: [RECEIVING_ROUTE, CENTRAL_RECEIVING_ROUTE],
       }[tenantType];
 
       history.replace({
