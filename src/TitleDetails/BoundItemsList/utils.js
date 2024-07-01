@@ -1,10 +1,8 @@
-import {
-  getItemStatusLabel,
-  ITEM_STATUS,
-} from '@folio/stripes-acq-components';
+import { getItemStatusLabel } from '@folio/stripes-acq-components';
 import { NoValue, TextLink } from '@folio/stripes/components';
 
 import { PIECE_COLUMNS } from '../constants';
+import { getPieceStatusFromItem } from '../../common/utils';
 
 export const getColumnFormatter = (hasViewInventoryPermissions, instanceId) => {
   return ({
@@ -21,7 +19,7 @@ export const getColumnFormatter = (hasViewInventoryPermissions, instanceId) => {
 
       return barcode;
     },
-    [PIECE_COLUMNS.itemStatus]: record => (record.itemStatus ? getItemStatusLabel(record.itemStatus) : `${ITEM_STATUS.undefined}`),
+    [PIECE_COLUMNS.itemStatus]: record => getItemStatusLabel(getPieceStatusFromItem(record)) || <NoValue />,
     [PIECE_COLUMNS.displaySummary]: record => record.displaySummary || <NoValue />,
     [PIECE_COLUMNS.callNumber]: record => record.callNumber || <NoValue />,
   });
