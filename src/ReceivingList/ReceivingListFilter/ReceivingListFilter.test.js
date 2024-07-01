@@ -3,22 +3,11 @@ import {
   screen,
   within,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { checkIfUserInCentralTenant } from '@folio/stripes/core';
-import {
-  ConsortiumLocationsContext,
-  ConsortiumLocationsContextProvider,
-  LocationsContext,
-  LocationsContextProvider,
-} from '@folio/stripes-acq-components';
+
+import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import { FILTERS } from '../constants';
 import ReceivingListFilter from './ReceivingListFilter';
-
-jest.mock('@folio/stripes-acq-components/lib/contexts', () => ({
-  ...jest.requireActual('@folio/stripes-acq-components/lib/contexts'),
-  LocationsContextProvider: jest.fn(),
-  ConsortiumLocationsContextProvider: jest.fn(),
-}));
 
 const locations = [
   { id: 'location-1', name: 'Test non-ECS location 1' },
@@ -39,14 +28,6 @@ const locationsECS = [
   },
 ];
 
-const buildContextProviderMock = (Context, value) => ({ children }) => {
-  return (
-    <Context.Provider value={value}>
-      {children}
-    </Context.Provider>
-  );
-};
-
 const defaultProps = {
   activeFilters: {},
   applyFilters: jest.fn(),
@@ -62,12 +43,9 @@ const renderReceivingListFilter = (props = {}) => (render(
 
 describe('ReceivingListFilter', () => {
   beforeEach(() => {
-    checkIfUserInCentralTenant
+    useLocationsQuery
       .mockClear()
-      .mockReturnValue(false);
-    LocationsContextProvider
-      .mockClear()
-      .mockImplementation(buildContextProviderMock(LocationsContext, { locations }));
+      .mockReturnValue({ locations });
   });
 
   it('should display receiving filters', async () => {
@@ -85,12 +63,9 @@ describe('ReceivingListFilter', () => {
 
   describe('ECS mode', () => {
     beforeEach(() => {
-      checkIfUserInCentralTenant
+      useLocationsQuery
         .mockClear()
-        .mockReturnValue(true);
-      ConsortiumLocationsContextProvider
-        .mockClear()
-        .mockImplementation(buildContextProviderMock(ConsortiumLocationsContext, { locations: locationsECS }));
+        .mockReturnValue({ locations: locationsECS });
     });
 
     it('should render locations filter with selected options', () => {

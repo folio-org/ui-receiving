@@ -1,12 +1,12 @@
-import '@folio/stripes-acq-components/test/jest/__mock__';
 import {
+  HOLDINGS_API,
   LIMIT_MAX,
+  LINES_API,
+  LOCATIONS_API,
   ORDER_FORMATS,
 } from '@folio/stripes-acq-components';
 
-import {
-  FILTERS,
-} from './constants';
+import { FILTERS } from './constants';
 import {
   fetchTitleOrderLines,
   fetchOrderLineHoldings,
@@ -19,38 +19,42 @@ describe('ReceivingList utils', () => {
     it('should make a request with correct query', () => {
       expect.assertions(1);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ poLines: [{ id: '1' }] }),
+        })),
       };
       const titles = [{ poLineId: 1 }, { poLineId: 2 }, { poLineId: 3 }];
       const orderLinesMap = {
         '1': {},
       };
 
-      fetchTitleOrderLines(mutator, titles, orderLinesMap)
+      fetchTitleOrderLines(ky, titles, orderLinesMap)
         .then(() => {
-          expect(mutator.GET).toHaveBeenCalledWith({
-            params: {
+          expect(ky.get).toHaveBeenCalledWith(LINES_API, expect.objectContaining({
+            searchParams: {
               limit: LIMIT_MAX,
               query: 'id==2 or id==3',
             },
-          });
+          }));
         });
     });
 
     it('should not make a request for empty titles', () => {
       expect.assertions(2);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ poLines: [] }),
+        })),
       };
       const orderLinesMap = {
         '1': {},
       };
 
-      fetchTitleOrderLines(mutator, [], orderLinesMap)
+      fetchTitleOrderLines(ky, [], orderLinesMap)
         .then((response) => {
-          expect(mutator.GET).not.toHaveBeenCalled();
+          expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
         });
     });
@@ -58,17 +62,19 @@ describe('ReceivingList utils', () => {
     it('should not make a request if there are no new order lines', () => {
       expect.assertions(2);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ poLines: [] }),
+        })),
       };
       const titles = [{ poLineId: 1 }];
       const orderLinesMap = {
         '1': {},
       };
 
-      fetchTitleOrderLines(mutator, titles, orderLinesMap)
+      fetchTitleOrderLines(ky, titles, orderLinesMap)
         .then((response) => {
-          expect(mutator.GET).not.toHaveBeenCalled();
+          expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
         });
     });
@@ -78,39 +84,42 @@ describe('ReceivingList utils', () => {
     it('should make a request with correct query', () => {
       expect.assertions(1);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
-        reset: jest.fn(),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ locations: [] }),
+        })),
       };
       const orderLines = [{ locations: [{ locationId: 1 }] }, { locations: [{ locationId: 2 }, { locationId: 3 }] }];
       const locationsMap = {
         '1': {},
       };
 
-      fetchOrderLineLocations(mutator, orderLines, locationsMap)
+      fetchOrderLineLocations(ky, orderLines, locationsMap)
         .then(() => {
-          expect(mutator.GET).toHaveBeenCalledWith({
-            params: {
+          expect(ky.get).toHaveBeenCalledWith(LOCATIONS_API, expect.objectContaining({
+            searchParams: {
               limit: LIMIT_MAX,
               query: 'id==2 or id==3',
             },
-          });
+          }));
         });
     });
 
     it('should not make a request for empty titles', () => {
       expect.assertions(2);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ locations: [] }),
+        })),
       };
       const locationsMap = {
         '1': {},
       };
 
-      fetchOrderLineLocations(mutator, [], locationsMap)
+      fetchOrderLineLocations(ky, [], locationsMap)
         .then((response) => {
-          expect(mutator.GET).not.toHaveBeenCalled();
+          expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
         });
     });
@@ -118,17 +127,19 @@ describe('ReceivingList utils', () => {
     it('should not make a request if there are no new order lines', () => {
       expect.assertions(2);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ locations: [] }),
+        })),
       };
       const orderLines = [{ locations: [{ locationId: 1 }] }];
       const locationsMap = {
         '1': {},
       };
 
-      fetchOrderLineLocations(mutator, orderLines, locationsMap)
+      fetchOrderLineLocations(ky, orderLines, locationsMap)
         .then((response) => {
-          expect(mutator.GET).not.toHaveBeenCalled();
+          expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
         });
     });
@@ -138,33 +149,36 @@ describe('ReceivingList utils', () => {
     it('should make a request with correct query', () => {
       expect.assertions(1);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
-        reset: jest.fn(),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ holdingsRecords: [] }),
+        })),
       };
       const orderLines = [{ locations: [{ holdingId: 1 }] }, { locations: [{ holdingId: 2 }, { holdingId: 3 }] }];
 
-      fetchOrderLineHoldings(mutator, orderLines)
+      fetchOrderLineHoldings(ky, orderLines)
         .then(() => {
-          expect(mutator.GET).toHaveBeenCalledWith({
-            params: {
+          expect(ky.get).toHaveBeenCalledWith(HOLDINGS_API, expect.objectContaining({
+            searchParams: {
               limit: LIMIT_MAX,
               query: 'id==1 or id==2 or id==3',
             },
-          });
+          }));
         });
     });
 
     it('should not make a request for empty titles', () => {
       expect.assertions(2);
 
-      const mutator = {
-        GET: jest.fn(() => Promise.resolve()),
+      const ky = {
+        get: jest.fn(() => ({
+          json: () => Promise.resolve({ holdingsRecords: [] }),
+        })),
       };
 
-      fetchOrderLineHoldings(mutator, [])
+      fetchOrderLineHoldings(ky, [])
         .then((response) => {
-          expect(mutator.GET).not.toHaveBeenCalled();
+          expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
         });
     });

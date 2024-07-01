@@ -81,12 +81,18 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const renderTitleDetailsContainer = () => render(
+const defaultProps = {
+  history: historyMock,
+  location: locationMock,
+  match: { params: { id: 'titleId' }, path: 'path', url: 'url' },
+  mutator,
+  tenantId: 'tenantId',
+}
+
+const renderTitleDetailsContainer = (props = {}) => render(
   <TitleDetailsContainer
-    history={historyMock}
-    location={locationMock}
-    match={{ params: { id: 'titleId' }, path: 'path', url: 'url' }}
-    mutator={mutator}
+    {...defaultProps}
+    {...props}
   />,
   { wrapper },
 );

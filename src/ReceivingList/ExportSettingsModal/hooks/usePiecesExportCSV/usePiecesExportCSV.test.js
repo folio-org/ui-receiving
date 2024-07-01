@@ -19,15 +19,18 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
+const kyMock = {
+  extend: () => kyMock,
+  get: () => ({
+    json: () => ({}),
+  }),
+}
+
 describe('usePiecesExportCSV', () => {
   beforeEach(() => {
     useOkapiKy
       .mockClear()
-      .mockReturnValue({
-        get: () => ({
-          json: () => ({}),
-        }),
-      });
+      .mockReturnValue(kyMock);
   });
 
   it('should return a function, that run export to csv', async () => {
