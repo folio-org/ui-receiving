@@ -33,9 +33,7 @@ const ReceivingListContainer = () => {
   const invalidReferenceMessage = intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' });
 
   const fetchReferences = useCallback(async (titles, ky) => {
-    const l = await fetchTitleOrderLines(ky, titles, {});
-    // TODO: remove: dev purposes
-    const orderLinesResponse = l.filter(Boolean);
+    const orderLinesResponse = await fetchTitleOrderLines(ky, titles, {});
     const holdingsResponse = await fetchOrderLineHoldings(ky, orderLinesResponse);
     const locationsResponse = await fetchOrderLineLocations(
       ky,

@@ -43,7 +43,6 @@ export const ReceivingRoutes = () => {
   return (
     <Switch>
       <Route
-        // TODO: handle routing lists in the context of central ordering
         component={RoutingList}
         path={[CENTRAL_ROUTING_LIST_ROUTE, ROUTING_LIST_ROUTE]}
       />

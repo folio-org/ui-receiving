@@ -50,7 +50,6 @@ export const AffiliationsNavigation = () => {
     currUserTenants,
   ]);
 
-  // TODO: apply logic for displaying
   const isNavigationVisible = (
     centralTenantId !== activeTenantId
     && [centralDefault, activeAffiliationDefault].includes(defaultReceivingSearchSetting)

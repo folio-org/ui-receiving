@@ -66,8 +66,7 @@ export const useReceiving = ({
 
     return {
       query,
-      // TODO: remove filter
-      titles: titlesResult.filter(Boolean),
+      titles: titlesResult,
       totalRecords,
     };
   };

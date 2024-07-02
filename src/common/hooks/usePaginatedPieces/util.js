@@ -7,7 +7,7 @@ import {
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
   const itemIds = pieces.reduce((acc, { itemId }) => {
-    return Boolean(itemId) ? acc.concat(itemId) : acc;
+    return itemId ? acc.concat(itemId) : acc;
   }, []);
 
   return batchRequest(

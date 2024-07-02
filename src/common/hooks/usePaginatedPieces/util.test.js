@@ -23,7 +23,7 @@ const buildKyMock = (res) => ({
   get: jest.fn(() => ({
     json: () => Promise.resolve(res),
   })),
-})
+});
 
 describe('Paginated pieces utilities', () => {
   describe('fetchLocalPieceItems', () => {
@@ -39,7 +39,7 @@ describe('Paginated pieces utilities', () => {
 
   describe('fetchConsortiumPieceItems', () => {
     const kyMock = buildKyMock({ items });
-  
+
     it('should fetch pieces items from the all related tenants', async () => {
       const result = await fetchConsortiumPieceItems(kyMock, { pieces });
 
