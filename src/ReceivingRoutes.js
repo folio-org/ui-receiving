@@ -75,7 +75,7 @@ export const ReceivingRoutes = () => {
       />
       <Route
         path={[CENTRAL_RECEIVING_ROUTE_UNRECEIVE, RECEIVING_ROUTE_UNRECEIVE]}
-        component={(props) => (
+        render={(props) => (
           <TitleUnreceiveContainer
             tenantId={targetTenantId}
             {...props}
