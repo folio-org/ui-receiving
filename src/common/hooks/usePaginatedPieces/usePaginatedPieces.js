@@ -6,66 +6,24 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 import {
-  batchRequest,
   getConsortiumCentralTenantId,
   makeQueryBuilder,
   ORDER_PIECES_API,
-  REQUESTS_API,
   useLocaleDateFormat,
 } from '@folio/stripes-acq-components';
 
 import { getPieceStatusFromItem } from '../../utils';
-import { makeKeywordQueryBuilder } from './searchConfigs';
 import {
-  fetchConsortiumPieceItems,
-  fetchLocalPieceItems,
-} from './util';
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from './hooks';
+import { makeKeywordQueryBuilder } from './searchConfigs';
 
 export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'cql.allRecords=1',
   makeKeywordQueryBuilder(dateFormat),
   'sortby receiptDate',
 );
-
-const usePieceRequestsFetch = ({ tenantId }) => {
-  const ky = useOkapiKy({ tenant: tenantId });
-
-  // TODO: integrate loading of requests from several tenants after implementation MODORDERS-1138
-  const fetchPieceRequests = ({ pieces, signal }) => {
-    return batchRequest(
-      async ({ params: searchParams }) => {
-        const { requests = [] } = await ky.get(REQUESTS_API, { searchParams, signal }).json();
-
-        return requests;
-      },
-      pieces,
-      (piecesChunk) => {
-        const itemIdsQuery = piecesChunk
-          .filter(piece => piece.itemId)
-          .map(piece => `itemId==${piece.itemId}`)
-          .join(' or ');
-
-        return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
-      },
-    );
-  };
-
-  return { fetchPieceRequests };
-};
-
-const usePieceItemsFetch = ({ instanceId, tenantId }) => {
-  const ky = useOkapiKy({ tenant: tenantId });
-
-  const fetchPieceItems = ({ pieces, crossTenant, signal }) => {
-    const kyExtended = ky.extend({ signal });
-
-    return crossTenant
-      ? fetchConsortiumPieceItems(kyExtended, { instanceId, pieces })
-      : fetchLocalPieceItems(kyExtended, { pieces });
-  };
-
-  return { fetchPieceItems };
-};
 
 export const usePaginatedPieces = ({
   pagination,

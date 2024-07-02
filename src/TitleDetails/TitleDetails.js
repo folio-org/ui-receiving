@@ -164,7 +164,14 @@ const TitleDetails = ({
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
-  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(titleId, title.acqUnitIds, { tenantId: targetTenantId });
+  const {
+    restrictions,
+    isLoading: isRestrictionsLoading,
+  } = useAcqRestrictions(
+    titleId,
+    title.acqUnitIds,
+    { tenantId: targetTenantId },
+  );
 
   const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;

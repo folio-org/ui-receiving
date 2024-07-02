@@ -1,13 +1,22 @@
 import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
+import {
   render,
   screen,
   within,
 } from '@folio/jest-config-stripes/testing-library/react';
-
 import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import { FILTERS } from '../constants';
 import ReceivingListFilter from './ReceivingListFilter';
+
+jest.mock('@folio/stripes-acq-components/lib/hooks', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components/lib/hooks'),
+  useLocationsQuery: jest.fn(),
+}));
 
 const locations = [
   { id: 'location-1', name: 'Test non-ECS location 1' },
@@ -34,11 +43,19 @@ const defaultProps = {
   disabled: false,
 };
 
+const queryClient = new QueryClient();
+const wrapper = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    {children}
+  </QueryClientProvider>
+);
+
 const renderReceivingListFilter = (props = {}) => (render(
   <ReceivingListFilter
     {...defaultProps}
     {...props}
   />,
+  { wrapper },
 ));
 
 describe('ReceivingListFilter', () => {

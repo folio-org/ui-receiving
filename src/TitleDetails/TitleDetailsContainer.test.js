@@ -87,7 +87,7 @@ const defaultProps = {
   match: { params: { id: 'titleId' }, path: 'path', url: 'url' },
   mutator,
   tenantId: 'tenantId',
-}
+};
 
 const renderTitleDetailsContainer = (props = {}) => render(
   <TitleDetailsContainer

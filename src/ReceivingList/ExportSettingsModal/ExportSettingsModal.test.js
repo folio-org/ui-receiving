@@ -1,7 +1,10 @@
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
+
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import {
   EXPORT_FIELDS_PARAMS,
@@ -52,7 +55,7 @@ describe('ExportSettingsModal actions', () => {
       expect(radioBtns[0].checked).toBeFalsy();
       expect(radioBtns[1].checked).toBeTruthy();
 
-      const selects = await screen.findAllByRole('textbox');
+      const selects = await screen.findAllByRole('searchbox');
 
       await user.click(selects[0]);
 

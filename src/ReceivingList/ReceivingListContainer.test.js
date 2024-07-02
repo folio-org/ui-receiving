@@ -1,38 +1,35 @@
-import React from 'react';
-import { render, screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
 
-import ReceivingListContainer from './ReceivingListContainer';
 import { useReceiving } from './hooks';
+import ReceivingListContainer from './ReceivingListContainer';
+import {
+  fetchLinesOrders,
+  fetchOrderLineHoldings,
+  fetchOrderLineLocations,
+  fetchTitleOrderLines,
+} from './utils';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
-  useCentralOrderingSettings: jest.fn(() => ({ enabled: false })),
   usePagination: () => ({}),
 }));
 jest.mock('./ReceivingList', () => jest.fn().mockReturnValue('ReceivingList'));
 jest.mock('./hooks/useReceiving', () => ({
   useReceiving: jest.fn(),
 }));
-
-const defaultProps = {
-  mutator: {
-    receivingListOrderLines: {
-      GET: jest.fn().mockReturnValue(
-        Promise.resolve([{ purchaseOrderId: 'orderId', locations: [{ locationId: 'locationId' }] }]),
-      ),
-    },
-    lineOrders: {
-      GET: jest.fn().mockReturnValue(Promise.resolve([{ id: 'orderId' }])),
-    },
-    receivingListLocations: {
-      GET: jest.fn().mockReturnValue(Promise.resolve([{ id: 'locationId' }])),
-    },
-  },
-};
+jest.mock('./utils', () => ({
+  fetchLinesOrders: jest.fn(),
+  fetchOrderLineHoldings: jest.fn(),
+  fetchOrderLineLocations: jest.fn(),
+  fetchTitleOrderLines: jest.fn(),
+}));
 
 const renderReceivingListContainer = (props = {}) => render(
   <ReceivingListContainer
-    {...defaultProps}
     {...props}
   />,
 );
@@ -45,6 +42,18 @@ describe('ReceivingListContainer', () => {
   }];
 
   beforeEach(() => {
+    fetchLinesOrders
+      .mockClear()
+      .mockReturnValue([]);
+    fetchOrderLineHoldings
+      .mockClear()
+      .mockReturnValue([]);
+    fetchOrderLineLocations
+      .mockClear()
+      .mockReturnValue([]);
+    fetchTitleOrderLines
+      .mockClear()
+      .mockReturnValue([]);
     useReceiving
       .mockClear()
       .mockReturnValue({ titles, totalRecords: titles.length });
@@ -61,25 +70,8 @@ describe('ReceivingListContainer', () => {
 
     await waitFor(() => useReceiving.mock.calls[0][0].fetchReferences(titles));
 
-    expect(defaultProps.mutator.receivingListOrderLines.GET).toHaveBeenCalledWith({
-      params: {
-        limit: 1000,
-        query: `id==${titles[0].poLineId}`,
-      },
-    });
-
-    expect(defaultProps.mutator.lineOrders.GET).toHaveBeenCalledWith({
-      params: {
-        limit: 1000,
-        query: 'id==orderId',
-      },
-    });
-
-    expect(defaultProps.mutator.receivingListLocations.GET).toHaveBeenCalledWith({
-      params: {
-        limit: 1000,
-        query: 'id==locationId',
-      },
-    });
+    expect(fetchTitleOrderLines).toHaveBeenCalled();
+    expect(fetchLinesOrders).toHaveBeenCalled();
+    expect(fetchOrderLineLocations).toHaveBeenCalled();
   });
 });

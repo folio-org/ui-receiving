@@ -24,7 +24,7 @@ const kyMock = {
   get: () => ({
     json: () => ({}),
   }),
-}
+};
 
 describe('usePiecesExportCSV', () => {
   beforeEach(() => {

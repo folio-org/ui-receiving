@@ -64,9 +64,6 @@ export const useReceiving = ({
       poLine: orderLinesMap[title.poLineId],
     }));
 
-    console.log('titles', titles);
-    console.log('titlesResult', titlesResult);
-
     return {
       query,
       // TODO: remove filter

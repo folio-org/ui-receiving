@@ -1,5 +1,11 @@
-import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import {
+  renderHook,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 
 import { useOkapiKy } from '@folio/stripes/core';
 import {
@@ -9,6 +15,10 @@ import {
   REQUESTS_API,
 } from '@folio/stripes-acq-components';
 
+import {
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from './hooks';
 import { usePaginatedPieces } from './usePaginatedPieces';
 
 jest.mock('@folio/stripes/core', () => ({
@@ -16,9 +26,18 @@ jest.mock('@folio/stripes/core', () => ({
   useNamespace: () => ['namespace'],
   useOkapiKy: jest.fn(),
 }));
+jest.mock('./hooks', () => ({
+  ...jest.requireActual('./hooks'),
+  usePieceItemsFetch: jest.fn(),
+  usePieceRequestsFetch: jest.fn(),
+}));
+jest.mock('./util', () => ({
+  ...jest.requireActual('./util'),
+  fetchConsortiumPieceItems: jest.fn(),
+  fetchLocalPieceItems: jest.fn(),
+}));
 
 const queryClient = new QueryClient();
-// eslint-disable-next-line react/prop-types
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     {children}
@@ -54,6 +73,9 @@ const KY_RESPONSE_DATA_MAP = {
   },
 };
 
+const fetchPieceItems = jest.fn(() => [item]);
+const fetchPieceRequests = jest.fn(() => [request]);
+
 describe('usePaginatedPieces', () => {
   beforeEach(() => {
     useOkapiKy
@@ -63,6 +85,12 @@ describe('usePaginatedPieces', () => {
           json: () => KY_RESPONSE_DATA_MAP[path],
         }),
       });
+    usePieceItemsFetch
+      .mockClear()
+      .mockReturnValue({ fetchPieceItems });
+    usePieceRequestsFetch
+      .mockClear()
+      .mockReturnValue({ fetchPieceRequests });
   });
 
   it('should return fetched hydrated pieces', async () => {
