@@ -10,6 +10,7 @@ import { getFullName } from '@folio/stripes/util';
 import { FolioFormattedDate } from '@folio/stripes-acq-components';
 
 import { isSyntheticUser } from '../../../common/utils';
+import { useReceivingSearchContext } from '../../../contexts';
 import { usePieceStatusChangeLog } from '../../hooks';
 
 const COLUMN_NAMES = {
@@ -42,7 +43,8 @@ const FORMATTER = {
 const VISIBLE_COLUMNS = Object.values(COLUMN_NAMES);
 
 export const ReceivingStatusChangeLog = ({ piece }) => {
-  const { isFetching, data } = usePieceStatusChangeLog(piece.id);
+  const { targetTenantId } = useReceivingSearchContext();
+  const { isFetching, data } = usePieceStatusChangeLog(piece.id, { tenantId: targetTenantId });
 
   return (
     <MultiColumnList

@@ -23,7 +23,7 @@ import { TitleReceiveList } from './TitleReceiveList';
 const FIELD_NAME = 'receivedItems';
 
 const TitleReceive = ({
-  centralOrdering = false,
+  crossTenant = false,
   createInventoryValues,
   form,
   handleSubmit,
@@ -84,7 +84,7 @@ const TitleReceive = ({
             paneTitle={paneTitle}
           >
             <LineLocationsView
-              centralOrdering={centralOrdering}
+              crossTenant={crossTenant}
               instanceId={instanceId}
               poLine={poLine}
               locations={locations}
@@ -101,7 +101,7 @@ const TitleReceive = ({
               id="receivedItems"
               name={FIELD_NAME}
               props={{
-                centralOrdering,
+                crossTenant,
                 createInventoryValues,
                 instanceId,
                 selectLocation: form.mutators.setLocationValue,
@@ -118,7 +118,7 @@ const TitleReceive = ({
 };
 
 TitleReceive.propTypes = {
-  centralOrdering: PropTypes.bool,
+  crossTenant: PropTypes.bool,
   createInventoryValues: PropTypes.object.isRequired,
   form: PropTypes.object,  // form object to get initialValues
   handleSubmit: PropTypes.func.isRequired,

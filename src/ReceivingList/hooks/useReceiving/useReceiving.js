@@ -1,19 +1,17 @@
+import moment from 'moment';
+import queryString from 'query-string';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router';
-import queryString from 'query-string';
-import moment from 'moment';
 
 import {
   useNamespace,
   useOkapiKy,
   useStripes,
 } from '@folio/stripes/core';
-import {
-  getFiltersCount,
-} from '@folio/stripes-acq-components';
+import { getFiltersCount } from '@folio/stripes-acq-components';
 
-import { buildTitlesQuery } from '../../utils';
 import { TITLES_API } from '../../../common/constants';
+import { buildTitlesQuery } from '../../utils';
 
 export const useReceiving = ({
   pagination,
@@ -21,7 +19,13 @@ export const useReceiving = ({
   searchParams = {},
   options = {},
 }) => {
-  const ky = useOkapiKy();
+  const {
+    enabled = true,
+    tenantId,
+    ...queryOptions
+  } = options;
+
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace({ key: 'receivings-list' });
   const { timezone } = useStripes();
 
@@ -41,17 +45,20 @@ export const useReceiving = ({
     offset: pagination.offset,
   };
 
-  const queryKey = [namespace, pagination.timestamp, pagination.limit, pagination.offset];
-  const queryFn = async () => {
+  const queryKey = [namespace, pagination.timestamp, pagination.limit, pagination.offset, tenantId];
+  const queryFn = async ({ signal }) => {
     if (!filtersCount) {
       return { titles: [], totalRecords: 0 };
     }
 
     const { titles, totalRecords } = await ky
-      .get(TITLES_API, { searchParams: { ...defaultSearchParams, ...searchParams } })
+      .get(TITLES_API, {
+        searchParams: { ...defaultSearchParams, ...searchParams },
+        signal,
+      })
       .json();
 
-    const { orderLinesMap } = await fetchReferences(titles);
+    const { orderLinesMap } = await fetchReferences(titles, ky.extend({ signal }));
     const titlesResult = titles.map(title => ({
       ...title,
       poLine: orderLinesMap[title.poLineId],
@@ -64,7 +71,7 @@ export const useReceiving = ({
     };
   };
   const defaultOptions = {
-    enabled: Boolean(pagination.timestamp),
+    enabled: enabled && Boolean(pagination.timestamp),
     keepPreviousData: true,
   };
 
@@ -73,7 +80,7 @@ export const useReceiving = ({
     queryFn,
     {
       ...defaultOptions,
-      ...options,
+      ...queryOptions,
     },
   );
 

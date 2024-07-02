@@ -22,9 +22,20 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titleResource } from '../common/resources';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleForm from '../TitleForm/TitleForm';
 
-function TitleEditContainer({ history, location, match, mutator }) {
+function TitleEditContainer({
+  history,
+  location,
+  match,
+  mutator,
+  tenantId,
+}) {
   const titleId = match.params.id;
   const [title, setTitle] = useState();
   const showCallout = useShowCallout();
@@ -32,6 +43,8 @@ function TitleEditContainer({ history, location, match, mutator }) {
   const [identifierTypes, setIdentifierTypes] = useState();
   const [contributorNameTypes, setContributorNameTypes] = useState();
   const intl = useIntl();
+
+  const { isCentralRouting } = useReceivingSearchContext();
 
   useEffect(() => {
     mutator.identifierTypes.GET()
@@ -60,14 +73,14 @@ function TitleEditContainer({ history, location, match, mutator }) {
 
   const onCancel = useCallback(
     () => {
-      const pathname = location.state?.backPathname || `/receiving/${titleId}/view`;
+      const pathname = location.state?.backPathname || `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`;
 
       history.push({
         pathname,
         search: location.search,
       });
     },
-    [history, titleId, location.search, location.state],
+    [history, isCentralRouting, titleId, location.search, location.state],
   );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
@@ -129,6 +142,7 @@ function TitleEditContainer({ history, location, match, mutator }) {
       initialValues={initialValues}
       onCancel={onCancel}
       onSubmit={onSubmit}
+      tenantId={tenantId}
     />
   );
 }
@@ -138,21 +152,25 @@ TitleEditContainer.manifest = Object.freeze({
     ...contributorNameTypesManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   editTitle: {
     ...titleResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   editTitlePOLine: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
   identifierTypes: {
     ...identifierTypesManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
 });
 
@@ -161,6 +179,7 @@ TitleEditContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };
 
 export default stripesConnect(TitleEditContainer);

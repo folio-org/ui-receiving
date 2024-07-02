@@ -28,6 +28,7 @@ const TitleInformation = ({
   subscriptionFrom,
   subscriptionInterval,
   subscriptionTo,
+  tenantId,
 }) => {
   return (
     <>
@@ -116,7 +117,10 @@ const TitleInformation = ({
           xs={6}
           lg={3}
         >
-          <AcqUnitsView units={acqUnitIds} />
+          <AcqUnitsView
+            tenantId={tenantId}
+            units={acqUnitIds}
+          />
         </Col>
       </Row>
       <Row>
@@ -125,7 +129,10 @@ const TitleInformation = ({
           xs={12}
         >
           <KeyValue label={<FormattedMessage id="ui-receiving.title.contributors" />}>
-            <ContributorDetails contributors={contributors} />
+            <ContributorDetails
+              contributors={contributors}
+              tenantId={tenantId}
+            />
           </KeyValue>
         </Col>
       </Row>
@@ -135,7 +142,10 @@ const TitleInformation = ({
           xs={12}
         >
           <KeyValue label={<FormattedMessage id="ui-receiving.title.productIds" />}>
-            <ProductIdDetails productIds={productIds} />
+            <ProductIdDetails
+              productIds={productIds}
+              tenantId={tenantId}
+            />
           </KeyValue>
         </Col>
       </Row>
@@ -155,6 +165,7 @@ TitleInformation.propTypes = {
   subscriptionFrom: PropTypes.string,
   subscriptionInterval: PropTypes.number,
   subscriptionTo: PropTypes.string,
+  tenantId: PropTypes.string,
 };
 
 export default TitleInformation;

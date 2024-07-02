@@ -31,7 +31,6 @@ import {
   ModalFooter,
   PIECE_STATUS,
   handleKeyCommand,
-  useCentralOrderingContext,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
@@ -91,8 +90,6 @@ const AddPieceModal = ({
     receivingStatus,
   } = formValues;
 
-  const { isCentralOrderingEnabled } = useCentralOrderingContext();
-
   /*
     When the "saveAndCreate" action is triggered, `isCreateAnother` is passed as an initial value to apply validations.
     This param should be reset to `false` after the component init.
@@ -145,6 +142,7 @@ const AddPieceModal = ({
     }
   };
 
+  // TODO: create adapter for central ordering enabled
   const checkHoldingAbandonment = useCallback((holdingId) => {
     return ky.get(`${HOLDINGS_API}/${holdingId}`)
       .json()
@@ -323,7 +321,6 @@ const AddPieceModal = ({
                 label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.pieceDetails]}
               >
                 <PieceFields
-                  centralOrdering={isCentralOrderingEnabled}
                   createInventoryValues={createInventoryValues}
                   instanceId={instanceId}
                   locationIds={locationIds}

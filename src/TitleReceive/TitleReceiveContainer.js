@@ -1,5 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -16,7 +21,6 @@ import {
   pieceResource,
   piecesResource,
   requestsResource,
-  useCentralOrderingContext,
   useLocationsQuery,
   useShowCallout,
 } from '@folio/stripes-acq-components';
@@ -32,13 +36,22 @@ import {
   getReceivingPieceItemStatus,
   handleReceiveErrorResponse,
 } from '../common/utils';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import { EXPECTED_PIECES_SEARCH_VALUE } from '../TitleDetails/constants';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
 
 function TitleReceiveContainer({ history, location, match, mutator }) {
   const showCallout = useShowCallout();
-  const { isCentralOrderingEnabled } = useCentralOrderingContext();
+  const {
+    crossTenant,
+    isCentralOrderingEnabled,
+    isCentralRouting,
+  } = useReceivingSearchContext();
 
   const titleId = match.params.id;
   const [pieces, setPieces] = useState();
@@ -98,11 +111,11 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   const onCancel = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/${titleId}/view`,
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
         search: location.search,
       });
     },
-    [history, titleId, location.search],
+    [history, isCentralRouting, titleId, location.search],
   );
   const [receivedPiecesWithRequests, setReceivedPiecesWithRequests] = useState([]);
   const closeOpenedRequestsModal = useCallback(
@@ -169,7 +182,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   return (
     <>
       <TitleReceive
-        centralOrdering={isCentralOrderingEnabled}
+        crossTenant={crossTenant}
         createInventoryValues={createInventoryValues}
         initialValues={initialValues}
         instanceId={instanceId}
@@ -195,16 +208,27 @@ TitleReceiveContainer.manifest = Object.freeze({
     ...titleResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
-  pieces: piecesResource,
+  pieces: {
+    ...piecesResource,
+    tenant: '!{tenantId}',
+  },
   poLine: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
+
+  // TODO: fetch items and requests from related tenants
   items: itemsResource,
   requests: requestsResource,
-  piece: pieceResource,
+
+  piece: {
+    ...pieceResource,
+    tenant: '!{tenantId}',
+  },
 });
 
 TitleReceiveContainer.propTypes = {

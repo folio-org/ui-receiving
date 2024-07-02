@@ -56,7 +56,14 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import { ROUTING_LIST_ROUTE } from '../constants';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE,
+  RECEIVING_ROUTE_CREATE,
+  ROUTING_LIST_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import {
   EXPECTED_PIECE_COLUMN_MAPPING,
   EXPECTED_PIECES_SEARCH_VALUE,
@@ -83,7 +90,7 @@ import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
 
-function getNewPieceValues(titleId, poLine, centralOrdering) {
+function getNewPieceValues(titleId, poLine, crossTenant) {
   const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
   const initialValuesPiece = { receiptDate: physical?.expectedReceiptDate, poLineId, titleId };
 
@@ -91,7 +98,7 @@ function getNewPieceValues(titleId, poLine, centralOrdering) {
     initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
   }
 
-  if (locations.length === 1 && !centralOrdering) {
+  if (locations.length === 1 && !crossTenant) {
     initialValuesPiece.locationId = locations[0].locationId;
     initialValuesPiece.holdingId = locations[0].holdingId;
   }
@@ -104,7 +111,7 @@ function getNewPieceValues(titleId, poLine, centralOrdering) {
 }
 
 const TitleDetails = ({
-  centralOrdering = false,
+  crossTenant = false,
   deletePiece,
   history,
   location,
@@ -133,6 +140,11 @@ const TitleDetails = ({
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
 
+  const {
+    isCentralRouting,
+    targetTenantId,
+  } = useReceivingSearchContext();
+
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
@@ -152,7 +164,14 @@ const TitleDetails = ({
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
 
-  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(titleId, title.acqUnitIds);
+  const {
+    restrictions,
+    isLoading: isRestrictionsLoading,
+  } = useAcqRestrictions(
+    titleId,
+    title.acqUnitIds,
+    { tenantId: targetTenantId },
+  );
 
   const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
@@ -175,7 +194,7 @@ const TitleDetails = ({
       name: 'new',
       handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.create')) {
-          history.push('/receiving/create');
+          history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE_CREATE : RECEIVING_ROUTE_CREATE);
         }
       }),
     },
@@ -197,7 +216,7 @@ const TitleDetails = ({
 
   const openAddPieceModal = useCallback(
     (e, piece) => {
-      setPieceValues(piece || getNewPieceValues(title.id, poLine, centralOrdering));
+      setPieceValues(piece || getNewPieceValues(title.id, poLine, crossTenant));
       setConfirmAcknowledgeNote(() => toggleAddPieceModal);
 
       return (
@@ -207,7 +226,7 @@ const TitleDetails = ({
       );
     },
     [
-      centralOrdering,
+      crossTenant,
       poLine,
       title.id,
       title.isAcknowledged,
@@ -227,11 +246,11 @@ const TitleDetails = ({
   const goToReceiveList = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/receive/${titleId}`,
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
         search: location.search,
       });
     },
-    [titleId, history, location.search],
+    [titleId, history, isCentralRouting, location.search],
   );
 
   const openReceiveList = useCallback(
@@ -486,6 +505,7 @@ const TitleDetails = ({
                 subscriptionFrom={title.subscriptionFrom}
                 subscriptionInterval={title.subscriptionInterval}
                 subscriptionTo={title.subscriptionTo}
+                tenantId={targetTenantId}
               />
             </Accordion>
 
@@ -582,6 +602,7 @@ const TitleDetails = ({
                   allowedNumberOfRoutingLists={numberOfPhysicalUnits}
                   createButtonLabel={<FormattedMessage id="ui-orders.routing.list.accordion.create.button" />}
                   routingListUrl={ROUTING_LIST_ROUTE}
+                  tenantId={targetTenantId}
                 />
               )
             }
@@ -689,7 +710,7 @@ const TitleDetails = ({
 };
 
 TitleDetails.propTypes = {
-  centralOrdering: PropTypes.bool,
+  crossTenant: PropTypes.bool,
   deletePiece: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,

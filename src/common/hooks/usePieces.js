@@ -13,13 +13,17 @@ export const usePieces = (
   kyOptions = {},
   queryOptions = {},
 ) => {
-  const ky = useOkapiKy();
+  const {
+    tenantId,
+    ...restKyOptions
+  } = kyOptions;
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace();
 
   const queryKey = [namespace, 'pieces'];
 
   const options = {
-    ...kyOptions,
+    ...restKyOptions,
     searchParams: {
       limit: LIMIT_MAX,
       ...kyOptions?.searchParams,

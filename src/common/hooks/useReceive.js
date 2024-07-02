@@ -1,6 +1,4 @@
-import {
-  useMutation,
-} from 'react-query';
+import { useMutation } from 'react-query';
 
 import { useOkapiKy } from '@folio/stripes/core';
 import { ITEM_STATUS } from '@folio/stripes-acq-components';
@@ -8,7 +6,9 @@ import { ITEM_STATUS } from '@folio/stripes-acq-components';
 import { CHECKIN_API } from '../constants';
 
 export const useReceive = (options = {}) => {
-  const ky = useOkapiKy();
+  const { tenantId, ...mutationOptions } = options;
+
+  const ky = useOkapiKy({ tenant: tenantId });
 
   const { mutateAsync } = useMutation({
     mutationFn: (pieces) => {
@@ -69,7 +69,7 @@ export const useReceive = (options = {}) => {
           return receivingResults;
         });
     },
-    ...options,
+    ...mutationOptions,
   });
 
   return {

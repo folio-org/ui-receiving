@@ -15,13 +15,22 @@ import {
   usePiecesExpect,
   useTitleHydratedPieces,
 } from '../common/hooks';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleExpect from './TitleExpect';
 
 export function TitleExpectContainer({ history, location, match }) {
-  const showCallout = useShowCallout();
   const titleId = match.params.id;
+  const showCallout = useShowCallout();
+  const {
+    isCentralRouting,
+    targetTenantId,
+  } = useReceivingSearchContext();
 
-  const { expectPieces } = usePiecesExpect();
+  const { expectPieces } = usePiecesExpect({ tenantId: targetTenantId });
   const {
     isLoading,
     orderLine,
@@ -30,16 +39,17 @@ export function TitleExpectContainer({ history, location, match }) {
     pieces,
     title,
   } = useTitleHydratedPieces({
+    tenantId: targetTenantId,
     titleId,
     receivingStatus: PIECE_STATUS.unreceivable,
   });
 
   const onCancel = useCallback(() => {
     history.push({
-      pathname: `/receiving/${titleId}/view`,
+      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
       search: location.search,
     });
-  }, [history, titleId, location.search]);
+  }, [history, isCentralRouting, titleId, location.search]);
 
   const onSubmit = useCallback(({ unreceivablePieces }) => {
     return expectPieces(unreceivablePieces)

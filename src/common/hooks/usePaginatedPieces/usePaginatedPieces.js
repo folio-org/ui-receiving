@@ -3,17 +3,20 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 import {
-  batchRequest,
+  getConsortiumCentralTenantId,
   makeQueryBuilder,
-  ITEMS_API,
   ORDER_PIECES_API,
-  REQUESTS_API,
   useLocaleDateFormat,
 } from '@folio/stripes-acq-components';
 
 import { getPieceStatusFromItem } from '../../utils';
+import {
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from './hooks';
 import { makeKeywordQueryBuilder } from './searchConfigs';
 
 export const buildPiecesQuery = dateFormat => makeQueryBuilder(
@@ -22,56 +25,28 @@ export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'sortby receiptDate',
 );
 
-const usePieceRequestsFetch = () => {
-  const ky = useOkapiKy();
-
-  const fetchPieceRequests = pieces => {
-    return batchRequest(
-      async ({ params: searchParams }) => {
-        const { requests = [] } = await ky.get(REQUESTS_API, { searchParams }).json();
-
-        return requests;
-      },
-      pieces,
-      (piecesChunk) => {
-        const itemIdsQuery = piecesChunk
-          .filter(piece => piece.itemId)
-          .map(piece => `itemId==${piece.itemId}`)
-          .join(' or ');
-
-        return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
-      },
-    );
-  };
-
-  return { fetchPieceRequests };
-};
-
-const usePieceItemsFetch = () => {
-  const ky = useOkapiKy();
-
-  const fetchPieceItems = pieces => {
-    return batchRequest(
-      async ({ params: searchParams }) => {
-        const { items = [] } = await ky.get(ITEMS_API, { searchParams }).json();
-
-        return items;
-      },
-      pieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId),
-    );
-  };
-
-  return { fetchPieceItems };
-};
-
 export const usePaginatedPieces = ({
   pagination,
   queryParams = {},
   options = {},
 }) => {
-  const ky = useOkapiKy();
-  const { fetchPieceRequests } = usePieceRequestsFetch();
-  const { fetchPieceItems } = usePieceItemsFetch();
+  const {
+    crossTenant,
+    enabled = true,
+    instanceId,
+    tenantId,
+    ...queryOptions
+  } = options;
+
+  const stripes = useStripes();
+  const ky = useOkapiKy({ tenant: tenantId });
+
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId });
+  const { fetchPieceItems } = usePieceItemsFetch({
+    instanceId,
+    tenantId: crossTenant ? getConsortiumCentralTenantId(stripes) : tenantId,
+  });
+
   const [namespace] = useNamespace({ key: `${queryParams.receivingStatus}-pieces-list` });
   const localeDateFormat = useLocaleDateFormat();
 
@@ -84,14 +59,14 @@ export const usePaginatedPieces = ({
   };
 
   const queryKey = [namespace, pagination.timestamp, pagination.limit, pagination.offset];
-  const queryFn = async () => {
+  const queryFn = async ({ signal }) => {
     const { pieces, totalRecords } = await ky
-      .get(ORDER_PIECES_API, { searchParams })
+      .get(ORDER_PIECES_API, { searchParams, signal })
       .json();
 
     const [requests, items] = await Promise.all([
-      fetchPieceRequests(pieces),
-      fetchPieceItems(pieces),
+      fetchPieceRequests({ pieces, crossTenant, signal }),
+      fetchPieceItems({ pieces, crossTenant, signal }),
     ]);
 
     const itemsMap = items.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
@@ -110,18 +85,16 @@ export const usePaginatedPieces = ({
     };
   };
   const defaultOptions = {
-    enabled: Boolean(pagination.timestamp),
+    enabled: enabled && Boolean(pagination.timestamp),
     keepPreviousData: true,
   };
 
-  const { isFetching, data } = useQuery(
+  const { isFetching, data } = useQuery({
     queryKey,
     queryFn,
-    {
-      ...defaultOptions,
-      ...options,
-    },
-  );
+    ...defaultOptions,
+    ...queryOptions,
+  });
 
   return ({
     ...data,

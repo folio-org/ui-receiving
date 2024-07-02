@@ -17,9 +17,9 @@ import {
   getExportData,
 } from '../../utils';
 
-export const usePiecesExportCSV = () => {
+export const usePiecesExportCSV = ({ tenantId, signal } = {}) => {
   const intl = useIntl();
-  const ky = useOkapiKy();
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace({ key: 'pieces-export-csv' });
 
   const mutationKey = [namespace];
@@ -27,7 +27,7 @@ export const usePiecesExportCSV = () => {
     exportFields,
     query,
   }) => {
-    const exportData = await getExportData(ky)({ exportFields, query });
+    const exportData = await getExportData(ky.extend({ signal }))({ exportFields, query });
     const exportReport = createExportReport(exportData, { intl });
 
     const filename = `receiving-export-${moment().format('YYYY-MM-DD-hh:mm')}`;

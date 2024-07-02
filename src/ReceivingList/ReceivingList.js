@@ -38,11 +38,19 @@ import {
   useFiltersReset,
   useFiltersToogle,
   useItemToView,
-  useLocationFilters,
+  useLocalStorageFilters,
   useLocationSorting,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { AffiliationsNavigation } from '../common/components';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_ROUTE,
+  RECEIVING_ROUTE_CREATE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleDetailsContainer from '../TitleDetails';
 import { ExportSettingsModal } from './ExportSettingsModal';
 import { ReceivingListActionMenu } from './ReceivingListActionMenu';
@@ -72,8 +80,8 @@ const columnMapping = {
   'orderWorkflow': <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
 };
 
-const getResultsFormatter = ({ search }) => ({
-  'title': data => <TextLink to={`/receiving/${data.id}/view${search}`}>{data.title}</TextLink>,
+const getResultsFormatter = ({ isCentralRouting, search }) => ({
+  'title': data => <TextLink to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${data.id}/view${search}`}>{data.title}</TextLink>,
   'poLine.physical.expectedReceiptDate': data => <FolioFormattedDate value={get(data, 'poLine.physical.expectedReceiptDate')} />,
   'poLine.titleOrPackage': data => (get(data, 'poLine.isPackage') ? get(data, 'poLine.titleOrPackage') : <NoValue />),
   'poLine.poLineNumber': data => get(data, 'poLine.poLineNumber'),
@@ -83,20 +91,24 @@ const getResultsFormatter = ({ search }) => ({
 });
 
 const ReceivingList = ({
-  centralOrdering = false,
+  crossTenant = false,
   history,
   isLoading,
   location,
+  filtersStorageKey,
   match,
   onNeedMoreData,
   pagination,
   query,
   resetData,
+  tenantId,
   titles,
   titlesCount,
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
+  const { isCentralRouting } = useReceivingSearchContext();
+
   const [
     filters,
     searchQuery,
@@ -106,7 +118,7 @@ const ReceivingList = ({
     resetFilters,
     changeIndex,
     searchIndex,
-  ] = useLocationFilters(location, history, resetData);
+  ] = useLocalStorageFilters(filtersStorageKey, location, history, resetData);
   const [
     sortingField,
     sortingDirection,
@@ -149,7 +161,7 @@ const ReceivingList = ({
       name: 'new',
       handler: handleKeyCommand(() => {
         if (stripes.hasPerm('ui-receiving.create')) {
-          history.push('/receiving/create');
+          history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE_CREATE : RECEIVING_ROUTE_CREATE);
         }
       }),
     },
@@ -177,6 +189,8 @@ const ReceivingList = ({
             id="receiving-filters-pane"
             toggleFilters={toggleFilters}
           >
+            <AffiliationsNavigation />
+
             <SingleSearchForm
               applySearch={applySearch}
               changeSearch={changeSearch}
@@ -198,7 +212,8 @@ const ReceivingList = ({
               activeFilters={filters}
               applyFilters={applyFilters}
               disabled={isLoading}
-              centralOrdering={centralOrdering}
+              crossTenant={crossTenant}
+              tenantId={tenantId}
             />
           </FiltersPane>
         )}
@@ -222,7 +237,7 @@ const ReceivingList = ({
                 contentData={titles}
                 visibleColumns={visibleColumns}
                 columnMapping={columnMapping}
-                formatter={getResultsFormatter({ search: location.search })}
+                formatter={getResultsFormatter({ search: location.search, isCentralRouting })}
                 loading={isLoading}
                 onNeedMoreData={onNeedMoreData}
                 sortOrder={sortingField}
@@ -259,7 +274,12 @@ const ReceivingList = ({
 
         <Route
           path={`${match.path}/:id/view`}
-          component={TitleDetailsContainer}
+          render={(props) => (
+            <TitleDetailsContainer
+              tenantId={tenantId}
+              {...props}
+            />
+          )}
         />
       </PersistedPaneset>
     </HasCommand>
@@ -267,17 +287,19 @@ const ReceivingList = ({
 };
 
 ReceivingList.propTypes = {
-  centralOrdering: PropTypes.bool,
-  onNeedMoreData: PropTypes.func.isRequired,
-  resetData: PropTypes.func.isRequired,
-  titlesCount: PropTypes.number,
-  isLoading: PropTypes.bool,
-  titles: PropTypes.arrayOf(PropTypes.object),
+  crossTenant: PropTypes.bool,
+  filtersStorageKey: PropTypes.string.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
+  isLoading: PropTypes.bool,
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
+  onNeedMoreData: PropTypes.func.isRequired,
   pagination: PropTypes.object.isRequired,
   query: PropTypes.string,
+  resetData: PropTypes.func.isRequired,
+  tenantId: PropTypes.string.isRequired,
+  titles: PropTypes.arrayOf(PropTypes.object),
+  titlesCount: PropTypes.number,
 };
 
 ReceivingList.defaultProps = {

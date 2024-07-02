@@ -57,8 +57,8 @@ const columnWidths = {
 };
 
 const getResultFormatter = ({
-  centralOrdering,
   createInventoryValues,
+  crossTenant,
   field,
   fieldsValue,
   instanceId,
@@ -159,7 +159,7 @@ const getResultFormatter = ({
     const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
     const isHolding = includes(createInventoryValues[record.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
 
-    const FieldInventoryComponent = centralOrdering
+    const FieldInventoryComponent = crossTenant
       ? ConsortiumFieldInventory
       : FieldInventory;
 
@@ -169,11 +169,12 @@ const getResultFormatter = ({
         instanceId={isHolding ? instanceId : undefined}
         locationIds={locationIds}
         locations={locations}
-        labelless
         locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
         holdingName={`${field}[${record.rowIndex}].holdingId`}
         locationName={`${field}[${record.rowIndex}].locationId`}
         onChange={selectLocation}
+        labelless
+        vertical
       />
     );
   },
@@ -232,7 +233,7 @@ const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
 export const TitleReceiveList = ({
   fields,
   props: {
-    centralOrdering,
+    crossTenant,
     createInventoryValues,
     instanceId,
     selectLocation,
@@ -248,8 +249,8 @@ export const TitleReceiveList = ({
   const { onKeyDown: onFieldKeyDown } = useFieldArrowNavigation(field, []);
 
   const cellFormatters = useMemo(() => getResultFormatter({
-    centralOrdering,
     createInventoryValues,
+    crossTenant,
     field,
     fieldsValue: fields.value,
     instanceId,
@@ -258,8 +259,8 @@ export const TitleReceiveList = ({
     poLineLocationIds,
     selectLocation,
   }), [
-    centralOrdering,
     createInventoryValues,
+    crossTenant,
     field,
     fields.value,
     instanceId,
@@ -303,7 +304,7 @@ export const TitleReceiveList = ({
 TitleReceiveList.propTypes = {
   fields: PropTypes.object.isRequired,
   props: PropTypes.shape({
-    centralOrdering: PropTypes.bool,
+    crossTenant: PropTypes.bool,
     createInventoryValues: PropTypes.object.isRequired,
     instanceId: PropTypes.string,
     selectLocation: PropTypes.func.isRequired,

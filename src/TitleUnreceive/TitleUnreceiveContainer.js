@@ -1,5 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -30,9 +34,21 @@ import {
   handleUnrecieveErrorResponse,
   unreceivePieces,
 } from '../common/utils';
+import {
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleUnreceive from './TitleUnreceive';
 
-function TitleUnreceiveContainer({ history, location, match, mutator }) {
+function TitleUnreceiveContainer({
+  history,
+  location,
+  match,
+  mutator,
+  // TODO: resolve where it's required except the mutators
+  tenantId,
+}) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
   const [pieces, setPieces] = useState();
@@ -41,6 +57,8 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
   const [pieceLocationMap, setPieceLocationMap] = useState();
   const [pieceHoldingMap, setPieceHoldingMap] = useState();
   const poLineId = title?.poLineId;
+
+  const { isCentralRouting } = useReceivingSearchContext();
 
   useEffect(
     () => {
@@ -106,11 +124,11 @@ function TitleUnreceiveContainer({ history, location, match, mutator }) {
   const onCancel = useCallback(
     () => {
       history.push({
-        pathname: `/receiving/${titleId}/view`,
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
         search: location.search,
       });
     },
-    [history, titleId, location.search],
+    [history, isCentralRouting, titleId, location.search],
   );
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
@@ -158,13 +176,20 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     ...titleResource,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
-  pieces: piecesResource,
+  pieces: {
+    ...piecesResource,
+    tenant: '!{tenantId}',
+  },
   poLine: {
     ...baseManifest,
     accumulate: true,
     fetch: false,
+    tenant: '!{tenantId}',
   },
+
+  // TODO: fetch from related tenants
   items: itemsResource,
   requests: requestsResource,
   locations: {
@@ -175,7 +200,11 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     ...holdingsResource,
     fetch: false,
   },
-  unreceive: receivingResource,
+
+  unreceive: {
+    ...receivingResource,
+    tenant: '!{tenantId}',
+  },
 });
 
 TitleUnreceiveContainer.propTypes = {
@@ -183,6 +212,7 @@ TitleUnreceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };
 
 export default stripesConnect(TitleUnreceiveContainer);

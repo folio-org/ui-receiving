@@ -1,12 +1,11 @@
 /* istanbul ignore */
-import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { render, cleanup } from '@folio/jest-config-stripes/testing-library/react';
-import { IntlProvider } from 'react-intl';
 import faker from 'faker';
-import { noop } from 'lodash';
+import noop from 'lodash/noop';
+import { IntlProvider } from 'react-intl';
+import { MemoryRouter } from 'react-router-dom';
 
-import '@folio/stripes-acq-components/test/jest/__mock__';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
+import { useLocalStorageFilters } from '@folio/stripes-acq-components';
 
 import ReceivingList from './ReceivingList';
 
@@ -15,6 +14,7 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   useItemToView: jest.fn().mockReturnValue({}),
   useFiltersToogle: jest.fn().mockReturnValue({ isFiltersOpened: true, toggleFilters: jest.fn() }),
+  useLocalStorageFilters: jest.fn(),
 }));
 
 jest.mock('@folio/stripes/smart-components', () => ({
@@ -38,6 +38,17 @@ jest.mock('./ReceivingListFilter', () => {
   return () => <span>ReceivingListFilter</span>;
 });
 
+const mockLocalStorageFilters = {
+  filters: {},
+  searchQuery: '',
+  applyFilters: jest.fn(),
+  applySearch: jest.fn(),
+  changeSearch: jest.fn(),
+  resetFilters: jest.fn(),
+  changeIndex: jest.fn(),
+  searchIndex: '',
+};
+
 const generateTitle = (idx) => ({
   title: `${faker.name.title()}_${(new Date()).valueOf()}_${idx}`,
 });
@@ -54,13 +65,18 @@ const renderReceivingList = () => (render(
         resetData={noop}
         titles={titles}
         titlesCount={titlesCount}
+        filtersStorageKey="receiving"
       />
     </MemoryRouter>
   </IntlProvider>,
 ));
 
 describe('Given Receiving List', () => {
-  afterEach(cleanup);
+  beforeEach(() => {
+    useLocalStorageFilters
+      .mockClear()
+      .mockReturnValue(Object.values(mockLocalStorageFilters));
+  });
 
   it('Than it should display search form', () => {
     const { getByText } = renderReceivingList();

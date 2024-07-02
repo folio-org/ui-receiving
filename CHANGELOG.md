@@ -18,6 +18,7 @@
 * *BREAKING* ECS - Add the affiliation dropdown to the piece form and full-screen receiving view. Refs UIREC-365.
 * Bump up `holdings-storage` interface. Refs UIREC-366.
 * Add Bound items accordion in receiving. Refs UIREC-322.
+* ECS - Apply receiving search settings. Refs UIREC-339.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

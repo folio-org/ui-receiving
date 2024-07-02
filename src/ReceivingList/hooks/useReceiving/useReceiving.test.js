@@ -1,7 +1,13 @@
-import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { useLocation } from 'react-router';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 
+import {
+  renderHook,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
 import { useReceiving } from './useReceiving';
@@ -27,18 +33,21 @@ const wrapper = ({ children }) => (
 
 const titles = [{ poLineId: '3e1a947f-a605-41b8-839c-7929f02ef911' }];
 
+const kyMock = {
+  extend: () => kyMock,
+  get: jest.fn(() => ({
+    json: () => ({
+      titles,
+      totalRecords: titles.length,
+    }),
+  })),
+};
+
 describe('useReceiving', () => {
   beforeEach(() => {
     useOkapiKy
       .mockClear()
-      .mockReturnValue({
-        get: () => ({
-          json: () => ({
-            titles,
-            totalRecords: titles.length,
-          }),
-        }),
-      });
+      .mockReturnValue(kyMock);
   });
 
   it('should return an empty list if there no filters were passed in the query', async () => {

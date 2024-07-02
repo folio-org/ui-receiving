@@ -38,8 +38,11 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  SECTIONS,
-} from './constants';
+  CENTRAL_RECEIVING_ROUTE,
+  RECEIVING_ROUTE,
+} from '../constants';
+import { useReceivingSearchContext } from '../contexts';
+import { SECTIONS } from './constants';
 import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
 
@@ -63,13 +66,16 @@ const TitleForm = ({
   values,
   identifierTypes,
   contributorNameTypes,
+  tenantId,
 }) => {
   const history = useHistory();
   const accordionStatusRef = useRef();
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata, acqUnitIds } = initialValues;
-  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds);
+  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds, { tenantId });
+
+  const { isCentralRouting } = useReceivingSearchContext();
 
   const disabled = hasValidationErrors || restrictions?.protectUpdate || isRestrictionsLoading;
 
@@ -121,7 +127,7 @@ const TitleForm = ({
     },
     {
       name: 'search',
-      handler: handleKeyCommand(() => history.push('/receiving')),
+      handler: handleKeyCommand(() => history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE)),
     },
   ];
 
@@ -173,6 +179,7 @@ const TitleForm = ({
                             type="text"
                             validate={validateRequired}
                           />
+                          {/* TODO: update plugin to support tenantId prop */}
                           <Pluggable
                             aria-haspopup="true"
                             dataKey="instances"
@@ -180,6 +187,7 @@ const TitleForm = ({
                             searchLabel={<FormattedMessage id="ui-receiving.title.titleLookUp" />}
                             selectInstance={addInstance}
                             type="find-instance"
+                            tenantId={tenantId}
                           >
                             <FormattedMessage id="ui-receiving.title.titleLookUpNoPlugin" />
                           </Pluggable>
@@ -293,6 +301,7 @@ const TitleForm = ({
                             perm={isEditMode ? MANAGE_ACQ_UNITS_PERM : ASSIGN_ACQ_UNITS_PERM}
                             isEdit={isEditMode}
                             preselectedUnits={values.acqUnitIds}
+                            tenantId={tenantId}
                             isFinal
                           />
                         </Col>
@@ -327,6 +336,7 @@ const TitleForm = ({
                             type="text"
                             validate={validateRequired}
                           />
+                          {/* TODO: update plugin to support tenantId prop */}
                           <Pluggable
                             addLines={addLines}
                             aria-haspopup="true"
@@ -335,6 +345,7 @@ const TitleForm = ({
                             searchButtonStyle="link"
                             searchLabel={<FormattedMessage id="ui-receiving.title.lineLookUp" />}
                             type="find-po-line"
+                            tenantId={tenantId}
                           >
                             <FormattedMessage id="ui-receiving.find-po-line-plugin-unavailable" />
                           </Pluggable>
@@ -380,15 +391,16 @@ const TitleForm = ({
 };
 
 TitleForm.propTypes = {
+  contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
   handleSubmit: PropTypes.func.isRequired,
+  hasValidationErrors: PropTypes.bool.isRequired,
+  identifierTypes: PropTypes.arrayOf(PropTypes.object),
   form: PropTypes.object,  // form object to get initialValues
   onCancel: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  tenantId: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,  // current form values
-  identifierTypes: PropTypes.arrayOf(PropTypes.object),
-  contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
-  hasValidationErrors: PropTypes.bool.isRequired,
 };
 
 export default stripesFinalForm({

@@ -12,12 +12,12 @@ import {
 } from '@folio/stripes-acq-components';
 
 const LineLocationsView = ({
-  centralOrdering = false,
+  crossTenant = false,
   instanceId,
   poLine,
   locations,
 }) => {
-  const { holdings, isLoading } = useInstanceHoldingsQuery(instanceId, { consortium: centralOrdering });
+  const { holdings, isLoading } = useInstanceHoldingsQuery(instanceId, { consortium: crossTenant });
 
   const locationsToDisplay = useMemo(() => {
     const locationsMap = locations.reduce((acc, l) => ({ ...acc, [l.id]: l }), {});
@@ -42,7 +42,7 @@ const LineLocationsView = ({
 };
 
 LineLocationsView.propTypes = {
-  centralOrdering: PropTypes.bool,
+  crossTenant: PropTypes.bool,
   instanceId: PropTypes.string,
   poLine: PropTypes.object.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
