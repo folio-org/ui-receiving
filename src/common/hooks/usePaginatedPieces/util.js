@@ -1,17 +1,22 @@
 import {
   batchRequest,
   ITEMS_API,
+  REQUESTS_API,
   SEARCH_API,
 } from '@folio/stripes-acq-components';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
+  const itemIds = pieces.reduce((acc, { itemId }) => {
+    return Boolean(itemId) ? acc.concat(itemId) : acc;
+  }, []);
+
   return batchRequest(
     async ({ params: searchParams }) => {
       const { items = [] } = await ky.get(ITEMS_API, { searchParams }).json();
 
       return items;
     },
-    pieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId),
+    itemIds,
   );
 };
 
@@ -34,4 +39,23 @@ export const fetchConsortiumPieceItems = (ky, { instanceId, pieces }) => {
     .then((items) => items.filter(({ id, holdingsRecordId, tenantId }) => {
       return !!tenantHoldingIdsMap.get(tenantId)?.has(holdingsRecordId) && pieceItemIdsSet.has(id);
     }));
+};
+
+export const fetchLocalPieceRequests = (ky, { pieces }) => {
+  return batchRequest(
+    async ({ params: searchParams }) => {
+      const { requests = [] } = await ky.get(REQUESTS_API, { searchParams }).json();
+
+      return requests;
+    },
+    pieces,
+    (piecesChunk) => {
+      const itemIdsQuery = piecesChunk
+        .filter(piece => piece.itemId)
+        .map(piece => `itemId==${piece.itemId}`)
+        .join(' or ');
+
+      return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
+    },
+  );
 };
