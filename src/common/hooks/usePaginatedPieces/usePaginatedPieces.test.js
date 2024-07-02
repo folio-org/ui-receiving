@@ -104,7 +104,6 @@ describe('usePaginatedPieces', () => {
       pieces: [{
         ...pieces[0],
         itemId: item.id,
-        barcode: item.barcode,
         callNumber: item.itemLevelCallNumber,
         itemStatus: item.status.name,
         request,
