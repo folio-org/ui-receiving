@@ -22,8 +22,8 @@ import { CONSORTIUM_TENANT_TYPE } from '../../constants';
 
 const { centralDefault, activeAffiliationDefault } = CENTRAL_ORDERING_DEFAULT_RECEIVING_SEARCH;
 
-const getTenantName = (tenants = [], tenantId) => {
-  return tenants.find((tenant) => tenant.id === tenantId)?.name;
+const getTenantName = (tenants, tenantId) => {
+  return tenants?.find((tenant) => tenant.id === tenantId)?.name;
 };
 
 export const AffiliationsNavigation = () => {
