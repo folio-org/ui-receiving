@@ -73,7 +73,7 @@ const TitleForm = ({
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata, acqUnitIds } = initialValues;
-  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds);
+  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds, { tenantId });
 
   const { isCentralRouting } = useReceivingSearchContext();
 

@@ -117,7 +117,10 @@ const TitleInformation = ({
           xs={6}
           lg={3}
         >
-          <AcqUnitsView units={acqUnitIds} />
+          <AcqUnitsView
+            tenantId={tenantId}
+            units={acqUnitIds}
+          />
         </Col>
       </Row>
       <Row>
