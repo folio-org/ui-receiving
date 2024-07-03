@@ -179,7 +179,6 @@ const TitleForm = ({
                             type="text"
                             validate={validateRequired}
                           />
-                          {/* TODO: update plugin to support tenantId prop */}
                           <Pluggable
                             aria-haspopup="true"
                             dataKey="instances"
@@ -336,7 +335,6 @@ const TitleForm = ({
                             type="text"
                             validate={validateRequired}
                           />
-                          {/* TODO: update plugin to support tenantId prop */}
                           <Pluggable
                             addLines={addLines}
                             aria-haspopup="true"

@@ -297,8 +297,6 @@ const TitleDetailsContainer = ({
   const isDataLoading = (
     isLoading
     || !(locations || vendorsMap)
-    // TODO: resolve
-    // || isLocationsLoading
     || !tenantId
   );
 

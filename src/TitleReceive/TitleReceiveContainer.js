@@ -221,7 +221,7 @@ TitleReceiveContainer.manifest = Object.freeze({
     tenant: '!{tenantId}',
   },
 
-  // TODO: fetch items and requests from related tenants
+  // TODO: fetch items and requests (after MODORDERS-1138) from related tenants
   items: itemsResource,
   requests: requestsResource,
 

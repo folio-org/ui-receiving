@@ -44,7 +44,6 @@ const ReceivingListFilter = ({
         options={ORDER_STATUS_OPTIONS}
       />
 
-      {/* TODO: update plugin to support tenantId prop */}
       <PluggableOrganizationFilter
         id={`filter-${FILTERS.ORDER_ORGANIZATION}`}
         activeFilters={activeFilters[FILTERS.ORDER_ORGANIZATION]}

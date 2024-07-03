@@ -65,7 +65,7 @@ export const useTitleHydratedPieces = ({
       },
     });
 
-    // TODO: fetch requests, holdings and items from related tenants in the central ordering
+    // TODO: fetch requests (after MODORDERS-1138), holdings and items from related tenants in the central ordering
     const hydratedPieces = await getHydratedPieces(
       pieces,
       mutatorAdapter(REQUESTS_API, 'requests'),

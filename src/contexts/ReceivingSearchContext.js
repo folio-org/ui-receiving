@@ -48,7 +48,6 @@ const getActiveSegment = (targetTenantId, centralTenantId) => {
   return targetTenantId === centralTenantId ? central : member;
 };
 
-// TODO: specify ECS mode
 export const ReceivingSearchContextProvider = ({ children }) => {
   const stripes = useStripes();
   const history = useHistory();

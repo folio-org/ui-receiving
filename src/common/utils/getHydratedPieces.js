@@ -8,6 +8,7 @@ export const getPieceStatusFromItem = (item) => {
 };
 
 export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {
+  // TODO: fetch consortium context's data
   const itemsIds = pieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId);
   const requestsPromise = batchFetch(mutatorRequests, pieces, (piecesChunk) => {
     const itemIdsQuery = piecesChunk
@@ -18,7 +19,11 @@ export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {
     return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
   });
 
-  return Promise.all([batchFetch(mutatorItems, itemsIds), requestsPromise, pieces])
+  return Promise.all([
+    batchFetch(mutatorItems, itemsIds),
+    requestsPromise,
+    pieces,
+  ])
     .then(([itemsResponse, requestsResponse, piecesResponse]) => {
       const itemsMap = itemsResponse.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
       const requestsMap = requestsResponse.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
