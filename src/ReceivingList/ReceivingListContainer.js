@@ -34,6 +34,7 @@ const ReceivingListContainer = () => {
 
   const fetchReferences = useCallback(async (titles, ky) => {
     const orderLinesResponse = await fetchTitleOrderLines(ky, titles, {});
+    // TODO: fetch from all related tenants for central tenant
     const holdingsResponse = await fetchOrderLineHoldings(ky, orderLinesResponse);
     const locationsResponse = await fetchOrderLineLocations(
       ky,

@@ -8,7 +8,6 @@ export const RECEIVING_ROUTE_UNRECEIVE = `${RECEIVING_ROUTE}/unreceive/:id`;
 export const RECEIVING_ROUTE_EXPECT = `${RECEIVING_ROUTE}/expect/:id`;
 export const ROUTING_LIST_ROUTE = `${RECEIVING_ROUTE}/routing-lists`;
 
-//
 export const CENTRAL_RECEIVING_ROUTE = '/receiving/central';
 export const CENTRAL_RECEIVING_BIND_PIECES_BASE_ROUTE = `${CENTRAL_RECEIVING_ROUTE}/bind-pieces`;
 export const CENTRAL_RECEIVING_BIND_PIECES_ROUTE = `${CENTRAL_RECEIVING_BIND_PIECES_BASE_ROUTE}/:id`;

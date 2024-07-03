@@ -26,8 +26,8 @@ import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
 } from '../../constants';
-import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 import { useReceivingSearchContext } from '../../contexts';
+import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';

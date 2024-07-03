@@ -46,8 +46,6 @@ function TitleUnreceiveContainer({
   location,
   match,
   mutator,
-  // TODO: resolve where it's required except the mutators
-  tenantId,
 }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
@@ -212,7 +210,6 @@ TitleUnreceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
-  tenantId: PropTypes.string.isRequired,
 };
 
 export default stripesConnect(TitleUnreceiveContainer);

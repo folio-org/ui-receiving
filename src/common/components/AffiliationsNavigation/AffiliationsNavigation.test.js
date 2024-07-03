@@ -17,7 +17,7 @@ import { AffiliationsNavigation } from './AffiliationsNavigation';
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   useCurrentUserTenants: jest.fn(),
-}))
+}));
 
 const renderAffiliationsNavigation = (props = {}) => render(
   <AffiliationsNavigation
@@ -36,8 +36,8 @@ const receivingContextMock = {
 };
 
 const tenants = [
-  { id: 'memberTenantId', name: 'Member'},
-  { id: 'centralTenantId', name: 'Central'},
+  { id: 'memberTenantId', name: 'Member' },
+  { id: 'centralTenantId', name: 'Central' },
 ];
 
 describe('AffiliationsNavigation', () => {
