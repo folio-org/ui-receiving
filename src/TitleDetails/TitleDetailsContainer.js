@@ -61,10 +61,7 @@ const TitleDetailsContainer = ({
   const [order, setOrder] = useState({});
   const [vendorsMap, setVendorsMap] = useState({});
 
-  const {
-    isLoading: isLocationsLoading,
-    locations,
-  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
+  const { locations } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   const { mutatePiece } = usePieceMutator({ tenantId });
   const { quickReceive } = useQuickReceive({ tenantId });
