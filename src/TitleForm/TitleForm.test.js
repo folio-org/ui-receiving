@@ -1,5 +1,9 @@
 import { MemoryRouter } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
@@ -31,6 +35,8 @@ jest.mock('react-router', () => ({
   useHistory: jest.fn(),
 }));
 
+const queryClient = new QueryClient();
+
 const defaultProps = {
   onCancel: jest.fn(),
   onSubmit: jest.fn(),
@@ -38,9 +44,11 @@ const defaultProps = {
 };
 
 const renderTitleForm = (props = defaultProps) => render(
-  <TitleForm
-    {...props}
-  />,
+  <QueryClientProvider client={queryClient}>
+    <TitleForm
+      {...props}
+    />
+  </QueryClientProvider>,
   { wrapper: MemoryRouter },
 );
 

@@ -1,30 +1,28 @@
 import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
+import {
   render,
   screen,
   within,
 } from '@folio/jest-config-stripes/testing-library/react';
+
 import { checkIfUserInCentralTenant } from '@folio/stripes/core';
 import {
-  ConsortiumLocationsContext,
-  ConsortiumLocationsContextProvider,
-  LocationsContext,
-  LocationsContextProvider,
+  useLocationsQuery,
 } from '@folio/stripes-acq-components';
 
 import { FILTERS } from '../constants';
 import ReceivingListFilter from './ReceivingListFilter';
 
-jest.mock('@folio/stripes-acq-components/lib/contexts', () => ({
-  ...jest.requireActual('@folio/stripes-acq-components/lib/contexts'),
-  LocationsContextProvider: jest.fn(),
-  ConsortiumLocationsContextProvider: jest.fn(),
+jest.mock('@folio/stripes-acq-components/lib/hooks', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components/lib/hooks'),
+  useLocationsQuery: jest.fn(),
 }));
 
-const locations = [
-  { id: 'location-1', name: 'Test non-ECS location 1' },
-  { id: 'location-2', name: 'Test non-ECS location 2' },
-  { id: 'location-3', name: 'Test non-ECS location 3' },
-];
+const queryClient = new QueryClient();
 
 const locationsECS = [
   {
@@ -54,20 +52,21 @@ const defaultProps = {
 };
 
 const renderReceivingListFilter = (props = {}) => (render(
-  <ReceivingListFilter
-    {...defaultProps}
-    {...props}
-  />,
+  <QueryClientProvider client={queryClient}>
+    <ReceivingListFilter
+      {...defaultProps}
+      {...props}
+    />
+  </QueryClientProvider>,
 ));
 
 describe('ReceivingListFilter', () => {
   beforeEach(() => {
+    useLocationsQuery.mockClear().mockReturnValue({ locations: [] });
+
     checkIfUserInCentralTenant
       .mockClear()
       .mockReturnValue(false);
-    LocationsContextProvider
-      .mockClear()
-      .mockImplementation(buildContextProviderMock(LocationsContext, { locations }));
   });
 
   it('should display receiving filters', async () => {
@@ -88,9 +87,8 @@ describe('ReceivingListFilter', () => {
       checkIfUserInCentralTenant
         .mockClear()
         .mockReturnValue(true);
-      ConsortiumLocationsContextProvider
-        .mockClear()
-        .mockImplementation(buildContextProviderMock(ConsortiumLocationsContext, { locations: locationsECS }));
+
+      useLocationsQuery.mockClear().mockReturnValue({ locations: locationsECS });
     });
 
     it('should render locations filter with selected options', () => {
