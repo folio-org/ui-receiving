@@ -1,5 +1,9 @@
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 
 import { render } from '@folio/jest-config-stripes/testing-library/react';
 
@@ -12,21 +16,25 @@ jest.mock('@folio/stripes-acq-components/lib/hooks', () => ({
   useIdentifierTypes: jest.fn(() => ({ identifierTypes: [] })),
 }));
 
+const queryClient = new QueryClient();
+
 const renderTitleInformation = (titleProp) => render(
   <IntlProvider locale="en">
     <MemoryRouter>
-      <TitleInformation
-        claimingActive={titleProp.claimingActive}
-        claimingInterval={titleProp.claimingInterval}
-        contributors={titleProp.contributors}
-        edition={titleProp.edition}
-        productIds={titleProp.productIds}
-        publishedDate={titleProp.publishedDate}
-        publisher={titleProp.publisher}
-        subscriptionFrom={titleProp.subscriptionFrom}
-        subscriptionInterval={titleProp.subscriptionInterval}
-        subscriptionTo={titleProp.subscriptionTo}
-      />
+      <QueryClientProvider client={queryClient}>
+        <TitleInformation
+          claimingActive={titleProp.claimingActive}
+          claimingInterval={titleProp.claimingInterval}
+          contributors={titleProp.contributors}
+          edition={titleProp.edition}
+          productIds={titleProp.productIds}
+          publishedDate={titleProp.publishedDate}
+          publisher={titleProp.publisher}
+          subscriptionFrom={titleProp.subscriptionFrom}
+          subscriptionInterval={titleProp.subscriptionInterval}
+          subscriptionTo={titleProp.subscriptionTo}
+        />
+      </QueryClientProvider>
     </MemoryRouter>
   </IntlProvider>,
 );
