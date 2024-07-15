@@ -18,7 +18,7 @@ export const getPieceById = (pieceMutator) => (id) => (
     .catch(() => ({}))
 );
 
-export const bindKyWithTenant = (ky, tenantId) => {
+export const extendKyWithTenant = (ky, tenantId) => {
   return ky.extend({
     hooks: {
       beforeRequest: [
@@ -46,7 +46,7 @@ export const chunkRequests = (items, queryFn, chunkResolver = identity) => {
 };
 
 export const getConsortiumCentralTenantKy = (ky, stripes) => {
-  return bindKyWithTenant(ky, getConsortiumCentralTenantId(stripes));
+  return extendKyWithTenant(ky, getConsortiumCentralTenantId(stripes));
 };
 
 export const fetchConsortiumInstanceHoldings = (ky, options = {}) => {
