@@ -1,4 +1,6 @@
-import { uniq, compact, flatten } from 'lodash';
+import compact from 'lodash/compact';
+import flatten from 'lodash/flatten';
+import uniq from 'lodash/uniq';
 
 import {
   batchRequest,
@@ -16,12 +18,16 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  chunkRequests,
+  fetchConsortiumInstanceHoldings,
+  fetchConsortiumInstanceLocations,
+  getConsortiumCentralTenantKy,
+} from '../common/utils';
+import {
   FILTERS,
   ORDER_FORMAT_MATERIAL_TYPE_MAP,
 } from './constants';
-import {
-  getKeywordQuery,
-} from './ReceivingListSearchConfig';
+import { getKeywordQuery } from './ReceivingListSearchConfig';
 
 export const fetchTitleOrderLines = (ky, titles, fetchedOrderLinesMap) => {
   const orderLinesQuery = titles
@@ -43,7 +49,7 @@ export const fetchTitleOrderLines = (ky, titles, fetchedOrderLinesMap) => {
     : Promise.resolve([]);
 };
 
-export const fetchOrderLineHoldings = (ky, orderLines) => {
+export const fetchOrderLineHoldings = (ky) => (orderLines) => {
   const holdingstoFetch = orderLines
     .reduce((acc, orderLine) => {
       return [...acc, ...(orderLine.locations || [])];
@@ -63,7 +69,35 @@ export const fetchOrderLineHoldings = (ky, orderLines) => {
     : Promise.resolve([]);
 };
 
-export const fetchOrderLineLocations = (ky, orderLines, fetchedLocationsMap) => {
+export const fetchConsortiumOrderLineHoldings = (ky, stripes) => async (orderLines) => {
+  const instanceIds = [...new Set(
+    orderLines
+      .map(({ instanceId }) => instanceId)
+      .filter(Boolean),
+  )];
+
+  return chunkRequests(
+    instanceIds,
+    (instanceId) => fetchConsortiumInstanceHoldings(
+      getConsortiumCentralTenantKy(ky, stripes),
+      {
+        searchParams: { instanceId },
+      },
+    ),
+  ).then((chunkedResponses) => {
+    const orderLinesHoldingIdsSet = new Set(
+      orderLines.flatMap(({ locations }) => {
+        return locations?.map(({ holdingId }) => holdingId);
+      }),
+    );
+
+    return chunkedResponses
+      .flatMap(({ holdings }) => holdings)
+      .filter(({ id }) => orderLinesHoldingIdsSet.has(id));
+  });
+};
+
+export const fetchOrderLineLocations = (ky) => (orderLines, fetchedLocationsMap) => {
   const unfetchedLocations = orderLines
     .reduce((acc, orderLine) => {
       return [...acc, ...(orderLine.locations || []).filter(({ locationId }) => !fetchedLocationsMap[locationId])];
@@ -80,6 +114,34 @@ export const fetchOrderLineLocations = (ky, orderLines, fetchedLocationsMap) => 
       uniq(unfetchedLocations),
     )
     : Promise.resolve([]);
+};
+
+export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) => {
+  const tenantIds = [...new Set(
+    orderLines
+      .flatMap(({ locations }) => locations?.map(({ tenantId }) => tenantId))
+      .filter(Boolean),
+  )];
+
+  return chunkRequests(
+    tenantIds,
+    (tenantId) => fetchConsortiumInstanceLocations(
+      getConsortiumCentralTenantKy(ky, stripes),
+      {
+        searchParams: { tenantId },
+      },
+    ),
+  ).then((chunkedResponses) => {
+    const orderLinesLocationIdsSet = new Set(
+      orderLines.flatMap(({ locations }) => {
+        return locations?.map(({ locationId }) => locationId);
+      }),
+    );
+
+    return chunkedResponses
+      .flatMap(({ locations }) => locations)
+      .filter(({ id }) => orderLinesLocationIdsSet.has(id));
+  });
 };
 
 export const buildTitlesQuery = (queryParams) => {
