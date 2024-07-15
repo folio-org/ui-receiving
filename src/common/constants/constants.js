@@ -4,3 +4,5 @@ export const CONSORTIUM_TENANT_TYPE = {
   central: 'central',
   member: 'member',
 };
+
+export const OKAPI_TENANT_HEADER = 'X-Okapi-Tenant';

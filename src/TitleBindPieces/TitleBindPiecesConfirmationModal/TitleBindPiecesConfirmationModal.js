@@ -10,6 +10,7 @@ import {
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
+  barCodesWithOpenRequests = [],
   id,
   onCancel,
   onConfirm,
@@ -64,12 +65,16 @@ export const TitleBindPiecesConfirmationModal = ({
       size="small"
       footer={footer}
     >
-      <FormattedMessage id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`} />
+      <FormattedMessage
+        id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`}
+        values={{ barCodes: barCodesWithOpenRequests.join(', ') }}
+      />
     </Modal>
   );
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
+  barCodesWithOpenRequests: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,

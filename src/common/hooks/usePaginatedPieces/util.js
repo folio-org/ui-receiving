@@ -1,9 +1,13 @@
+import groupBy from 'lodash/groupBy';
+
 import {
   batchRequest,
   ITEMS_API,
   REQUESTS_API,
   SEARCH_API,
 } from '@folio/stripes-acq-components';
+
+import { extendKyWithTenant } from '../../utils';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
   const itemIds = pieces.reduce((acc, { itemId }) => {
@@ -41,21 +45,50 @@ export const fetchConsortiumPieceItems = (ky, { instanceId, pieces }) => {
     }));
 };
 
+const buildPieceRequestsSearchParams = (pieces = []) => {
+  const formData = new FormData();
+
+  formData.append('status', 'Open*');
+
+  pieces.filter(i => i.itemId).map(({ id }) => {
+    formData.append('pieceIds', id);
+  })
+
+  return new URLSearchParams(formData).toString();
+}
+
 export const fetchLocalPieceRequests = (ky, { pieces }) => {
-  return batchRequest(
-    async ({ params: searchParams }) => {
-      const { requests = [] } = await ky.get(REQUESTS_API, { searchParams }).json();
+  if (!pieces.length) {
+    return Promise.resolve([]);
+  }
 
-      return requests;
-    },
-    pieces,
-    (piecesChunk) => {
-      const itemIdsQuery = piecesChunk
-        .filter(piece => piece.itemId)
-        .map(piece => `itemId==${piece.itemId}`)
-        .join(' or ');
+  return ky
+    .get(REQUESTS_API, {
+      searchParams: buildPieceRequestsSearchParams(pieces),
+    })
+    .json()
+    .then(({ circulationRequests }) => circulationRequests);
+};
 
-      return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
-    },
-  );
+export const fetchConsortiumPieceRequests = async (ky, { pieces, signal }) => {
+  if (!pieces.length) {
+    return Promise.resolve([]);
+  }
+
+  const pieceByTenantIds = groupBy(pieces, 'receivingTenantId');
+
+  const requestPromises = Object.entries(pieceByTenantIds).map(([tenantId, currentPieces]) => {
+    const tenantKy = extendKyWithTenant(ky, tenantId);
+
+    return tenantKy
+      .get(REQUESTS_API, {
+        searchParams: buildPieceRequestsSearchParams(currentPieces),
+        signal,
+      })
+      .json();
+  });
+
+  const responses = await Promise.all(requestPromises);
+
+  return responses.flatMap(({ circulationRequests }) => circulationRequests);
 };

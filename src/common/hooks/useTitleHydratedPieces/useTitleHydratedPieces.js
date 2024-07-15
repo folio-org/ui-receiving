@@ -4,17 +4,22 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 import {
   HOLDINGS_API,
-  ITEMS_API,
   LOCATIONS_API,
-  REQUESTS_API,
   batchFetch,
   useOrderLine,
 } from '@folio/stripes-acq-components';
 
-import { getHydratedPieces } from '../../utils';
+import { useReceivingSearchContext } from '../../../contexts';
+import { getHydratedPieces, isConsortiumEnabled } from '../../utils';
+import { usePieceItemsFetch } from '../usePaginatedPieces/hooks';
+import {
+  fetchConsortiumPieceRequests,
+  fetchLocalPieceRequests,
+} from '../usePaginatedPieces/util';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 
@@ -25,7 +30,11 @@ export const useTitleHydratedPieces = ({
   searchQuery = '',
 } = {}) => {
   const ky = useOkapiKy({ tenantId });
+  const stripes = useStripes();
+  const isConsortium = isConsortiumEnabled(stripes);
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
+
+  const { targetTenantId } = useReceivingSearchContext();
 
   const {
     title,
@@ -50,6 +59,11 @@ export const useTitleHydratedPieces = ({
     { enabled: Boolean(titleId && orderLine?.id && receivingStatus) },
   );
 
+  const { fetchPieceItems } = usePieceItemsFetch({
+    instanceId: title?.instanceId,
+    tenantId: targetTenantId,
+  });
+
   const isReferenceDataLoading = (
     isTitleLoading
     || isOrderLineLoading
@@ -65,11 +79,12 @@ export const useTitleHydratedPieces = ({
       },
     });
 
-    // TODO: fetch requests (after MODORDERS-1138), holdings and items from related tenants in the central ordering
     const hydratedPieces = await getHydratedPieces(
       pieces,
-      mutatorAdapter(REQUESTS_API, 'requests'),
-      mutatorAdapter(ITEMS_API, 'items'),
+      isConsortium
+        ? fetchConsortiumPieceRequests(ky, { pieces })
+        : fetchLocalPieceRequests(ky, { pieces }),
+      fetchPieceItems({ pieces, isConsortium }),
     );
 
     const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);

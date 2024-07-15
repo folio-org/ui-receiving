@@ -31,20 +31,24 @@ import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
+import { isConsortiumEnabled } from '../utils';
 
 export const TitleBindPiecesContainer = () => {
-  const stripes = useStripes();
   const history = useHistory();
   const location = useLocation();
   const showCallout = useShowCallout();
+  const stripes = useStripes();
   const { isCentralRouting } = useReceivingSearchContext();
 
+  const isConsortium = isConsortiumEnabled(stripes);
+  const currentTenant = stripes.okapi?.tenant;
+
   const { id: titleId } = useParams();
-  const currentTenantId = stripes.user?.user?.id;
 
   const [open, toggleOpen] = useToggle(false);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const bindPieceData = useRef(null);
+  const barCodesWithOpenRequests = useRef([]);
 
   const { bindPieces, isBinding } = useBindPiecesMutation();
 
@@ -108,10 +112,15 @@ export const TitleBindPiecesContainer = () => {
     };
 
     if (openRequests?.length) {
-      const hasDifferentRequesterId = openRequests.some(({ request }) => request?.requesterId !== currentTenantId);
+      let hasDifferentRequesterId = false;
+
+      if (isConsortium) {
+        hasDifferentRequesterId = openRequests.some(({ request }) => request.receivingTenantId !== currentTenant);
+      }
 
       setShowDeleteMessage(hasDifferentRequesterId);
       bindPieceData.current = requestData;
+      barCodesWithOpenRequests.current = openRequests.filter(Boolean).map(({ barcode }) => barcode);
       toggleOpen();
     } else {
       bindItems(requestData);
@@ -146,6 +155,7 @@ export const TitleBindPiecesContainer = () => {
         onConfirm={onConfirm}
         showDeleteMessage={showDeleteMessage}
         open={open}
+        barCodesWithOpenRequests={barCodesWithOpenRequests.current}
       />
     </>
   );

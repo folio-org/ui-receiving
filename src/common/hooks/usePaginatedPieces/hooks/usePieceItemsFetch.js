@@ -8,10 +8,10 @@ import {
 export const usePieceItemsFetch = ({ instanceId, tenantId }) => {
   const ky = useOkapiKy({ tenant: tenantId });
 
-  const fetchPieceItems = ({ pieces, crossTenant, signal }) => {
+  const fetchPieceItems = ({ pieces, isConsortium, signal }) => {
     const kyExtended = ky.extend({ signal });
 
-    return crossTenant
+    return isConsortium
       ? fetchConsortiumPieceItems(kyExtended, { instanceId, pieces })
       : fetchLocalPieceItems(kyExtended, { pieces });
   };
