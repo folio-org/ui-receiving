@@ -1,5 +1,6 @@
 import compact from 'lodash/compact';
 import flatten from 'lodash/flatten';
+import map from 'lodash/map';
 import uniq from 'lodash/uniq';
 
 import {
@@ -87,7 +88,7 @@ export const fetchConsortiumOrderLineHoldings = (ky, stripes) => async (orderLin
   ).then((chunkedResponses) => {
     const orderLinesHoldingIdsSet = new Set(
       orderLines.flatMap(({ locations }) => {
-        return locations?.map(({ holdingId }) => holdingId);
+        return map(locations, 'holdingId');
       }),
     );
 
@@ -134,7 +135,7 @@ export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) =
   ).then((chunkedResponses) => {
     const orderLinesLocationIdsSet = new Set(
       orderLines.flatMap(({ locations }) => {
-        return locations?.map(({ locationId }) => locationId);
+        return map(locations, 'locationId');
       }),
     );
 
