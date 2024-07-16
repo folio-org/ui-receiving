@@ -24,7 +24,3 @@ export const getPieceColumnFormatter = ({ field, intl }) => {
     ...COLUMN_FORMATTER,
   };
 };
-
-export const isConsortiumEnabled = stripes => {
-  return stripes?.hasInterface('consortia');
-};

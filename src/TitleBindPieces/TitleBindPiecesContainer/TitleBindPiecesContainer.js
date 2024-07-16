@@ -19,7 +19,6 @@ import {
   LoadingPane,
   Paneset,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
 
 import { useTitleHydratedPieces } from '../../common/hooks';
 import {
@@ -114,7 +113,7 @@ export const TitleBindPiecesContainer = () => {
       let hasDifferentRequesterId = false;
 
       if (crossTenant) {
-        hasDifferentRequesterId = openRequests.some(({ request }) => request.receivingTenantId !== activeTenantId);
+        hasDifferentRequesterId = openRequests.some(({ request }) => request.tenantId !== activeTenantId);
       }
 
       setShowDeleteMessage(hasDifferentRequesterId);
