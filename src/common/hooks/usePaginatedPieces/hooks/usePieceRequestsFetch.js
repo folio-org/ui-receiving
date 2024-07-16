@@ -11,8 +11,8 @@ export const usePieceRequestsFetch = ({ tenantId } = {}) => {
   const fetchPieceRequests = ({ pieces, signal, crossTenant }) => {
     const kyExtended = ky.extend({ signal });
 
-    return crossTenant ?
-      fetchConsortiumPieceRequests(ky, { pieces, signal })
+    return crossTenant
+      ? fetchConsortiumPieceRequests(ky, { pieces, signal })
       : fetchLocalPieceRequests(kyExtended, { pieces });
   };
 

@@ -31,17 +31,16 @@ import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
-import { isConsortiumEnabled } from '../utils';
 
 export const TitleBindPiecesContainer = () => {
   const history = useHistory();
   const location = useLocation();
   const showCallout = useShowCallout();
-  const stripes = useStripes();
-  const { isCentralRouting } = useReceivingSearchContext();
-
-  const isConsortium = isConsortiumEnabled(stripes);
-  const currentTenant = stripes.okapi?.tenant;
+  const {
+    activeTenantId,
+    crossTenant,
+    isCentralRouting,
+  } = useReceivingSearchContext();
 
   const { id: titleId } = useParams();
 
@@ -114,8 +113,8 @@ export const TitleBindPiecesContainer = () => {
     if (openRequests?.length) {
       let hasDifferentRequesterId = false;
 
-      if (isConsortium) {
-        hasDifferentRequesterId = openRequests.some(({ request }) => request.receivingTenantId !== currentTenant);
+      if (crossTenant) {
+        hasDifferentRequesterId = openRequests.some(({ request }) => request.receivingTenantId !== activeTenantId);
       }
 
       setShowDeleteMessage(hasDifferentRequesterId);

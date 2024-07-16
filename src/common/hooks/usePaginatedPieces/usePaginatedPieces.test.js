@@ -12,9 +12,9 @@ import {
   ITEM_STATUS,
   ITEMS_API,
   ORDER_PIECES_API,
-  REQUESTS_API,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_REQUESTS_API } from '../../constants';
 import {
   usePieceItemsFetch,
   usePieceRequestsFetch,
@@ -68,7 +68,7 @@ const KY_RESPONSE_DATA_MAP = {
   [ITEMS_API]: {
     items: [item],
   },
-  [REQUESTS_API]: {
+  [PIECE_REQUESTS_API]: {
     requests: [request],
   },
 };

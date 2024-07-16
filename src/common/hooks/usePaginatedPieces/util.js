@@ -3,10 +3,10 @@ import groupBy from 'lodash/groupBy';
 import {
   batchRequest,
   ITEMS_API,
-  REQUESTS_API,
   SEARCH_API,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_REQUESTS_API } from '../../constants';
 import { extendKyWithTenant } from '../../utils';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
@@ -50,12 +50,12 @@ const buildPieceRequestsSearchParams = (pieces = []) => {
 
   formData.append('status', 'Open*');
 
-  pieces.filter(i => i.itemId).map(({ id }) => {
+  pieces.filter(i => i.itemId).forEach(({ id }) => {
     formData.append('pieceIds', id);
-  })
+  });
 
   return new URLSearchParams(formData).toString();
-}
+};
 
 export const fetchLocalPieceRequests = (ky, { pieces }) => {
   if (!pieces.length) {
@@ -63,7 +63,7 @@ export const fetchLocalPieceRequests = (ky, { pieces }) => {
   }
 
   return ky
-    .get(REQUESTS_API, {
+    .get(PIECE_REQUESTS_API, {
       searchParams: buildPieceRequestsSearchParams(pieces),
     })
     .json()
@@ -81,7 +81,7 @@ export const fetchConsortiumPieceRequests = async (ky, { pieces, signal }) => {
     const tenantKy = extendKyWithTenant(ky, tenantId);
 
     return tenantKy
-      .get(REQUESTS_API, {
+      .get(PIECE_REQUESTS_API, {
         searchParams: buildPieceRequestsSearchParams(currentPieces),
         signal,
       })

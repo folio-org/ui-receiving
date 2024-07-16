@@ -10,11 +10,11 @@ import {
   ITEMS_API,
   LOCATIONS_API,
   PIECE_STATUS,
-  REQUESTS_API,
   useOrderLine,
 } from '@folio/stripes-acq-components';
 import { orderLine } from '@folio/stripes-acq-components/test/jest/fixtures';
 
+import { PIECE_REQUESTS_API } from '../../constants';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 import { useTitleHydratedPieces } from './useTitleHydratedPieces';
@@ -72,7 +72,7 @@ const pieces = [
 ];
 
 const kyResponseMap = {
-  [REQUESTS_API]: { requests },
+  [PIECE_REQUESTS_API]: { requests },
   [ITEMS_API]: { items },
   [HOLDINGS_API]: { holdingsRecords: holdings },
   [LOCATIONS_API]: { locations },

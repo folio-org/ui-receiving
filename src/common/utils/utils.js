@@ -1,6 +1,7 @@
-import { ORDER_PIECES_API } from '@folio/stripes-acq-components';
-
-import { OKAPI_TENANT_HEADER } from '../constants';
+import {
+  OKAPI_TENANT_HEADER,
+  ORDER_PIECES_API,
+} from '@folio/stripes-acq-components';
 
 export const getPieceById = (pieceMutator) => (id) => (
   pieceMutator.GET({
