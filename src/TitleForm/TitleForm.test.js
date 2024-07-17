@@ -69,12 +69,10 @@ const wrapper = ({ children }) => (
 );
 
 const renderTitleForm = (props = defaultProps) => render(
-  <QueryClientProvider client={queryClient}>
-    <TitleForm
-      {...props}
-    />
-  </QueryClientProvider>,
-  { wrapper: MemoryRouter },
+  <TitleForm
+    {...props}
+  />,
+  { wrapper },
 );
 
 describe('TitleForm', () => {

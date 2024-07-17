@@ -185,12 +185,12 @@ describe('TitleBindPiecesContainer', () => {
 
   it('should provide "instanceId" in the bind request payload for package PO Line', async () => {
     useTitleHydratedPieces.mockReturnValue({
-        title: mockTitle,
-        orderLine: {
-          id: 'po-line-id',
-          isPackage: true,
-        },
-      });
+      title: mockTitle,
+      orderLine: {
+        id: 'po-line-id',
+        isPackage: true,
+      },
+    });
 
     renderTitleBindPiecesContainer();
 
