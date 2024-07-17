@@ -7,6 +7,7 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { useTitleHydratedPieces } from '../../common/hooks';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
@@ -36,8 +37,17 @@ jest.mock('../hooks', () => ({
   useBindPiecesMutation: jest.fn().mockReturnValue({ bindPieces: jest.fn(), isBinding: false }),
 }));
 
-const mockTitle = { title: 'Title', id: '001', poLineId: '002' };
-const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
+const mockTitle = {
+  title: 'Title',
+  id: '001',
+  poLineId: '002',
+  instanceId: 'instanceId',
+};
+const locationMock = {
+  hash: 'hash',
+  pathname: 'pathname',
+  search: 'search',
+};
 const historyMock = {
   push: jest.fn(),
   action: 'PUSH',
@@ -51,8 +61,16 @@ const renderTitleBindPiecesContainer = () => render(
 );
 
 describe('TitleBindPiecesContainer', () => {
+  const mockBindPieces = jest.fn().mockResolvedValue(() => Promise.resolve());
+
   beforeEach(() => {
     TitleBindPieces.mockClear();
+    useBindPiecesMutation
+      .mockClear()
+      .mockReturnValue({
+        bindPieces: mockBindPieces,
+        isBinding: false,
+      });
     useHistory.mockClear().mockReturnValue(historyMock);
     useTitleHydratedPieces
       .mockClear()
@@ -89,14 +107,6 @@ describe('TitleBindPiecesContainer', () => {
   });
 
   it('should call `bindPieces` mutation on submit', async () => {
-    const mockBindPieces = jest.fn().mockResolvedValue(() => Promise.resolve());
-
-    useBindPiecesMutation
-      .mockClear()
-      .mockReturnValue({
-        bindPieces: mockBindPieces,
-        isBinding: false,
-      });
     renderTitleBindPiecesContainer();
 
     TitleBindPieces.mock.calls[0][0].onSubmit({
@@ -134,14 +144,6 @@ describe('TitleBindPiecesContainer', () => {
   });
 
   it('should call `bindPieces` mutation with transfer confirmation action on submit', async () => {
-    const mockBindPieces = jest.fn().mockResolvedValue(() => Promise.resolve());
-
-    useBindPiecesMutation
-      .mockClear()
-      .mockReturnValue({
-        bindPieces: mockBindPieces,
-        isBinding: false,
-      });
     renderTitleBindPiecesContainer();
 
     TitleBindPieces.mock.calls[0][0].onSubmit({
@@ -179,5 +181,38 @@ describe('TitleBindPiecesContainer', () => {
       },
       requestsAction: TRANSFER_REQUEST_ACTIONS.transfer,
     });
+  });
+
+  it('should provide "instanceId" in the bind request payload for package PO Line', async () => {
+    useTitleHydratedPieces.mockReturnValue({
+        title: mockTitle,
+        orderLine: {
+          id: 'po-line-id',
+          isPackage: true,
+        },
+      });
+
+    renderTitleBindPiecesContainer();
+
+    TitleBindPieces.mock.calls[0][0].onSubmit({
+      receivedItems: [
+        {
+          id: '9b946a34-f762-4672-b9bc-adf71390796a',
+          holdingId: 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
+          checked: true,
+          itemId: '123',
+          request: { requesterId: '001' },
+        },
+      ],
+      bindItem: {
+        materialTypeId: '1a54b431-2e4f-452d-9cae-9cee66c9a892',
+        permanentLoanTypeId: '2b94c631-fca9-4892-a730-03ee529ffe27',
+        locationId: 'fcd64ce1-6995-48f0-840e-89ffa2288371',
+      },
+    });
+
+    await userEvent.click(await screen.findByText(/bind.pieces.modal.button.transfer/));
+
+    expect(mockBindPieces).toHaveBeenCalledWith(expect.objectContaining({ instanceId: mockTitle.instanceId }));
   });
 });
