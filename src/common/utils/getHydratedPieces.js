@@ -4,7 +4,16 @@ export const getPieceStatusFromItem = (item) => {
   return item?.status?.name || ITEM_STATUS.undefined;
 };
 
-export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {
+export function getHydratedPieces({
+  crossTenant,
+  fetchPieceItems,
+  fetchPieceRequests,
+  isConsortium,
+  pieces,
+}) {
+  const mutatorItems = fetchPieceItems({ pieces, crossTenant, isConsortium });
+  const mutatorRequests = fetchPieceRequests({ pieces });
+
   return Promise.all([
     mutatorItems,
     mutatorRequests,

@@ -32,12 +32,17 @@ import {
 import {
   getHydratedPieces,
   handleUnrecieveErrorResponse,
+  isConsortiumEnabled,
   unreceivePieces,
 } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
 } from '../constants';
+import {
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from '../common/hooks/usePaginatedPieces/hooks';
 import { useReceivingSearchContext } from '../contexts';
 import TitleUnreceive from './TitleUnreceive';
 
@@ -46,6 +51,7 @@ function TitleUnreceiveContainer({
   location,
   match,
   mutator,
+  stripes,
 }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
@@ -56,7 +62,13 @@ function TitleUnreceiveContainer({
   const [pieceHoldingMap, setPieceHoldingMap] = useState();
   const poLineId = title?.poLineId;
 
-  const { isCentralRouting } = useReceivingSearchContext();
+  const { crossTenant, isCentralRouting, targetTenantId } = useReceivingSearchContext();
+  const isConsortium = isConsortiumEnabled(stripes);
+  const { fetchPieceItems } = usePieceItemsFetch({
+    instanceId: title?.instanceId,
+    tenantId: targetTenantId,
+  });
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId: targetTenantId });
 
   useEffect(
     () => {
@@ -90,7 +102,17 @@ function TitleUnreceiveContainer({
             query: `${filterQuery} sortby locationId`,
           },
         })
-          .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
+          .then(async (piecesResponse) => {
+            const hydratedPieces = await getHydratedPieces({
+              pieces: piecesResponse,
+              fetchPieceItems,
+              fetchPieceRequests,
+              crossTenant,
+              isConsortium,
+            });
+
+            return hydratedPieces;
+          })
           .then(hydratedPieces => {
             setPieces(hydratedPieces);
             const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
@@ -210,6 +232,7 @@ TitleUnreceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  stripes: PropTypes.object.isRequired,
 };
 
 export default stripesConnect(TitleUnreceiveContainer);

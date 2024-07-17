@@ -21,3 +21,7 @@ export const extendKyWithTenant = (ky, tenantId) => {
     },
   });
 };
+
+export const isConsortiumEnabled = stripes => {
+  return stripes?.hasInterface('consortia');
+};

@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 import {
   HOLDINGS_API,
@@ -13,12 +14,14 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { useReceivingSearchContext } from '../../../contexts';
-import { getHydratedPieces } from '../../utils';
-import { usePieceItemsFetch } from '../usePaginatedPieces/hooks';
 import {
-  fetchConsortiumPieceRequests,
-  fetchLocalPieceRequests,
-} from '../usePaginatedPieces/util';
+  getHydratedPieces,
+  isConsortiumEnabled,
+} from '../../utils';
+import {
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from '../usePaginatedPieces/hooks';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 
@@ -29,9 +32,14 @@ export const useTitleHydratedPieces = ({
   searchQuery = '',
 } = {}) => {
   const ky = useOkapiKy({ tenantId });
+  const stripes = useStripes();
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
-  const { crossTenant, targetTenantId } = useReceivingSearchContext();
+  const isConsortium = isConsortiumEnabled(stripes);
+  const {
+    crossTenant,
+    targetTenantId,
+  } = useReceivingSearchContext();
 
   const {
     title,
@@ -61,6 +69,8 @@ export const useTitleHydratedPieces = ({
     tenantId: targetTenantId,
   });
 
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId });
+
   const isReferenceDataLoading = (
     isTitleLoading
     || isOrderLineLoading
@@ -76,13 +86,13 @@ export const useTitleHydratedPieces = ({
       },
     });
 
-    const hydratedPieces = await getHydratedPieces(
+    const hydratedPieces = await getHydratedPieces({
       pieces,
-      crossTenant
-        ? fetchConsortiumPieceRequests(ky, { pieces })
-        : fetchLocalPieceRequests(ky, { pieces }),
-      fetchPieceItems({ pieces, crossTenant }),
-    );
+      fetchPieceItems,
+      fetchPieceRequests,
+      crossTenant,
+      isConsortium,
+    });
 
     const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
     const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);

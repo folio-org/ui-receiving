@@ -1,5 +1,3 @@
-import groupBy from 'lodash/groupBy';
-
 import {
   batchRequest,
   ITEMS_API,
@@ -7,7 +5,6 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { PIECE_REQUESTS_API } from '../../constants';
-import { extendKyWithTenant } from '../../utils';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
   const itemIds = pieces.reduce((acc, { itemId }) => {
@@ -68,27 +65,4 @@ export const fetchLocalPieceRequests = (ky, { pieces }) => {
     })
     .json()
     .then(({ circulationRequests }) => circulationRequests);
-};
-
-export const fetchConsortiumPieceRequests = async (ky, { pieces, signal }) => {
-  if (!pieces.length) {
-    return Promise.resolve([]);
-  }
-
-  const pieceByTenantIds = groupBy(pieces, 'receivingTenantId');
-
-  const requestPromises = Object.entries(pieceByTenantIds).map(([tenantId, currentPieces]) => {
-    const tenantKy = extendKyWithTenant(ky, tenantId);
-
-    return tenantKy
-      .get(PIECE_REQUESTS_API, {
-        searchParams: buildPieceRequestsSearchParams(currentPieces),
-        signal,
-      })
-      .json();
-  });
-
-  const responses = await Promise.all(requestPromises);
-
-  return responses.flatMap(({ circulationRequests }) => circulationRequests);
 };

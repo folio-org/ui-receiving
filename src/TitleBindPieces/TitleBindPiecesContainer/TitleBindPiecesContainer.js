@@ -39,6 +39,7 @@ export const TitleBindPiecesContainer = () => {
     activeTenantId,
     crossTenant,
     isCentralRouting,
+    targetTenantId,
   } = useReceivingSearchContext();
 
   const { id: titleId } = useParams();
@@ -58,6 +59,7 @@ export const TitleBindPiecesContainer = () => {
     title,
   } = useTitleHydratedPieces({
     titleId,
+    tenantId: targetTenantId,
     receivingStatus: PIECE_STATUS.received,
     searchQuery: `isBound==false and format==${PIECE_FORMAT.physical}`,
   });

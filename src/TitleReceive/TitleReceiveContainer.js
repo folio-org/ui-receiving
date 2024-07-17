@@ -35,6 +35,7 @@ import {
   getHydratedPieces,
   getReceivingPieceItemStatus,
   handleReceiveErrorResponse,
+  isConsortiumEnabled,
 } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
@@ -44,13 +45,18 @@ import { useReceivingSearchContext } from '../contexts';
 import { EXPECTED_PIECES_SEARCH_VALUE } from '../TitleDetails/constants';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
+import {
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from '../common/hooks/usePaginatedPieces/hooks';
 
-function TitleReceiveContainer({ history, location, match, mutator }) {
+function TitleReceiveContainer({ history, location, match, mutator, stripes }) {
   const showCallout = useShowCallout();
   const {
     crossTenant,
     isCentralOrderingEnabled,
     isCentralRouting,
+    targetTenantId,
   } = useReceivingSearchContext();
 
   const titleId = match.params.id;
@@ -67,6 +73,13 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     isLoading: isLocationsLoading,
     locations,
   } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
+
+  const isConsortium = isConsortiumEnabled(stripes);
+  const { fetchPieceItems } = usePieceItemsFetch({
+    instanceId: title?.instanceId,
+    tenantId: targetTenantId,
+  });
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId: targetTenantId });
 
   useEffect(
     () => {
@@ -100,7 +113,17 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
             query: `${filterQuery} sortby locationId`,
           },
         })
-          .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
+          .then(async (piecesResponse) => {
+            const hydratedPieces = await getHydratedPieces({
+              pieces: piecesResponse,
+              fetchPieceItems,
+              fetchPieceRequests,
+              crossTenant,
+              isConsortium,
+            });
+
+            return hydratedPieces;
+          })
           .then(setPieces);
       }
     },
@@ -236,6 +259,7 @@ TitleReceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
+  stripes: PropTypes.object.isRequired,
 };
 
 export default stripesConnect(TitleReceiveContainer);
