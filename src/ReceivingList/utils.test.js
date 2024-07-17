@@ -1,18 +1,27 @@
 import {
+  CONSORTIUM_LOCATIONS_API,
   HOLDINGS_API,
   LIMIT_MAX,
   LINES_API,
   LOCATIONS_API,
   ORDER_FORMATS,
+  SEARCH_API,
 } from '@folio/stripes-acq-components';
 
 import { FILTERS } from './constants';
 import {
+  fetchConsortiumOrderLineHoldings,
+  fetchConsortiumOrderLineLocations,
   fetchTitleOrderLines,
   fetchOrderLineHoldings,
   fetchOrderLineLocations,
   buildTitlesQuery,
 } from './utils';
+
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  getConsortiumCentralTenantId: jest.fn(() => 'centralTenantId'),
+}));
 
 describe('ReceivingList utils', () => {
   describe('fetchTitleOrderLines', () => {
@@ -94,7 +103,7 @@ describe('ReceivingList utils', () => {
         '1': {},
       };
 
-      fetchOrderLineLocations(ky, orderLines, locationsMap)
+      fetchOrderLineLocations(ky)(orderLines, locationsMap)
         .then(() => {
           expect(ky.get).toHaveBeenCalledWith(LOCATIONS_API, expect.objectContaining({
             searchParams: {
@@ -117,7 +126,7 @@ describe('ReceivingList utils', () => {
         '1': {},
       };
 
-      fetchOrderLineLocations(ky, [], locationsMap)
+      fetchOrderLineLocations(ky)([], locationsMap)
         .then((response) => {
           expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
@@ -137,7 +146,7 @@ describe('ReceivingList utils', () => {
         '1': {},
       };
 
-      fetchOrderLineLocations(ky, orderLines, locationsMap)
+      fetchOrderLineLocations(ky)(orderLines, locationsMap)
         .then((response) => {
           expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
@@ -156,7 +165,7 @@ describe('ReceivingList utils', () => {
       };
       const orderLines = [{ locations: [{ holdingId: 1 }] }, { locations: [{ holdingId: 2 }, { holdingId: 3 }] }];
 
-      fetchOrderLineHoldings(ky, orderLines)
+      fetchOrderLineHoldings(ky)(orderLines)
         .then(() => {
           expect(ky.get).toHaveBeenCalledWith(HOLDINGS_API, expect.objectContaining({
             searchParams: {
@@ -176,7 +185,7 @@ describe('ReceivingList utils', () => {
         })),
       };
 
-      fetchOrderLineHoldings(ky, [])
+      fetchOrderLineHoldings(ky)([])
         .then((response) => {
           expect(ky.get).not.toHaveBeenCalled();
           expect(response).toEqual([]);
@@ -241,6 +250,97 @@ describe('ReceivingList utils', () => {
       const query = buildTitlesQuery({ [FILTERS.LOCATION]: 'locationId' });
 
       expect(query).toContain('(poLine.locations=="*locationId*" or poLine.searchLocationIds=="*locationId*")');
+    });
+  });
+
+  describe('ECS mode', () => {
+    describe('fetchConsortiumOrderLineHoldings', () => {
+      it('should fetch order line holdings from consortium tenants', async () => {
+        const ky = {
+          extend: () => ky,
+          get: jest.fn(() => ({
+            json: () => Promise.resolve({ holdings: [] }),
+          })),
+        };
+
+        const orderLines = [
+          {
+            instanceId: 'instanceId-1',
+            locations: [{ holdingId: 1 }],
+          },
+          {
+            instanceId: 'instanceId-2',
+            locations: [{ holdingId: 2 }],
+          },
+          {
+            instanceId: 'instanceId-2',
+            locations: [{ holdingId: 3 }],
+          },
+        ];
+
+        fetchConsortiumOrderLineHoldings(ky, {})(orderLines).then(() => {
+          expect(ky.get).toHaveBeenCalledTimes(2);
+          expect(ky.get).toHaveBeenNthCalledWith(
+            1,
+            `${SEARCH_API}/consortium/holdings`,
+            { searchParams: { instanceId: orderLines[0].instanceId } },
+          );
+          expect(ky.get).toHaveBeenNthCalledWith(
+            2,
+            `${SEARCH_API}/consortium/holdings`,
+            { searchParams: { instanceId: orderLines[1].instanceId } },
+          );
+        });
+      });
+    });
+
+    describe('fetchConsortiumOrderLineLocations', () => {
+      it('should fetch order line locations from consortium tenants', async () => {
+        const ky = {
+          extend: () => ky,
+          get: jest.fn(() => ({
+            json: () => Promise.resolve({ locations: [] }),
+          })),
+        };
+
+        const orderLines = [
+          {
+            instanceId: 'instanceId-1',
+            locations: [{
+              locationId: 1,
+              tenantId: 'central',
+            }],
+          },
+          {
+            instanceId: 'instanceId-2',
+            locations: [{
+              locationId: 2,
+              tenantId: 'member',
+            }],
+          },
+          {
+            instanceId: 'instanceId-3',
+            locations: [{
+              locationId: 3,
+              tenantId: 'member',
+            }],
+          },
+        ];
+
+        fetchConsortiumOrderLineLocations(ky, {})(orderLines).then(() => {
+          expect(ky.get).toHaveBeenCalledTimes(2);
+          expect(ky.get).toHaveBeenNthCalledWith(
+            1,
+            CONSORTIUM_LOCATIONS_API,
+            { searchParams: { tenantId: orderLines[0].locations[0].tenantId } },
+          );
+          expect(ky.get).toHaveBeenNthCalledWith(
+            2,
+            CONSORTIUM_LOCATIONS_API,
+            { searchParams: { tenantId: orderLines[1].locations[0].tenantId } },
+          );
+        });
+      });
     });
   });
 });

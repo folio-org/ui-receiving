@@ -7,6 +7,8 @@ import {
 import { useReceiving } from './hooks';
 import ReceivingListContainer from './ReceivingListContainer';
 import {
+  fetchConsortiumOrderLineHoldings,
+  fetchConsortiumOrderLineLocations,
   fetchLinesOrders,
   fetchOrderLineHoldings,
   fetchOrderLineLocations,
@@ -22,6 +24,8 @@ jest.mock('./hooks/useReceiving', () => ({
   useReceiving: jest.fn(),
 }));
 jest.mock('./utils', () => ({
+  fetchConsortiumOrderLineHoldings: jest.fn(),
+  fetchConsortiumOrderLineLocations: jest.fn(),
   fetchLinesOrders: jest.fn(),
   fetchOrderLineHoldings: jest.fn(),
   fetchOrderLineLocations: jest.fn(),
@@ -42,15 +46,21 @@ describe('ReceivingListContainer', () => {
   }];
 
   beforeEach(() => {
+    fetchConsortiumOrderLineHoldings
+      .mockClear()
+      .mockReturnValue(() => []);
+    fetchConsortiumOrderLineLocations
+      .mockClear()
+      .mockReturnValue(() => []);
     fetchLinesOrders
       .mockClear()
       .mockReturnValue([]);
     fetchOrderLineHoldings
       .mockClear()
-      .mockReturnValue([]);
+      .mockReturnValue(() => []);
     fetchOrderLineLocations
       .mockClear()
-      .mockReturnValue([]);
+      .mockReturnValue(() => []);
     fetchTitleOrderLines
       .mockClear()
       .mockReturnValue([]);

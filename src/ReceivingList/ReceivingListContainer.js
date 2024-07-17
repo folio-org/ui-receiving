@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
+import { useStripes } from '@folio/stripes/core';
 import {
   getHoldingLocationName,
   RESULT_COUNT_INCREMENT,
@@ -12,6 +13,8 @@ import ReceivingList from './ReceivingList';
 import { useReceivingSearchContext } from '../contexts';
 import { useReceiving } from './hooks';
 import {
+  fetchConsortiumOrderLineHoldings,
+  fetchConsortiumOrderLineLocations,
   fetchLinesOrders,
   fetchOrderLineHoldings,
   fetchOrderLineLocations,
@@ -22,6 +25,7 @@ const resetData = () => {};
 
 const ReceivingListContainer = () => {
   const intl = useIntl();
+  const stripes = useStripes();
 
   const {
     crossTenant,
@@ -34,10 +38,18 @@ const ReceivingListContainer = () => {
 
   const fetchReferences = useCallback(async (titles, ky) => {
     const orderLinesResponse = await fetchTitleOrderLines(ky, titles, {});
-    // TODO: fetch from all related tenants for central tenant
-    const holdingsResponse = await fetchOrderLineHoldings(ky, orderLinesResponse);
-    const locationsResponse = await fetchOrderLineLocations(
-      ky,
+
+    const holdingsResponse = await (
+      isCentralOrderingEnabled
+        ? fetchConsortiumOrderLineHoldings(ky, stripes)
+        : fetchOrderLineHoldings(ky)
+    )(orderLinesResponse);
+
+    const locationsResponse = await (
+      isCentralOrderingEnabled
+        ? fetchConsortiumOrderLineLocations(ky, stripes)
+        : fetchOrderLineLocations(ky)
+    )(
       [
         ...orderLinesResponse,
         ...holdingsResponse
@@ -87,7 +99,7 @@ const ReceivingListContainer = () => {
     }, {});
 
     return { orderLinesMap };
-  }, [invalidReferenceMessage]);
+  }, [invalidReferenceMessage, isCentralOrderingEnabled, stripes]);
 
   const { pagination, changePage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
   const {
