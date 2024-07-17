@@ -49,7 +49,7 @@ describe('Paginated pieces utilities', () => {
   });
 
   describe('fetchLocalPieceRequests', () => {
-    const kyMock = buildKyMock({ requests });
+    const kyMock = buildKyMock({ circulationRequests: requests });
 
     it('should fetch pieces requests from the active tenant', async () => {
       const result = await fetchLocalPieceRequests(kyMock, { pieces });

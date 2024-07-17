@@ -14,13 +14,11 @@ import {
 import {
   baseManifest,
   batchFetch,
-  itemsResource,
   LIMIT_MAX,
   LINES_API,
   locationsManifest,
   PIECE_STATUS,
   piecesResource,
-  requestsResource,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -208,10 +206,6 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     fetch: false,
     tenant: '!{tenantId}',
   },
-
-  // TODO: fetch items and requests (after MODORDERS-1138) from related tenants
-  items: itemsResource,
-  requests: requestsResource,
   locations: {
     ...locationsManifest,
     fetch: false,

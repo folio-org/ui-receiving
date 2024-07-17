@@ -12,6 +12,7 @@ import { useLocationsQuery } from '@folio/stripes-acq-components';
 import {
   useReceive,
 } from '../common/hooks';
+import { getHydratedPieces } from '../common/utils';
 import TitleReceiveContainer from './TitleReceiveContainer';
 import TitleReceive from './TitleReceive';
 
@@ -23,11 +24,16 @@ jest.mock('@folio/stripes-acq-components', () => ({
 jest.mock('../common/hooks', () => ({
   useReceive: jest.fn().mockReturnValue({}),
 }));
+jest.mock('../common/utils', () => ({
+  ...jest.requireActual('../common/utils'),
+  getHydratedPieces: jest.fn(),
+}));
 jest.mock('./TitleReceive', () => jest.fn().mockReturnValue('TitleReceive'));
 
 const mockTitle = { title: 'Title', id: '001', poLineId: '002', instanceId: 'instanceId' };
 const mockPoLine = { id: '002', locations: [{ locationId: '1' }] };
 const mockPieces = [{ id: '01', locationId: '1' }];
+const mockRequests = [{ id: '01', itemId: '01', locationId: '1' }];
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -85,6 +91,7 @@ describe('TitleReceiveContainer', () => {
     useLocationsQuery
       .mockClear()
       .mockReturnValue({ locations: [{ id: 'locationId' }] });
+    getHydratedPieces.mockClear().mockReturnValue(Promise.resolve(mockRequests));
   });
 
   afterEach(cleanup);
