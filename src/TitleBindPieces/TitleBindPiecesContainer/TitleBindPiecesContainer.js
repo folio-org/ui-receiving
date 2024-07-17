@@ -102,10 +102,10 @@ export const TitleBindPiecesContainer = () => {
     const requestData = {
       poLineId: orderLine.id,
       bindPieceIds: selectedItems.map(({ id }) => id),
-      instanceId: orderLine.instanceId || title.instanceId,
       bindItem: {
         ...values.bindItem,
       },
+      ...(orderLine.isPackage ? { instanceId: title.instanceId } : {}),
     };
 
     if (openRequests?.length) {
