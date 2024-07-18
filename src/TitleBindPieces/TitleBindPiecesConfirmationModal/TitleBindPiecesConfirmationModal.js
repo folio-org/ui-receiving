@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -10,13 +11,21 @@ import {
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
-  barCodes = [],
+  activeTenantId,
+  crossTenant = false,
   id,
   onCancel,
   onConfirm,
   open,
-  shouldShowDeleteMessage = false,
+  openRequests,
 }) => {
+  const barcodes = useMemo(() => openRequests.filter(Boolean).map(({ barcode }) => barcode), [openRequests]);
+  const shouldShowDeleteMessage = useMemo(() => {
+    if (!crossTenant) return false;
+
+    return openRequests.some(({ request }) => request.tenantId !== activeTenantId);
+  }, [activeTenantId, crossTenant, openRequests]);
+
   const modalAction = shouldShowDeleteMessage ? 'delete' : 'transfer';
   const footer = (
     <ModalFooter>
@@ -67,17 +76,18 @@ export const TitleBindPiecesConfirmationModal = ({
     >
       <FormattedMessage
         id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`}
-        values={{ barCodes: barCodes.join(', ') }}
+        values={{ barcodes: barcodes.join(', ') }}
       />
     </Modal>
   );
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
-  barCodes: PropTypes.arrayOf(PropTypes.string),
+  activeTenantId: PropTypes.string.isRequired,
+  crossTenant: PropTypes.bool,
   id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  shouldShowDeleteMessage: PropTypes.bool,
+  openRequests: PropTypes.arrayOf(PropTypes.object),
 };

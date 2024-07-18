@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -45,8 +44,7 @@ export const TitleBindPiecesContainer = () => {
   const { id: titleId } = useParams();
 
   const [open, toggleOpen] = useToggle(false);
-  const [shouldShowDeleteMessage, setShouldShowDeleteMessage] = useState(false);
-  const [barCodes, setBarCodes] = useState([]);
+  const [openRequests, setOpenRequests] = useState([]);
   const [bindPieceData, setBindPieceData] = useState({});
   const { bindPieces, isBinding } = useBindPiecesMutation();
 
@@ -87,8 +85,6 @@ export const TitleBindPiecesContainer = () => {
     toggleOpen();
 
     if (requestsAction === TRANSFER_REQUEST_ACTIONS.cancel) {
-      setShouldShowDeleteMessage(false);
-
       return null;
     }
 
@@ -100,7 +96,7 @@ export const TitleBindPiecesContainer = () => {
 
   const onSubmit = async (values) => {
     const selectedItems = values.receivedItems.filter(({ checked }) => checked);
-    const openRequests = selectedItems.filter(({ itemId, request }) => itemId && request);
+    const piecesWithOpenRequests = selectedItems.filter(({ itemId, request }) => itemId && request);
 
     const requestData = {
       poLineId: orderLine.id,
@@ -111,15 +107,9 @@ export const TitleBindPiecesContainer = () => {
       ...(orderLine.isPackage ? { instanceId: title.instanceId } : {}),
     };
 
-    if (openRequests?.length) {
-      if (crossTenant) {
-        setShouldShowDeleteMessage(openRequests.some(({ request }) => request.tenantId !== activeTenantId));
-      } else {
-        setShouldShowDeleteMessage(false);
-      }
-
+    if (piecesWithOpenRequests?.length) {
+      setOpenRequests(piecesWithOpenRequests);
       setBindPieceData(requestData);
-      setBarCodes(openRequests.filter(Boolean).map(({ barcode }) => barcode));
       toggleOpen();
     } else {
       bindItems(requestData);
@@ -152,9 +142,10 @@ export const TitleBindPiecesContainer = () => {
         id="confirm-binding-modal"
         onCancel={toggleOpen}
         onConfirm={onConfirm}
-        shouldShowDeleteMessage={shouldShowDeleteMessage}
         open={open}
-        barCodes={barCodes}
+        activeTenantId={activeTenantId}
+        openRequests={openRequests}
+        crossTenant={crossTenant}
       />
     </>
   );

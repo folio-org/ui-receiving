@@ -119,6 +119,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
           holdingName={PIECE_FORM_FIELD_NAMES.locationId}
           locationName={PIECE_FORM_FIELD_NAMES.locationId}
           onChange={onLocationSelected}
+          locationLookupLabel={<FormattedMessage id="stripes-acq-components.holding.label" />}
           required
         />
       </Col>

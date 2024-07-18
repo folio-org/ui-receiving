@@ -44,7 +44,12 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const titleId = match.params.id;
 
-  const { pieces, title, orderLine: poLine, isLoading: isPiecesLoading } = useTitleHydratedPieces({
+  const {
+    pieces,
+    title,
+    orderLine: poLine,
+    isLoading: isPiecesLoading,
+  } = useTitleHydratedPieces({
     titleId,
     tenantId: targetTenantId,
     receivingStatus: `(${EXPECTED_PIECES_SEARCH_VALUE})`,

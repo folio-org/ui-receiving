@@ -30,7 +30,6 @@ import {
 import {
   getHydratedPieces,
   handleUnrecieveErrorResponse,
-  isConsortiumEnabled,
   unreceivePieces,
 } from '../common/utils';
 import {
@@ -49,7 +48,6 @@ function TitleUnreceiveContainer({
   location,
   match,
   mutator,
-  stripes,
 }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
@@ -61,7 +59,6 @@ function TitleUnreceiveContainer({
   const poLineId = title?.poLineId;
 
   const { crossTenant, isCentralRouting, targetTenantId } = useReceivingSearchContext();
-  const isConsortium = isConsortiumEnabled(stripes);
   const { fetchPieceItems } = usePieceItemsFetch({
     instanceId: title?.instanceId,
     tenantId: targetTenantId,
@@ -106,7 +103,6 @@ function TitleUnreceiveContainer({
               fetchPieceItems,
               fetchPieceRequests,
               crossTenant,
-              isConsortium,
             });
 
             return hydratedPieces;
@@ -226,7 +222,6 @@ TitleUnreceiveContainer.propTypes = {
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   mutator: PropTypes.object.isRequired,
-  stripes: PropTypes.object.isRequired,
 };
 
 export default stripesConnect(TitleUnreceiveContainer);

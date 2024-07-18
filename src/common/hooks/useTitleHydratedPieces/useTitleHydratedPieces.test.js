@@ -27,7 +27,6 @@ jest.mock('@folio/stripes-acq-components', () => ({
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
   getHydratedPieces: jest.fn().mockReturnValue(Promise.resolve([{ id: 'id', itemId: 'itemId' }])),
-  isConsortiumEnabled: jest.fn(),
 }));
 jest.mock('../usePieces', () => ({ usePieces: jest.fn() }));
 jest.mock('../useTitle', () => ({ useTitle: jest.fn() }));

@@ -76,8 +76,6 @@ describe('TitleReceiveContainer', () => {
     });
   });
 
-  afterEach(cleanup);
-
   it('should render loading', async () => {
     useTitleHydratedPieces.mockClear().mockReturnValue({
       title: {},

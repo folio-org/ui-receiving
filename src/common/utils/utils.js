@@ -30,10 +30,6 @@ export const extendKyWithTenant = (ky, tenantId) => {
   });
 };
 
-export const isConsortiumEnabled = stripes => {
-  return stripes?.hasInterface('consortia');
-};
-
 export const chunkRequests = (items, queryFn, chunkResolver = identity) => {
   return chunk(items, CONCURRENT_REQUESTS)
     .reduce(async (acc, itemsChunk) => {

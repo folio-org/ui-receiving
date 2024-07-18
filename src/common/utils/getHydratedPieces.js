@@ -8,15 +8,14 @@ export function getHydratedPieces({
   crossTenant,
   fetchPieceItems,
   fetchPieceRequests,
-  isConsortium,
   pieces,
 }) {
-  const mutatorItems = fetchPieceItems({ pieces, crossTenant, isConsortium });
-  const mutatorRequests = fetchPieceRequests({ pieces });
+  const pieceItems = fetchPieceItems({ pieces, crossTenant });
+  const pieceRequests = fetchPieceRequests({ pieces });
 
   return Promise.all([
-    mutatorItems,
-    mutatorRequests,
+    pieceItems,
+    pieceRequests,
     pieces,
   ])
     .then(([itemsResponse, requestsResponse, piecesResponse]) => {

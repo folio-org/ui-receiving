@@ -4,7 +4,6 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
-  useStripes,
 } from '@folio/stripes/core';
 import {
   HOLDINGS_API,
@@ -14,10 +13,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { useReceivingSearchContext } from '../../../contexts';
-import {
-  getHydratedPieces,
-  isConsortiumEnabled,
-} from '../../utils';
+import { getHydratedPieces } from '../../utils';
 import {
   usePieceItemsFetch,
   usePieceRequestsFetch,
@@ -32,10 +28,8 @@ export const useTitleHydratedPieces = ({
   searchQuery = '',
 } = {}) => {
   const ky = useOkapiKy({ tenantId });
-  const stripes = useStripes();
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
-  const isConsortium = isConsortiumEnabled(stripes);
   const {
     crossTenant,
     targetTenantId,
@@ -91,7 +85,6 @@ export const useTitleHydratedPieces = ({
       fetchPieceItems,
       fetchPieceRequests,
       crossTenant,
-      isConsortium,
     });
 
     const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
