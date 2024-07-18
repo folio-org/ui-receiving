@@ -45,10 +45,9 @@ export const TitleBindPiecesContainer = () => {
   const { id: titleId } = useParams();
 
   const [open, toggleOpen] = useToggle(false);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const bindPieceData = useRef(null);
-  const barCodesWithOpenRequests = useRef([]);
-
+  const [shouldShowDeleteMessage, setShouldShowDeleteMessage] = useState(false);
+  const [barCodes, setBarCodes] = useState([]);
+  const [bindPieceData, setBindPieceData] = useState({});
   const { bindPieces, isBinding } = useBindPiecesMutation();
 
   const {
@@ -88,13 +87,13 @@ export const TitleBindPiecesContainer = () => {
     toggleOpen();
 
     if (requestsAction === TRANSFER_REQUEST_ACTIONS.cancel) {
-      setShowDeleteMessage(false);
+      setShouldShowDeleteMessage(false);
 
       return null;
     }
 
     return bindItems({
-      ...bindPieceData.current,
+      ...bindPieceData,
       requestsAction,
     });
   };
@@ -112,15 +111,14 @@ export const TitleBindPiecesContainer = () => {
     };
 
     if (openRequests?.length) {
-      let hasDifferentRequesterId = false;
-
       if (crossTenant) {
-        hasDifferentRequesterId = openRequests.some(({ request }) => request.tenantId !== activeTenantId);
+        setShouldShowDeleteMessage(openRequests.some(({ request }) => request.tenantId !== activeTenantId));
+      } else {
+        setShouldShowDeleteMessage(false);
       }
 
-      setShowDeleteMessage(hasDifferentRequesterId);
-      bindPieceData.current = requestData;
-      barCodesWithOpenRequests.current = openRequests.filter(Boolean).map(({ barcode }) => barcode);
+      setBindPieceData(requestData);
+      setBarCodes(openRequests.filter(Boolean).map(({ barcode }) => barcode));
       toggleOpen();
     } else {
       bindItems(requestData);
@@ -153,9 +151,9 @@ export const TitleBindPiecesContainer = () => {
         id="confirm-binding-modal"
         onCancel={toggleOpen}
         onConfirm={onConfirm}
-        showDeleteMessage={showDeleteMessage}
+        shouldShowDeleteMessage={shouldShowDeleteMessage}
         open={open}
-        barCodesWithOpenRequests={barCodesWithOpenRequests.current}
+        barCodes={barCodes}
       />
     </>
   );

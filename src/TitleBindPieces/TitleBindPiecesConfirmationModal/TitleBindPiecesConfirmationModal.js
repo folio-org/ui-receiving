@@ -10,18 +10,18 @@ import {
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
-  barCodesWithOpenRequests = [],
+  barCodes = [],
   id,
   onCancel,
   onConfirm,
   open,
-  showDeleteMessage = false,
+  shouldShowDeleteMessage = false,
 }) => {
-  const modalAction = showDeleteMessage ? 'delete' : 'transfer';
+  const modalAction = shouldShowDeleteMessage ? 'delete' : 'transfer';
   const footer = (
     <ModalFooter>
       {
-        !showDeleteMessage && (
+        !shouldShowDeleteMessage && (
           <>
             <Button
               marginBottom0
@@ -67,17 +67,17 @@ export const TitleBindPiecesConfirmationModal = ({
     >
       <FormattedMessage
         id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`}
-        values={{ barCodes: barCodesWithOpenRequests.join(', ') }}
+        values={{ barCodes: barCodes.join(', ') }}
       />
     </Modal>
   );
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
-  barCodesWithOpenRequests: PropTypes.arrayOf(PropTypes.string),
+  barCodes: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  showDeleteMessage: PropTypes.bool,
+  shouldShowDeleteMessage: PropTypes.bool,
 };
