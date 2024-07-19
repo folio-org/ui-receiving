@@ -35,7 +35,6 @@ export const TitleBindPiecesContainer = () => {
   const location = useLocation();
   const showCallout = useShowCallout();
   const {
-    crossTenant,
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
