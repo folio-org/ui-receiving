@@ -143,7 +143,6 @@ export const TitleBindPiecesContainer = () => {
         onConfirm={onConfirm}
         open={open}
         openRequests={openRequests}
-        crossTenant={crossTenant}
       />
     </>
   );
