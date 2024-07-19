@@ -3,7 +3,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import {
   render,
-  cleanup,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useLocationsQuery } from '@folio/stripes-acq-components';

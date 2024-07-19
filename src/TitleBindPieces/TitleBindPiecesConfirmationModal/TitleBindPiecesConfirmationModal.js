@@ -8,29 +8,29 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
+import { useReceivingSearchContext } from '../../contexts';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
-  activeTenantId,
-  crossTenant = false,
   id,
   onCancel,
   onConfirm,
   open,
   openRequests,
 }) => {
+  const { crossTenant, activeTenantId } = useReceivingSearchContext();
   const barcodes = useMemo(() => openRequests.filter(Boolean).map(({ barcode }) => barcode), [openRequests]);
-  const shouldShowDeleteMessage = useMemo(() => {
+  const withDeleteMessage = useMemo(() => {
     if (!crossTenant) return false;
 
     return openRequests.some(({ request }) => request.tenantId !== activeTenantId);
   }, [activeTenantId, crossTenant, openRequests]);
 
-  const modalAction = shouldShowDeleteMessage ? 'delete' : 'transfer';
+  const modalAction = withDeleteMessage ? 'delete' : 'transfer';
   const footer = (
     <ModalFooter>
       {
-        !shouldShowDeleteMessage && (
+        !withDeleteMessage && (
           <>
             <Button
               marginBottom0
@@ -83,8 +83,6 @@ export const TitleBindPiecesConfirmationModal = ({
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
-  activeTenantId: PropTypes.string.isRequired,
-  crossTenant: PropTypes.bool,
   id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,

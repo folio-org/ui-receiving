@@ -35,7 +35,6 @@ export const TitleBindPiecesContainer = () => {
   const location = useLocation();
   const showCallout = useShowCallout();
   const {
-    activeTenantId,
     crossTenant,
     isCentralRouting,
     targetTenantId,
@@ -143,7 +142,6 @@ export const TitleBindPiecesContainer = () => {
         onCancel={toggleOpen}
         onConfirm={onConfirm}
         open={open}
-        activeTenantId={activeTenantId}
         openRequests={openRequests}
         crossTenant={crossTenant}
       />
