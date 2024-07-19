@@ -87,7 +87,7 @@ const ReceivingListContainer = () => {
           const origHolding = holdingsMap[holdingId];
 
           if (origHolding) {
-            return getHoldingLocationName(origHolding, locationsMap);
+            return getHoldingLocationName(origHolding, locationsMap, invalidReferenceMessage);
           }
 
           return origLocation?.name ?? invalidReferenceMessage;

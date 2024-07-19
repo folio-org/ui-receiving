@@ -118,31 +118,16 @@ export const fetchOrderLineLocations = (ky) => (orderLines, fetchedLocationsMap)
 };
 
 export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) => {
-  const tenantIds = [...new Set(
-    orderLines
-      .flatMap(({ locations }) => locations?.map(({ tenantId }) => tenantId))
-      .filter(Boolean),
-  )];
+  return fetchConsortiumInstanceLocations(getConsortiumCentralTenantKy(ky, stripes))
+    .then(({ locations }) => {
+      const orderLinesLocationIdsSet = new Set(
+        orderLines.flatMap(({ locations }) => {
+          return map(locations, 'locationId');
+        }).filter(Boolean),
+      );
 
-  return chunkRequests(
-    tenantIds,
-    (tenantId) => fetchConsortiumInstanceLocations(
-      getConsortiumCentralTenantKy(ky, stripes),
-      {
-        searchParams: { tenantId },
-      },
-    ),
-  ).then((chunkedResponses) => {
-    const orderLinesLocationIdsSet = new Set(
-      orderLines.flatMap(({ locations }) => {
-        return map(locations, 'locationId');
-      }),
-    );
-
-    return chunkedResponses
-      .flatMap(({ locations }) => locations)
-      .filter(({ id }) => orderLinesLocationIdsSet.has(id));
-  });
+      return locations.filter(({ id }) => orderLinesLocationIdsSet.has(id));
+    });
 };
 
 export const buildTitlesQuery = (queryParams) => {
