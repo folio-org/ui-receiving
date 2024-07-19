@@ -10,12 +10,11 @@ import {
   ITEMS_API,
   LOCATIONS_API,
   PIECE_STATUS,
+  REQUESTS_API,
   useOrderLine,
 } from '@folio/stripes-acq-components';
 import { orderLine } from '@folio/stripes-acq-components/test/jest/fixtures';
 
-import { PIECE_REQUESTS_API } from '../../constants';
-import { getHydratedPieces } from '../../utils';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 import { useTitleHydratedPieces } from './useTitleHydratedPieces';
@@ -23,10 +22,6 @@ import { useTitleHydratedPieces } from './useTitleHydratedPieces';
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   useOrderLine: jest.fn(),
-}));
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
-  getHydratedPieces: jest.fn().mockReturnValue(Promise.resolve([{ id: 'id', itemId: 'itemId' }])),
 }));
 jest.mock('../usePieces', () => ({ usePieces: jest.fn() }));
 jest.mock('../useTitle', () => ({ useTitle: jest.fn() }));
@@ -77,7 +72,7 @@ const pieces = [
 ];
 
 const kyResponseMap = {
-  [PIECE_REQUESTS_API]: { requests },
+  [REQUESTS_API]: { requests },
   [ITEMS_API]: { items },
   [HOLDINGS_API]: { holdingsRecords: holdings },
   [LOCATIONS_API]: { locations },
@@ -101,7 +96,6 @@ describe('useTitleHydratedPieces', () => {
     useOkapiKy
       .mockClear()
       .mockReturnValue({ get: getMock });
-    getHydratedPieces.mockClear().mockReturnValue(Promise.resolve(requests));
   });
 
   it('fetches hydrated pieces', async () => {

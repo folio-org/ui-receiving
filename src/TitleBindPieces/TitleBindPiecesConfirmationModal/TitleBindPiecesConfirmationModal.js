@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -8,7 +7,6 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
-import { useReceivingSearchContext } from '../../contexts';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
@@ -16,21 +14,13 @@ export const TitleBindPiecesConfirmationModal = ({
   onCancel,
   onConfirm,
   open,
-  openRequests,
+  showDeleteMessage = false,
 }) => {
-  const { crossTenant, activeTenantId } = useReceivingSearchContext();
-  const barcodes = useMemo(() => openRequests.filter(Boolean).map(({ barcode }) => barcode), [openRequests]);
-  const withDeleteMessage = useMemo(() => {
-    if (!crossTenant) return false;
-
-    return openRequests.some(({ request }) => request.tenantId !== activeTenantId);
-  }, [activeTenantId, crossTenant, openRequests]);
-
-  const modalAction = withDeleteMessage ? 'delete' : 'transfer';
+  const modalAction = showDeleteMessage ? 'delete' : 'transfer';
   const footer = (
     <ModalFooter>
       {
-        !withDeleteMessage && (
+        !showDeleteMessage && (
           <>
             <Button
               marginBottom0
@@ -74,10 +64,7 @@ export const TitleBindPiecesConfirmationModal = ({
       size="small"
       footer={footer}
     >
-      <FormattedMessage
-        id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`}
-        values={{ barcodes: barcodes.join(', ') }}
-      />
+      <FormattedMessage id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`} />
     </Modal>
   );
 };
@@ -87,5 +74,5 @@ TitleBindPiecesConfirmationModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  openRequests: PropTypes.arrayOf(PropTypes.object),
+  showDeleteMessage: PropTypes.bool,
 };

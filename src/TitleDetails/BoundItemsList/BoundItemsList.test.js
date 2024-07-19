@@ -1,5 +1,6 @@
 import {
   render,
+  cleanup,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 import { IntlProvider } from 'react-intl';
@@ -47,6 +48,8 @@ describe('BoundItemsList', () => {
       totalRecords: items.length,
     });
   });
+
+  afterEach(cleanup);
 
   it('should render component', () => {
     renderBoundItemsList();

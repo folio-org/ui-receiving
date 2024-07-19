@@ -2,21 +2,14 @@ import React from 'react';
 import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { getHydratedPieces } from '../common/utils';
 import TitleUnreceiveContainer from './TitleUnreceiveContainer';
 import TitleUnreceive from './TitleUnreceive';
-
-jest.mock('../common/utils', () => ({
-  ...jest.requireActual('../common/utils'),
-  getHydratedPieces: jest.fn(),
-}));
 
 jest.mock('./TitleUnreceive', () => jest.fn().mockReturnValue('TitleUnreceive'));
 
 const mockTitle = { title: 'Title', id: '001', poLineId: '002' };
 const mockPoLine = { id: '002', locations: [{ locationId: '1' }] };
 const mockPieces = [{ id: '01', locationId: '1' }];
-const mockRequests = [{ id: '01', itemId: '01', locationId: '1' }];
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -71,7 +64,6 @@ describe('TitleUnreceiveContainer', () => {
   beforeEach(() => {
     TitleUnreceive.mockClear();
     historyMock.push.mockClear();
-    getHydratedPieces.mockClear().mockReturnValue(Promise.resolve(mockRequests));
   });
 
   it('should display title unreceive', async () => {

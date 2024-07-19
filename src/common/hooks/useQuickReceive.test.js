@@ -18,7 +18,6 @@ import {
 
 jest.mock('../utils', () => ({
   ...jest.requireActual('../utils'),
-  extendKyWithTenant: jest.fn(),
   getItemById: jest.fn(() => () => Promise.resolve({})),
   getPieceById: jest.fn(() => () => Promise.resolve({ json: () => ({}) })),
 }));

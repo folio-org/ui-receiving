@@ -1,21 +1,27 @@
-import { ITEM_STATUS } from '@folio/stripes-acq-components';
+import {
+  batchFetch,
+  ITEM_STATUS,
+} from '@folio/stripes-acq-components';
 
 export const getPieceStatusFromItem = (item) => {
   return item?.status?.name || ITEM_STATUS.undefined;
 };
 
-export function getHydratedPieces({
-  crossTenant,
-  fetchPieceItems,
-  fetchPieceRequests,
-  pieces,
-}) {
-  const pieceItems = fetchPieceItems({ pieces, crossTenant });
-  const pieceRequests = fetchPieceRequests({ pieces });
+export function getHydratedPieces(pieces, mutatorRequests, mutatorItems) {
+  // TODO: fetch consortium context's data
+  const itemsIds = pieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId);
+  const requestsPromise = batchFetch(mutatorRequests, pieces, (piecesChunk) => {
+    const itemIdsQuery = piecesChunk
+      .filter(piece => piece.itemId)
+      .map(piece => `itemId==${piece.itemId}`)
+      .join(' or ');
+
+    return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
+  });
 
   return Promise.all([
-    pieceItems,
-    pieceRequests,
+    batchFetch(mutatorItems, itemsIds),
+    requestsPromise,
     pieces,
   ])
     .then(([itemsResponse, requestsResponse, piecesResponse]) => {

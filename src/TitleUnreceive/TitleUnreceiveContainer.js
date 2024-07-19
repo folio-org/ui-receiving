@@ -14,11 +14,13 @@ import {
 import {
   baseManifest,
   batchFetch,
+  itemsResource,
   LIMIT_MAX,
   LINES_API,
   locationsManifest,
   PIECE_STATUS,
   piecesResource,
+  requestsResource,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
@@ -36,10 +38,6 @@ import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
 } from '../constants';
-import {
-  usePieceItemsFetch,
-  usePieceRequestsFetch,
-} from '../common/hooks/usePaginatedPieces/hooks';
 import { useReceivingSearchContext } from '../contexts';
 import TitleUnreceive from './TitleUnreceive';
 
@@ -58,12 +56,7 @@ function TitleUnreceiveContainer({
   const [pieceHoldingMap, setPieceHoldingMap] = useState();
   const poLineId = title?.poLineId;
 
-  const { crossTenant, isCentralRouting, targetTenantId } = useReceivingSearchContext();
-  const { fetchPieceItems } = usePieceItemsFetch({
-    instanceId: title?.instanceId,
-    tenantId: targetTenantId,
-  });
-  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId: targetTenantId });
+  const { isCentralRouting } = useReceivingSearchContext();
 
   useEffect(
     () => {
@@ -97,16 +90,7 @@ function TitleUnreceiveContainer({
             query: `${filterQuery} sortby locationId`,
           },
         })
-          .then(async (piecesResponse) => {
-            const hydratedPieces = await getHydratedPieces({
-              pieces: piecesResponse,
-              fetchPieceItems,
-              fetchPieceRequests,
-              crossTenant,
-            });
-
-            return hydratedPieces;
-          })
+          .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
           .then(hydratedPieces => {
             setPieces(hydratedPieces);
             const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
@@ -202,6 +186,10 @@ TitleUnreceiveContainer.manifest = Object.freeze({
     fetch: false,
     tenant: '!{tenantId}',
   },
+
+  // TODO: fetch items and requests (after MODORDERS-1138) from related tenants
+  items: itemsResource,
+  requests: requestsResource,
   locations: {
     ...locationsManifest,
     fetch: false,

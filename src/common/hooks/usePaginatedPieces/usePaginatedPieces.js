@@ -65,7 +65,7 @@ export const usePaginatedPieces = ({
       .json();
 
     const [requests, items] = await Promise.all([
-      fetchPieceRequests({ pieces, signal }),
+      fetchPieceRequests({ pieces, crossTenant, signal }),
       fetchPieceItems({ pieces, crossTenant, signal }),
     ]);
 

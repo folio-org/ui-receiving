@@ -20,7 +20,6 @@
 * Add Bound items accordion in receiving. Refs UIREC-322.
 * ECS - Apply receiving search settings. Refs UIREC-339.
 * Provide `instanceId` value for the bind pieces request. Refs UIREC-369.
-* ECS - Use new endpoint to fetch pieces associated requests in all tenants. Refs UIREC-373.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)
