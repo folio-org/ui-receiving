@@ -25,7 +25,10 @@ import {
   RECEIVING_ROUTE,
 } from '../../constants';
 import { useReceivingSearchContext } from '../../contexts';
-import { TRANSFER_REQUEST_ACTIONS } from '../constants';
+import {
+  ERROR_CODES,
+  TRANSFER_REQUEST_ACTIONS,
+} from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
@@ -59,6 +62,23 @@ export const TitleBindPiecesContainer = () => {
     searchQuery: `isBound==false and format==${PIECE_FORMAT.physical}`,
   });
 
+  const handleMutationError = useCallback(async (error) => {
+    let parsed;
+
+    try {
+      parsed = await error.response.json();
+    } catch (parsingException) {
+      parsed = error.response;
+    }
+
+    const errorCode = ERROR_CODES[parsed.code] || ERROR_CODES.generic;
+
+    showCallout({
+      type: 'error',
+      messageId: `ui-receiving.bind.pieces.create.error.${errorCode}`,
+    });
+  }, [showCallout]);
+
   const onCancel = useCallback(() => {
     history.push({
       pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
@@ -71,12 +91,7 @@ export const TitleBindPiecesContainer = () => {
       .then(() => {
         onCancel();
         showCallout({ messageId: 'ui-receiving.bind.pieces.create.success' });
-      }).catch(() => {
-        showCallout({
-          type: 'error',
-          messageId: 'ui-receiving.bind.pieces.create.error',
-        });
-      });
+      }).catch((error) => handleMutationError(error));
   };
 
   const onConfirm = (requestsAction) => {
@@ -101,6 +116,7 @@ export const TitleBindPiecesContainer = () => {
       bindPieceIds: selectedItems.map(({ id }) => id),
       bindItem: {
         ...values.bindItem,
+        tenantId: values.bindItem?.tenantId || targetTenantId,
       },
       ...(orderLine.isPackage ? { instanceId: title.instanceId } : {}),
     };
@@ -132,7 +148,7 @@ export const TitleBindPiecesContainer = () => {
         onCancel={onCancel}
         onSubmit={onSubmit}
         paneTitle={paneTitle}
-        instanceId={title.instanceId}
+        instanceId={title?.instanceId}
         locations={holdingLocations}
         isLoading={isBinding}
       />
@@ -142,6 +158,7 @@ export const TitleBindPiecesContainer = () => {
         onConfirm={onConfirm}
         open={open}
         openRequests={openRequests}
+        bindPieceData={bindPieceData}
       />
     </>
   );

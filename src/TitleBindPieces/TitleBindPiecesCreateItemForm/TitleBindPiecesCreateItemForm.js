@@ -8,6 +8,7 @@ import {
 
 import {
   validateRequired,
+  ConsortiumFieldInventory,
   FieldInventory,
 } from '@folio/stripes-acq-components';
 import {
@@ -17,6 +18,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
+import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import { useLoanTypes, useMaterialTypes } from '../hooks';
 import { buildOptions } from '../utils';
@@ -25,6 +27,12 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
+
+  const { crossTenant } = useReceivingSearchContext();
+
+  const FieldInventoryComponent = crossTenant
+    ? ConsortiumFieldInventory
+    : FieldInventory;
 
   const materialTypesOptions = useMemo(() => {
     const emptyOption = [{
@@ -95,7 +103,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
       </Col>
       <Col
         xs={6}
-        md={3}
+        md={2}
       >
         <Field
           component={Select}
@@ -109,17 +117,17 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
         />
       </Col>
       <Col
-        xs={6}
-        md={3}
+        xs={12}
+        md={4}
       >
-        <FieldInventory
+        <FieldInventoryComponent
+          affiliationName={PIECE_FORM_FIELD_NAMES.tenantId}
           instanceId={instanceId}
           locationIds={locationIds}
           locations={locations}
           holdingName={PIECE_FORM_FIELD_NAMES.locationId}
           locationName={PIECE_FORM_FIELD_NAMES.locationId}
           onChange={onLocationSelected}
-          locationLookupLabel={<FormattedMessage id="stripes-acq-components.holding.label" />}
           required
         />
       </Col>

@@ -21,6 +21,7 @@
 * ECS - Apply receiving search settings. Refs UIREC-339.
 * Provide `instanceId` value for the bind pieces request. Refs UIREC-369.
 * ECS - Use new endpoint to fetch pieces associated requests in all tenants. Refs UIREC-373.
+* ECS - Allow users in the central tenant can place orders on behalf of member tenants. Refs UIREC-363.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

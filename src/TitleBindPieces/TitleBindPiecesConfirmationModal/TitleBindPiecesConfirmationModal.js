@@ -12,6 +12,7 @@ import { useReceivingSearchContext } from '../../contexts';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
+  bindPieceData = {},
   id,
   onCancel,
   onConfirm,
@@ -19,12 +20,16 @@ export const TitleBindPiecesConfirmationModal = ({
   openRequests,
 }) => {
   const { crossTenant, activeTenantId } = useReceivingSearchContext();
+
   const barcodes = useMemo(() => openRequests.filter(Boolean).map(({ barcode }) => barcode), [openRequests]);
+
   const withDeleteMessage = useMemo(() => {
+    const currentTenantId = bindPieceData?.bindItem?.tenantId || activeTenantId;
+
     if (!crossTenant) return false;
 
-    return openRequests.some(({ request }) => request.tenantId !== activeTenantId);
-  }, [activeTenantId, crossTenant, openRequests]);
+    return openRequests.some(({ request }) => request.tenantId !== currentTenantId);
+  }, [activeTenantId, bindPieceData, crossTenant, openRequests]);
 
   const modalAction = withDeleteMessage ? 'delete' : 'transfer';
   const footer = (
@@ -83,6 +88,7 @@ export const TitleBindPiecesConfirmationModal = ({
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
+  bindPieceData: PropTypes.object,
   id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
