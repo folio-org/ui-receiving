@@ -121,8 +121,8 @@ export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) =
   return fetchConsortiumInstanceLocations(getConsortiumCentralTenantKy(ky, stripes))
     .then(({ locations }) => {
       const orderLinesLocationIdsSet = new Set(
-        orderLines.flatMap(({ locations }) => {
-          return map(locations, 'locationId');
+        orderLines.flatMap(({ locations: lineLocations }) => {
+          return map(lineLocations, 'locationId');
         }).filter(Boolean),
       );
 
