@@ -29,6 +29,7 @@ const items = [{
   displaySummary: 'Electronic item',
   status: { name: 'Available' },
   itemId: 'itemId',
+  bindItemId: 'bindItemId',
   id: 'id',
 }];
 
@@ -36,7 +37,7 @@ describe('useBoundItems', () => {
   const getMock = jest.fn((url) => ({
     json: () => {
       if (url.includes('pieces')) {
-        return { pieces: [{ itemId: 'itemId' }] };
+        return { pieces: [{ bindItemId: 'bindItemId' }] };
       }
 
       return { items };

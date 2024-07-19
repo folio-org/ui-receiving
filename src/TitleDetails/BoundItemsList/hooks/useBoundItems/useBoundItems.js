@@ -33,7 +33,7 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
     queryKey: [namespace, titleId, poLineId],
     queryFn: async () => {
       const { pieces = DEFAULT_DATA } = await ky.get(ORDER_PIECES_API, { searchParams }).json();
-      const itemIds = [...new Set(pieces.filter(({ itemId }) => itemId).map(({ itemId }) => itemId))];
+      const itemIds = [...new Set(pieces.filter(({ bindItemId }) => bindItemId).map(({ bindItemId }) => bindItemId))];
 
       const items = await batchRequest(
         ({ params }) => ky.get(ITEMS_API, { searchParams: params }).json(),
