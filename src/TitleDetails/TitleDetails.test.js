@@ -133,12 +133,12 @@ describe('TitleDetails', () => {
   });
 
   it('should display filter search inputs if there are pieces to receive/unreceive', async () => {
-    const piecesExistance = {
+    const piecesExistence = {
       [PIECE_STATUS.expected]: true,
       [PIECE_STATUS.received]: true,
     };
 
-    renderTitleDetails({ piecesExistance });
+    renderTitleDetails({ piecesExistence });
 
     expect(screen.getAllByTestId('filter-search-input')).toBeDefined();
   });

@@ -7,6 +7,8 @@ import { LoadingPane } from '@folio/stripes/components';
 
 import {
   RECEIVING_BIND_PIECES_ROUTE,
+  RECEIVING_PIECE_CREATE_ROUTE,
+  RECEIVING_PIECE_EDIT_ROUTE,
   RECEIVING_ROUTE,
   RECEIVING_ROUTE_CREATE,
   RECEIVING_ROUTE_EDIT,
@@ -15,6 +17,8 @@ import {
   RECEIVING_ROUTE_UNRECEIVE,
   ROUTING_LIST_ROUTE,
   CENTRAL_RECEIVING_BIND_PIECES_ROUTE,
+  CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
+  CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
   CENTRAL_RECEIVING_ROUTE,
   CENTRAL_RECEIVING_ROUTE_CREATE,
   CENTRAL_RECEIVING_ROUTE_EDIT,
@@ -24,6 +28,10 @@ import {
   CENTRAL_ROUTING_LIST_ROUTE,
 } from './constants';
 import { useReceivingSearchContext } from './contexts';
+import {
+  PieceCreateContainer,
+  PieceEditContainer,
+} from './Piece';
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleBindPiecesContainer } from './TitleBindPieces';
 import { RoutingList } from './TitleDetails';
@@ -45,6 +53,14 @@ export const ReceivingRoutes = () => {
       <Route
         component={RoutingList}
         path={[CENTRAL_ROUTING_LIST_ROUTE, ROUTING_LIST_ROUTE]}
+      />
+      <Route
+        component={PieceCreateContainer}
+        path={[CENTRAL_RECEIVING_PIECE_CREATE_ROUTE, RECEIVING_PIECE_CREATE_ROUTE]}
+      />
+      <Route
+        component={PieceEditContainer}
+        path={[CENTRAL_RECEIVING_PIECE_EDIT_ROUTE, RECEIVING_PIECE_EDIT_ROUTE]}
       />
       <Route
         path={[CENTRAL_RECEIVING_ROUTE_EDIT, RECEIVING_ROUTE_EDIT]}

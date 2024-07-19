@@ -274,12 +274,7 @@ const ReceivingList = ({
 
         <Route
           path={`${match.path}/:id/view`}
-          render={(props) => (
-            <TitleDetailsContainer
-              tenantId={tenantId}
-              {...props}
-            />
-          )}
+          component={TitleDetailsContainer}
         />
       </PersistedPaneset>
     </HasCommand>

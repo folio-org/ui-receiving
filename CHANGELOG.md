@@ -20,6 +20,7 @@
 * Add Bound items accordion in receiving. Refs UIREC-322.
 * ECS - Apply receiving search settings. Refs UIREC-339.
 * Provide `instanceId` value for the bind pieces request. Refs UIREC-369.
+* Move the piece form out of the modal to a separate route with a full view. Refs UIREC-368.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)

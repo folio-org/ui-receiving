@@ -57,8 +57,12 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
+  CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
   CENTRAL_RECEIVING_ROUTE,
   CENTRAL_RECEIVING_ROUTE_CREATE,
+  RECEIVING_PIECE_CREATE_ROUTE,
+  RECEIVING_PIECE_EDIT_ROUTE,
   RECEIVING_ROUTE,
   RECEIVING_ROUTE_CREATE,
   ROUTING_LIST_ROUTE,
@@ -112,22 +116,15 @@ function getNewPieceValues(titleId, poLine, crossTenant) {
 
 const TitleDetails = ({
   crossTenant = false,
-  deletePiece,
   history,
   location,
-  locations,
-  onAddPiece,
-  onCheckIn,
   onClose,
   onEdit,
   order,
-  piecesExistance,
+  piecesExistence,
   poLine,
   title,
-  onUnreceive,
   vendorsMap = {},
-  getHoldingsItemsAndPieces,
-  getPieceValues,
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
@@ -148,15 +145,7 @@ const TitleDetails = ({
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
-  const pieceLocationId = pieceValues.locationId;
   const showRoutingList = orderFormat === ORDER_FORMATS.PEMix || orderFormat === ORDER_FORMATS.physicalResource;
-  const poLineLocations = useMemo(() => (
-    poLine?.locations?.map(({ locationId }) => locationId) ?? []
-  ), [poLine?.locations]);
-  const poLineLocationIds = useMemo(() => poLineLocations.filter(Boolean), [poLineLocations]);
-  const locationIds = useMemo(() => (
-    pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds
-  ), [poLineLocationIds, pieceLocationId]);
   const numberOfPhysicalUnits = useMemo(() => {
     return poLine?.locations?.reduce((acc, { quantityPhysical = 0 }) => acc + quantityPhysical, 0);
   }, [poLine?.locations]);
@@ -177,7 +166,6 @@ const TitleDetails = ({
   const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
   const isBinderyActive = get(poLine, 'details.isBinderyActive', false);
 
-  const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
   const acknowledgeNoteModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.receivingNoteModal.title' });
 
   const {
@@ -253,6 +241,24 @@ const TitleDetails = ({
     [titleId, history, isCentralRouting, location.search],
   );
 
+  const onPieceCreate = useCallback(() => {
+    history.push({
+      pathname: (isCentralRouting ? CENTRAL_RECEIVING_PIECE_CREATE_ROUTE : RECEIVING_PIECE_CREATE_ROUTE).replace(':id', titleId),
+      search: location.search,
+    });
+  }, [history, isCentralRouting, location.search, titleId]);
+
+  const onPieceEdit = useCallback((_, piece) => {
+    const pathname = (isCentralRouting ? CENTRAL_RECEIVING_PIECE_EDIT_ROUTE : RECEIVING_PIECE_EDIT_ROUTE)
+      .replace(':id', titleId)
+      .replace(':pieceId', piece.id);
+
+    history.push({
+      pathname,
+      search: location.search,
+    });
+  }, [history, isCentralRouting, location.search, titleId]);
+
   const openReceiveList = useCallback(
     () => {
       setConfirmAcknowledgeNote(() => goToReceiveList);
@@ -285,57 +291,13 @@ const TitleDetails = ({
     [toggleConfirmReceiving],
   );
 
-  const onReceivePieces = useCallback(
-    () => (isOrderClosed ? confirmReceiving().then(openReceiveList, noop) : openReceiveList()),
-    [isOrderClosed, confirmReceiving, openReceiveList],
-  );
+  const onReceivePieces = useCallback(() => (
+    isOrderClosed
+      ? confirmReceiving().then(openReceiveList, noop)
+      : openReceiveList()
+  ), [isOrderClosed, confirmReceiving, openReceiveList]);
 
-  const onConfirmReceiving = () => {
-    confirmReceivingPromise.current.resolve();
-    toggleConfirmReceiving();
-  };
-
-  const onCancelReceiving = () => {
-    confirmReceivingPromise.current.reject();
-    toggleConfirmReceiving();
-  };
-
-  const onSave = useCallback(
-    async (values, options, isCreateAnother) => {
-      toggleAddPieceModal();
-
-      const piece = await onAddPiece(values, options);
-
-      if (isCreateAnother) {
-        return values.id
-          ? getPieceValues(values.id).then(onCreateAnotherPiece)
-          : onCreateAnotherPiece(piece);
-      }
-
-      return piece;
-    },
-    [onAddPiece, toggleAddPieceModal, getPieceValues, onCreateAnotherPiece],
-  );
-
-  const onQuickReceive = useCallback((values, isCreateAnother) => {
-    const onReceive = async (receivingValues) => {
-      const res = await onCheckIn(receivingValues);
-
-      if (isCreateAnother) {
-        const pieceId = res?.[0]?.receivingItemResults?.[0]?.pieceId;
-
-        return pieceId && getPieceValues(pieceId).then(onCreateAnotherPiece);
-      }
-
-      return res;
-    };
-
-    return isOrderClosed
-      ? confirmReceiving().then(() => onReceive(values), noop)
-      : onReceive(values);
-  }, [isOrderClosed, confirmReceiving, onCheckIn, getPieceValues, onCreateAnotherPiece]);
-
-  const hasReceive = Boolean(piecesExistance?.[EXPECTED_PIECES_SEARCH_VALUE]);
+  const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
   const [isReceivedPiecesLoading, setReceivedPiecesLoading] = useState(false);
@@ -370,7 +332,7 @@ const TitleDetails = ({
         applyFilters={applyExpectedPiecesFilters}
         filters={expectedPiecesFilters}
         hasReceive={hasReceive}
-        openAddPieceModal={openAddPieceModal}
+        onPieceCreate={onPieceCreate}
         openReceiveList={onReceivePieces}
         titleId={titleId}
         disabled={isPiecesLock || restrictions?.protectUpdate}
@@ -382,9 +344,9 @@ const TitleDetails = ({
     [
       applyExpectedPiecesFilters,
       expectedPiecesFilters,
+      onPieceCreate,
       hasReceive,
       restrictions,
-      openAddPieceModal,
       onReceivePieces,
       titleId,
       isPiecesLock,
@@ -393,7 +355,7 @@ const TitleDetails = ({
     ],
   );
 
-  const hasUnreceive = Boolean(piecesExistance?.[PIECE_STATUS.received]);
+  const hasUnreceive = Boolean(piecesExistence?.[PIECE_STATUS.received]);
   const receivedPiecesActions = useMemo(
     () => (
       <TitleDetailsReceivedActions
@@ -419,7 +381,7 @@ const TitleDetails = ({
     ],
   );
 
-  const hasUnreceivable = Boolean(piecesExistance?.[PIECE_STATUS.unreceivable]);
+  const hasUnreceivable = Boolean(piecesExistence?.[PIECE_STATUS.unreceivable]);
   const renderUnreceivablePiecesActions = (renderColumnsMenu) => (
     <TitleDetailsUnreceivableActions
       applyFilters={applyUnreceivablePiecesFilters}
@@ -556,11 +518,11 @@ const TitleDetails = ({
               label={TITLE_ACCORDION_LABELS.expected}
             >
               <ExpectedPiecesList
-                key={piecesExistance?.key}
+                key={piecesExistence?.key}
                 filters={expectedPiecesFilters}
                 onLoadingStatusChange={setExpectedPiecesLoading}
                 title={title}
-                selectPiece={openAddPieceModal}
+                selectPiece={onPieceEdit}
                 visibleColumns={expectedPiecesVisibleColumns}
               />
             </Accordion>
@@ -586,11 +548,11 @@ const TitleDetails = ({
               label={TITLE_ACCORDION_LABELS.received}
             >
               <ReceivedPiecesList
-                key={piecesExistance?.key}
+                key={piecesExistence?.key}
                 filters={receivedPiecesFilters}
                 onLoadingStatusChange={setReceivedPiecesLoading}
                 title={title}
-                selectPiece={openEditReceivedPieceModal}
+                selectPiece={onPieceEdit}
                 visibleColumns={receivedPiecesVisibleColumns}
               />
             </Accordion>
@@ -633,11 +595,11 @@ const TitleDetails = ({
                   label={TITLE_ACCORDION_LABELS[TITLE_ACCORDION.unreceivable]}
                 >
                   <UnreceivablePiecesList
-                    key={piecesExistance?.key}
+                    key={piecesExistence?.key}
                     filters={unreceivablePiecesFilters}
                     onLoadingStatusChange={setIsUnreceivablePiecesLoading}
                     title={title}
-                    selectPiece={openAddPieceModal}
+                    selectPiece={onPieceEdit}
                     visibleColumns={visibleColumns}
                   />
                 </Accordion>
@@ -649,7 +611,7 @@ const TitleDetails = ({
               label={TITLE_ACCORDION_LABELS.boundItems}
             >
               <BoundItemsList
-                key={piecesExistance?.key}
+                key={piecesExistence?.key}
                 id="bound-items-list"
                 filters={boundItemsFilters}
                 title={title}
@@ -674,34 +636,22 @@ const TitleDetails = ({
           />
         )}
 
+        {/* TODO: eventually remove */}
         {isAddPieceModalOpened && (
           <AddPieceModal
-            close={toggleAddPieceModal}
-            deletePiece={deletePiece}
-            canDeletePiece={!isPiecesLock}
-            initialValues={pieceValues}
-            instanceId={title.instanceId}
-            locations={locations}
-            locationIds={locationIds}
-            onCheckIn={onQuickReceive}
-            onSubmit={onSave}
-            poLine={poLine}
-            restrictionsByAcqUnit={restrictions}
-            onUnreceive={onUnreceive}
-            getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
-          />
-        )}
-
-        {isConfirmReceiving && (
-          <ConfirmationModal
-            aria-label={confirmReceivingModalLabel}
-            confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
-            heading={confirmReceivingModalLabel}
-            id="confirm-receiving"
-            message={<FormattedMessage id="ui-receiving.piece.confirmReceiving.message" />}
-            onCancel={onCancelReceiving}
-            onConfirm={onConfirmReceiving}
-            open
+            // close={toggleAddPieceModal}
+            // deletePiece={deletePiece}
+            // canDeletePiece={!isPiecesLock}
+            // initialValues={pieceValues}
+            // instanceId={title.instanceId}
+            // locations={locations}
+            // locationIds={locationIds}
+            // onCheckIn={onQuickReceive}
+            // onSubmit={onSave}
+            // poLine={poLine}
+            // restrictionsByAcqUnit={restrictions}
+            // onUnreceive={onUnreceive}
+            // getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
         )}
       </Pane>
@@ -711,22 +661,16 @@ const TitleDetails = ({
 
 TitleDetails.propTypes = {
   crossTenant: PropTypes.bool,
-  deletePiece: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
-  onAddPiece: PropTypes.func.isRequired,
-  onCheckIn: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   order: PropTypes.object.isRequired,
-  piecesExistance: PropTypes.object,
+  piecesExistence: PropTypes.object,
   poLine: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,
   vendorsMap: PropTypes.object.isRequired,
-  getHoldingsItemsAndPieces: PropTypes.func.isRequired,
-  getPieceValues: PropTypes.func.isRequired,
-  onUnreceive: PropTypes.func.isRequired,
 };
 
 export default withRouter(TitleDetails);

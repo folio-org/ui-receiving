@@ -1,0 +1,1 @@
+export { usePiece } from './usePiece';

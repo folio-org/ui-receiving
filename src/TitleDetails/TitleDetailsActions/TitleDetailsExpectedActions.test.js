@@ -9,7 +9,7 @@ const defaultProps = {
   applyFilters: jest.fn(),
   checkinItems: true,
   filters: {},
-  openAddPieceModal: jest.fn(),
+  onPieceCreate: jest.fn(),
   openReceiveList: jest.fn(),
   hasReceive: true,
   visibleColumns: EXPECTED_PIECE_VISIBLE_COLUMNS,
@@ -43,14 +43,14 @@ describe('TitleDetailsExpectedActions', () => {
     expect(defaultProps.openReceiveList).toHaveBeenCalled();
   });
 
-  it('should call openAddPieceModal when add piece button is pressed and actions are not disabled', async () => {
-    defaultProps.openAddPieceModal.mockClear();
+  it('should call onPieceCreate when add piece button is pressed and actions are not disabled', async () => {
+    defaultProps.onPieceCreate.mockClear();
     renderTitleDetailsExpectedActions({ canAddPiece: true });
 
     await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
     await user.click(screen.getByTestId('add-piece-button'));
 
-    expect(defaultProps.openAddPieceModal).toHaveBeenCalled();
+    expect(defaultProps.onPieceCreate).toHaveBeenCalled();
   });
 
   it('should not call openReceiveList when receive button is pressed and actions are disabled', async () => {
@@ -63,14 +63,14 @@ describe('TitleDetailsExpectedActions', () => {
     expect(defaultProps.openReceiveList).not.toHaveBeenCalled();
   });
 
-  it('should not call openAddPieceModal when add piece button is pressed and actions are disabled', async () => {
-    defaultProps.openAddPieceModal.mockClear();
+  it('should not call onPieceCreate when add piece button is pressed and actions are disabled', async () => {
+    defaultProps.onPieceCreate.mockClear();
     renderTitleDetailsExpectedActions({ ...defaultProps, disabled: true });
 
     await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
     await user.click(screen.getByTestId('add-piece-button'));
 
-    expect(defaultProps.openAddPieceModal).not.toHaveBeenCalled();
+    expect(defaultProps.onPieceCreate).not.toHaveBeenCalled();
   });
 });
 
