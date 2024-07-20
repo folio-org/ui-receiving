@@ -10,7 +10,10 @@ import {
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { useTitleHydratedPieces } from '../../common/hooks';
-import { TRANSFER_REQUEST_ACTIONS } from '../constants';
+import {
+  ERROR_CODES,
+  TRANSFER_REQUEST_ACTIONS,
+} from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesContainer } from './TitleBindPiecesContainer';
@@ -214,5 +217,40 @@ describe('TitleBindPiecesContainer', () => {
     await userEvent.click(await screen.findByText(/bind.pieces.modal.button.transfer/));
 
     expect(mockBindPieces).toHaveBeenCalledWith(expect.objectContaining({ instanceId: mockTitle.instanceId }));
+  });
+
+  //  should handle error on bindPieces
+
+  it('should handle error on bindPieces', async () => {
+    const error = {
+      response: {
+        code: ERROR_CODES.bindItemMustIncludeEitherHoldingIdOrLocationId,
+      },
+    };
+
+    mockBindPieces.mockRejectedValue(error);
+
+    renderTitleBindPiecesContainer();
+
+    TitleBindPieces.mock.calls[0][0].onSubmit({
+      'receivedItems': [
+        {
+          'id': '9b946a34-f762-4672-b9bc-adf71390796a',
+          'holdingId': 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
+          'checked': true,
+        },
+        {
+          'id': '20c6305a-80c6-42e4-8488-f1ea8dea1d40',
+          'holdingId': 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
+          'checked': true,
+        },
+      ],
+      'bindItem': {
+        'materialTypeId': '1a54b431-2e4f-452d-9cae-9cee66c9a892',
+        'permanentLoanTypeId': '2b94c631-fca9-4892-a730-03ee529ffe27',
+      },
+    });
+
+    expect(mockBindPieces).toHaveBeenCalled();
   });
 });
