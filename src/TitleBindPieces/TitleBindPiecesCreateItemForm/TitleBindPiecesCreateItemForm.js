@@ -20,7 +20,10 @@ import {
 
 import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
-import { useLoanTypes, useMaterialTypes } from '../hooks';
+import {
+  useLoanTypes,
+  useMaterialTypes,
+} from '../hooks';
 import { buildOptions } from '../utils';
 
 export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations }) => {
@@ -128,6 +131,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
           holdingName={PIECE_FORM_FIELD_NAMES.locationId}
           locationName={PIECE_FORM_FIELD_NAMES.locationId}
           onChange={onLocationSelected}
+          locationLabelId="ui-receiving.piece.permanentLocationId"
           required
         />
       </Col>
