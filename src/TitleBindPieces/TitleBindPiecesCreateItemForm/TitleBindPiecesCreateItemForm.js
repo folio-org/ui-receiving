@@ -56,7 +56,11 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
   }, [loanTypes, intl]);
 
   const onLocationSelected = (location) => {
-    onChange(PIECE_FORM_FIELD_NAMES.locationId, location);
+    // Location selection returns a locationId as string
+    // while "Create new holding for location" modal selection returns a object of the location
+    const locationId = location?.id || location;
+
+    onChange(PIECE_FORM_FIELD_NAMES.locationId, locationId);
   };
 
   const locationIds = useMemo(() => locations.map(({ id }) => id), [locations]);
