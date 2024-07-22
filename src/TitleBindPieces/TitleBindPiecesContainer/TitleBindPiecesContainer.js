@@ -90,7 +90,10 @@ export const TitleBindPiecesContainer = () => {
     return bindPieces(requestData)
       .then(() => {
         onCancel();
-        showCallout({ messageId: 'ui-receiving.bind.pieces.create.success' });
+        showCallout({ 
+          messageId: 'ui-receiving.bind.pieces.create.success',
+          values: { barcode: requestData.bindItem?.barcode },
+        });
       }).catch((error) => handleMutationError(error));
   };
 

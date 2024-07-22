@@ -1,3 +1,5 @@
+import { FormattedMessage } from 'react-intl';
+
 import { getItemStatusLabel } from '@folio/stripes-acq-components';
 import { NoValue, TextLink } from '@folio/stripes/components';
 
@@ -9,18 +11,25 @@ export const getColumnFormatter = (hasViewInventoryPermissions, instanceId) => {
     [PIECE_COLUMNS.barcode]: record => {
       const { barcode, id, holdingsRecordId } = record;
 
-      if (!barcode) return <NoValue />;
-
       if (!hasViewInventoryPermissions) return barcode;
 
       if (instanceId && holdingsRecordId && id) {
-        return <TextLink target="_blank" to={`/inventory/view/${instanceId}/${holdingsRecordId}/${id}`}>{barcode}</TextLink>;
+        const barcodeText = barcode || <FormattedMessage id="ui-receiving.piece.barcode.noBarcode" />;
+
+        return (
+          <TextLink
+            target="_blank"
+            to={`/inventory/view/${instanceId}/${holdingsRecordId}/${id}`}
+          >
+            {barcodeText}
+          </TextLink>
+        );
       }
 
       return barcode;
     },
     [PIECE_COLUMNS.itemStatus]: record => getItemStatusLabel(getPieceStatusFromItem(record)) || <NoValue />,
     [PIECE_COLUMNS.displaySummary]: record => record.displaySummary || <NoValue />,
-    [PIECE_COLUMNS.callNumber]: record => record.callNumber || <NoValue />,
+    [PIECE_COLUMNS.callNumber]: record => record.itemLevelCallNumber || <NoValue />,
   });
 };
