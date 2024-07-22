@@ -45,7 +45,7 @@ export const TitleBindPiecesContainer = () => {
   const { id: titleId } = useParams();
 
   const [open, toggleOpen] = useToggle(false);
-  const [openRequests, setOpenRequests] = useState([]);
+  const [listOfOpenRequests, setListOfOpenRequests] = useState([]);
   const [bindPieceData, setBindPieceData] = useState({});
   const { bindPieces, isBinding } = useBindPiecesMutation();
 
@@ -122,7 +122,7 @@ export const TitleBindPiecesContainer = () => {
     };
 
     if (piecesWithOpenRequests?.length) {
-      setOpenRequests(piecesWithOpenRequests);
+      setListOfOpenRequests(piecesWithOpenRequests);
       setBindPieceData(requestData);
       toggleOpen();
     } else {
@@ -157,7 +157,7 @@ export const TitleBindPiecesContainer = () => {
         onCancel={toggleOpen}
         onConfirm={onConfirm}
         open={open}
-        openRequests={openRequests}
+        listOfOpenRequests={listOfOpenRequests}
         bindPieceData={bindPieceData}
       />
     </>
