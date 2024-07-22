@@ -95,7 +95,7 @@ export const TitleBindPiecesContainer = () => {
         onCancel();
         showCallout({
           messageId: `ui-receiving.bind.pieces.create.success.${messageId}`,
-          values: { barcode: requestData.bindItem?.barcode },
+          values: { barcode },
         });
       }).catch((error) => handleMutationError(error));
   };
