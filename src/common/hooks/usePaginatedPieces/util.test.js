@@ -1,9 +1,9 @@
 import {
   ITEMS_API,
-  REQUESTS_API,
   SEARCH_API,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_REQUESTS_API } from '../../constants';
 import {
   fetchConsortiumPieceItems,
   fetchLocalPieceItems,
@@ -49,13 +49,13 @@ describe('Paginated pieces utilities', () => {
   });
 
   describe('fetchLocalPieceRequests', () => {
-    const kyMock = buildKyMock({ requests });
+    const kyMock = buildKyMock({ circulationRequests: requests });
 
     it('should fetch pieces requests from the active tenant', async () => {
       const result = await fetchLocalPieceRequests(kyMock, { pieces });
 
       expect(result).toEqual(requests);
-      expect(kyMock.get).toHaveBeenCalledWith(REQUESTS_API, expect.objectContaining({}));
+      expect(kyMock.get).toHaveBeenCalledWith(PIECE_REQUESTS_API, expect.objectContaining({}));
     });
   });
 });

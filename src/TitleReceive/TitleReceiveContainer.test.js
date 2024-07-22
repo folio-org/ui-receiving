@@ -2,15 +2,14 @@ import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
 import {
-  act,
   render,
-  cleanup,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import {
   useReceive,
+  useTitleHydratedPieces,
 } from '../common/hooks';
 import TitleReceiveContainer from './TitleReceiveContainer';
 import TitleReceive from './TitleReceive';
@@ -20,8 +19,17 @@ jest.mock('@folio/stripes-acq-components', () => ({
   useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
   useLocationsQuery: jest.fn(),
 }));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  stripesConnect: jest.fn(c => c),
+}));
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  LoadingPane: jest.fn().mockReturnValue('LoadingPane'),
+}));
 jest.mock('../common/hooks', () => ({
   useReceive: jest.fn().mockReturnValue({}),
+  useTitleHydratedPieces: jest.fn(),
 }));
 jest.mock('./TitleReceive', () => jest.fn().mockReturnValue('TitleReceive'));
 
@@ -40,103 +48,53 @@ const historyMock = {
   location: locationMock,
 };
 
-const renderTitleReceiveContainer = (mutator) => (render(
+const renderTitleReceiveContainer = () => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
       <TitleReceiveContainer
         history={historyMock}
         location={locationMock}
         match={{ params: { id: '001' }, path: 'path', url: 'url' }}
-        mutator={mutator}
       />
     </MemoryRouter>
   </IntlProvider>,
 ));
 
 describe('TitleReceiveContainer', () => {
-  let mutator;
-
   beforeEach(() => {
-    mutator = {
-      title: {
-        GET: jest.fn().mockReturnValue(Promise.resolve(mockTitle)),
-      },
-      pieces: {
-        GET: jest.fn().mockReturnValue(Promise.resolve(mockPieces)),
-      },
-      piece: {
-        POST: jest.fn(),
-      },
-      poLine: {
-        GET: jest.fn().mockReturnValue(Promise.resolve(mockPoLine)),
-      },
-      requests: {
-        GET: jest.fn(),
-        reset: jest.fn(),
-      },
-      items: {
-        GET: jest.fn(),
-        reset: jest.fn(),
-      },
-    };
-
     TitleReceive.mockClear();
     historyMock.push.mockClear();
     useLocationsQuery
       .mockClear()
       .mockReturnValue({ locations: [{ id: 'locationId' }] });
+    useTitleHydratedPieces.mockClear().mockReturnValue({
+      title: mockTitle,
+      pieces: mockPieces,
+      orderLine: mockPoLine,
+      isLoading: false,
+    });
   });
 
-  afterEach(cleanup);
-
-  it('should display title receive', async () => {
-    await act(async () => {
-      renderTitleReceiveContainer(mutator);
+  it('should render loading', async () => {
+    useTitleHydratedPieces.mockClear().mockReturnValue({
+      title: {},
+      pieces: [],
+      orderLine: {},
+      isLoading: true,
     });
+    renderTitleReceiveContainer();
 
-    expect(screen.getByText('TitleReceive')).toBeDefined();
+    expect(screen.getByText('LoadingPane')).toBeInTheDocument();
   });
 
-  it('should load only title data', async () => {
-    const title = { name: 'Title', id: '001' };
+  it('should render component', async () => {
+    renderTitleReceiveContainer();
 
-    mutator.title.GET.mockReturnValue(Promise.resolve(title));
-
-    await act(async () => {
-      renderTitleReceiveContainer(mutator);
-    });
-
-    expect(mutator.title.GET).toHaveBeenCalled();
-    expect(mutator.pieces.GET).not.toHaveBeenCalled();
-    expect(mutator.poLine.GET).not.toHaveBeenCalled();
-    expect(mutator.requests.GET).not.toHaveBeenCalled();
-    expect(mutator.items.GET).not.toHaveBeenCalled();
-  });
-
-  it('should load locations data after mounted', async () => {
-    const title = { name: 'Title', id: '001' };
-
-    mutator.title.GET.mockReturnValue(Promise.resolve(title));
-
-    await act(async () => {
-      renderTitleReceiveContainer(mutator);
-    });
-
-    expect(useLocationsQuery).toHaveBeenCalled();
-  });
-
-  it('should load all data', async () => {
-    await act(async () => {
-      renderTitleReceiveContainer(mutator);
-    });
-
-    expect(mutator.title.GET).toHaveBeenCalled();
-    expect(mutator.pieces.GET).toHaveBeenCalled();
-    expect(mutator.poLine.GET).toHaveBeenCalled();
+    expect(screen.getByText('TitleReceive')).toBeInTheDocument();
   });
 
   it('should redirect to title details when receive is cancelled', async () => {
-    await act(async () => renderTitleReceiveContainer(mutator));
+    renderTitleReceiveContainer();
 
     TitleReceive.mock.calls[0][0].onCancel();
 
@@ -148,7 +106,7 @@ describe('TitleReceiveContainer', () => {
 
     useReceive.mockClear().mockReturnValue({ receive: receiveMock });
 
-    await act(async () => renderTitleReceiveContainer(mutator));
+    renderTitleReceiveContainer();
 
     TitleReceive.mock.calls[0][0].onSubmit({ receivedItems: [{ checked: true, isCreateItem: true }] });
 

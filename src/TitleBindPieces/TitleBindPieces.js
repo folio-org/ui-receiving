@@ -23,6 +23,7 @@ const FIELD_NAME = 'receivedItems';
 const TitleBindPieces = ({
   form,
   handleSubmit,
+  instanceId,
   locations,
   onCancel,
   paneTitle,
@@ -75,8 +76,9 @@ const TitleBindPieces = ({
           >
             <TitleBindPiecesCreateItemForm
               onChange={form.change}
-              instanceId={values.instanceId}
+              instanceId={instanceId}
               locations={locations}
+              values={values}
             />
             <FieldArray
               id={FIELD_NAME}
@@ -95,6 +97,7 @@ TitleBindPieces.propTypes = {
   form: PropTypes.object,
   isLoading: PropTypes.bool,
   locations: PropTypes.arrayOf(PropTypes.object),
+  instanceId: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,

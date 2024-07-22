@@ -8,6 +8,7 @@ import {
 
 import {
   validateRequired,
+  ConsortiumFieldInventory,
   FieldInventory,
 } from '@folio/stripes-acq-components';
 import {
@@ -17,14 +18,24 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
+import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
-import { useLoanTypes, useMaterialTypes } from '../hooks';
+import {
+  useLoanTypes,
+  useMaterialTypes,
+} from '../hooks';
 import { buildOptions } from '../utils';
 
 export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations }) => {
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
+
+  const { crossTenant } = useReceivingSearchContext();
+
+  const FieldInventoryComponent = crossTenant
+    ? ConsortiumFieldInventory
+    : FieldInventory;
 
   const materialTypesOptions = useMemo(() => {
     const emptyOption = [{
@@ -45,7 +56,11 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
   }, [loanTypes, intl]);
 
   const onLocationSelected = (location) => {
-    onChange(PIECE_FORM_FIELD_NAMES.locationId, location?.id);
+    // Location selection returns a locationId as string
+    // while "Create new holding for location" modal selection returns a object of the location
+    const locationId = location?.id || location;
+
+    onChange(PIECE_FORM_FIELD_NAMES.locationId, locationId);
   };
 
   const locationIds = useMemo(() => locations.map(({ id }) => id), [locations]);
@@ -95,7 +110,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
       </Col>
       <Col
         xs={6}
-        md={3}
+        md={2}
       >
         <Field
           component={Select}
@@ -109,16 +124,19 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
         />
       </Col>
       <Col
-        xs={6}
-        md={3}
+        xs={12}
+        md={4}
       >
-        <FieldInventory
+        <FieldInventoryComponent
+          affiliationName={PIECE_FORM_FIELD_NAMES.tenantId}
           instanceId={instanceId}
           locationIds={locationIds}
           locations={locations}
           holdingName={PIECE_FORM_FIELD_NAMES.locationId}
           locationName={PIECE_FORM_FIELD_NAMES.locationId}
           onChange={onLocationSelected}
+          locationLabelId="ui-receiving.piece.permanentLocationId"
+          holdingLabelId="ui-receiving.piece.permanentLocationId"
           required
         />
       </Col>

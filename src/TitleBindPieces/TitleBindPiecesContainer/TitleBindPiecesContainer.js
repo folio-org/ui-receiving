@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -19,7 +18,6 @@ import {
   LoadingPane,
   Paneset,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
 
 import { useTitleHydratedPieces } from '../../common/hooks';
 import {
@@ -27,25 +25,28 @@ import {
   RECEIVING_ROUTE,
 } from '../../constants';
 import { useReceivingSearchContext } from '../../contexts';
-import { TRANSFER_REQUEST_ACTIONS } from '../constants';
+import {
+  ERROR_CODES,
+  TRANSFER_REQUEST_ACTIONS,
+} from '../constants';
 import { useBindPiecesMutation } from '../hooks';
 import TitleBindPieces from '../TitleBindPieces';
 import { TitleBindPiecesConfirmationModal } from '../TitleBindPiecesConfirmationModal';
 
 export const TitleBindPiecesContainer = () => {
-  const stripes = useStripes();
   const history = useHistory();
   const location = useLocation();
   const showCallout = useShowCallout();
-  const { isCentralRouting } = useReceivingSearchContext();
+  const {
+    isCentralRouting,
+    targetTenantId,
+  } = useReceivingSearchContext();
 
   const { id: titleId } = useParams();
-  const currentTenantId = stripes.user?.user?.id;
 
   const [open, toggleOpen] = useToggle(false);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const bindPieceData = useRef(null);
-
+  const [listOfOpenRequests, setListOfOpenRequests] = useState([]);
+  const [bindPieceData, setBindPieceData] = useState({});
   const { bindPieces, isBinding } = useBindPiecesMutation();
 
   const {
@@ -56,9 +57,27 @@ export const TitleBindPiecesContainer = () => {
     title,
   } = useTitleHydratedPieces({
     titleId,
+    tenantId: targetTenantId,
     receivingStatus: PIECE_STATUS.received,
     searchQuery: `isBound==false and format==${PIECE_FORMAT.physical}`,
   });
+
+  const handleMutationError = useCallback(async (error) => {
+    let parsed;
+
+    try {
+      parsed = await error.response.json();
+    } catch (parsingException) {
+      parsed = error.response;
+    }
+
+    const errorCode = ERROR_CODES[parsed.code] || ERROR_CODES.generic;
+
+    showCallout({
+      type: 'error',
+      messageId: `ui-receiving.bind.pieces.create.error.${errorCode}`,
+    });
+  }, [showCallout]);
 
   const onCancel = useCallback(() => {
     history.push({
@@ -72,47 +91,39 @@ export const TitleBindPiecesContainer = () => {
       .then(() => {
         onCancel();
         showCallout({ messageId: 'ui-receiving.bind.pieces.create.success' });
-      }).catch(() => {
-        showCallout({
-          type: 'error',
-          messageId: 'ui-receiving.bind.pieces.create.error',
-        });
-      });
+      }).catch((error) => handleMutationError(error));
   };
 
   const onConfirm = (requestsAction) => {
     toggleOpen();
 
     if (requestsAction === TRANSFER_REQUEST_ACTIONS.cancel) {
-      setShowDeleteMessage(false);
-
       return null;
     }
 
     return bindItems({
-      ...bindPieceData.current,
+      ...bindPieceData,
       requestsAction,
     });
   };
 
   const onSubmit = async (values) => {
     const selectedItems = values.receivedItems.filter(({ checked }) => checked);
-    const openRequests = selectedItems.filter(({ itemId, request }) => itemId && request);
+    const piecesWithOpenRequests = selectedItems.filter(({ itemId, request }) => itemId && request);
 
     const requestData = {
       poLineId: orderLine.id,
       bindPieceIds: selectedItems.map(({ id }) => id),
       bindItem: {
         ...values.bindItem,
+        tenantId: values.bindItem?.tenantId || targetTenantId,
       },
       ...(orderLine.isPackage ? { instanceId: title.instanceId } : {}),
     };
 
-    if (openRequests?.length) {
-      const hasDifferentRequesterId = openRequests.some(({ request }) => request?.requesterId !== currentTenantId);
-
-      setShowDeleteMessage(hasDifferentRequesterId);
-      bindPieceData.current = requestData;
+    if (piecesWithOpenRequests?.length) {
+      setListOfOpenRequests(piecesWithOpenRequests);
+      setBindPieceData(requestData);
       toggleOpen();
     } else {
       bindItems(requestData);
@@ -137,7 +148,7 @@ export const TitleBindPiecesContainer = () => {
         onCancel={onCancel}
         onSubmit={onSubmit}
         paneTitle={paneTitle}
-        instanceId={title.instanceId}
+        instanceId={title?.instanceId}
         locations={holdingLocations}
         isLoading={isBinding}
       />
@@ -145,8 +156,9 @@ export const TitleBindPiecesContainer = () => {
         id="confirm-binding-modal"
         onCancel={toggleOpen}
         onConfirm={onConfirm}
-        showDeleteMessage={showDeleteMessage}
         open={open}
+        listOfOpenRequests={listOfOpenRequests}
+        bindPieceData={bindPieceData}
       />
     </>
   );

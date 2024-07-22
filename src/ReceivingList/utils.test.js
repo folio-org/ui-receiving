@@ -328,17 +328,8 @@ describe('ReceivingList utils', () => {
         ];
 
         fetchConsortiumOrderLineLocations(ky, {})(orderLines).then(() => {
-          expect(ky.get).toHaveBeenCalledTimes(2);
-          expect(ky.get).toHaveBeenNthCalledWith(
-            1,
-            CONSORTIUM_LOCATIONS_API,
-            { searchParams: { tenantId: orderLines[0].locations[0].tenantId } },
-          );
-          expect(ky.get).toHaveBeenNthCalledWith(
-            2,
-            CONSORTIUM_LOCATIONS_API,
-            { searchParams: { tenantId: orderLines[1].locations[0].tenantId } },
-          );
+          expect(ky.get).toHaveBeenCalledTimes(1);
+          expect(ky.get).toHaveBeenNthCalledWith(1, CONSORTIUM_LOCATIONS_API, {});
         });
       });
     });

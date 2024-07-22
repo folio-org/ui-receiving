@@ -7,14 +7,17 @@ import {
 } from '@folio/stripes/core';
 import {
   HOLDINGS_API,
-  ITEMS_API,
   LOCATIONS_API,
-  REQUESTS_API,
   batchFetch,
   useOrderLine,
 } from '@folio/stripes-acq-components';
 
+import { useReceivingSearchContext } from '../../../contexts';
 import { getHydratedPieces } from '../../utils';
+import {
+  usePieceItemsFetch,
+  usePieceRequestsFetch,
+} from '../usePaginatedPieces/hooks';
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 
@@ -26,6 +29,8 @@ export const useTitleHydratedPieces = ({
 } = {}) => {
   const ky = useOkapiKy({ tenantId });
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
+
+  const { crossTenant } = useReceivingSearchContext();
 
   const {
     title,
@@ -50,6 +55,13 @@ export const useTitleHydratedPieces = ({
     { enabled: Boolean(titleId && orderLine?.id && receivingStatus) },
   );
 
+  const { fetchPieceItems } = usePieceItemsFetch({
+    instanceId: title?.instanceId,
+    tenantId,
+  });
+
+  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId });
+
   const isReferenceDataLoading = (
     isTitleLoading
     || isOrderLineLoading
@@ -65,12 +77,12 @@ export const useTitleHydratedPieces = ({
       },
     });
 
-    // TODO: fetch requests (after MODORDERS-1138), holdings and items from related tenants in the central ordering
-    const hydratedPieces = await getHydratedPieces(
+    const hydratedPieces = await getHydratedPieces({
       pieces,
-      mutatorAdapter(REQUESTS_API, 'requests'),
-      mutatorAdapter(ITEMS_API, 'items'),
-    );
+      fetchPieceItems,
+      fetchPieceRequests,
+      crossTenant,
+    });
 
     const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
     const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);

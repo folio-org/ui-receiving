@@ -1,5 +1,8 @@
 import { getItemStatusLabel } from '@folio/stripes-acq-components';
-import { NoValue, TextLink } from '@folio/stripes/components';
+import {
+  NoValue,
+  TextLink,
+} from '@folio/stripes/components';
 
 import { getPieceStatusFromItem } from '../../common/utils';
 import { PIECE_COLUMNS } from '../../Piece';

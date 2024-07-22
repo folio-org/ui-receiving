@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -7,20 +8,38 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
+import { useReceivingSearchContext } from '../../contexts';
 import { TRANSFER_REQUEST_ACTIONS } from '../constants';
 
 export const TitleBindPiecesConfirmationModal = ({
+  bindPieceData = {},
   id,
+  listOfOpenRequests,
   onCancel,
   onConfirm,
   open,
-  showDeleteMessage = false,
 }) => {
-  const modalAction = showDeleteMessage ? 'delete' : 'transfer';
+  const { crossTenant, activeTenantId } = useReceivingSearchContext();
+
+  const barcodes = useMemo(() => {
+    return listOfOpenRequests
+      .filter(Boolean)
+      .map(({ barcode }) => barcode);
+  }, [listOfOpenRequests]);
+
+  const withDeleteMessage = useMemo(() => {
+    const currentTenantId = bindPieceData?.bindItem?.tenantId || activeTenantId;
+
+    if (!crossTenant) return false;
+
+    return listOfOpenRequests.some(({ request }) => request.tenantId !== currentTenantId);
+  }, [activeTenantId, bindPieceData, crossTenant, listOfOpenRequests]);
+
+  const modalAction = withDeleteMessage ? 'delete' : 'transfer';
   const footer = (
     <ModalFooter>
       {
-        !showDeleteMessage && (
+        !withDeleteMessage && (
           <>
             <Button
               marginBottom0
@@ -64,15 +83,19 @@ export const TitleBindPiecesConfirmationModal = ({
       size="small"
       footer={footer}
     >
-      <FormattedMessage id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`} />
+      <FormattedMessage
+        id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`}
+        values={{ barcodes: barcodes.join(', ') }}
+      />
     </Modal>
   );
 };
 
 TitleBindPiecesConfirmationModal.propTypes = {
+  bindPieceData: PropTypes.object,
   id: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  showDeleteMessage: PropTypes.bool,
+  listOfOpenRequests: PropTypes.arrayOf(PropTypes.object),
 };

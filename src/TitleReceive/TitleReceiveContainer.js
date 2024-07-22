@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types';
 import {
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -13,26 +11,16 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 import {
-  baseManifest,
-  itemsResource,
-  LIMIT_MAX,
-  LINES_API,
   PIECE_FORMAT,
-  pieceResource,
-  piecesResource,
-  requestsResource,
   useLocationsQuery,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import {
-  titleResource,
-} from '../common/resources';
-import {
   useReceive,
+  useTitleHydratedPieces,
 } from '../common/hooks';
 import {
-  getHydratedPieces,
   getReceivingPieceItemStatus,
   handleReceiveErrorResponse,
 } from '../common/utils';
@@ -45,20 +33,28 @@ import { EXPECTED_PIECES_SEARCH_VALUE } from '../Piece';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
 
-function TitleReceiveContainer({ history, location, match, mutator }) {
+function TitleReceiveContainer({ history, location, match }) {
   const showCallout = useShowCallout();
   const {
     crossTenant,
     isCentralOrderingEnabled,
     isCentralRouting,
+    targetTenantId,
   } = useReceivingSearchContext();
 
   const titleId = match.params.id;
-  const [pieces, setPieces] = useState();
-  const [title, setTitle] = useState();
-  const [poLine, setPoLine] = useState();
 
-  const poLineId = title?.poLineId;
+  const {
+    pieces,
+    title,
+    orderLine: poLine,
+    isLoading: isPiecesLoading,
+  } = useTitleHydratedPieces({
+    titleId,
+    tenantId: targetTenantId,
+    receivingStatus: `(${EXPECTED_PIECES_SEARCH_VALUE})`,
+  });
+
   const instanceId = title?.instanceId;
 
   const { receive } = useReceive();
@@ -67,46 +63,6 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     isLoading: isLocationsLoading,
     locations,
   } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
-
-  useEffect(
-    () => {
-      mutator.title.GET()
-        .then(setTitle);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titleId],
-  );
-
-  useEffect(
-    () => {
-      if (poLineId) {
-        mutator.poLine.GET({
-          path: `${LINES_API}/${poLineId}`,
-        }).then(setPoLine);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [poLineId],
-  );
-
-  useEffect(
-    () => {
-      if (poLineId) {
-        const filterQuery = `titleId=${titleId} and poLineId==${poLineId} and receivingStatus==(${EXPECTED_PIECES_SEARCH_VALUE})`;
-
-        mutator.pieces.GET({
-          params: {
-            limit: `${LIMIT_MAX}`,
-            query: `${filterQuery} sortby locationId`,
-          },
-        })
-          .then(piecesResponse => getHydratedPieces(piecesResponse, mutator.requests, mutator.items))
-          .then(setPieces);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titleId, poLineId],
-  );
 
   const onCancel = useCallback(
     () => {
@@ -166,7 +122,7 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
     [poLine],
   );
 
-  const isLoading = !(pieces && poLine && title) || isLocationsLoading;
+  const isLoading = isPiecesLoading || isLocationsLoading;
 
   if (isLoading) {
     return (
@@ -203,39 +159,10 @@ function TitleReceiveContainer({ history, location, match, mutator }) {
   );
 }
 
-TitleReceiveContainer.manifest = Object.freeze({
-  title: {
-    ...titleResource,
-    accumulate: true,
-    fetch: false,
-    tenant: '!{tenantId}',
-  },
-  pieces: {
-    ...piecesResource,
-    tenant: '!{tenantId}',
-  },
-  poLine: {
-    ...baseManifest,
-    accumulate: true,
-    fetch: false,
-    tenant: '!{tenantId}',
-  },
-
-  // TODO: fetch items and requests (after MODORDERS-1138) from related tenants
-  items: itemsResource,
-  requests: requestsResource,
-
-  piece: {
-    ...pieceResource,
-    tenant: '!{tenantId}',
-  },
-});
-
 TitleReceiveContainer.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
-  mutator: PropTypes.object.isRequired,
 };
 
 export default stripesConnect(TitleReceiveContainer);

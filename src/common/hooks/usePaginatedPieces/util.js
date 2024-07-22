@@ -1,9 +1,10 @@
 import {
   batchRequest,
   ITEMS_API,
-  REQUESTS_API,
   SEARCH_API,
 } from '@folio/stripes-acq-components';
+
+import { PIECE_REQUESTS_API } from '../../constants';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
   const itemIds = pieces.reduce((acc, { itemId }) => {
@@ -41,21 +42,27 @@ export const fetchConsortiumPieceItems = (ky, { instanceId, pieces }) => {
     }));
 };
 
+const buildPieceRequestsSearchParams = (pieces = []) => {
+  const formData = new FormData();
+
+  formData.append('status', 'Open*');
+
+  pieces.filter(i => i.itemId).forEach(({ id }) => {
+    formData.append('pieceIds', id);
+  });
+
+  return new URLSearchParams(formData).toString();
+};
+
 export const fetchLocalPieceRequests = (ky, { pieces }) => {
-  return batchRequest(
-    async ({ params: searchParams }) => {
-      const { requests = [] } = await ky.get(REQUESTS_API, { searchParams }).json();
+  if (!pieces.length) {
+    return Promise.resolve([]);
+  }
 
-      return requests;
-    },
-    pieces,
-    (piecesChunk) => {
-      const itemIdsQuery = piecesChunk
-        .filter(piece => piece.itemId)
-        .map(piece => `itemId==${piece.itemId}`)
-        .join(' or ');
-
-      return itemIdsQuery ? `(${itemIdsQuery}) and status="Open*"` : '';
-    },
-  );
+  return ky
+    .get(PIECE_REQUESTS_API, {
+      searchParams: buildPieceRequestsSearchParams(pieces),
+    })
+    .json()
+    .then(({ circulationRequests }) => circulationRequests);
 };

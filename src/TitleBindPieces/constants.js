@@ -35,10 +35,17 @@ export const PIECE_FORM_FIELD_NAMES = {
   materialTypeId: 'bindItem.materialTypeId',
   permanentLoanTypeId: 'bindItem.permanentLoanTypeId',
   locationId: 'bindItem.locationId',
+  holdingId: 'bindItem.holdingId',
+  tenantId: 'bindItem.tenantId',
 };
 
 export const TRANSFER_REQUEST_ACTIONS = {
   cancel: 'Cancel',
   notTransfer: 'Do Nothing',
   transfer: 'Transfer',
+};
+
+export const ERROR_CODES = {
+  bindItemMustIncludeEitherHoldingIdOrLocationId: 'bindItemMustIncludeEitherHoldingIdOrLocationId',
+  generic: 'generic',
 };
