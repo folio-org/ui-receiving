@@ -1,9 +1,7 @@
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import {
-  PIECE_ACTIONS_BY_STATUS,
-  PIECE_ACTION_NAMES,
-} from './constants';
+import { PIECE_ACTION_NAMES } from '../../constants';
+import { PIECE_ACTIONS_BY_STATUS } from './constants';
 import { getPieceActionMenu } from './utils';
 
 const { expected, unreceivable, received } = PIECE_STATUS;

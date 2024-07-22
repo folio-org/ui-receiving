@@ -1,3 +1,5 @@
+import identity from 'lodash/identity';
+import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import {
   useCallback,
@@ -36,12 +38,15 @@ import {
   handleUnrecieveErrorResponse,
 } from '../../common/utils';
 import {
+  CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_ROUTE_VIEW,
+  RECEIVING_PIECE_CREATE_ROUTE,
   RECEIVING_ROUTE_VIEW,
 } from '../../constants';
 import { useReceivingSearchContext } from '../../contexts';
 import { usePieceQuickReceiving } from '../hooks';
 import PieceForm from './PieceForm';
+import { PIECE_ACTION_NAMES, PIECE_FORM_CHECKBOX_FIELD_NAMES, PIECE_FORM_FIELD_NAMES, PIECE_FORM_SERVICE_FIELD_NAMES } from '../constants';
 
 export const PieceFormContainer = ({
   initialValues,
@@ -144,16 +149,39 @@ export const PieceFormContainer = ({
     titleId,
   ]);
 
+  const onCreateAnother = useCallback((values) => {
+    const piecePrototype = {
+      ...omit(values, [
+        'id',
+        'itemId',
+        'receivedDate',
+        PIECE_FORM_FIELD_NAMES.receivingStatus,
+      ]),
+      [PIECE_FORM_FIELD_NAMES.isCreateItem]: values?.itemId ? true : values?.isCreateItem,
+      [PIECE_FORM_SERVICE_FIELD_NAMES.isCreateAnother]: true,
+    };
+
+    const pathname = (isCentralRouting ? CENTRAL_RECEIVING_PIECE_CREATE_ROUTE : RECEIVING_PIECE_CREATE_ROUTE).replace(':id', titleId);
+
+    history.push({
+      pathname,
+      search,
+      state: { piecePrototype },
+    });
+  }, [history, isCentralRouting, search, titleId]);
+
   const onSubmit = useCallback((formValues) => {
     // TODO: handle somewhere "Create another"
     const {
       deleteHolding = false,
-      ...piece
+      postSubmitAction,
     } = formValues;
 
     const options = {
       searchParams: { deleteHolding },
     };
+
+    const piece = omit(formValues, Object.values(PIECE_FORM_SERVICE_FIELD_NAMES));
 
     return mutatePiece({ piece, options })
       .then((res) => {
@@ -164,7 +192,18 @@ export const PieceFormContainer = ({
 
         return res;
       })
-      .then(onCloseForm)
+      .then((data) => {
+        console.log('data', data);
+        if (!postSubmitAction) return data;
+
+        const handler = new Map([
+          [PIECE_ACTION_NAMES.saveAndCreate, onCreateAnother],
+          [PIECE_ACTION_NAMES.quickReceive, onQuickReceive],
+        ]).get(postSubmitAction) || identity;
+
+        return handler(data);
+      })
+      // .then(onCloseForm)
       .catch(async ({ response }) => {
         const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
@@ -175,7 +214,13 @@ export const PieceFormContainer = ({
           });
         }
       });
-  }, [mutatePiece, onCloseForm, showCallout]);
+  }, [
+    mutatePiece,
+    onCloseForm,
+    onCreateAnother,
+    onQuickReceive,
+    showCallout,
+  ]);
 
   const onDelete = useCallback((pieceToDelete, options = {}) => {
     const apiCall = pieceToDelete?.id
@@ -226,6 +271,22 @@ export const PieceFormContainer = ({
 
   /* --- */
 
+  const formInitialValues = useMemo(() => {
+    if (!initialValues) return {};
+
+    const initialCheckboxValues = (
+      PIECE_FORM_CHECKBOX_FIELD_NAMES.reduce((acc, key) => {
+        acc[key] = Boolean(initialValues[key]);
+
+        return acc;
+      }, {})
+    );
+
+    return { ...initialValues, ...initialCheckboxValues };
+  }, [initialValues]);
+
+  console.log('formInitialValues', formInitialValues);
+
   const isLoading = (
     !initialValues
     || isLoadingProp
@@ -240,19 +301,19 @@ export const PieceFormContainer = ({
     return <LoadingView />;
   }
 
-  console.log('title', title);
-  console.log('initValue', initialValues);
-  console.log('orderLine', orderLine);
-  console.log('order', order);
-  console.log('locations', locations);
-  console.log('restrictions', restrictions);
+  // console.log('title', title);
+  // console.log('initValue', initialValues);
+  // console.log('orderLine', orderLine);
+  // console.log('order', order);
+  // console.log('locations', locations);
+  // console.log('restrictions', restrictions);
 
   return (
     <>
       <PieceForm
         canDeletePiece={canDeletePiece}
         createInventoryValues={createInventoryValues}
-        initialValues={initialValues}
+        initialValues={formInitialValues}
         instanceId={instanceId}
         onClose={onCloseForm}
         onDelete={onDelete}

@@ -39,7 +39,9 @@ import {
   getHoldingsItemsAndPieces,
 } from '../../common/utils';
 import {
+  PIECE_ACTION_NAMES,
   PIECE_FORM_FIELD_NAMES,
+  PIECE_FORM_SERVICE_FIELD_NAMES,
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
 } from '../constants';
@@ -49,10 +51,7 @@ import { ReceivingStatusChangeLog } from '../ReceivingStatusChangeLog';
 import { SendClaimModal } from '../SendClaimModal';
 import { ItemFields } from './ItemFields';
 import { PieceFields } from './PieceFields';
-import {
-  PIECE_ACTION_NAMES,
-  PieceFormActionButtons,
-} from './PieceFormActionButtons';
+import { PieceFormActionButtons } from './PieceFormActionButtons';
 
 export const PieceForm = ({
   canDeletePiece,
@@ -64,7 +63,6 @@ export const PieceForm = ({
   instanceId,
   onClose,
   onDelete: onDeleteProp,
-  onQuickReceive: onQuickReceiveProp,
   onUnreceive: onUnreceiveProp,
   locationIds,
   locations,
@@ -79,8 +77,6 @@ export const PieceForm = ({
   const ky = useOkapiKy();
   const accordionStatusRef = useRef();
 
-  const fv = form.getState().values;
-
   const {
     batch,
     change,
@@ -94,14 +90,10 @@ export const PieceForm = ({
     id,
     internalNote,
     itemId,
-    isCreateAnother,
     isCreateItem,
     metadata,
     receivingStatus,
   } = formValues;
-
-  console.log('formValues', formValues);
-  console.log('fv', fv);
 
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
@@ -160,24 +152,26 @@ export const PieceForm = ({
     return handleSubmit(e);
   }, [
     checkHoldingAbandonment,
-    getState,
     handleSubmit,
+    getState,
     id,
     toggleDeleteHoldingsConfirmation,
   ]);
 
   const onDeleteHoldings = useCallback(() => {
-    change(PIECE_FORM_FIELD_NAMES.deleteHolding, true);
+    change(PIECE_FORM_SERVICE_FIELD_NAMES.deleteHolding, true);
     handleSubmit();
   }, [change, handleSubmit]);
 
   const onCreateAnotherPiece = useCallback(() => {
-
-  }, []);
+    change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.saveAndCreate);
+    onSave();
+  }, [change, onSave]);
 
   const onQuickReceive = useCallback(() => {
-    return onQuickReceiveProp(formValues);
-  }, [formValues, onQuickReceiveProp]);
+    change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.quickReceive);
+    onSave();
+  }, [change, onSave]);
 
   const onUnreceive = useCallback(() => {
     const currentPiece = {
@@ -235,7 +229,6 @@ export const PieceForm = ({
   const end = (
     <PieceFormActionButtons
       actionsDisabled={actionsDisabled}
-      isCreateAnother={isCreateAnother}
       isEditMode={Boolean(id)}
       onCreateAnotherPiece={onCreateAnotherPiece}
       onClaimDelay={toggleClaimDelayModal}
@@ -243,7 +236,7 @@ export const PieceForm = ({
       onDelete={toggleDeleteConfirmation}
       onReceive={onQuickReceive}
       onUnreceivePiece={onUnreceive}
-      onSave={handleSubmit}
+      onSave={onSave}
       onStatusChange={onStatusChange}
       status={receivingStatus}
     />
@@ -264,7 +257,7 @@ export const PieceForm = ({
     },
     {
       name: 'save',
-      handler: handleKeyCommand(handleSubmit, { disabled: isSaveAndCloseDisabled }),
+      handler: handleKeyCommand(onSave, { disabled: isSaveAndCloseDisabled }),
     },
     {
       name: 'receive',
@@ -408,7 +401,6 @@ PieceForm.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.object),
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onQuickReceive: PropTypes.func.isRequired,
   onUnreceive: PropTypes.func.isRequired,
   paneTitle: PropTypes.node.isRequired,
   pieceFormatOptions: PropTypes.arrayOf(PropTypes.shape({

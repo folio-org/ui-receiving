@@ -17,8 +17,6 @@ export const PieceEdit = ({ match }) => {
     piece,
   } = usePiece(pieceId, { tenantId });
 
-  console.log('piece', piece);
-
   return (
     <PieceFormContainer
       initialValues={piece}

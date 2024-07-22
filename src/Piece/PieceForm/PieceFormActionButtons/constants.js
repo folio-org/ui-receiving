@@ -6,17 +6,7 @@ import {
 } from '@folio/stripes/components';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-export const PIECE_ACTION_NAMES = {
-  saveAndClose: 'saveAndClose',
-  saveAndCreate: 'saveAndCreate',
-  quickReceive: 'quickReceive',
-  sendClaim: 'sendClaim',
-  delayClaim: 'delayClaim',
-  unReceivable: 'unReceivable',
-  unReceive: 'unReceive',
-  expect: 'expect',
-  delete: 'delete',
-};
+import { PIECE_ACTION_NAMES } from '../../constants';
 
 export const EXPECTED_PIECES_ACTIONS = [
   PIECE_ACTION_NAMES.saveAndCreate,

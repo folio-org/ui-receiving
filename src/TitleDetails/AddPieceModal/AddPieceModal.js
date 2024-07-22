@@ -37,6 +37,7 @@ import {
 import { HOLDINGS_API } from '../../common/constants';
 import { getClaimingIntervalFromDate } from '../../common/utils';
 import {
+  PIECE_ACTION_NAMES,
   PIECE_FORM_FIELD_NAMES,
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
@@ -47,7 +48,6 @@ import { DeleteHoldingsModal } from '../DeleteHoldingsModal';
 import { SendClaimModal } from '../SendClaimModal';
 import { ItemFields } from './ItemFields';
 import { ModalActionButtons } from './ModalActionButtons';
-import { PIECE_ACTION_NAMES } from './ModalActionButtons/constants';
 import { PieceFields } from './PieceFields';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 

@@ -12,7 +12,7 @@ import { useTitle } from '../../common/hooks';
 import { ORDER_FORMAT_TO_PIECE_FORMAT } from '../constants';
 import { PieceFormContainer } from '../PieceForm';
 
-function getNewPieceValues(titleId, poLine, crossTenant) {
+function getNewPieceValues(titleId, poLine = {}, crossTenant) {
   const {
     orderFormat,
     id: poLineId,
@@ -31,7 +31,7 @@ function getNewPieceValues(titleId, poLine, crossTenant) {
     initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
   }
 
-  if (locations.length === 1 && !crossTenant) {
+  if (locations?.length === 1 && !crossTenant) {
     initialValuesPiece.locationId = locations[0].locationId;
     initialValuesPiece.holdingId = locations[0].holdingId;
   }
@@ -43,8 +43,12 @@ function getNewPieceValues(titleId, poLine, crossTenant) {
   return initialValuesPiece;
 }
 
-export const PieceCreate = ({ match }) => {
+export const PieceCreate = ({
+  location,
+  match,
+}) => {
   const { id: titleId } = match.params;
+  const { state } = location;
 
   const intl = useIntl();
 
@@ -63,11 +67,13 @@ export const PieceCreate = ({ match }) => {
     orderLine,
   } = useOrderLine(title?.poLineId, { tenantId });
 
-  const initialValues = useMemo(() => getNewPieceValues(
-    titleId,
-    orderLine,
-    crossTenant,
-  ), [crossTenant, orderLine, titleId]);
+  const initialValues = useMemo(() => {
+    console.log('state?.piecePrototype', state?.piecePrototype);
+
+    return typeof state?.piecePrototype === 'object'
+      ? state.piecePrototype
+      : getNewPieceValues(titleId, orderLine, crossTenant);
+  }, [crossTenant, orderLine, state?.piecePrototype, titleId]);
 
   const isLoading = isTitleLoading || isOrderLineLoading;
 
@@ -81,5 +87,6 @@ export const PieceCreate = ({ match }) => {
 };
 
 PieceCreate.propTypes = {
+  location: ReactRouterPropTypes.location.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
 };

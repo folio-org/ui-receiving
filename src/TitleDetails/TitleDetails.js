@@ -146,6 +146,7 @@ const TitleDetails = ({
 
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
+  const isAcknowledged = title.isAcknowledged;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const showRoutingList = orderFormat === ORDER_FORMATS.PEMix || orderFormat === ORDER_FORMATS.physicalResource;
   const numberOfPhysicalUnits = useMemo(() => {
@@ -204,53 +205,14 @@ const TitleDetails = ({
     },
   ];
 
-  const openAddPieceModal = useCallback(
-    (e, piece) => {
-      setPieceValues(piece || getNewPieceValues(title.id, poLine, crossTenant));
-      setConfirmAcknowledgeNote(() => toggleAddPieceModal);
-
-      return (
-        title.isAcknowledged
-          ? toggleAcknowledgeNote()
-          : toggleAddPieceModal()
-      );
-    },
-    [
-      crossTenant,
-      poLine,
-      title.id,
-      title.isAcknowledged,
-      toggleAcknowledgeNote,
-      toggleAddPieceModal,
-    ],
-  );
-
-  const openEditReceivedPieceModal = useCallback(
-    (e, piece) => {
-      setPieceValues(piece);
-      toggleAddPieceModal();
-    },
-    [toggleAddPieceModal],
-  );
-
-  const goToReceiveList = useCallback(
-    () => {
-      history.push({
-        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
-        search: location.search,
-      });
-    },
-    [titleId, history, isCentralRouting, location.search],
-  );
-
-  const onPieceCreate = useCallback(() => {
+  const goToPieceCreateForm = useCallback(() => {
     history.push({
       pathname: (isCentralRouting ? CENTRAL_RECEIVING_PIECE_CREATE_ROUTE : RECEIVING_PIECE_CREATE_ROUTE).replace(':id', titleId),
       search: location.search,
     });
   }, [history, isCentralRouting, location.search, titleId]);
 
-  const onPieceEdit = useCallback((_, piece) => {
+  const goToPieceEditForm = useCallback((piece) => {
     const pathname = (isCentralRouting ? CENTRAL_RECEIVING_PIECE_EDIT_ROUTE : RECEIVING_PIECE_EDIT_ROUTE)
       .replace(':id', titleId)
       .replace(':pieceId', piece.id);
@@ -261,29 +223,47 @@ const TitleDetails = ({
     });
   }, [history, isCentralRouting, location.search, titleId]);
 
+  const goToReceiveList = useCallback(() => {
+    history.push({
+      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
+      search: location.search,
+    });
+  }, [titleId, history, isCentralRouting, location.search]);
+
+  const onPieceCreate = useCallback(() => {
+    setConfirmAcknowledgeNote(() => goToPieceCreateForm);
+
+    return (
+      isAcknowledged
+        ? toggleAcknowledgeNote()
+        : goToPieceCreateForm()
+    );
+  }, [goToPieceCreateForm, isAcknowledged, toggleAcknowledgeNote]);
+
+  const onPieceEdit = useCallback((_, piece) => {
+    const goToPieceEditFormBound = goToPieceEditForm.bind(null, piece);
+
+    setConfirmAcknowledgeNote(() => goToPieceEditFormBound);
+
+    return (
+      isAcknowledged
+        ? toggleAcknowledgeNote()
+        : goToPieceEditFormBound()
+    );
+  }, [goToPieceEditForm, isAcknowledged, toggleAcknowledgeNote]);
+
   const openReceiveList = useCallback(
     () => {
       setConfirmAcknowledgeNote(() => goToReceiveList);
 
       return (
-        title.isAcknowledged
+        isAcknowledged
           ? toggleAcknowledgeNote()
           : goToReceiveList()
       );
     },
-    [title.isAcknowledged, toggleAcknowledgeNote, goToReceiveList],
+    [goToReceiveList, isAcknowledged, toggleAcknowledgeNote],
   );
-
-  const onCreateAnotherPiece = useCallback(piece => {
-    const pieceFormValues = {
-      ...omit(piece, ['id', 'itemId', 'receivingStatus', 'receivedDate']),
-      isCreateItem: piece?.itemId ? true : piece?.isCreateItem,
-      isCreateAnother: true,
-    };
-
-    setPieceValues(pieceFormValues);
-    toggleAddPieceModal();
-  }, [setPieceValues, toggleAddPieceModal]);
 
   const confirmReceiving = useCallback(
     () => new Promise((resolve, reject) => {

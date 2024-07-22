@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/components';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { PIECE_ACTION_NAMES } from './constants';
+import { PIECE_ACTION_NAMES } from '../../constants';
 import { getPieceActionMenu } from './utils';
 
 import css from './PieceFormActionButtons.css';

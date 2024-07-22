@@ -1,8 +1,11 @@
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { ModalActionButtons } from './ModalActionButtons';
+import { PieceFormActionButtons } from './PieceFormActionButtons';
 
 const onSave = jest.fn();
 const onDelete = jest.fn();
@@ -17,10 +20,10 @@ const defaultProps = {
 };
 
 const renderComponent = (props = {}) => render(
-  <ModalActionButtons {...defaultProps} {...props} />,
+  <PieceFormActionButtons {...defaultProps} {...props} />,
 );
 
-describe('ModalActionButtons', () => {
+describe('PieceFormActionButtons', () => {
   it('should render component', () => {
     renderComponent({ status: 'status' });
 

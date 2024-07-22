@@ -24,7 +24,6 @@ export const PIECE_FORM_FIELD_NAMES = {
   claimingInterval: 'claimingInterval',
   comment: 'comment',
   copyNumber: 'copyNumber',
-  deleteHolding: 'deleteHolding',
   discoverySuppress: 'discoverySuppress',
   displayOnHolding: 'displayOnHolding',
   displaySummary: 'displaySummary',
@@ -35,7 +34,6 @@ export const PIECE_FORM_FIELD_NAMES = {
   holdingId: 'holdingId',
   internalNote: 'internalNote',
   isBound: 'isBound',
-  isCreateAnother: 'isCreateAnother',
   isCreateItem: 'isCreateItem',
   locationId: 'locationId',
   receiptDate: 'receiptDate',
@@ -44,12 +42,17 @@ export const PIECE_FORM_FIELD_NAMES = {
   supplement: 'supplement',
 };
 
+export const PIECE_FORM_SERVICE_FIELD_NAMES = {
+  deleteHolding: 'deleteHolding',
+  isCreateAnother: 'isCreateAnother',
+  postSubmitAction: 'postSubmitAction',
+};
+
 export const PIECE_FORM_CHECKBOX_FIELD_NAMES = [
   PIECE_FORM_FIELD_NAMES.discoverySuppress,
   PIECE_FORM_FIELD_NAMES.displayOnHolding,
   PIECE_FORM_FIELD_NAMES.displayToPublic,
   PIECE_FORM_FIELD_NAMES.isBound,
-  PIECE_FORM_FIELD_NAMES.isCreateAnother,
   PIECE_FORM_FIELD_NAMES.isCreateItem,
   PIECE_FORM_FIELD_NAMES.supplement,
 ];
@@ -188,4 +191,16 @@ export const PIECE_MODAL_ACCORDION_LABELS = {
   [PIECE_MODAL_ACCORDION.pieceDetails]: <FormattedMessage id="ui-receiving.piece.accordion.pieceDetails" />,
   [PIECE_MODAL_ACCORDION.itemDetails]: <FormattedMessage id="ui-receiving.piece.accordion.itemDetails" />,
   [PIECE_MODAL_ACCORDION.statusChangeLog]: <FormattedMessage id="ui-receiving.piece.accordion.statusChangeLog" />,
+};
+
+export const PIECE_ACTION_NAMES = {
+  saveAndClose: 'saveAndClose',
+  saveAndCreate: 'saveAndCreate',
+  quickReceive: 'quickReceive',
+  sendClaim: 'sendClaim',
+  delayClaim: 'delayClaim',
+  unReceivable: 'unReceivable',
+  unReceive: 'unReceive',
+  expect: 'expect',
+  delete: 'delete',
 };

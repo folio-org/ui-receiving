@@ -6,7 +6,6 @@ export * from './usePieceMutator';
 export * from './usePiece';
 export * from './usePieces';
 export * from './usePiecesExpect';
-export * from './useQuickReceive';
 export * from './useReceive';
 export * from './useTitle';
 export * from './useTitleHydratedPieces';
