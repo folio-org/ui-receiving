@@ -1,9 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { FilterMenu } from '@folio/stripes-acq-components';
-import { CheckboxFilter, ColumnManagerMenu } from '@folio/stripes/smart-components';
+import {
+  CheckboxFilter,
+  ColumnManagerMenu,
+} from '@folio/stripes/smart-components';
 import {
   Button,
   Dropdown,
@@ -16,7 +18,7 @@ import {
   EXPECTED_PIECE_COLUMN_MAPPING,
   MENU_FILTERS,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
-} from '../constants';
+} from '../../Piece';
 
 export function TitleDetailsExpectedActions({
   applyFilters,

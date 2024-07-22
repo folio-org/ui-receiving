@@ -1,4 +1,4 @@
-import { PIECE_COLUMNS } from '../TitleDetails/constants';
+import { PIECE_COLUMNS } from '../Piece';
 
 export const TITLE_EXPECT_PIECES_VISIBLE_COLUMNS = [
   'checked',

@@ -1,8 +1,10 @@
-import React from 'react';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../constants';
+import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
 import { TitleDetailsExpectedActions } from './TitleDetailsExpectedActions';
 
 const defaultProps = {

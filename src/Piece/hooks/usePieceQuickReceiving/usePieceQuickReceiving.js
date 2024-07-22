@@ -21,7 +21,7 @@ export const usePieceQuickReceiving = ({
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
 
   const confirmReceivingPromise = useRef(Promise);
-  const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
+  const isOrderClosed = order?.workflowStatus === ORDER_STATUSES.closed;
 
   const { quickReceive } = useQuickReceive({ tenantId });
 

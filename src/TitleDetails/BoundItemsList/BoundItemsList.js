@@ -12,7 +12,7 @@ import {
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
-import { PIECE_COLUMN_MAPPING } from '../constants';
+import { PIECE_COLUMN_MAPPING } from '../../Piece';
 import {
   BOUND_ITEMS_LIMIT,
   VISIBLE_COLUMNS,

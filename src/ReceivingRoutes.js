@@ -29,8 +29,8 @@ import {
 } from './constants';
 import { useReceivingSearchContext } from './contexts';
 import {
-  PieceCreateContainer,
-  PieceEditContainer,
+  PieceCreate,
+  PieceEdit,
 } from './Piece';
 import { ReceivingListContainer } from './ReceivingList';
 import { TitleBindPiecesContainer } from './TitleBindPieces';
@@ -55,11 +55,11 @@ export const ReceivingRoutes = () => {
         path={[CENTRAL_ROUTING_LIST_ROUTE, ROUTING_LIST_ROUTE]}
       />
       <Route
-        component={PieceCreateContainer}
+        component={PieceCreate}
         path={[CENTRAL_RECEIVING_PIECE_CREATE_ROUTE, RECEIVING_PIECE_CREATE_ROUTE]}
       />
       <Route
-        component={PieceEditContainer}
+        component={PieceEdit}
         path={[CENTRAL_RECEIVING_PIECE_EDIT_ROUTE, RECEIVING_PIECE_EDIT_ROUTE]}
       />
       <Route

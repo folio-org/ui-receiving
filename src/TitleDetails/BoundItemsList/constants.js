@@ -1,4 +1,4 @@
-import { PIECE_COLUMNS } from '../constants';
+import { PIECE_COLUMNS } from '../../Piece';
 
 export const BOUND_ITEMS_LIMIT = 20;
 export const VISIBLE_COLUMNS = [

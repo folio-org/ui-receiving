@@ -22,7 +22,7 @@ import {
   RECEIVING_ROUTE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
-import { EXPECTED_PIECES_SEARCH_VALUE } from './constants';
+import { EXPECTED_PIECES_SEARCH_VALUE } from '../Piece';
 import TitleDetails from './TitleDetails';
 
 const getVendorIds = (order, orderLine) => {

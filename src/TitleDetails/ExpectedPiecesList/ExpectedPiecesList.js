@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   EXPECTED_PIECES_STATUSES,
   PIECE_COLUMNS,
-} from '../constants';
+} from '../../Piece';
 import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 

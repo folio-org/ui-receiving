@@ -1,5 +1,6 @@
 export * from './getClaimingIntervalFromDate';
 export * from './getDehydratedPiece';
+export * from './getHoldingsItemsAndPieces';
 export * from './getItemById';
 export * from './getReceivingPieceItemStatus';
 export * from './getHydratedPieces';

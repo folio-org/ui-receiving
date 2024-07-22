@@ -69,16 +69,18 @@ import {
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import {
-  EXPECTED_PIECE_COLUMN_MAPPING,
   EXPECTED_PIECES_SEARCH_VALUE,
+  EXPECTED_PIECE_COLUMN_MAPPING,
   MENU_FILTERS,
   ORDER_FORMAT_TO_PIECE_FORMAT,
   RECEIVED_PIECE_COLUMN_MAPPING,
+  UNRECEIVABLE_PIECE_COLUMN_MAPPING,
+} from '../Piece';
+import {
   TITLE_ACCORDION,
   TITLE_ACCORDION_LABELS,
-  UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from './constants';
-import AddPieceModal from './AddPieceModal';
+// import AddPieceModal from './AddPieceModal';
 import { BoundItemsList } from './BoundItemsList';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import POLDetails from './POLDetails';
@@ -637,23 +639,23 @@ const TitleDetails = ({
         )}
 
         {/* TODO: eventually remove */}
-        {isAddPieceModalOpened && (
+        {/* {isAddPieceModalOpened && (
           <AddPieceModal
-            // close={toggleAddPieceModal}
-            // deletePiece={deletePiece}
-            // canDeletePiece={!isPiecesLock}
-            // initialValues={pieceValues}
-            // instanceId={title.instanceId}
-            // locations={locations}
-            // locationIds={locationIds}
-            // onCheckIn={onQuickReceive}
-            // onSubmit={onSave}
-            // poLine={poLine}
-            // restrictionsByAcqUnit={restrictions}
-            // onUnreceive={onUnreceive}
-            // getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
+            close={toggleAddPieceModal}
+            deletePiece={deletePiece}
+            canDeletePiece={!isPiecesLock}
+            initialValues={pieceValues}
+            instanceId={title.instanceId}
+            locations={locations}
+            locationIds={locationIds}
+            onCheckIn={onQuickReceive}
+            onSubmit={onSave}
+            poLine={poLine}
+            restrictionsByAcqUnit={restrictions}
+            onUnreceive={onUnreceive}
+            getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
           />
-        )}
+        )} */}
       </Pane>
     </HasCommand>
   );

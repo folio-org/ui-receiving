@@ -19,7 +19,7 @@ import {
   PIECE_COLUMNS,
   PIECE_COLUMN_MAPPING,
   SORTABLE_COLUMNS,
-} from '../constants';
+} from '../../Piece';
 
 const formatter = {
   ...PIECE_COLUMN_BASE_FORMATTER,

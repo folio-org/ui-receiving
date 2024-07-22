@@ -18,7 +18,7 @@ import { useReceivingSearchContext } from '../../contexts';
 import {
   MENU_FILTERS,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
-} from '../constants';
+} from '../../Piece';
 
 export function TitleDetailsUnreceivableActions({
   applyFilters,

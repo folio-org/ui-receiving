@@ -25,7 +25,7 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
   } = options;
 
   const ky = useOkapiKy({ tenant: tenantId });
-  const [namespace] = useNamespace();
+  const [namespace] = useNamespace('piece-status-changelog');
 
   const searchParams = {
     limit: LIMIT_MAX,
@@ -35,9 +35,9 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
     data = DEFAULT_DATA,
     isLoading,
     isFetching,
-  } = useQuery(
-    [namespace, pieceId, tenantId],
-    async ({ signal }) => {
+  } = useQuery({
+    queryKey: ['piece-changelog', namespace, pieceId, tenantId],
+    queryFn: async ({ signal }) => {
       const { pieceAuditEvents } = await ky.get(`${PIECE_AUDIT_API}/${pieceId}/status-change-history`, { searchParams, signal }).json();
 
       const userIds = [...pieceAuditEvents.reduce((acc, { userId }) => acc.add(userId), new Set())];
@@ -53,11 +53,9 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
         ...get(pieceSnapshot, 'map', {}),
       }));
     },
-    {
-      enabled: enabled && Boolean(pieceId),
-      ...queryOptions,
-    },
-  );
+    enabled: enabled && Boolean(pieceId),
+    ...queryOptions,
+  });
 
   return {
     data,

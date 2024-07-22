@@ -4,7 +4,7 @@ import {
 } from '@folio/stripes-acq-components';
 import { NoValue } from '@folio/stripes/components';
 
-import { PIECE_COLUMNS } from '../TitleDetails/constants';
+import { PIECE_COLUMNS } from '../Piece';
 
 export const VISIBLE_COLUMNS = [
   PIECE_COLUMNS.checked,

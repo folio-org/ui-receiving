@@ -18,7 +18,7 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_FORM_FIELD_NAMES } from '../../../TitleDetails/constants';
+import { PIECE_FORM_FIELD_NAMES } from '../../../Piece/constants';
 
 function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
   const { format, itemId, holdingsRecordId, receivingStatus } = piece;

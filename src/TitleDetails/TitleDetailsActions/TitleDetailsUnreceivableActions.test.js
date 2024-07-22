@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router';
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { UNRECEIVABLE_PIECE_VISIBLE_COLUMNS } from '../constants';
+import { UNRECEIVABLE_PIECE_VISIBLE_COLUMNS } from '../../Piece';
 import { TitleDetailsUnreceivableActions } from './TitleDetailsUnreceivableActions';
 
 const defaultProps = {

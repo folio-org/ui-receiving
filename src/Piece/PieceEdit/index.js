@@ -1,1 +1,1 @@
-export { PieceEditContainer } from './PieceEditContainer';
+export { PieceEdit } from './PieceEdit';

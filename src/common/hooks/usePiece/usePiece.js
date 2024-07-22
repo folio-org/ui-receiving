@@ -20,7 +20,7 @@ export const usePiece = (pieceId, options = {}) => {
     isFetching,
     isLoading,
   } = useQuery({
-    queryKey: [namespace, pieceId, tenantId],
+    queryKey: ['piece', namespace, pieceId, tenantId],
     queryFn: ({ signal }) => ky.get(`${ORDER_PIECES_API}/${pieceId}`, { signal }).json(),
     enabled: enabled && Boolean(pieceId),
   });

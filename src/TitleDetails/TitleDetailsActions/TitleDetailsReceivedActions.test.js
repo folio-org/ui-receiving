@@ -9,7 +9,7 @@ import user from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   MENU_FILTERS,
   RECEIVED_PIECE_VISIBLE_COLUMNS,
-} from '../constants';
+} from '../../Piece';
 import { TitleDetailsReceivedActions } from './TitleDetailsReceivedActions';
 
 const defaultProps = {

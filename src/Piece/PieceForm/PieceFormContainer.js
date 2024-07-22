@@ -15,7 +15,10 @@ import {
   LoadingView,
 } from '@folio/stripes/components';
 import {
+  ORDER_FORMATS,
   ORDER_STATUSES,
+  PIECE_FORMAT,
+  PIECE_FORMAT_OPTIONS,
   useAcqRestrictions,
   useLocationsQuery,
   useOrderLine,
@@ -25,21 +28,25 @@ import {
 import {
   useOrder,
   usePieceMutator,
-  useQuickReceive,
   useTitle,
   useUnreceive,
 } from '../../common/hooks';
+import {
+  handleCommonErrors,
+  handleUnrecieveErrorResponse,
+} from '../../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE_VIEW,
   RECEIVING_ROUTE_VIEW,
 } from '../../constants';
 import { useReceivingSearchContext } from '../../contexts';
 import { usePieceQuickReceiving } from '../hooks';
-import { handleCommonErrors } from '../../common/utils';
+import PieceForm from './PieceForm';
 
 export const PieceFormContainer = ({
   initialValues,
   isLoading: isLoadingProp = false,
+  paneTitle,
 }) => {
   const showCallout = useShowCallout();
   const intl = useIntl();
@@ -105,6 +112,10 @@ export const PieceFormContainer = ({
   const instanceId = title?.instanceId;
   const pieceLocationId = initialValues?.locationId;
   const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
+  const orderFormat = orderLine?.orderFormat;
+  const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
+    ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
+    : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues?.format);
 
   /* Memoized values */
 
@@ -113,6 +124,12 @@ export const PieceFormContainer = ({
 
     return (pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds);
   }, [orderLine, pieceLocationId]);
+
+  const createInventoryValues = useMemo(() => ({
+    [PIECE_FORMAT.physical]: orderLine?.physical?.createInventory,
+    [PIECE_FORMAT.electronic]: orderLine?.eresource?.createInventory,
+    [PIECE_FORMAT.other]: orderLine?.physical?.createInventory,
+  }), [orderLine]);
 
   /* Callbacks */
 
@@ -127,7 +144,17 @@ export const PieceFormContainer = ({
     titleId,
   ]);
 
-  const onSubmit = useCallback((piece, options) => {
+  const onSubmit = useCallback((formValues) => {
+    // TODO: handle somewhere "Create another"
+    const {
+      deleteHolding = false,
+      ...piece
+    } = formValues;
+
+    const options = {
+      searchParams: { deleteHolding },
+    };
+
     return mutatePiece({ piece, options })
       .then((res) => {
         showCallout({
@@ -137,6 +164,7 @@ export const PieceFormContainer = ({
 
         return res;
       })
+      .then(onCloseForm)
       .catch(async ({ response }) => {
         const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
@@ -147,12 +175,60 @@ export const PieceFormContainer = ({
           });
         }
       });
-  }, [mutatePiece, showCallout]);
+  }, [mutatePiece, onCloseForm, showCallout]);
+
+  const onDelete = useCallback((pieceToDelete, options = {}) => {
+    const apiCall = pieceToDelete?.id
+      ? mutatePiece({
+        piece: pieceToDelete,
+        options: {
+          ...options,
+          method: 'delete',
+        },
+      })
+      : Promise.resolve();
+
+    return apiCall
+      .then(
+        () => {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.delete.success',
+            type: 'success',
+            values: { enumeration: pieceToDelete?.enumeration },
+          });
+        },
+        async (response) => {
+          const hasCommonErrors = await handleCommonErrors(showCallout, response);
+
+          if (!hasCommonErrors) {
+            showCallout({
+              messageId: 'ui-receiving.piece.actions.delete.error',
+              type: 'error',
+              values: { enumeration: pieceToDelete?.enumeration },
+            });
+          }
+        },
+      )
+      .then(onCloseForm);
+  }, [onCloseForm, mutatePiece, showCallout]);
+
+  const onUnreceive = useCallback((pieces) => {
+    return unreceive(pieces)
+      .then(async () => {
+        showCallout({
+          messageId: 'ui-receiving.title.actions.unreceive.success',
+          type: 'success',
+        });
+      })
+      .then(onCloseForm)
+      .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems: pieces }));
+  }, [onCloseForm, showCallout, unreceive]);
 
   /* --- */
 
   const isLoading = (
-    isLoadingProp
+    !initialValues
+    || isLoadingProp
     || isTitleLoading
     || isOrderLineLoading
     || isOrderLoading
@@ -173,7 +249,23 @@ export const PieceFormContainer = ({
 
   return (
     <>
-      PieceFormContainer
+      <PieceForm
+        canDeletePiece={canDeletePiece}
+        createInventoryValues={createInventoryValues}
+        initialValues={initialValues}
+        instanceId={instanceId}
+        onClose={onCloseForm}
+        onDelete={onDelete}
+        onQuickReceive={onQuickReceive}
+        onSubmit={onSubmit}
+        onUnreceive={onUnreceive}
+        locationIds={locationIds}
+        locations={locations}
+        paneTitle={paneTitle}
+        pieceFormatOptions={pieceFormatOptions}
+        poLine={orderLine}
+        restrictionsByAcqUnit={restrictions}
+      />
 
       <ConfirmationModal
         aria-label={confirmReceivingModalLabel}
@@ -192,4 +284,5 @@ export const PieceFormContainer = ({
 PieceFormContainer.propTypes = {
   initialValues: PropTypes.object,
   isLoading: PropTypes.bool,
+  paneTitle: PropTypes.node.isRequired,
 };

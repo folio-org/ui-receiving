@@ -1,1 +1,0 @@
-export { DeleteHoldingsModal } from './DeleteHoldingsModal';

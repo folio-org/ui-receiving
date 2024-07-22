@@ -1,7 +1,14 @@
-import { FormattedMessage, useIntl } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import PropTypes from 'prop-types';
 
-import { Button, Modal, Loading } from '@folio/stripes/components';
+import {
+  Button,
+  Modal,
+  Loading,
+} from '@folio/stripes/components';
 import { ModalFooter } from '@folio/stripes-acq-components';
 
 import {
@@ -15,8 +22,15 @@ export const DeletePieceModal = ({
   piece,
 }) => {
   const { itemId, holdingId } = piece;
-  const { itemsCount, isFetching: isItemsFetching } = useHoldingItems(holdingId, { searchParams: { limit: 1 } });
-  const { piecesCount, isFetching: isPiecesFetching } = usePieces(
+
+  const { itemsCount, isFetching: isItemsFetching } = useHoldingItems(
+    holdingId,
+    { searchParams: { limit: 1 } },
+  );
+  const {
+    piecesCount,
+    isFetching: isPiecesFetching,
+  } = usePieces(
     {
       searchParams: {
         limit: 1,

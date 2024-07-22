@@ -29,7 +29,7 @@ import {
   MENU_FILTERS,
   RECEIVED_PIECE_COLUMN_MAPPING,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
-} from '../constants';
+} from '../../Piece';
 
 export function TitleDetailsReceivedActions({
   applyFilters,

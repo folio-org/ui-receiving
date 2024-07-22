@@ -29,7 +29,7 @@ import {
   PIECE_COLUMN_MAPPING,
   PIECE_COLUMNS,
   PIECE_FORM_FIELD_NAMES,
-} from '../TitleDetails/constants';
+} from '../Piece';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
 const visibleColumns = [

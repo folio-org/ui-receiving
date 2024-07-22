@@ -1,10 +1,14 @@
-import React from 'react';
-import { render, cleanup, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import { IntlProvider } from 'react-intl';
 
-import '@folio/stripes-acq-components/test/jest/__mock__';
+import {
+  render,
+  fireEvent,
+} from '@folio/jest-config-stripes/testing-library/react';
 
-import { PIECE_COLUMNS, RECEIVED_PIECE_VISIBLE_COLUMNS } from '../constants';
+import {
+  PIECE_COLUMNS,
+  RECEIVED_PIECE_VISIBLE_COLUMNS,
+} from '../../Piece';
 import PiecesList from './PiecesList';
 
 const pieces = [{
@@ -31,8 +35,6 @@ const renderPiecesList = (selectPiece) => (render(
 ));
 
 describe('Given Pieces List', () => {
-  afterEach(cleanup);
-
   it('Than it should display pieces table', () => {
     const { getByText } = renderPiecesList();
 

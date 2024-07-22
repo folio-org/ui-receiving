@@ -5,7 +5,7 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_COLUMNS } from '../constants';
+import { PIECE_COLUMNS } from '../../Piece';
 import PiecesList from '../PiecesList';
 import { usePiecesList } from '../hooks';
 

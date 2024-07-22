@@ -10,7 +10,7 @@ import {
   MultiColumnList,
 } from '@folio/stripes/components';
 
-import { PIECE_COLUMN_MAPPING } from '../../TitleDetails/constants';
+import { PIECE_COLUMN_MAPPING } from '../../Piece';
 import { VISIBLE_COLUMNS } from '../constants';
 import { getPieceColumnFormatter } from '../utils';
 

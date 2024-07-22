@@ -1,12 +1,11 @@
-import React from 'react';
-import { render, cleanup, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  fireEvent,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { IntlProvider } from 'react-intl';
 
-import '@folio/stripes-acq-components/test/jest/__mock__';
-
 import { usePaginatedPieces } from '../../common/hooks';
-
-import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../constants';
+import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
 import ExpectedPiecesList from './ExpectedPiecesList';
 
 jest.mock('../../common/hooks', () => ({
@@ -43,8 +42,6 @@ describe('Given Expected Pieces List', () => {
       isFetching: false,
     });
   });
-
-  afterEach(cleanup);
 
   it('Than it should display correct table', () => {
     const { getByText } = renderPiecesList(onEditPiece);

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { PIECE_COLUMNS } from '../constants';
+import { PIECE_COLUMNS } from '../../Piece';
 import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 

@@ -10,7 +10,7 @@ import { getHoldingLocationName } from '@folio/stripes-acq-components';
 import {
   PIECE_COLUMN_BASE_FORMATTER,
   UNRECEIVABLE_PIECE_COLUMN_MAPPING,
-} from '../TitleDetails/constants';
+} from '../Piece';
 
 export const getResultFormatter = ({ field, intl, pieceHoldingMap, pieceLocationMap }) => ({
   ...PIECE_COLUMN_BASE_FORMATTER,

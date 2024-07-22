@@ -1,1 +1,1 @@
-export { PieceCreateContainer } from './PieceCreateContainer';
+export { PieceCreate } from './PieceCreate';

@@ -41,7 +41,7 @@ import {
   RECEIVING_ROUTE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
-import { EXPECTED_PIECES_SEARCH_VALUE } from '../TitleDetails/constants';
+import { EXPECTED_PIECES_SEARCH_VALUE } from '../Piece';
 import TitleReceive from './TitleReceive';
 import OpenedRequestsModal from './OpenedRequestsModal';
 
