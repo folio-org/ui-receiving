@@ -23,6 +23,7 @@
 * ECS - Use new endpoint to fetch pieces associated requests in all tenants. Refs UIREC-373.
 * ECS - Allow the central tenant select affiliations for locations in the Bind Pieces screen when central ordering is enabled. Refs UIREC-363.
 * Add barcode values for "Bind" process messages. Refs UIREC-372.
+* Receiving app closes after closing Routing list page. Refs UIREC-380.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.3...v5.0.4)
