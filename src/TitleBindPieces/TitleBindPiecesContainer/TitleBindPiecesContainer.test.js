@@ -57,6 +57,26 @@ const historyMock = {
   go: jest.fn(),
   location: locationMock,
 };
+const mockErrorMessages = [
+  {
+    response: {
+      code: ERROR_CODES.bindItemMustIncludeEitherHoldingIdOrLocationId,
+    },
+    message: 'ui-receiving.bind.pieces.error.bindItemMustIncludeEitherHoldingIdOrLocationId',
+  },
+  {
+    response: {
+      code: 'some error code',
+    },
+    message: 'ui-receiving.bind.pieces.error.generic',
+  },
+  {
+    response: {
+      errors: [{ code: ERROR_CODES.barcodeIsNotUnique }],
+    },
+    message: 'ui-receiving.bind.pieces.error.barcodeIsNotUnique',
+  },
+];
 
 const renderTitleBindPiecesContainer = () => render(
   <TitleBindPiecesContainer />,
@@ -219,38 +239,34 @@ describe('TitleBindPiecesContainer', () => {
     expect(mockBindPieces).toHaveBeenCalledWith(expect.objectContaining({ instanceId: mockTitle.instanceId }));
   });
 
-  //  should handle error on bindPieces
+  describe('should handle error on bindPieces', () => {
+    mockErrorMessages.forEach(({ response, message }) => {
+      it(`should show error message "${message}"`, async () => {
+        mockBindPieces.mockRejectedValue({ response });
 
-  it('should handle error on bindPieces', async () => {
-    const error = {
-      response: {
-        code: ERROR_CODES.bindItemMustIncludeEitherHoldingIdOrLocationId,
-      },
-    };
+        renderTitleBindPiecesContainer();
 
-    mockBindPieces.mockRejectedValue(error);
+        TitleBindPieces.mock.calls[0][0].onSubmit({
+          'receivedItems': [
+            {
+              'id': '9b946a34-f762-4672-b9bc-adf71390796a',
+              'holdingId': 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
+              'checked': true,
+            },
+            {
+              'id': '20c6305a-80c6-42e4-8488-f1ea8dea1d40',
+              'holdingId': 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
+              'checked': true,
+            },
+          ],
+          'bindItem': {
+            'materialTypeId': '1a54b431-2e4f-452d-9cae-9cee66c9a892',
+            'permanentLoanTypeId': '2b94c631-fca9-4892-a730-03ee529ffe27',
+          },
+        });
 
-    renderTitleBindPiecesContainer();
-
-    TitleBindPieces.mock.calls[0][0].onSubmit({
-      'receivedItems': [
-        {
-          'id': '9b946a34-f762-4672-b9bc-adf71390796a',
-          'holdingId': 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
-          'checked': true,
-        },
-        {
-          'id': '20c6305a-80c6-42e4-8488-f1ea8dea1d40',
-          'holdingId': 'ae483aad-ee4c-4545-98f7-c2538c10b1cc',
-          'checked': true,
-        },
-      ],
-      'bindItem': {
-        'materialTypeId': '1a54b431-2e4f-452d-9cae-9cee66c9a892',
-        'permanentLoanTypeId': '2b94c631-fca9-4892-a730-03ee529ffe27',
-      },
+        expect(mockBindPieces).toHaveBeenCalled();
+      });
     });
-
-    expect(mockBindPieces).toHaveBeenCalled();
   });
 });
