@@ -190,7 +190,7 @@ const TitleDetails = ({
   const goToPieceEditForm = useCallback((piece) => {
     const pathname = (isCentralRouting ? CENTRAL_RECEIVING_PIECE_EDIT_ROUTE : RECEIVING_PIECE_EDIT_ROUTE)
       .replace(':id', titleId)
-      .replace(':pieceId', piece.id);
+      .replace(':pieceId', piece?.id);
 
     history.push({
       pathname,

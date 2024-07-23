@@ -7,25 +7,36 @@ import {
 import {
   act,
   render,
+  screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { useLocationsQuery } from '@folio/stripes-acq-components';
+import {
+  useLocationsQuery,
+  useOrderLine,
+} from '@folio/stripes-acq-components';
+import { useOkapiKy } from '@folio/stripes/core';
 
+import {
+  useOrder,
+  useOrganizationsBatch,
+  useTitle,
+} from '../common/hooks';
 import TitleDetails from './TitleDetails';
 import TitleDetailsContainer from './TitleDetailsContainer';
+import { useReceivingSearchContext } from '../contexts';
+import { RECEIVING_ROUTE } from '../constants';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
-  useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
   useLocationsQuery: jest.fn(),
+  useOrderLine: jest.fn(),
 }));
 jest.mock('../common/hooks', () => ({
-  usePieceMutator: jest.fn().mockReturnValue({}),
-  useQuickReceive: jest.fn().mockReturnValue({}),
-  useUnreceive: jest.fn().mockReturnValue({ unreceive: Promise.resolve() }),
+  useOrder: jest.fn(),
+  useOrganizationsBatch: jest.fn(),
+  useTitle: jest.fn(),
 }));
 jest.mock('./TitleDetails', () => jest.fn().mockReturnValue('TitleDetails'));
 
-const queryClient = new QueryClient();
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -42,32 +53,21 @@ const pieces = [{ id: 'pieceId', locationId: 'locationId', poLineId: 'poLineId' 
 const locations = [{ id: 'locationId' }];
 const vendors = [{ id: 'vendorId', name: 'vendorName' }];
 const poLine = { id: 'poLineId', purchaseOrderId: 'orderId', locations: [{ locationId: 'locationId' }] };
-const mutator = {
-  title: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(title)),
-  },
-  poLine: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(poLine)),
-  },
-  purchaseOrder: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(purchaseOrder)),
-  },
-  pieces: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(pieces)),
-  },
-  items: {
-    GET: jest.fn(),
-  },
-  requests: {
-    GET: jest.fn(),
-  },
-  vendors: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(vendors)),
-    reset: jest.fn(),
-  },
+
+const receivingContextMock = {
+  isCentralOrderingEnabled: false,
+  isCentralRouting: false,
+  targetTenantId: 'tenantId',
 };
 
-// eslint-disable-next-line react/prop-types
+const kyMock = {
+  extend: () => kyMock,
+  get: jest.fn(() => ({
+    json: () => Promise.resolve({ pieces }),
+  })),
+};
+
+const queryClient = new QueryClient();
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     <MemoryRouter>
@@ -79,8 +79,11 @@ const wrapper = ({ children }) => (
 const defaultProps = {
   history: historyMock,
   location: locationMock,
-  match: { params: { id: 'titleId' }, path: 'path', url: 'url' },
-  mutator,
+  match: {
+    params: { id: 'titleId' },
+    path: 'path',
+    url: 'url',
+  },
   tenantId: 'tenantId',
 };
 
@@ -94,32 +97,60 @@ const renderTitleDetailsContainer = (props = {}) => render(
 
 describe('TitleDetailsContainer', () => {
   beforeEach(() => {
+    historyMock.push.mockClear();
     TitleDetails.mockClear();
     useLocationsQuery
       .mockClear()
       .mockReturnValue({ locations });
+    useOkapiKy
+      .mockClear()
+      .mockReturnValue(kyMock);
+    useOrder
+      .mockClear()
+      .mockReturnValue({ order: purchaseOrder });
+    useOrderLine
+      .mockClear()
+      .mockImplementationOnce((_, { onSuccess } = {}) => {
+        onSuccess?.(poLine);
+
+        return { orderLine: poLine };
+      })
+      .mockReturnValue({ orderLine: poLine });
+    useOrganizationsBatch
+      .mockClear()
+      .mockImplementationOnce((_, { onSuccess } = {}) => {
+        onSuccess?.(vendors);
+
+        return vendors;
+      })
+      .mockReturnValue(vendors);
+    useReceivingSearchContext
+      .mockClear()
+      .mockReturnValue(receivingContextMock);
+    useTitle
+      .mockClear()
+      .mockReturnValue({ title });
   });
 
-  it('should load all data', async () => {
-    await act(async () => {
-      renderTitleDetailsContainer();
-    });
+  it('should render title details', () => {
+    renderTitleDetailsContainer();
 
-    expect(mutator.title.GET).toHaveBeenCalled();
-    expect(mutator.purchaseOrder.GET).toHaveBeenCalled();
-    expect(mutator.pieces.GET).toHaveBeenCalled();
-    expect(mutator.poLine.GET).toHaveBeenCalled();
-    expect(mutator.vendors.GET).toHaveBeenCalled();
+    expect(screen.getByText('TitleDetails')).toBeInTheDocument();
   });
 
-  it('should fetch items and pieces in holding', async () => {
-    await act(async () => {
-      renderTitleDetailsContainer();
-    });
+  it('should close title details pane', async () => {
+    renderTitleDetailsContainer();
 
-    TitleDetails.mock.calls[0][0].getHoldingsItemsAndPieces('holdingId');
+    await act(async () => TitleDetails.mock.calls[0][0].onClose());
 
-    expect(mutator.pieces.GET).toHaveBeenCalled();
-    expect(mutator.items.GET).toHaveBeenCalled();
+    expect(historyMock.push).toHaveBeenCalledWith(expect.objectContaining({ pathname: RECEIVING_ROUTE }));
+  });
+
+  it('should navigate to the title edit form', async () => {
+    renderTitleDetailsContainer();
+
+    await act(async () => TitleDetails.mock.calls[0][0].onEdit());
+
+    expect(historyMock.push).toHaveBeenCalledWith(expect.objectContaining({ pathname: `${RECEIVING_ROUTE}/${title.id}/edit` }));
   });
 });

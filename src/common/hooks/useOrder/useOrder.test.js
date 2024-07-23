@@ -3,14 +3,16 @@ import {
   QueryClientProvider,
 } from 'react-query';
 
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  renderHook,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 import { ORDER_STATUSES } from '@folio/stripes-acq-components';
 
 import { useOrder } from './useOrder';
 
 const queryClient = new QueryClient();
-
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     {children}
@@ -32,7 +34,7 @@ describe('useOrder', () => {
         }),
       });
 
-    const { result, waitFor } = renderHook(() => useOrder(order.id), { wrapper });
+    const { result } = renderHook(() => useOrder(order.id), { wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy());
 

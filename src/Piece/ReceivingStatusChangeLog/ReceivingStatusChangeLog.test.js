@@ -1,6 +1,9 @@
 import { MemoryRouter } from 'react-router-dom';
 
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { getFullName } from '@folio/stripes/util';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
@@ -8,8 +11,8 @@ import { CLAIMING_JOB_SYNTHETIC_USER_ID } from '../../common/constants';
 import { usePieceStatusChangeLog } from '../hooks';
 import { ReceivingStatusChangeLog } from './ReceivingStatusChangeLog';
 
-jest.mock('../../hooks', () => ({
-  ...jest.requireActual('../../hooks'),
+jest.mock('../hooks', () => ({
+  ...jest.requireActual('../hooks'),
   usePieceStatusChangeLog: jest.fn(),
 }));
 

@@ -1,11 +1,11 @@
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 
-import { ITEM_STATUS } from '@folio/stripes-acq-components';
-
 import {
-  usePieceMutator,
-  useReceive,
-} from '../../../common/hooks';
+  ITEM_STATUS,
+  ORDER_STATUSES,
+} from '@folio/stripes-acq-components';
+
+import { useReceive } from '../../../common/hooks';
 import {
   getItemById,
   getPieceById,
@@ -20,7 +20,6 @@ jest.mock('../../../common/utils', () => ({
 }));
 jest.mock('../../../common/hooks', () => ({
   ...jest.requireActual('../../../common/hooks'),
-  usePieceMutator: jest.fn(),
   useReceive: jest.fn(),
 }));
 
@@ -30,28 +29,28 @@ const pieceValues = {
   displaySummary: 'v1',
 };
 
+const order = {
+  id: 'po-id',
+  workflowStatus: ORDER_STATUSES.pending,
+};
+
 describe('usePieceQuickReceiving', () => {
-  let mutatePieceMock;
   let receivePieceMock;
 
   beforeEach(() => {
-    mutatePieceMock = jest.fn().mockReturnValue(Promise.resolve(pieceValues));
     receivePieceMock = jest.fn();
 
     getItemById.mockClear();
     getPieceById.mockClear();
-    usePieceMutator
-      .mockClear()
-      .mockReturnValue({ mutatePiece: mutatePieceMock });
     useReceive
       .mockClear()
       .mockReturnValue({ receive: receivePieceMock });
   });
 
   it('should call receive', async () => {
-    const { result } = renderHook(() => usePieceQuickReceiving());
+    const { result } = renderHook(() => usePieceQuickReceiving({ order }));
 
-    await result.current.quickReceive(pieceValues);
+    await result.current.onQuickReceive(pieceValues);
 
     expect(receivePieceMock).toHaveBeenCalled();
   });
@@ -62,11 +61,9 @@ describe('usePieceQuickReceiving', () => {
 
     beforeEach(() => {
       getPieceById.mockReturnValue(() => Promise.resolve({ json: () => ({ ...pieceValues, itemId }) }));
-      mutatePieceMock.mockImplementation(({ piece }) => Promise.resolve(piece));
+      const { result } = renderHook(() => usePieceQuickReceiving({ order }));
 
-      const { result } = renderHook(() => usePieceQuickReceiving());
-
-      quickReceive = result.current.quickReceive;
+      quickReceive = result.current.onQuickReceive;
     });
 
     it('should update item status from \'On order\' to \'In process\'', async () => {
