@@ -84,6 +84,8 @@ const AddPieceModal = ({
     id,
     internalNote,
     itemId,
+    bindItemId,
+    isBound,
     isCreateAnother,
     isCreateItem,
     metadata,
@@ -119,6 +121,10 @@ const AddPieceModal = ({
   const isSaveAndCreateDisabled = disabled || protectUpdate || protectCreate;
   const isSaveAndCloseDisabled = disabled || (protectUpdate && Boolean(id));
   const isEditDisabled = disabled || protectUpdate;
+  const hasBoundItem = Boolean(bindItemId && isBound);
+  const itemDetailsAccordionLabelId = hasBoundItem
+    ? PIECE_MODAL_ACCORDION.originalItemDetails
+    : PIECE_MODAL_ACCORDION.itemDetails;
 
   const onReceive = useCallback(
     () => {
@@ -335,7 +341,7 @@ const AddPieceModal = ({
               <Accordion
                 closedByDefault={isItemFieldsDisabled}
                 id={PIECE_MODAL_ACCORDION.itemDetails}
-                label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.itemDetails]}
+                label={PIECE_MODAL_ACCORDION_LABELS[itemDetailsAccordionLabelId]}
               >
                 <ItemFields disabled={isItemFieldsDisabled} />
               </Accordion>

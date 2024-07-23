@@ -71,7 +71,7 @@ export const TitleBindPiecesContainer = () => {
       parsed = error.response;
     }
 
-    const errorCode = ERROR_CODES[parsed.code] || ERROR_CODES.generic;
+    const errorCode = ERROR_CODES[parsed.code || parsed.errors?.[0]?.code] || ERROR_CODES.generic;
 
     showCallout({
       type: 'error',

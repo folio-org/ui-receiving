@@ -84,7 +84,7 @@ export const TitleBindPiecesConfirmationModal = ({
       footer={footer}
     >
       <FormattedMessage
-        id={`ui-receiving.bind.pieces.modal.request.${modalAction}.message`}
+        id={`ui-receiving.bind.pieces.modal.${modalAction}.message`}
         values={{ barcodes: barcodes.join(', ') }}
       />
     </Modal>

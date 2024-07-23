@@ -78,7 +78,7 @@ export const usePaginatedPieces = ({
         ...piece,
         itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
         callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
-        itemStatus: getPieceStatusFromItem(!piece.isBound && itemsMap[piece.itemId]),
+        itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
         request: requestsMap[piece.itemId],
         holdingsRecordId: itemsMap[piece.itemId]?.holdingsRecordId,
       })),
