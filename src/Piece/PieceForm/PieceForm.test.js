@@ -27,12 +27,10 @@ jest.mock('@folio/stripes-acq-components', () => {
     useCentralOrderingContext: jest.fn(),
   };
 });
-jest.mock('../../common/components/LineLocationsView/LineLocationsView',
-  () => jest.fn().mockReturnValue('LineLocationsView'));
-jest.mock('../../common/hooks', () => ({
-  ...jest.requireActual('../../common/hooks'),
-  useUnreceive: jest.fn(() => ({ unreceive: jest.fn(() => Promise.resolve()) })),
-}));
+jest.mock(
+  '../../common/components/LineLocationsView/LineLocationsView',
+  () => jest.fn().mockReturnValue('LineLocationsView'),
+);
 jest.mock('../../common/utils', () => ({
   ...jest.requireActual('../../common/utils'),
   getHoldingsItemsAndPieces: jest.fn(() => () => Promise.resolve({
