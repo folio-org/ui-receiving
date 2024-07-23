@@ -27,7 +27,7 @@ export const useTitleHydratedPieces = ({
   titleId,
   searchQuery = '',
 } = {}) => {
-  const ky = useOkapiKy({ tenantId });
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
   const { crossTenant } = useReceivingSearchContext();
