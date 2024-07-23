@@ -92,7 +92,7 @@ export const PieceCreate = ({
     <PieceFormContainer
       initialValues={initialValues}
       isLoading={isLoading}
-      paneTitle={intl.formatMessage({ id: 'ui-receiving.piece.addPieceModal.title' })}
+      paneTitle={intl.formatMessage({ id: 'ui-receiving.piece.pieceForm.create.title' })}
     />
   );
 };

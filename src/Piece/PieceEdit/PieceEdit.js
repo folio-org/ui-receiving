@@ -21,7 +21,7 @@ export const PieceEdit = ({ match }) => {
     <PieceFormContainer
       initialValues={piece}
       isLoading={isLoading}
-      paneTitle={intl.formatMessage({ id: 'ui-receiving.piece.addPieceModal.editTitle' })}
+      paneTitle={intl.formatMessage({ id: 'ui-receiving.piece.pieceForm.edit.title' })}
     />
   );
 };
