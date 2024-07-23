@@ -53,7 +53,7 @@ import { ItemFields } from './ItemFields';
 import { PieceFields } from './PieceFields';
 import { PieceFormActionButtons } from './PieceFormActionButtons';
 
-export const PieceForm = ({
+const PieceForm = ({
   canDeletePiece,
   createInventoryValues,
   form,
