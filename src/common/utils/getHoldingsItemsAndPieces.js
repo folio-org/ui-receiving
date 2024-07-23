@@ -12,8 +12,7 @@ export const getHoldingsItemsAndPieces = (ky) => (holdingId, params = {}) => {
       ...params,
     },
   })
-    .json()
-    .then(({ pieces }) => pieces);
+    .json();
 
   const holdingsItems = ky.get(ITEMS_API, {
     searchParams: {
@@ -22,8 +21,7 @@ export const getHoldingsItemsAndPieces = (ky) => (holdingId, params = {}) => {
       ...params,
     },
   })
-    .json()
-    .then(({ items }) => items);
+    .json();
 
   return Promise
     .all([holdingsPieces, holdingsItems])
