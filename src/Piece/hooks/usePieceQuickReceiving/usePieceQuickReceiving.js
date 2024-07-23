@@ -12,7 +12,14 @@ import {
 import { useOkapiKy } from '@folio/stripes/core';
 
 import { useReceive } from '../../../common/hooks';
-import { extendKyWithTenant, getItemById, getPieceById, getPieceStatusFromItem, getReceivingPieceItemStatus, handleReceiveErrorResponse } from '../../../common/utils';
+import {
+  extendKyWithTenant,
+  getItemById,
+  getPieceById,
+  getPieceStatusFromItem,
+  getReceivingPieceItemStatus,
+  handleReceiveErrorResponse,
+} from '../../../common/utils';
 
 export const usePieceQuickReceiving = ({
   order,
@@ -64,7 +71,6 @@ export const usePieceQuickReceiving = ({
         return res;
       })
       .catch((e) => {
-        console.log(e);
         handleReceiveErrorResponse(showCallout, e.response);
       });
   }, [quickReceive, showCallout]);

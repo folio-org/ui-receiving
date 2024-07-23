@@ -3,29 +3,24 @@ import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 import { ITEM_STATUS } from '@folio/stripes-acq-components';
 
 import {
+  usePieceMutator,
+  useReceive,
+} from '../../../common/hooks';
+import {
   getItemById,
   getPieceById,
-} from '../utils';
-import {
-  useQuickReceive,
-} from './useQuickReceive';
-import {
-  usePieceMutator,
-} from './usePieceMutator';
-import {
-  useReceive,
-} from './useReceive';
+} from '../../../common/utils';
+import { usePieceQuickReceiving } from './usePieceQuickReceiving';
 
-jest.mock('../utils', () => ({
-  ...jest.requireActual('../utils'),
+jest.mock('../../../common/utils', () => ({
+  ...jest.requireActual('../../../common/utils'),
   extendKyWithTenant: jest.fn(),
   getItemById: jest.fn(() => () => Promise.resolve({})),
   getPieceById: jest.fn(() => () => Promise.resolve({ json: () => ({}) })),
 }));
-jest.mock('./usePieceMutator', () => ({
+jest.mock('../../../common/hooks', () => ({
+  ...jest.requireActual('../../../common/hooks'),
   usePieceMutator: jest.fn(),
-}));
-jest.mock('./useReceive', () => ({
   useReceive: jest.fn(),
 }));
 
@@ -35,7 +30,7 @@ const pieceValues = {
   displaySummary: 'v1',
 };
 
-describe('useQuickReceive', () => {
+describe('usePieceQuickReceiving', () => {
   let mutatePieceMock;
   let receivePieceMock;
 
@@ -45,20 +40,16 @@ describe('useQuickReceive', () => {
 
     getItemById.mockClear();
     getPieceById.mockClear();
-    usePieceMutator.mockClear().mockReturnValue({ mutatePiece: mutatePieceMock });
-    useReceive.mockClear().mockReturnValue({ receive: receivePieceMock });
-  });
-
-  it('should call mutate piece', async () => {
-    const { result } = renderHook(() => useQuickReceive());
-
-    await result.current.quickReceive(pieceValues);
-
-    expect(mutatePieceMock).toHaveBeenCalled();
+    usePieceMutator
+      .mockClear()
+      .mockReturnValue({ mutatePiece: mutatePieceMock });
+    useReceive
+      .mockClear()
+      .mockReturnValue({ receive: receivePieceMock });
   });
 
   it('should call receive', async () => {
-    const { result } = renderHook(() => useQuickReceive());
+    const { result } = renderHook(() => usePieceQuickReceiving());
 
     await result.current.quickReceive(pieceValues);
 
@@ -73,7 +64,7 @@ describe('useQuickReceive', () => {
       getPieceById.mockReturnValue(() => Promise.resolve({ json: () => ({ ...pieceValues, itemId }) }));
       mutatePieceMock.mockImplementation(({ piece }) => Promise.resolve(piece));
 
-      const { result } = renderHook(() => useQuickReceive());
+      const { result } = renderHook(() => usePieceQuickReceiving());
 
       quickReceive = result.current.quickReceive;
     });

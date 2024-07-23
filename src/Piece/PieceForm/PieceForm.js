@@ -116,11 +116,11 @@ export const PieceForm = ({
     }
   }, [change]);
 
-  // TODO: adapt for central ordering enabled
+  // TODO: adapt for central ordering enabled (UIREC-374)
   const checkHoldingAbandonment = useCallback((holdingId) => {
     return ky.get(`${HOLDINGS_API}/${holdingId}`)
       .json()
-      // TODO: fetch from related tenants in central ordering and for central tenant
+      // TODO: fetch from related tenants in central ordering and for central tenant (UIREC-374)
       .then((holding) => getHoldingsItemsAndPieces(ky)(holding.id, { limit: 1 }))
       .then(({ pieces, items }) => {
         const willAbandoned = Boolean(

@@ -7,7 +7,6 @@ import {
 import {
   get,
   noop,
-  omit,
 } from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -56,6 +55,7 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { ConfirmReceivingModal } from '../common/components';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -72,7 +72,6 @@ import {
   EXPECTED_PIECES_SEARCH_VALUE,
   EXPECTED_PIECE_COLUMN_MAPPING,
   MENU_FILTERS,
-  ORDER_FORMAT_TO_PIECE_FORMAT,
   RECEIVED_PIECE_COLUMN_MAPPING,
   UNRECEIVABLE_PIECE_COLUMN_MAPPING,
 } from '../Piece';
@@ -80,7 +79,6 @@ import {
   TITLE_ACCORDION,
   TITLE_ACCORDION_LABELS,
 } from './constants';
-// import AddPieceModal from './AddPieceModal';
 import { BoundItemsList } from './BoundItemsList';
 import ExpectedPiecesList from './ExpectedPiecesList';
 import POLDetails from './POLDetails';
@@ -96,28 +94,7 @@ import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
 
-function getNewPieceValues(titleId, poLine, crossTenant) {
-  const { orderFormat, id: poLineId, physical, locations, checkinItems } = poLine;
-  const initialValuesPiece = { receiptDate: physical?.expectedReceiptDate, poLineId, titleId };
-
-  if (orderFormat !== ORDER_FORMATS.PEMix) {
-    initialValuesPiece.format = ORDER_FORMAT_TO_PIECE_FORMAT[orderFormat];
-  }
-
-  if (locations.length === 1 && !crossTenant) {
-    initialValuesPiece.locationId = locations[0].locationId;
-    initialValuesPiece.holdingId = locations[0].holdingId;
-  }
-
-  if (checkinItems) {
-    initialValuesPiece.displayOnHolding = true;
-  }
-
-  return initialValuesPiece;
-}
-
 const TitleDetails = ({
-  crossTenant = false,
   history,
   location,
   onClose,
@@ -131,8 +108,6 @@ const TitleDetails = ({
   const intl = useIntl();
   const stripes = useStripes();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
-  const [isAddPieceModalOpened, toggleAddPieceModal] = useModalToggle();
-  const [pieceValues, setPieceValues] = useState({});
   const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
   const confirmReceivingPromise = useRef({});
@@ -278,6 +253,16 @@ const TitleDetails = ({
       ? confirmReceiving().then(openReceiveList, noop)
       : openReceiveList()
   ), [isOrderClosed, confirmReceiving, openReceiveList]);
+
+  const onConfirmReceiving = () => {
+    confirmReceivingPromise.current.resolve();
+    toggleConfirmReceiving();
+  };
+
+  const onCancelReceiving = () => {
+    confirmReceivingPromise.current.reject();
+    toggleConfirmReceiving();
+  };
 
   const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
@@ -602,47 +587,31 @@ const TitleDetails = ({
           </AccordionSet>
         </AccordionStatus>
 
-        {isAcknowledgeNote && (
-          <ConfirmationModal
-            aria-label={acknowledgeNoteModalLabel}
-            confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
-            heading={acknowledgeNoteModalLabel}
-            id="acknowledge-receiving-note"
-            message={receivingNote}
-            onCancel={toggleAcknowledgeNote}
-            onConfirm={() => {
-              toggleAcknowledgeNote();
-              confirmAcknowledgeNote();
-            }}
-            open
-          />
-        )}
+        <ConfirmationModal
+          open={isAcknowledgeNote}
+          aria-label={acknowledgeNoteModalLabel}
+          confirmLabel={<FormattedMessage id="ui-receiving.piece.actions.confirm" />}
+          heading={acknowledgeNoteModalLabel}
+          id="acknowledge-receiving-note"
+          message={receivingNote}
+          onCancel={toggleAcknowledgeNote}
+          onConfirm={() => {
+            toggleAcknowledgeNote();
+            confirmAcknowledgeNote();
+          }}
+        />
 
-        {/* TODO: eventually remove */}
-        {/* {isAddPieceModalOpened && (
-          <AddPieceModal
-            close={toggleAddPieceModal}
-            deletePiece={deletePiece}
-            canDeletePiece={!isPiecesLock}
-            initialValues={pieceValues}
-            instanceId={title.instanceId}
-            locations={locations}
-            locationIds={locationIds}
-            onCheckIn={onQuickReceive}
-            onSubmit={onSave}
-            poLine={poLine}
-            restrictionsByAcqUnit={restrictions}
-            onUnreceive={onUnreceive}
-            getHoldingsItemsAndPieces={getHoldingsItemsAndPieces}
-          />
-        )} */}
+        <ConfirmReceivingModal
+          open={isConfirmReceiving}
+          onCancel={onCancelReceiving}
+          onConfirm={onConfirmReceiving}
+        />
       </Pane>
     </HasCommand>
   );
 };
 
 TitleDetails.propTypes = {
-  crossTenant: PropTypes.bool,
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),

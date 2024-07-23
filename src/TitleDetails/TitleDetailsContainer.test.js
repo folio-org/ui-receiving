@@ -10,11 +10,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useLocationsQuery } from '@folio/stripes-acq-components';
 
-import {
-  usePieceMutator,
-  useQuickReceive,
-  useUnreceive,
-} from '../common/hooks';
 import TitleDetails from './TitleDetails';
 import TitleDetailsContainer from './TitleDetailsContainer';
 
@@ -115,48 +110,6 @@ describe('TitleDetailsContainer', () => {
     expect(mutator.pieces.GET).toHaveBeenCalled();
     expect(mutator.poLine.GET).toHaveBeenCalled();
     expect(mutator.vendors.GET).toHaveBeenCalled();
-  });
-
-  it('should mutate piece when onAdd is called', async () => {
-    const mutatePieceMock = jest.fn().mockReturnValue(Promise.resolve());
-
-    usePieceMutator.mockClear().mockReturnValue({ mutatePiece: mutatePieceMock });
-
-    await act(async () => {
-      renderTitleDetailsContainer();
-    });
-
-    await TitleDetails.mock.calls[0][0].onAddPiece(pieces[0]);
-
-    expect(mutatePieceMock).toHaveBeenCalled();
-  });
-
-  it('should receive piece when onCheckIn is called', async () => {
-    const quickReceiveMock = jest.fn().mockReturnValue(Promise.resolve());
-
-    useQuickReceive.mockClear().mockReturnValue({ quickReceive: quickReceiveMock });
-
-    await act(async () => {
-      renderTitleDetailsContainer();
-    });
-
-    await TitleDetails.mock.calls[0][0].onCheckIn(pieces[0]);
-
-    expect(quickReceiveMock).toHaveBeenCalled();
-  });
-
-  it('should receive piece when onUnreceive is called', async () => {
-    const onUnreceive = jest.fn().mockReturnValue(Promise.resolve());
-
-    useUnreceive.mockClear().mockReturnValue({ unreceive: onUnreceive });
-
-    await act(async () => {
-      renderTitleDetailsContainer();
-    });
-
-    await TitleDetails.mock.calls[0][0].onUnreceive(pieces[0]);
-
-    expect(onUnreceive).toHaveBeenCalled();
   });
 
   it('should fetch items and pieces in holding', async () => {

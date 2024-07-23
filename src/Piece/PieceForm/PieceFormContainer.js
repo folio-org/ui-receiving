@@ -5,17 +5,13 @@ import {
   useCallback,
   useMemo,
 } from 'react';
-import { useIntl } from 'react-intl';
 import {
   useHistory,
   useLocation,
   useParams,
 } from 'react-router-dom';
 
-import {
-  ConfirmationModal,
-  LoadingView,
-} from '@folio/stripes/components';
+import { LoadingView } from '@folio/stripes/components';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
@@ -27,6 +23,7 @@ import {
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
+import { ConfirmReceivingModal } from '../../common/components';
 import {
   useOrder,
   usePieceMutator,
@@ -44,9 +41,17 @@ import {
   RECEIVING_ROUTE_VIEW,
 } from '../../constants';
 import { useReceivingSearchContext } from '../../contexts';
+import {
+  PIECE_ACTION_NAMES,
+  PIECE_FORM_CHECKBOX_FIELD_NAMES,
+  PIECE_FORM_FIELD_NAMES,
+  PIECE_FORM_SERVICE_FIELD_NAMES,
+} from '../constants';
 import { usePieceQuickReceiving } from '../hooks';
 import PieceForm from './PieceForm';
-import { PIECE_ACTION_NAMES, PIECE_FORM_CHECKBOX_FIELD_NAMES, PIECE_FORM_FIELD_NAMES, PIECE_FORM_SERVICE_FIELD_NAMES } from '../constants';
+
+/* Set of post-submission actions that should not close the form after piece saving */
+const NOT_CLOSURE_ACTIONS_SET = new Set([PIECE_ACTION_NAMES.saveAndCreate]);
 
 export const PieceFormContainer = ({
   initialValues,
@@ -54,7 +59,6 @@ export const PieceFormContainer = ({
   paneTitle,
 }) => {
   const showCallout = useShowCallout();
-  const intl = useIntl();
   const history = useHistory();
   const { search } = useLocation();
   const { id: titleId } = useParams();
@@ -116,7 +120,6 @@ export const PieceFormContainer = ({
   const canDeletePiece = !(!orderLine?.checkinItems && order?.workflowStatus === ORDER_STATUSES.pending);
   const instanceId = title?.instanceId;
   const pieceLocationId = initialValues?.locationId;
-  const confirmReceivingModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.title' });
   const orderFormat = orderLine?.orderFormat;
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
     ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
@@ -150,7 +153,7 @@ export const PieceFormContainer = ({
   ]);
 
   const onCreateAnother = useCallback((values) => {
-    const piecePrototype = {
+    const pieceTemplate = {
       ...omit(values, [
         'id',
         'itemId',
@@ -166,19 +169,18 @@ export const PieceFormContainer = ({
     history.push({
       pathname,
       search,
-      state: { piecePrototype },
+      state: { pieceTemplate },
     });
   }, [history, isCentralRouting, search, titleId]);
 
   const onSubmit = useCallback((formValues) => {
-    // TODO: handle somewhere "Create another"
     const {
-      deleteHolding = false,
+      deleteHolding,
       postSubmitAction,
     } = formValues;
 
     const options = {
-      searchParams: { deleteHolding },
+      searchParams: { ...(deleteHolding ? { deleteHolding } : {}) },
     };
 
     const piece = omit(formValues, Object.values(PIECE_FORM_SERVICE_FIELD_NAMES));
@@ -193,17 +195,20 @@ export const PieceFormContainer = ({
         return res;
       })
       .then((data) => {
-        console.log('data', data);
         if (!postSubmitAction) return data;
 
-        const handler = new Map([
+        const postSubmitHandler = new Map([
           [PIECE_ACTION_NAMES.saveAndCreate, onCreateAnother],
           [PIECE_ACTION_NAMES.quickReceive, onQuickReceive],
         ]).get(postSubmitAction) || identity;
 
-        return handler(data);
+        return postSubmitHandler(data);
       })
-      // .then(onCloseForm)
+      .then((data) => {
+        if (!NOT_CLOSURE_ACTIONS_SET.has(postSubmitAction)) onCloseForm();
+
+        return data;
+      })
       .catch(async ({ response }) => {
         const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
@@ -285,8 +290,6 @@ export const PieceFormContainer = ({
     return { ...initialValues, ...initialCheckboxValues };
   }, [initialValues]);
 
-  console.log('formInitialValues', formInitialValues);
-
   const isLoading = (
     !initialValues
     || isLoadingProp
@@ -300,13 +303,6 @@ export const PieceFormContainer = ({
   if (isLoading) {
     return <LoadingView />;
   }
-
-  // console.log('title', title);
-  // console.log('initValue', initialValues);
-  // console.log('orderLine', orderLine);
-  // console.log('order', order);
-  // console.log('locations', locations);
-  // console.log('restrictions', restrictions);
 
   return (
     <>
@@ -328,13 +324,8 @@ export const PieceFormContainer = ({
         restrictionsByAcqUnit={restrictions}
       />
 
-      <ConfirmationModal
-        aria-label={confirmReceivingModalLabel}
-        id="confirm-receiving"
+      <ConfirmReceivingModal
         open={isConfirmReceiving}
-        confirmLabel={intl.formatMessage({ id: 'ui-receiving.piece.actions.confirm' })}
-        heading={confirmReceivingModalLabel}
-        message={intl.formatMessage({ id: 'ui-receiving.piece.confirmReceiving.message' })}
         onCancel={onCancelReceive}
         onConfirm={onConfirmReceive}
       />

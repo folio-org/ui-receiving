@@ -7,8 +7,8 @@ import {
   useOrderLine,
 } from '@folio/stripes-acq-components';
 
-import { useReceivingSearchContext } from '../../contexts';
 import { useTitle } from '../../common/hooks';
+import { useReceivingSearchContext } from '../../contexts';
 import { ORDER_FORMAT_TO_PIECE_FORMAT } from '../constants';
 import { PieceFormContainer } from '../PieceForm';
 
@@ -49,6 +49,7 @@ export const PieceCreate = ({
 }) => {
   const { id: titleId } = match.params;
   const { state } = location;
+  const isCreateFromTemplate = typeof state?.pieceTemplate === 'object';
 
   const intl = useIntl();
 
@@ -60,20 +61,30 @@ export const PieceCreate = ({
   const {
     isLoading: isTitleLoading,
     title,
-  } = useTitle(titleId, { tenantId });
+  } = useTitle(titleId, {
+    tenantId,
+    enabled: !isCreateFromTemplate,
+  });
 
   const {
     isLoading: isOrderLineLoading,
     orderLine,
-  } = useOrderLine(title?.poLineId, { tenantId });
+  } = useOrderLine(title?.poLineId, {
+    tenantId,
+    enabled: !isCreateFromTemplate,
+  });
 
   const initialValues = useMemo(() => {
-    console.log('state?.piecePrototype', state?.piecePrototype);
-
-    return typeof state?.piecePrototype === 'object'
-      ? state.piecePrototype
+    return isCreateFromTemplate
+      ? state.pieceTemplate
       : getNewPieceValues(titleId, orderLine, crossTenant);
-  }, [crossTenant, orderLine, state?.piecePrototype, titleId]);
+  }, [
+    crossTenant,
+    isCreateFromTemplate,
+    orderLine,
+    state?.pieceTemplate,
+    titleId,
+  ]);
 
   const isLoading = isTitleLoading || isOrderLineLoading;
 
