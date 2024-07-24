@@ -300,9 +300,7 @@ export const PieceFormContainer = ({
     || isRestrictionsLoading
   );
 
-  if (isLoading) {
-    return <LoadingView />;
-  }
+  if (isLoading) return <LoadingView />;
 
   return (
     <>

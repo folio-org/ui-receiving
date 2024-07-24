@@ -2,11 +2,11 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
+
 import {
   renderHook,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
-
 import { useOkapiKy } from '@folio/stripes/core';
 import { VENDORS_API } from '@folio/stripes-acq-components';
 

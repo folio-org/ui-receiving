@@ -26,18 +26,15 @@ import {
 import { usePieceQuickReceiving } from '../hooks';
 import { PieceFormContainer } from './PieceFormContainer';
 
-jest.mock('@folio/stripes-acq-components', () => {
-  return {
-    ...jest.requireActual('@folio/stripes-acq-components'),
-    FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
-    useCentralOrderingContext: jest.fn(),
-    useAcqRestrictions: jest.fn(),
-    useLocationsQuery: jest.fn(),
-    useOrderLine: jest.fn(),
-  };
-});
-jest.mock('../../common/components/LineLocationsView/LineLocationsView',
-  () => jest.fn().mockReturnValue('LineLocationsView'));
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
+  useCentralOrderingContext: jest.fn(),
+  useAcqRestrictions: jest.fn(),
+  useLocationsQuery: jest.fn(),
+  useOrderLine: jest.fn(),
+}));
+jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
 jest.mock('../../common/hooks', () => ({
   ...jest.requireActual('../../common/hooks'),
   useHoldingItems: jest.fn(),

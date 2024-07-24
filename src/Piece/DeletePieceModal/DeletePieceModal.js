@@ -1,8 +1,8 @@
+import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   useIntl,
 } from 'react-intl';
-import PropTypes from 'prop-types';
 
 import {
   Button,

@@ -10,12 +10,10 @@ import { useTitle } from '../../common/hooks';
 import { PieceFormContainer } from '../PieceForm';
 import { PieceCreate } from './PieceCreate';
 
-jest.mock('@folio/stripes-acq-components', () => {
-  return {
-    ...jest.requireActual('@folio/stripes-acq-components'),
-    useOrderLine: jest.fn(),
-  };
-});
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useOrderLine: jest.fn(),
+}));
 jest.mock('../../common/hooks', () => ({
   ...jest.requireActual('../../common/hooks'),
   useTitle: jest.fn(),

@@ -20,10 +20,10 @@ import {
   useOrganizationsBatch,
   useTitle,
 } from '../common/hooks';
+import { RECEIVING_ROUTE } from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleDetails from './TitleDetails';
 import TitleDetailsContainer from './TitleDetailsContainer';
-import { useReceivingSearchContext } from '../contexts';
-import { RECEIVING_ROUTE } from '../constants';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),

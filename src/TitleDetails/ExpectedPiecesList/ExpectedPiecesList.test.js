@@ -1,8 +1,9 @@
+import { IntlProvider } from 'react-intl';
+
 import {
   render,
   fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { IntlProvider } from 'react-intl';
 
 import { usePaginatedPieces } from '../../common/hooks';
 import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
