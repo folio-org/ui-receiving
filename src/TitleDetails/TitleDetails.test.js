@@ -24,7 +24,10 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { usePaginatedPieces } from '../common/hooks';
-import { RECEIVING_PIECE_CREATE_ROUTE, RECEIVING_PIECE_EDIT_ROUTE } from '../constants';
+import {
+  RECEIVING_PIECE_CREATE_ROUTE,
+  RECEIVING_PIECE_EDIT_ROUTE,
+} from '../constants';
 import TitleDetails from './TitleDetails';
 
 jest.mock('react-router-dom', () => ({
