@@ -12,14 +12,14 @@ import { useReceivingSearchContext } from '../../contexts';
 import { ORDER_FORMAT_TO_PIECE_FORMAT } from '../constants';
 import { PieceFormContainer } from '../PieceForm';
 
-function getNewPieceValues(titleId, poLine = {}, crossTenant) {
+function getNewPieceValues(titleId, poLine, crossTenant) {
   const {
     orderFormat,
     id: poLineId,
     physical,
     locations,
     checkinItems,
-  } = poLine;
+  } = (poLine || {});
 
   const initialValuesPiece = {
     receiptDate: physical?.expectedReceiptDate,
