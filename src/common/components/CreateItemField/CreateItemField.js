@@ -21,21 +21,29 @@ import {
 import { PIECE_FORM_FIELD_NAMES } from '../../../Piece/constants';
 
 function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
-  const { format, itemId, holdingsRecordId, receivingStatus } = piece;
+  const {
+    bindItemId,
+    format,
+    holdingsRecordId,
+    isBound,
+    itemId,
+    receivingStatus,
+  } = piece;
   const isAddItemAvailable =
     includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
     && Boolean(instanceId);
   const isReceived = receivingStatus === PIECE_STATUS.received;
+  const currentItemId = isBound ? bindItemId : itemId;
 
   const intl = useIntl();
 
-  if (itemId && holdingsRecordId) {
+  if (currentItemId && holdingsRecordId) {
     return (
       <KeyValue label={label}>
         <Link
           data-test-connected-link
           data-testid="connected-link"
-          to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}
+          to={`/inventory/view/${instanceId}/${holdingsRecordId}/${currentItemId}`}
         >
           <FormattedMessage id="ui-receiving.piece.connectedItem" />
           <Icon

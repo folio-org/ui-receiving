@@ -156,14 +156,15 @@
 
   "bind.pieces.create.error.generic": "Failed to create bind pieces",
   "bind.pieces.create.error.bindItemMustIncludeEitherHoldingIdOrLocationId": "A holdings or location reference must present",
+  "bind.pieces.create.error.barcodeIsNotUnique": "Barcode must be unique, piece and item data could not be updated.",
   "bind.pieces.modal.button.transfer": "Transfer",
   "bind.pieces.create.success.withBarcode": "Item <b>{barcode}</b> created successfully",
+  "bind.pieces.modal.transfer.message": "There are requests on the following pieces: <b>{barcodes}</b>. <b>Transfer requests</b> to the new record?",
+  "bind.pieces.modal.delete.message": "There are requests on the following pieces: <b>{barcodes}</b>. Please <b>delete requests</b> before proceeding.",
   "bind.pieces.create.success.noBarcode": "Item created successfully",
   "bind.pieces.modal.button.not.transfer": "Do not transfer",
-  "bind.pieces.modal.request.transfer.message": "There are requests on the following pieces: <b>{barcodes}</b>. <b>Transfer requests</b> to the new record?",
-  "bind.pieces.modal.request.delete.message": "There are requests on the following pieces: <b>{barcodes}</b>. Please <b>delete requests</b> before proceeding.",
-
   "piece.accordion.itemDetails":"Item details",
+  "piece.accordion.originalItemDetails":"Item details (original)",
   "piece.accordion.pieceDetails":"Piece details",
   "piece.accordion.statusChangeLog":"Status log",
   "piece.accessionNumber": "Accession number",

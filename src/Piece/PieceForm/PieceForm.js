@@ -90,6 +90,8 @@ const PieceForm = ({
     id,
     internalNote,
     itemId,
+    bindItemId,
+    isBound,
     isCreateItem,
     metadata,
     receivingStatus,
@@ -106,6 +108,10 @@ const PieceForm = ({
   const isSaveAndCreateDisabled = disabled || protectUpdate || protectCreate;
   const isSaveAndCloseDisabled = disabled || (protectUpdate && Boolean(id));
   const isEditDisabled = disabled || protectUpdate;
+  const hasBoundItem = Boolean(bindItemId && isBound);
+  const itemDetailsAccordionLabelId = hasBoundItem
+    ? PIECE_MODAL_ACCORDION.originalItemDetails
+    : PIECE_MODAL_ACCORDION.itemDetails;
 
   const onChangeDisplayOnHolding = useCallback(({ target: { checked } }) => {
     change(PIECE_FORM_FIELD_NAMES.displayOnHolding, checked);
@@ -331,7 +337,7 @@ const PieceForm = ({
                     <Accordion
                       closedByDefault={isItemFieldsDisabled}
                       id={PIECE_MODAL_ACCORDION.itemDetails}
-                      label={PIECE_MODAL_ACCORDION_LABELS[PIECE_MODAL_ACCORDION.itemDetails]}
+                      label={PIECE_MODAL_ACCORDION_LABELS[itemDetailsAccordionLabelId]}
                     >
                       <ItemFields disabled={isItemFieldsDisabled} />
                     </Accordion>

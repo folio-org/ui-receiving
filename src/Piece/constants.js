@@ -184,12 +184,14 @@ export const PIECE_MODAL_ACCORDION = {
   metadata: 'metadata',
   pieceDetails: 'pieceDetails',
   itemDetails: 'itemDetails',
+  originalItemDetails: 'originalItemDetails',
   statusChangeLog: 'statusChangeLog',
 };
 
 export const PIECE_MODAL_ACCORDION_LABELS = {
   [PIECE_MODAL_ACCORDION.pieceDetails]: <FormattedMessage id="ui-receiving.piece.accordion.pieceDetails" />,
   [PIECE_MODAL_ACCORDION.itemDetails]: <FormattedMessage id="ui-receiving.piece.accordion.itemDetails" />,
+  [PIECE_MODAL_ACCORDION.originalItemDetails]: <FormattedMessage id="ui-receiving.piece.accordion.originalItemDetails" />,
   [PIECE_MODAL_ACCORDION.statusChangeLog]: <FormattedMessage id="ui-receiving.piece.accordion.statusChangeLog" />,
 };
 

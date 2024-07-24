@@ -46,6 +46,7 @@ export const TRANSFER_REQUEST_ACTIONS = {
 };
 
 export const ERROR_CODES = {
+  barcodeIsNotUnique: 'barcodeIsNotUnique',
   bindItemMustIncludeEitherHoldingIdOrLocationId: 'bindItemMustIncludeEitherHoldingIdOrLocationId',
   generic: 'generic',
 };
