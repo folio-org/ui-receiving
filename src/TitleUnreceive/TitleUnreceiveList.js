@@ -55,7 +55,7 @@ export const TitleUnreceiveList = ({ fields, props: { pieceLocationMap, pieceHol
         ),
         location: ({ locationId, holdingId }) => (
           holdingId
-            ? getHoldingLocationName(pieceHoldingMap[holdingId], pieceLocationMap)
+            ? getHoldingLocationName(pieceHoldingMap[holdingId], pieceLocationMap, intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' }))
             : (pieceLocationMap[locationId]?.name && `${pieceLocationMap[locationId].name} (${pieceLocationMap[locationId].code})`) || ''
         ),
         hasRequest: record => (

@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
 import {
   Label,
@@ -17,6 +20,8 @@ const LineLocationsView = ({
   poLine,
   locations,
 }) => {
+  const intl = useIntl();
+
   const { holdings, isLoading } = useInstanceHoldingsQuery(instanceId, { consortium: crossTenant });
 
   const locationsToDisplay = useMemo(() => {
@@ -24,12 +29,12 @@ const LineLocationsView = ({
     const holdingsMap = holdings.reduce((acc, h) => ({ ...acc, [h.id]: h }), {});
     const lineLocations = poLine.locations.map(({ holdingId, locationId }) => (
       holdingId
-        ? holdings.length && holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap)
+        ? holdings.length && holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap, intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' }))
         : (locationsMap[locationId]?.name && `${locationsMap[locationId].name} (${locationsMap[locationId].code})`) || ''
     ));
 
     return lineLocations.filter(Boolean).join(', ');
-  }, [holdings, locations, poLine.locations]);
+  }, [holdings, intl, locations, poLine.locations]);
 
   return (
     <>

@@ -33,7 +33,7 @@ export const getResultFormatter = ({ field, intl, pieceHoldingMap, pieceLocation
   ),
   location: ({ locationId, holdingId }) => (
     holdingId
-      ? getHoldingLocationName(pieceHoldingMap[holdingId], pieceLocationMap)
+      ? getHoldingLocationName(pieceHoldingMap[holdingId], pieceLocationMap, intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' }))
       : (pieceLocationMap[locationId]?.name && `${pieceLocationMap[locationId].name} (${pieceLocationMap[locationId].code})`) || ''
   ),
 });

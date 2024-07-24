@@ -50,7 +50,7 @@ export const createExportReport = (
     locationId,
   }) => (
     holdingId
-      ? holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap)
+      ? holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap, invalidReferenceLabel)
       : locationsMap[locationId]?.name && `${locationsMap[locationId].name} (${locationsMap[locationId]?.code})`
   );
 
