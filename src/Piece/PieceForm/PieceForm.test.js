@@ -318,6 +318,31 @@ describe('PieceForm', () => {
     });
   });
 
+  it('should clear Item details inputs when change format from physical to electronic', async () => {
+    renderPieceForm({
+      pieceFormatOptions: [
+        { value: PIECE_FORMAT.physical, label: 'Physical' },
+        { value: PIECE_FORMAT.electronic, label: 'Electronic' },
+        { value: PIECE_FORMAT.other, label: 'Other' },
+      ],
+      initialValues: {
+        isCreateAnother: true,
+        receivingStatus: PIECE_STATUS.expected,
+        format: PIECE_FORMAT.physical,
+        barcode: 'barcode',
+        callNumber: 'callNumber',
+      },
+    });
+
+    const formatlabel = screen.getByText('ui-receiving.piece.format');
+
+    await user.click(formatlabel);
+    await user.selectOptions(screen.getByRole('combobox', { name: 'ui-receiving.piece.format' }), 'Electronic');
+
+    expect(screen.getByLabelText('ui-receiving.piece.barcode')).toHaveValue('');
+    expect(screen.getByLabelText('ui-receiving.piece.callNumber')).toHaveValue('');
+  });
+
   it('should update piece status', async () => {
     const onChange = jest.fn();
 
