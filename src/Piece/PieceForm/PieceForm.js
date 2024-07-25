@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import {
   useCallback,
+  useEffect,
   useRef,
 } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -30,6 +31,7 @@ import {
   DeleteHoldingsModal,
   handleKeyCommand,
   HOLDINGS_API,
+  PIECE_FORMAT,
   PIECE_STATUS,
   useModalToggle,
 } from '@folio/stripes-acq-components';
@@ -96,6 +98,17 @@ const PieceForm = ({
     metadata,
     receivingStatus,
   } = formValues;
+
+  useEffect(() => {
+    if (!id && formValues?.format === PIECE_FORMAT.electronic) {
+      batch(() => {
+        change(PIECE_FORM_FIELD_NAMES.isCreateItem, false);
+        change(PIECE_FORM_FIELD_NAMES.barcode, undefined);
+        change(PIECE_FORM_FIELD_NAMES.callNumber, undefined);
+        change(PIECE_FORM_FIELD_NAMES.accessionNumber, undefined);
+      });
+    }
+  }, [batch, change, id, formValues]);
 
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
