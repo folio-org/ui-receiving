@@ -12,7 +12,7 @@ export const usePiece = (pieceId, options = {}) => {
     tenantId,
   } = options;
 
-  const ky = useOkapiKy({ tenantId });
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace('receiving-title-piece');
 
   const {
