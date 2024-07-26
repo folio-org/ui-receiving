@@ -180,7 +180,7 @@ export const PieceFields = ({
               createInventoryValues={createInventoryValues}
               instanceId={instanceId}
               label={<FormattedMessage id="ui-receiving.piece.createItem" />}
-              piece={{ holdingsRecordId: values.holdingId, ...values }}
+              piece={values}
             />
           </Col>
         )}

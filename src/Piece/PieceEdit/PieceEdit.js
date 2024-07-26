@@ -1,7 +1,13 @@
+import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { usePiece } from '../../common/hooks';
+import {
+  useItem,
+  usePiece,
+  usePiecesRequests,
+} from '../../common/hooks';
+import { getPieceStatusFromItem } from '../../common/utils';
 import { useReceivingSearchContext } from '../../contexts';
 import { PieceFormContainer } from '../PieceForm';
 
@@ -13,13 +19,33 @@ export const PieceEdit = ({ match }) => {
   const { targetTenantId: tenantId } = useReceivingSearchContext();
 
   const {
-    isLoading,
+    isLoading: isPieceLoading,
     piece,
   } = usePiece(pieceId, { tenantId });
 
+  const {
+    isLoading: isItemLoading,
+    item,
+  } = useItem(piece?.itemId, { tenantId });
+
+  const {
+    isLoading: isRequestsLoading,
+    requests,
+  } = usePiecesRequests([piece?.id], { tenantId });
+
+  const initialValues = useMemo(() => ({
+    ...(piece || {}),
+    callNumber: item?.itemLevelCallNumber,
+    itemStatus: getPieceStatusFromItem(item),
+    request: requests?.[0],
+    holdingsRecordId: item?.holdingsRecordId,
+  }), [item, piece, requests]);
+
+  const isLoading = isPieceLoading || isItemLoading || isRequestsLoading;
+
   return (
     <PieceFormContainer
-      initialValues={piece}
+      initialValues={initialValues}
       isLoading={isLoading}
       paneTitle={intl.formatMessage({ id: 'ui-receiving.piece.pieceForm.edit.title' })}
     />
