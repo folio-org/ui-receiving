@@ -12,6 +12,8 @@ import { PieceEdit } from './PieceEdit';
 jest.mock('../../common/hooks', () => ({
   ...jest.requireActual('../../common/hooks'),
   usePiece: jest.fn(),
+  useItem: jest.fn(() => ({})),
+  usePiecesRequests: jest.fn(() => ({ requests: [] })),
 }));
 jest.mock('../../contexts', () => ({
   ...jest.requireActual('../../contexts'),
