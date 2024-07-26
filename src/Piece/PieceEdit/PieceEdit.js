@@ -38,7 +38,7 @@ export const PieceEdit = ({ match }) => {
     callNumber: item?.itemLevelCallNumber,
     itemStatus: getPieceStatusFromItem(item),
     request: requests?.[0],
-    holdingsRecordId: item?.holdingsRecordId,
+    holdingsRecordId: piece?.holdingId,
   }), [item, piece, requests]);
 
   const isLoading = isPieceLoading || isItemLoading || isRequestsLoading;
