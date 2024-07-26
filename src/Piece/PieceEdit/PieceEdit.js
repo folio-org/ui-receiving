@@ -31,7 +31,7 @@ export const PieceEdit = ({ match }) => {
   const {
     isLoading: isRequestsLoading,
     requests,
-  } = usePiecesRequests([piece?.id], { tenantId });
+  } = usePiecesRequests([piece], { tenantId });
 
   const initialValues = useMemo(() => ({
     ...(piece || {}),

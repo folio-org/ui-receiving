@@ -5,6 +5,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { PIECE_REQUESTS_API } from '../../constants';
+import { buildPieceRequestsSearchParams } from '../../utils';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
   const itemIds = pieces.reduce((acc, { itemId }) => {
@@ -40,18 +41,6 @@ export const fetchConsortiumPieceItems = (ky, { instanceId, pieces }) => {
     .then((items) => items.filter(({ id, holdingsRecordId, tenantId }) => {
       return !!tenantHoldingIdsMap.get(tenantId)?.has(holdingsRecordId) && pieceItemIdsSet.has(id);
     }));
-};
-
-const buildPieceRequestsSearchParams = (pieces = []) => {
-  const formData = new FormData();
-
-  formData.append('status', 'Open*');
-
-  pieces.filter(i => i.itemId).forEach(({ id }) => {
-    formData.append('pieceIds', id);
-  });
-
-  return new URLSearchParams(formData).toString();
 };
 
 export const fetchLocalPieceRequests = (ky, { pieces }) => {

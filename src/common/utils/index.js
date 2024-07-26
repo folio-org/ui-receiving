@@ -1,3 +1,4 @@
+export * from './buildPieceRequestsSearchParams';
 export * from './getClaimingIntervalFromDate';
 export * from './getDehydratedPiece';
 export * from './getHoldingsItemsAndPieces';

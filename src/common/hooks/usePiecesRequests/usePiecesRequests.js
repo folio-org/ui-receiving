@@ -4,13 +4,13 @@ import {
   useNamespace,
   useOkapiKy,
 } from '@folio/stripes/core';
-import { LIMIT_MAX } from '@folio/stripes-acq-components';
 
 import { PIECE_REQUESTS_API } from '../../constants';
+import { buildPieceRequestsSearchParams } from '../../utils';
 
 const DEFAULT_DATA = [];
 
-export const usePiecesRequests = (pieceIds = [], options = {}) => {
+export const usePiecesRequests = (pieces = [], options = {}) => {
   const {
     enabled = true,
     tenantId,
@@ -25,20 +25,13 @@ export const usePiecesRequests = (pieceIds = [], options = {}) => {
     isFetching,
     isLoading,
   } = useQuery({
-    queryKey: [namespace, tenantId, pieceIds],
+    queryKey: [namespace, tenantId, pieces],
     queryFn: ({ signal }) => {
-      const searchParams = new URLSearchParams({
-        limit: LIMIT_MAX,
-        status: 'Open*',
-      });
-
-      pieceIds
-        .filter(Boolean)
-        .forEach((pieceId) => searchParams.append('pieceIds', pieceId));
+      const searchParams = buildPieceRequestsSearchParams(pieces);
 
       return ky.get(PIECE_REQUESTS_API, { searchParams, signal }).json();
     },
-    enabled: enabled && Boolean(pieceIds.length),
+    enabled: enabled && Boolean(pieces.length),
     ...queryOptions,
   });
 
