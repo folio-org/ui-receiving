@@ -89,6 +89,7 @@ const PieceForm = ({
   const {
     enumeration,
     externalNote,
+    format,
     id,
     internalNote,
     itemId,
@@ -100,7 +101,7 @@ const PieceForm = ({
   } = formValues;
 
   useEffect(() => {
-    if (!id && formValues?.format === PIECE_FORMAT.electronic) {
+    if (!id && format === PIECE_FORMAT.electronic) {
       batch(() => {
         change(PIECE_FORM_FIELD_NAMES.isCreateItem, false);
         change(PIECE_FORM_FIELD_NAMES.barcode, undefined);
@@ -108,7 +109,7 @@ const PieceForm = ({
         change(PIECE_FORM_FIELD_NAMES.accessionNumber, undefined);
       });
     }
-  }, [batch, change, id, formValues]);
+  }, [batch, change, format, id]);
 
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
