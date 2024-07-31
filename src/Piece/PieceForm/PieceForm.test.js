@@ -8,7 +8,6 @@ import {
   screen,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { useOkapiKy } from '@folio/stripes/core';
 import {
   FieldInventory,
   INVENTORY_RECORDS_TYPE,
@@ -16,7 +15,6 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { getHoldingsItemsAndPieces } from '../../common/utils';
 import { usePieceStatusChangeLog } from '../hooks';
 import PieceForm from './PieceForm';
 
@@ -28,13 +26,6 @@ jest.mock('@folio/stripes-acq-components', () => {
   };
 });
 jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
-jest.mock('../../common/utils', () => ({
-  ...jest.requireActual('../../common/utils'),
-  getHoldingsItemsAndPieces: jest.fn(() => () => Promise.resolve({
-    pieces: { totalRecords: 2 },
-    items: { totalRecords: 1 },
-  })),
-}));
 jest.mock('../hooks', () => ({
   ...jest.requireActual('../hooks'),
   usePieceStatusChangeLog: jest.fn(),
@@ -49,6 +40,7 @@ const defaultProps = {
     }),
   },
   hasValidationErrors: false,
+  checkHoldingAbandonment: jest.fn(() => Promise.resolve({ willAbandoned: false })),
   createInventoryValues: {},
   onClose: jest.fn(),
   onDelete: jest.fn(),
@@ -88,12 +80,6 @@ const logs = [
   },
 ];
 
-const kyMock = {
-  get: jest.fn(() => ({
-    json: () => Promise.resolve(holding),
-  })),
-};
-
 const DATE_FORMAT = 'MM/DD/YYYY';
 const today = moment();
 
@@ -113,15 +99,12 @@ const createNewHoldingForThePiece = (newHoldingId = 'newHoldingUUID') => {
 
 describe('PieceForm', () => {
   beforeEach(() => {
+    defaultProps.checkHoldingAbandonment.mockClear();
     defaultProps.onClose.mockClear();
     defaultProps.onDelete.mockClear();
     defaultProps.onSubmit.mockClear();
     defaultProps.onUnreceive.mockClear();
     FieldInventory.mockClear();
-    kyMock.get.mockClear();
-    useOkapiKy
-      .mockClear()
-      .mockReturnValue(kyMock);
     usePieceStatusChangeLog
       .mockClear()
       .mockReturnValue({ data: logs });
@@ -261,12 +244,7 @@ describe('PieceForm', () => {
 
     describe('Abandoned holdings', () => {
       it('should display the modal for deleting abandoned holding when the original holding is empty after changing to a new one', async () => {
-        getHoldingsItemsAndPieces
-          .mockClear()
-          .mockReturnValue(() => Promise.resolve({
-            pieces: { totalRecords: 1 },
-            items: { totalRecords: 0 },
-          }));
+        defaultProps.checkHoldingAbandonment.mockResolvedValue({ willAbandoned: true });
 
         renderPieceForm({
           initialValues: {
@@ -281,24 +259,6 @@ describe('PieceForm', () => {
 
         expect(await screen.findByText('stripes-acq-components.holdings.deleteModal.message')).toBeInTheDocument();
         expect(defaultProps.onSubmit).not.toHaveBeenCalled();
-      });
-
-      it('should NOT display the modal for deleting abandoned holding if it has already been deleted', async () => {
-        kyMock.get.mockReturnValue(({ json: () => Promise.reject(new Error('404')) }));
-
-        renderPieceForm({
-          initialValues: {
-            id: 'pieceId',
-            format: PIECE_FORMAT.physical,
-            holdingId: holding.id,
-          },
-        });
-
-        await createNewHoldingForThePiece();
-        await user.click(await findButton('stripes-components.saveAndClose'));
-
-        expect(screen.queryByText('stripes-acq-components.holdings.deleteModal.message')).not.toBeInTheDocument();
-        expect(defaultProps.onSubmit).toHaveBeenCalled();
       });
     });
   });
