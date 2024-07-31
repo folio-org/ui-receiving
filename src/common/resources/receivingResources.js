@@ -1,11 +1,9 @@
 import {
   baseManifest,
+  HOLDINGS_API,
 } from '@folio/stripes-acq-components';
 
-import {
-  RECEIVE_API,
-  HOLDINGS_API,
-} from '../constants';
+import { RECEIVE_API } from '../constants';
 
 export const receivingResource = {
   ...baseManifest,

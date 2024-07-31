@@ -1,6 +1,7 @@
 import {
   CONTRIBUTOR_NAME_TYPES_API,
   fetchExportDataByIds,
+  HOLDINGS_API,
   IDENTIFIER_TYPES_API,
   ITEMS_API,
   LINES_API,
@@ -10,7 +11,6 @@ import {
   USERS_API,
 } from '@folio/stripes-acq-components';
 
-import { HOLDINGS_API } from '../../../common/constants';
 import { mapUniqElements } from './mapUniqElements';
 
 export const fetchPOLinesExportData = (ky) => (titles = []) => {
