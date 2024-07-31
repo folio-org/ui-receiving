@@ -47,7 +47,10 @@ import {
   PIECE_FORM_FIELD_NAMES,
   PIECE_FORM_SERVICE_FIELD_NAMES,
 } from '../constants';
-import { usePieceQuickReceiving } from '../hooks';
+import {
+  usePieceHoldingAbandonmentCheck,
+  usePieceQuickReceiving,
+} from '../hooks';
 import PieceForm from './PieceForm';
 
 /* Set of post-submission actions that should not close the form after piece saving */
@@ -290,6 +293,8 @@ export const PieceFormContainer = ({
     return { ...initialValues, ...initialCheckboxValues };
   }, [initialValues]);
 
+  const { checkHoldingAbandonment } = usePieceHoldingAbandonmentCheck(formInitialValues);
+
   const isLoading = (
     !initialValues
     || isLoadingProp
@@ -306,6 +311,7 @@ export const PieceFormContainer = ({
     <>
       <PieceForm
         canDeletePiece={canDeletePiece}
+        checkHoldingAbandonment={checkHoldingAbandonment}
         createInventoryValues={createInventoryValues}
         initialValues={formInitialValues}
         instanceId={instanceId}

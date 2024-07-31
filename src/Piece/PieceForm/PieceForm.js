@@ -22,24 +22,17 @@ import {
   Paneset,
   Row,
 } from '@folio/stripes/components';
-import {
-  useOkapiKy,
-  useStripes,
-} from '@folio/stripes/core';
+import { useStripes } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   DeleteHoldingsModal,
   handleKeyCommand,
-  HOLDINGS_API,
   PIECE_FORMAT,
   PIECE_STATUS,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import {
-  getClaimingIntervalFromDate,
-  getHoldingsItemsAndPieces,
-} from '../../common/utils';
+import { getClaimingIntervalFromDate } from '../../common/utils';
 import {
   PIECE_ACTION_NAMES,
   PIECE_FORM_FIELD_NAMES,
@@ -57,6 +50,7 @@ import { PieceFormActionButtons } from './PieceFormActionButtons';
 
 const PieceForm = ({
   canDeletePiece,
+  checkHoldingAbandonment,
   createInventoryValues,
   form,
   handleSubmit,
@@ -76,7 +70,6 @@ const PieceForm = ({
   values: formValues,
 }) => {
   const stripes = useStripes();
-  const ky = useOkapiKy();
   const accordionStatusRef = useRef();
 
   const {
@@ -135,24 +128,6 @@ const PieceForm = ({
       change(PIECE_FORM_FIELD_NAMES.displayToPublic, checked);
     }
   }, [change]);
-
-  // TODO: adapt for central ordering enabled (UIREC-374)
-  const checkHoldingAbandonment = useCallback((holdingId) => {
-    return ky.get(`${HOLDINGS_API}/${holdingId}`)
-      .json()
-      // TODO: fetch from related tenants in central ordering and for central tenant (UIREC-374)
-      .then((holding) => getHoldingsItemsAndPieces(ky)(holding.id, { limit: 1 }))
-      .then(({ pieces, items }) => {
-        const willAbandoned = Boolean(
-          pieces && items
-          && (pieces.totalRecords === 1)
-          && ((items.totalRecords === 1 && itemId) || items.totalRecords === 0),
-        );
-
-        return { willAbandoned };
-      })
-      .catch(() => ({ willAbandoned: false }));
-  }, [itemId, ky]);
 
   const onSave = useCallback(async (e) => {
     const holdingId = getState().values?.holdingId;
@@ -411,6 +386,7 @@ const PieceForm = ({
 
 PieceForm.propTypes = {
   canDeletePiece: PropTypes.bool,
+  checkHoldingAbandonment: PropTypes.func.isRequired,
   createInventoryValues: PropTypes.object.isRequired,
   form: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,

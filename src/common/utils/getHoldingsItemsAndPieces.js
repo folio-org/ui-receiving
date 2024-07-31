@@ -4,27 +4,32 @@ import {
   ORDER_PIECES_API,
 } from '@folio/stripes-acq-components';
 
-export const getHoldingsItemsAndPieces = (ky) => (holdingId, params = {}) => {
-  const holdingsPieces = ky.get(ORDER_PIECES_API, {
+export const getHoldingPieces = (ky) => (holdingId, params = {}) => {
+  return ky.get(ORDER_PIECES_API, {
     searchParams: {
       limit: `${LIMIT_MAX}`,
       query: `holdingId==${holdingId}`,
       ...params,
     },
-  })
-    .json();
+  }).json();
+};
 
-  const holdingsItems = ky.get(ITEMS_API, {
+export const getHoldingItems = (ky) => (holdingId, params = {}) => {
+  return ky.get(ITEMS_API, {
     searchParams: {
       limit: `${LIMIT_MAX}`,
       query: `holdingsRecordId==${holdingId}`,
       ...params,
     },
-  })
-    .json();
+  }).json();
+};
 
+export const getHoldingsItemsAndPieces = (ky) => (holdingId, params = {}) => {
   return Promise
-    .all([holdingsPieces, holdingsItems])
+    .all([
+      getHoldingPieces(ky)(holdingId, params),
+      getHoldingItems(ky)(holdingId, params),
+    ])
     .then(([piecesInHolding, itemsInHolding]) => ({
       pieces: piecesInHolding,
       items: itemsInHolding,
