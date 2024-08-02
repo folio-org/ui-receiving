@@ -26,7 +26,7 @@ export const PieceEdit = ({ match }) => {
   const {
     isLoading: isItemLoading,
     item,
-  } = useItem(piece?.itemId, { tenantId });
+  } = useItem(piece?.itemId, { tenantId: piece?.receivingTenantId });
 
   const {
     isLoading: isRequestsLoading,

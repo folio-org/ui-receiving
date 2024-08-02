@@ -12,7 +12,6 @@ import {
   buildSortingQuery,
   connectQuery,
   HOLDINGS_API,
-  LIMIT_MAX,
   LINES_API,
   LOCATIONS_API,
   ORDERS_API,
@@ -31,23 +30,18 @@ import {
 import { getKeywordQuery } from './ReceivingListSearchConfig';
 
 export const fetchTitleOrderLines = (ky, titles, fetchedOrderLinesMap) => {
-  const orderLinesQuery = titles
+  const orderLineIds = titles
     .filter(title => !fetchedOrderLinesMap[title.poLineId])
-    .map(title => `id==${title.poLineId}`)
-    .join(' or ');
+    .map(title => title.poLineId);
 
-  const searchParams = {
-    limit: LIMIT_MAX,
-    query: orderLinesQuery,
-  };
-
-  return orderLinesQuery
-    ? (
+  return batchRequest(
+    ({ params: searchParams }) => (
       ky.get(LINES_API, { searchParams })
         .json()
         .then(({ poLines }) => poLines)
-    )
-    : Promise.resolve([]);
+    ),
+    orderLineIds,
+  );
 };
 
 export const fetchOrderLineHoldings = (ky) => (orderLines) => {
