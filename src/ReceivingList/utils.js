@@ -1,7 +1,6 @@
 import { uniq, compact, flatten } from 'lodash';
 
 import {
-  LIMIT_MAX,
   batchFetch,
   buildArrayFieldQuery,
   buildDateRangeQuery,
@@ -20,19 +19,11 @@ import {
 } from './ReceivingListSearchConfig';
 
 export const fetchTitleOrderLines = (mutator, titles, fetchedOrderLinesMap) => {
-  const orderLinesQuery = titles
+  const orderLineIds = titles
     .filter(title => !fetchedOrderLinesMap[title.poLineId])
-    .map(title => `id==${title.poLineId}`)
-    .join(' or ');
+    .map(title => title.poLineId);
 
-  return orderLinesQuery
-    ? mutator.GET({
-      params: {
-        limit: LIMIT_MAX,
-        query: orderLinesQuery,
-      },
-    })
-    : Promise.resolve([]);
+  return batchFetch(mutator, orderLineIds);
 };
 
 export const fetchOrderLineHoldings = (mutator, orderLines) => {
