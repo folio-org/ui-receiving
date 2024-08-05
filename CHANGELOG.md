@@ -2,6 +2,9 @@
 
 ## 5.1.0 (IN PROGRESS)
 
+## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)
+
 * Break order lines in chunks on receiving list. Refs UIREC-385.
 
 ## [5.0.4](https://github.com/folio-org/ui-receiving/tree/v5.0.4) (2024-04-22)
