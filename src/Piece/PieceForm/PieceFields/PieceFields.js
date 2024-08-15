@@ -38,7 +38,7 @@ export const PieceFields = ({
   setLocationValue,
   onChangeDisplayOnHolding,
 }) => {
-  const { crossTenant } = useReceivingSearchContext();
+  const { crossTenant, activeTenantId } = useReceivingSearchContext();
   const { values } = useFormState();
 
   const isNotReceived = values.receivingStatus !== PIECE_STATUS.received;
@@ -181,6 +181,7 @@ export const PieceFields = ({
               instanceId={instanceId}
               label={<FormattedMessage id="ui-receiving.piece.createItem" />}
               piece={values}
+              currentTenantId={activeTenantId}
             />
           </Col>
         )}

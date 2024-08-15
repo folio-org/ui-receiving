@@ -20,7 +20,16 @@ import {
 
 import { PIECE_FORM_FIELD_NAMES } from '../../../Piece/constants';
 
-function CreateItemField({ createInventoryValues, instanceId, label, piece, name }) {
+import css from './style.css';
+
+function CreateItemField({
+  currentTenantId,
+  createInventoryValues,
+  instanceId,
+  label,
+  piece,
+  name,
+}) {
   const {
     bindItemId,
     format,
@@ -28,12 +37,14 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
     isBound,
     itemId,
     receivingStatus,
+    receivingTenantId,
   } = piece;
   const isAddItemAvailable =
     includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
     && Boolean(instanceId);
   const isReceived = receivingStatus === PIECE_STATUS.received;
   const currentItemId = isBound ? bindItemId : itemId;
+  const isLinkDisabled = (receivingTenantId && currentTenantId) && (receivingTenantId !== currentTenantId);
 
   const intl = useIntl();
 
@@ -43,6 +54,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
         <Link
           data-test-connected-link
           data-testid="connected-link"
+          className={isLinkDisabled ? css.disabled : ''}
           to={`/inventory/view/${instanceId}/${holdingsRecordId}/${currentItemId}`}
         >
           <FormattedMessage id="ui-receiving.piece.connectedItem" />
@@ -71,6 +83,7 @@ function CreateItemField({ createInventoryValues, instanceId, label, piece, name
 }
 
 CreateItemField.propTypes = {
+  currentTenantId: PropTypes.string,
   createInventoryValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   label: PropTypes.node,

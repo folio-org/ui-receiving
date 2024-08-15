@@ -23,10 +23,14 @@ const renderForm = ({ piece }) => (
 
 const FromCmpt = stripesFinalForm({})(renderForm);
 
-const renderCreateItemField = (piece) => (render(
+const renderCreateItemField = (piece, props = {}) => (render(
   <IntlProvider locale="en">
     <MemoryRouter>
-      <FromCmpt onSubmit={() => { }} piece={piece} />
+      <FromCmpt
+        onSubmit={() => { }}
+        {...props}
+        piece={piece}
+      />
     </MemoryRouter>
   </IntlProvider>,
 ));
@@ -51,5 +55,14 @@ describe('CreateItemField', () => {
 
     expect(queryByTestId('connected-link')).toBeNull();
     expect(queryByTestId('isCreateItem')).toBeNull();
+  });
+
+  it('should link be disabled if receivingTenantId is different from currentTenantId', () => {
+    const { getByTestId } = renderCreateItemField(
+      { receivingTenantId: 'receivingTenantId' },
+      { currentTenantId: 'currentTenantId' },
+    );
+
+    expect(getByTestId('connected-link').closest('a')).toBeDisabled();
   });
 });

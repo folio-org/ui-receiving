@@ -27,6 +27,7 @@
 * Improve item record behavior for items associated with receiving pieces after binding. Refs UIREC-371.
 * Move the piece form out of the modal to a separate route with a full view. Refs UIREC-368.
 * Clear Item details when "Save and create another" option for adding electronic piece. Refs UIREC-377.
+* ECS: Disable Item Connected link when item is located in another tenant. Refs UIREC-387.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)
