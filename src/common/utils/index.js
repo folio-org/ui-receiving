@@ -9,4 +9,5 @@ export * from './handleCommonErrors';
 export * from './handleReceiveErrorResponse';
 export * from './isSyntheticUser';
 export * from './receive';
+export * from './setLocationValueFormMutator';
 export * from './utils';

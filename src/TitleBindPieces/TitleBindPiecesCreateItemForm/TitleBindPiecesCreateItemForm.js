@@ -26,7 +26,11 @@ import {
 } from '../hooks';
 import { buildOptions } from '../utils';
 
-export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations }) => {
+export const TitleBindPiecesCreateItemForm = ({
+  instanceId,
+  locations,
+  selectLocation,
+}) => {
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
@@ -54,14 +58,6 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
 
     return emptyOption.concat(buildOptions(loanTypes, intl));
   }, [loanTypes, intl]);
-
-  const onLocationSelected = (location) => {
-    // Location selection returns a locationId as string
-    // while "Create new holding for location" modal selection returns a object of the location
-    const locationId = location?.id || location;
-
-    onChange(PIECE_FORM_FIELD_NAMES.locationId, locationId);
-  };
 
   const locationIds = useMemo(() => locations.map(({ id }) => id), [locations]);
 
@@ -132,9 +128,9 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
           instanceId={instanceId}
           locationIds={locationIds}
           locations={locations}
-          holdingName={PIECE_FORM_FIELD_NAMES.locationId}
+          holdingName={PIECE_FORM_FIELD_NAMES.holdingId}
           locationName={PIECE_FORM_FIELD_NAMES.locationId}
-          onChange={onLocationSelected}
+          onChange={selectLocation}
           locationLabelId="ui-receiving.piece.permanentLocationId"
           holdingLabelId="ui-receiving.piece.permanentLocationId"
           required
@@ -145,7 +141,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
 };
 
 TitleBindPiecesCreateItemForm.propTypes = {
-  onChange: PropTypes.func.isRequired,
   instanceId: PropTypes.string.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
+  selectLocation: PropTypes.func.isRequired,
 };

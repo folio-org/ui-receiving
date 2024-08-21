@@ -15,6 +15,7 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
+import { setLocationValueFormMutator } from '../common/utils';
 import { TitleBindPiecesCreateItemForm } from './TitleBindPiecesCreateItemForm';
 import { TitleBindPiecesList } from './TitleBindPiecesList';
 
@@ -75,10 +76,9 @@ const TitleBindPieces = ({
             paneTitle={paneTitle}
           >
             <TitleBindPiecesCreateItemForm
-              onChange={form.change}
               instanceId={instanceId}
               locations={locations}
-              values={values}
+              selectLocation={form.mutators.setLocationValue}
             />
             <FieldArray
               id={FIELD_NAME}
@@ -117,5 +117,6 @@ export default stripesFinalForm({
         tools.changeValue(state, `${FIELD_NAME}[${i}].checked`, () => isChecked);
       });
     },
+    setLocationValue: setLocationValueFormMutator,
   },
 })(TitleBindPieces);

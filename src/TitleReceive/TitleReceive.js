@@ -18,6 +18,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { LineLocationsView } from '../common/components';
+import { setLocationValueFormMutator } from '../common/utils';
 import { TitleReceiveList } from './TitleReceiveList';
 
 const FIELD_NAME = 'receivedItems';
@@ -137,16 +138,7 @@ export default stripesFinalForm({
   navigationCheck: true,
   subscription: { values: true },
   mutators: {
-    setLocationValue: (args, state, tools) => {
-      const [location, locationField, holdingFieldName, holdingId] = args;
-      const locationId = holdingId ? undefined : location?.id || location;
-
-      tools.changeValue(state, locationField, () => locationId);
-
-      if (holdingFieldName) {
-        tools.changeValue(state, holdingFieldName, () => holdingId);
-      }
-    },
+    setLocationValue: setLocationValueFormMutator,
     toggleCheckedAll: (args, state, tools) => {
       const isChecked = !!args[0];
 
