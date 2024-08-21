@@ -51,7 +51,6 @@ export const TitleBindPiecesContainer = () => {
 
   const {
     isLoading,
-    holdingLocations = [],
     orderLine,
     pieces = [],
     title,
@@ -155,7 +154,7 @@ export const TitleBindPiecesContainer = () => {
         onSubmit={onSubmit}
         paneTitle={paneTitle}
         instanceId={title?.instanceId}
-        locations={holdingLocations}
+        titleId={titleId}
         isLoading={isBinding}
       />
       <TitleBindPiecesConfirmationModal

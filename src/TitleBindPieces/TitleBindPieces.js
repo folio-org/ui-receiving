@@ -24,11 +24,11 @@ const TitleBindPieces = ({
   form,
   handleSubmit,
   instanceId,
-  locations,
   onCancel,
   paneTitle,
   pristine,
   submitting,
+  titleId,
   values,
   isLoading,
 }) => {
@@ -75,10 +75,10 @@ const TitleBindPieces = ({
             paneTitle={paneTitle}
           >
             <TitleBindPiecesCreateItemForm
-              onChange={form.change}
               instanceId={instanceId}
-              locations={locations}
-              values={values}
+              titleId={titleId}
+              bindItemValues={values?.bindItem}
+              setLocationValue={form.mutators.setLocationValue}
             />
             <FieldArray
               id={FIELD_NAME}
@@ -96,13 +96,13 @@ const TitleBindPieces = ({
 TitleBindPieces.propTypes = {
   form: PropTypes.object,
   isLoading: PropTypes.bool,
-  locations: PropTypes.arrayOf(PropTypes.object),
   instanceId: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  titleId: PropTypes.string,
   values: PropTypes.object.isRequired,
 };
 
@@ -116,6 +116,16 @@ export default stripesFinalForm({
       state.formState.values[FIELD_NAME].forEach((_, i) => {
         tools.changeValue(state, `${FIELD_NAME}[${i}].checked`, () => isChecked);
       });
+    },
+    setLocationValue: (args, state, tools) => {
+      const [location, locationField, holdingFieldName, holdingId] = args;
+      const locationId = holdingId ? undefined : location?.id || location;
+
+      tools.changeValue(state, locationField, () => locationId);
+
+      if (holdingFieldName) {
+        tools.changeValue(state, holdingFieldName, () => holdingId);
+      }
     },
   },
 })(TitleBindPieces);

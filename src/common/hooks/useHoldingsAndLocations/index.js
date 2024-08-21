@@ -1,0 +1,1 @@
+export { useHoldingsAndLocations } from './useHoldingsAndLocations';

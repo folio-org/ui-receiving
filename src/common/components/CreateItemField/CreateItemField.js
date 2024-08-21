@@ -31,6 +31,7 @@ function CreateItemField({
   name,
 }) {
   const {
+    id,
     bindItemId,
     format,
     holdingsRecordId,
@@ -39,6 +40,7 @@ function CreateItemField({
     receivingStatus,
     receivingTenantId,
   } = piece;
+  const editMode = Boolean(id);
   const isAddItemAvailable =
     includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
     && Boolean(instanceId);
@@ -48,7 +50,7 @@ function CreateItemField({
 
   const intl = useIntl();
 
-  if (currentItemId && holdingsRecordId) {
+  if (itemId && holdingsRecordId) {
     return (
       <KeyValue label={label}>
         <Link
@@ -65,7 +67,9 @@ function CreateItemField({
         </Link>
       </KeyValue>
     );
-  } else if (isAddItemAvailable) {
+  }
+
+  if (!editMode && isAddItemAvailable) {
     return (
       <Field
         component={Checkbox}
@@ -79,7 +83,9 @@ function CreateItemField({
         aria-label={intl.formatMessage({ id: 'ui-receiving.piece.createItem' })}
       />
     );
-  } else return <NoValue />;
+  }
+
+  return <KeyValue label={label} value={<NoValue />} />;
 }
 
 CreateItemField.propTypes = {

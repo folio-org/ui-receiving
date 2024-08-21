@@ -1,4 +1,5 @@
 export * from './useHoldingItems';
+export * from './useHoldingsAndLocations';
 export * from './useItem';
 export * from './useOrder';
 export * from './useOrganizationsBatch';

@@ -18,6 +18,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
+import { useHoldingsAndLocations } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import {
@@ -26,11 +27,15 @@ import {
 } from '../hooks';
 import { buildOptions } from '../utils';
 
-export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations }) => {
+export const TitleBindPiecesCreateItemForm = ({ instanceId, bindItemValues = {}, setLocationValue }) => {
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
 
+  const { locations } = useHoldingsAndLocations({
+    instanceId,
+    tenantId: bindItemValues.tenantId,
+  });
   const { crossTenant } = useReceivingSearchContext();
 
   const FieldInventoryComponent = crossTenant
@@ -54,14 +59,6 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
 
     return emptyOption.concat(buildOptions(loanTypes, intl));
   }, [loanTypes, intl]);
-
-  const onLocationSelected = (location) => {
-    // Location selection returns a locationId as string
-    // while "Create new holding for location" modal selection returns a object of the location
-    const locationId = location?.id || location;
-
-    onChange(PIECE_FORM_FIELD_NAMES.locationId, locationId);
-  };
 
   const locationIds = useMemo(() => locations.map(({ id }) => id), [locations]);
 
@@ -132,9 +129,9 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
           instanceId={instanceId}
           locationIds={locationIds}
           locations={locations}
-          holdingName={PIECE_FORM_FIELD_NAMES.locationId}
+          holdingName={PIECE_FORM_FIELD_NAMES.holdingId}
           locationName={PIECE_FORM_FIELD_NAMES.locationId}
-          onChange={onLocationSelected}
+          onChange={setLocationValue}
           locationLabelId="ui-receiving.piece.permanentLocationId"
           holdingLabelId="ui-receiving.piece.permanentLocationId"
           required
@@ -145,7 +142,7 @@ export const TitleBindPiecesCreateItemForm = ({ onChange, instanceId, locations 
 };
 
 TitleBindPiecesCreateItemForm.propTypes = {
-  onChange: PropTypes.func.isRequired,
   instanceId: PropTypes.string.isRequired,
-  locations: PropTypes.arrayOf(PropTypes.object),
+  bindItemValues: PropTypes.object,
+  setLocationValue: PropTypes.func.isRequired,
 };
