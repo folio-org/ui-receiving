@@ -29,6 +29,7 @@
 * Clear Item details when "Save and create another" option for adding electronic piece. Refs UIREC-377.
 * ECS - Disable Item Connected link when item is located in another tenant. Refs UIREC-387.
 * ECS - Optimize requests to fetch consortium items and holdings. Refs UIREC-389.
+* Fix the issue of creating new holdings instead of using existing ones in the bind form. Refs UIREC-391.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)
