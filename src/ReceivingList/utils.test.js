@@ -7,6 +7,10 @@ import {
   ORDER_FORMATS,
 } from '@folio/stripes-acq-components';
 
+import {
+  BATCH_IDENTIFIER_TYPE,
+  CONSORTIUM_BATCH_HOLDINGS,
+} from '../common/constants';
 import { FILTERS } from './constants';
 import {
   fetchConsortiumOrderLineHoldings,
@@ -16,7 +20,6 @@ import {
   fetchOrderLineLocations,
   buildTitlesQuery,
 } from './utils';
-import { BATCH_IDENTIFIER_TYPE, CONSORTIUM_BATCH_HOLDINGS } from '../common/constants';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
