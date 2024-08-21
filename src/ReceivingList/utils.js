@@ -18,8 +18,10 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  chunkRequests,
-  fetchConsortiumInstanceHoldings,
+  BATCH_IDENTIFIER_TYPE,
+  CONSORTIUM_BATCH_HOLDINGS,
+} from '../common/constants';
+import {
   fetchConsortiumInstanceLocations,
   getConsortiumCentralTenantKy,
 } from '../common/utils';
@@ -71,25 +73,16 @@ export const fetchConsortiumOrderLineHoldings = (ky, stripes) => async (orderLin
       .filter(Boolean),
   )];
 
-  return chunkRequests(
-    instanceIds,
-    (instanceId) => fetchConsortiumInstanceHoldings(
-      getConsortiumCentralTenantKy(ky, stripes),
-      {
-        searchParams: { instanceId },
-      },
-    ),
-  ).then((chunkedResponses) => {
-    const orderLinesHoldingIdsSet = new Set(
-      orderLines.flatMap(({ locations }) => {
-        return map(locations, 'holdingId');
-      }),
-    );
+  const batchIdsDto = {
+    identifierType: BATCH_IDENTIFIER_TYPE.instanceId,
+    identifierValues: instanceIds,
+  };
 
-    return chunkedResponses
-      .flatMap(({ holdings }) => holdings)
-      .filter(({ id }) => orderLinesHoldingIdsSet.has(id));
-  });
+  const { holdings } = await getConsortiumCentralTenantKy(ky, stripes)
+    .post(CONSORTIUM_BATCH_HOLDINGS, { json: batchIdsDto })
+    .json();
+
+  return holdings;
 };
 
 export const fetchOrderLineLocations = (ky) => (orderLines, fetchedLocationsMap) => {
