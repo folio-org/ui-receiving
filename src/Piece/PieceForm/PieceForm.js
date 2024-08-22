@@ -118,8 +118,8 @@ const PieceForm = ({
   const isSaveAndCreateDisabled = disabled || protectUpdate || protectCreate;
   const isSaveAndCloseDisabled = disabled || (protectUpdate && Boolean(id));
   const isEditDisabled = disabled || protectUpdate;
-  const hasBoundItem = Boolean(bindItemId && isBound);
-  const itemDetailsAccordionLabelId = hasBoundItem
+  const isOriginalItemDetailsVisible = Boolean(itemId && bindItemId && isBound);
+  const itemDetailsAccordionLabelId = isOriginalItemDetailsVisible
     ? PIECE_MODAL_ACCORDION.originalItemDetails
     : PIECE_MODAL_ACCORDION.itemDetails;
 

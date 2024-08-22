@@ -42,6 +42,7 @@ export const PieceFields = ({
   const { values } = useFormState();
 
   const isNotReceived = values.receivingStatus !== PIECE_STATUS.received;
+  const isLocationSelectionDisabled = !isNotReceived || values.receivingStatus === PIECE_STATUS.unreceivable;
   const isLocationRequired = includes(createInventoryValues[values.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isDisplayToPublic = values.displayOnHolding;
 
@@ -295,7 +296,8 @@ export const PieceFields = ({
             holdingName={PIECE_FORM_FIELD_NAMES.holdingId}
             locationName={PIECE_FORM_FIELD_NAMES.locationId}
             onChange={setLocationValue}
-            disabled={!isNotReceived}
+            disabled={isLocationSelectionDisabled}
+            isNonInteractive={isLocationSelectionDisabled}
             required={isLocationRequired}
           />
         </Col>

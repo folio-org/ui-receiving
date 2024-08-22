@@ -209,19 +209,22 @@ describe('PieceForm', () => {
 
     it('should display item details original when `Bound` has been checked and has `bindItemId`', async () => {
       renderPieceForm({
-        createInventoryValues: { [PIECE_FORMAT.physical]: INVENTORY_RECORDS_TYPE.instanceAndHolding },
+        createInventoryValues: {
+          [PIECE_FORMAT.physical]: INVENTORY_RECORDS_TYPE.instanceAndHolding,
+        },
         initialValues: {
           format: PIECE_FORMAT.physical,
           isBound: true,
           bindItemId: 'bindItemId',
           receivingStatus: PIECE_STATUS.received,
+          itemId: '1',
         },
       });
 
       const boundCheckbox = screen.getByLabelText('ui-receiving.piece.isBound');
 
       expect(boundCheckbox).toBeChecked();
-      expect(screen.getByText('ui-receiving.piece.accordion.originalItemDetails')).toBeDefined();
+      expect(screen.getByText('ui-receiving.piece.accordion.originalItemDetails')).toBeInTheDocument();
     });
   });
 
