@@ -25,11 +25,11 @@ const TitleBindPieces = ({
   form,
   handleSubmit,
   instanceId,
-  locations,
   onCancel,
   paneTitle,
   pristine,
   submitting,
+  titleId,
   values,
   isLoading,
 }) => {
@@ -77,8 +77,8 @@ const TitleBindPieces = ({
           >
             <TitleBindPiecesCreateItemForm
               instanceId={instanceId}
-              locations={locations}
               selectLocation={form.mutators.setLocationValue}
+              bindItemValues={values?.bindItem}
             />
             <FieldArray
               id={FIELD_NAME}
@@ -96,13 +96,13 @@ const TitleBindPieces = ({
 TitleBindPieces.propTypes = {
   form: PropTypes.object,
   isLoading: PropTypes.bool,
-  locations: PropTypes.arrayOf(PropTypes.object),
   instanceId: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  titleId: PropTypes.string,
   values: PropTypes.object.isRequired,
 };
 

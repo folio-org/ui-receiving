@@ -6,6 +6,7 @@ import {
   Col,
   InfoPopover,
   KeyValue,
+  NoValue,
   Row,
   TextField,
 } from '@folio/stripes/components';
@@ -68,7 +69,7 @@ export const ItemFields = ({ disabled }) => {
                 <InfoPopover content={(<FormattedMessage id="ui-receiving.piece.itemStatus.info" />)} />
               </>
           )}
-            value={getItemStatusLabel(values.itemStatus)}
+            value={values?.itemId ? getItemStatusLabel(values.itemStatus) : <NoValue />}
           />
         </Col>
         <Col

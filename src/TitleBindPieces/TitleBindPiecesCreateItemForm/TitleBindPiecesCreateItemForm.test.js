@@ -59,9 +59,6 @@ const renderComponent = (props = defaultProps) => render(
 );
 
 describe('TitleBindPiecesCreateItemForm', () => {
-  beforeEach(() => {
-  });
-
   it('should render component', () => {
     renderComponent();
 

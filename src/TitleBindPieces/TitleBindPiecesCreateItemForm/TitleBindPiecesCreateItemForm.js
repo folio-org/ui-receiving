@@ -18,6 +18,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
+import { useHoldingsAndLocations } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import {
@@ -28,13 +29,17 @@ import { buildOptions } from '../utils';
 
 export const TitleBindPiecesCreateItemForm = ({
   instanceId,
-  locations,
+  bindItemValues = {},
   selectLocation,
 }) => {
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
 
+  const { locations } = useHoldingsAndLocations({
+    instanceId,
+    tenantId: bindItemValues.tenantId,
+  });
   const { crossTenant } = useReceivingSearchContext();
 
   const FieldInventoryComponent = crossTenant
@@ -142,6 +147,6 @@ export const TitleBindPiecesCreateItemForm = ({
 
 TitleBindPiecesCreateItemForm.propTypes = {
   instanceId: PropTypes.string.isRequired,
-  locations: PropTypes.arrayOf(PropTypes.object),
   selectLocation: PropTypes.func.isRequired,
+  bindItemValues: PropTypes.object,
 };

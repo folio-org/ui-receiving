@@ -321,6 +321,8 @@ describe('PieceForm', () => {
         isCreateAnother: false,
         isCreateItem: false,
         receivingStatus: PIECE_STATUS.expected,
+        itemId: 'itemUUID',
+        request: {},
       },
     });
 

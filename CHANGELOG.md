@@ -27,6 +27,7 @@
 * Improve item record behavior for items associated with receiving pieces after binding. Refs UIREC-371.
 * Move the piece form out of the modal to a separate route with a full view. Refs UIREC-368.
 * Clear Item details when "Save and create another" option for adding electronic piece. Refs UIREC-377.
+* ECS: Holding name should be displayed for member holdings in "Permanent location" dropdown. Refs UIREC-386.
 * ECS - Disable Item Connected link when item is located in another tenant. Refs UIREC-387.
 * ECS - Optimize requests to fetch consortium items and holdings. Refs UIREC-389.
 * ECS - Fix the issue of creating new holdings instead of using existing ones in the bind form. Refs UIREC-391.

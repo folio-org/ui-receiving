@@ -26,6 +26,18 @@ const initialValues = {
     barcode: '10001',
     enumeration: 'The American Journal of Medicine',
     id: '0001',
+  }, {
+    barcode: '10002',
+    enumeration: 'The American Journal of Medicine',
+    id: '0002',
+    itemId: '0002',
+    itemStatus: 'Available',
+  },
+  {
+    barcode: '10003',
+    enumeration: 'The American Journal of Medicine',
+    id: '0003',
+    itemId: '0003',
   }],
 };
 const defaultProps = {

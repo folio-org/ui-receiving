@@ -25,7 +25,17 @@ export const COLUMN_FORMATTER = {
   [PIECE_COLUMNS.copyNumber]: record => record.copyNumber || <NoValue />,
   [PIECE_COLUMNS.accessionNumber]: record => record.accessionNumber || <NoValue />,
   [PIECE_COLUMNS.barcode]: record => record.barcode || <NoValue />,
-  [PIECE_COLUMNS.itemStatus]: record => (record.itemStatus ? getItemStatusLabel(record.itemStatus) : `${ITEM_STATUS.undefined}`),
+  [PIECE_COLUMNS.itemStatus]: record => {
+    if (!record.itemId) {
+      return <NoValue />;
+    }
+
+    if (record.itemStatus) {
+      return getItemStatusLabel(record.itemStatus);
+    }
+
+    return ITEM_STATUS.undefined;
+  },
   [PIECE_COLUMNS.callNumber]: record => record.callNumber || <NoValue />,
 };
 
