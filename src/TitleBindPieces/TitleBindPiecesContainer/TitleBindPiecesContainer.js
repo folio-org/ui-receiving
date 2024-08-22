@@ -154,7 +154,6 @@ export const TitleBindPiecesContainer = () => {
         onSubmit={onSubmit}
         paneTitle={paneTitle}
         instanceId={title?.instanceId}
-        titleId={titleId}
         isLoading={isBinding}
       />
       <TitleBindPiecesConfirmationModal

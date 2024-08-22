@@ -29,7 +29,6 @@ const TitleBindPieces = ({
   paneTitle,
   pristine,
   submitting,
-  titleId,
   values,
   isLoading,
 }) => {
@@ -102,7 +101,6 @@ TitleBindPieces.propTypes = {
   paneTitle: PropTypes.string.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
-  titleId: PropTypes.string,
   values: PropTypes.object.isRequired,
 };
 
