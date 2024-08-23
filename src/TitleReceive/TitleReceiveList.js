@@ -178,7 +178,9 @@ const getResultFormatter = ({
       />
     );
   },
-  [PIECE_COLUMNS.itemStatus]: ({ itemStatus }) => getItemStatusLabel(itemStatus),
+  [PIECE_COLUMNS.itemStatus]: record => {
+    return record?.itemId ? getItemStatusLabel(record?.itemStatus) : <NoValue />;
+  },
   [PIECE_COLUMNS.callNumber]: record => (
     <Field
       name={`${field}[${record.rowIndex}].callNumber`}
