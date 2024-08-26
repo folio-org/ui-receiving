@@ -21,11 +21,6 @@ import {
 } from './hooks';
 import { usePaginatedPieces } from './usePaginatedPieces';
 
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  useNamespace: () => ['namespace'],
-  useOkapiKy: jest.fn(),
-}));
 jest.mock('./hooks', () => ({
   ...jest.requireActual('./hooks'),
   usePieceItemsFetch: jest.fn(),

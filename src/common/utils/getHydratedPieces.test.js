@@ -3,7 +3,7 @@ import { getHydratedPieces } from './getHydratedPieces';
 const fetchPieceItems = jest.fn();
 const fetchPieceRequests = jest.fn();
 const pieces = [{ itemId: 'itemId' }];
-const crossTenant = 'crossTenant';
+const crossTenant = false;
 
 describe('getHydratedPieces', () => {
   beforeEach(() => {
