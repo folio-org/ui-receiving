@@ -71,17 +71,22 @@ export const usePaginatedPieces = ({
 
     const itemsMap = items.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
     const requestsMap = requests.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
+    const userTenants = stripes.user.user.tenants?.map(({ id }) => id) || [];
 
     return {
       totalRecords,
-      pieces: pieces.map((piece) => ({
-        ...piece,
-        itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
-        callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
-        itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
-        request: requestsMap[piece.itemId],
-        holdingsRecordId: itemsMap[piece.itemId]?.holdingsRecordId,
-      })),
+      pieces: pieces
+        .filter(piece => {
+          return !crossTenant || userTenants.includes(piece.receivingTenantId);
+        })
+        .map((piece) => ({
+          ...piece,
+          itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
+          callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
+          itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
+          request: requestsMap[piece.itemId],
+          holdingsRecordId: itemsMap[piece.itemId]?.holdingsRecordId,
+        })),
     };
   };
   const defaultOptions = {

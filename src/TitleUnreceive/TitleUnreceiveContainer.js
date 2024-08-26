@@ -6,7 +6,9 @@ import {
 } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { stripesConnect } from '@folio/stripes/core';
+import {
+  stripesConnect,
+} from '@folio/stripes/core';
 import {
   LoadingPane,
   Paneset,
@@ -48,6 +50,7 @@ function TitleUnreceiveContainer({
   location,
   match,
   mutator,
+  stripes,
 }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
@@ -103,6 +106,7 @@ function TitleUnreceiveContainer({
               fetchPieceItems,
               fetchPieceRequests,
               crossTenant,
+              userTenants: stripes.user.user.tenants?.map(({ id }) => id),
             });
 
             return hydratedPieces;

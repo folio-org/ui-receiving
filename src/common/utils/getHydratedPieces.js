@@ -6,6 +6,7 @@ export const getPieceStatusFromItem = (item) => {
 
 export function getHydratedPieces({
   crossTenant,
+  userTenants = [],
   fetchPieceItems,
   fetchPieceRequests,
   pieces,
@@ -22,15 +23,19 @@ export function getHydratedPieces({
       const itemsMap = itemsResponse.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
       const requestsMap = requestsResponse.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
 
-      return piecesResponse.map((piece) => ({
-        ...piece,
-        itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
-        barcode: itemsMap[piece.itemId]?.barcode,
-        accessionNumber: itemsMap[piece.itemId]?.accessionNumber,
-        callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
-        itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
-        request: requestsMap[piece.itemId],
-        holdingsRecordId: itemsMap[piece.itemId]?.holdingsRecordId,
-      }));
+      return piecesResponse
+        .filter(piece => {
+          return !crossTenant || userTenants.includes(piece.receivingTenantId);
+        })
+        .map((piece) => ({
+          ...piece,
+          itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,
+          barcode: itemsMap[piece.itemId]?.barcode,
+          accessionNumber: itemsMap[piece.itemId]?.accessionNumber,
+          callNumber: itemsMap[piece.itemId]?.itemLevelCallNumber,
+          itemStatus: getPieceStatusFromItem(itemsMap[piece.itemId]),
+          request: requestsMap[piece.itemId],
+          holdingsRecordId: itemsMap[piece.itemId]?.holdingsRecordId,
+        }));
     });
 }
