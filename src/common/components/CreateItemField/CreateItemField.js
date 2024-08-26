@@ -18,18 +18,20 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
+import { useReceivingSearchContext } from '../../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../../../Piece/constants';
 
 import css from './style.css';
 
 function CreateItemField({
-  currentTenantId,
   createInventoryValues,
   instanceId,
   label,
   piece,
   name,
 }) {
+  const { activeTenantId: currentTenantId } = useReceivingSearchContext();
+
   const {
     id,
     bindItemId,
@@ -40,15 +42,34 @@ function CreateItemField({
     receivingStatus,
     receivingTenantId,
   } = piece;
-  const editMode = Boolean(id);
-  const isAddItemAvailable =
-    includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
-    && Boolean(instanceId);
+
   const isReceived = receivingStatus === PIECE_STATUS.received;
+  const isAddItemAvailable =
+  includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
+  && Boolean(instanceId)
+  && !itemId
+  && (!id || receivingStatus === PIECE_STATUS.expected);
+
   const currentItemId = isBound ? bindItemId : itemId;
   const isLinkDisabled = (receivingTenantId && currentTenantId) && (receivingTenantId !== currentTenantId);
 
   const intl = useIntl();
+
+  if (isAddItemAvailable) {
+    return (
+      <Field
+        component={Checkbox}
+        data-testid="isCreateItem"
+        disabled={isReceived}
+        fullWidth
+        label={label}
+        name={name}
+        type="checkbox"
+        vertical
+        aria-label={intl.formatMessage({ id: 'ui-receiving.piece.createItem' })}
+      />
+    );
+  }
 
   if (itemId && holdingsRecordId) {
     return (
@@ -69,27 +90,10 @@ function CreateItemField({
     );
   }
 
-  if (!editMode && isAddItemAvailable) {
-    return (
-      <Field
-        component={Checkbox}
-        data-testid="isCreateItem"
-        disabled={isReceived}
-        fullWidth
-        label={label}
-        name={name}
-        type="checkbox"
-        vertical
-        aria-label={intl.formatMessage({ id: 'ui-receiving.piece.createItem' })}
-      />
-    );
-  }
-
   return <KeyValue label={label} value={<NoValue />} />;
 }
 
 CreateItemField.propTypes = {
-  currentTenantId: PropTypes.string,
   createInventoryValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
   label: PropTypes.node,
