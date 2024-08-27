@@ -20,6 +20,8 @@ export const usePiecesList = ({
   const {
     crossTenant,
     targetTenantId,
+    centralTenantId,
+    activeTenantId
   } = useReceivingSearchContext();
 
   const [sorting, setSorting] = useState(initialSorting);
@@ -41,6 +43,8 @@ export const usePiecesList = ({
       crossTenant,
       instanceId: title?.instanceId,
       tenantId: targetTenantId,
+      centralTenantId,
+      activeTenantId,
     },
   });
 

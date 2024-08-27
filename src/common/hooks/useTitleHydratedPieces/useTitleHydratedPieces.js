@@ -32,7 +32,7 @@ export const useTitleHydratedPieces = ({
   const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
-  const { crossTenant } = useReceivingSearchContext();
+  const { activeTenantId, crossTenant, centralTenantId } = useReceivingSearchContext();
 
   const {
     title,
@@ -83,7 +83,9 @@ export const useTitleHydratedPieces = ({
       pieces,
       fetchPieceItems,
       fetchPieceRequests,
+      activeTenantId,
       crossTenant,
+      centralTenantId,
       userTenants: stripes.user.user.tenants?.map(({ id }) => id),
     });
 

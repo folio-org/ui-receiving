@@ -61,7 +61,13 @@ function TitleUnreceiveContainer({
   const [pieceHoldingMap, setPieceHoldingMap] = useState();
   const poLineId = title?.poLineId;
 
-  const { crossTenant, isCentralRouting, targetTenantId } = useReceivingSearchContext();
+  const {
+    activeTenantId,
+    centralTenantId,
+    crossTenant,
+    isCentralRouting,
+    targetTenantId,
+  } = useReceivingSearchContext();
   const { fetchPieceItems } = usePieceItemsFetch({
     instanceId: title?.instanceId,
     tenantId: targetTenantId,
@@ -105,6 +111,8 @@ function TitleUnreceiveContainer({
               pieces: piecesResponse,
               fetchPieceItems,
               fetchPieceRequests,
+              activeTenantId,
+              centralTenantId,
               crossTenant,
               userTenants: stripes.user.user.tenants?.map(({ id }) => id),
             });
