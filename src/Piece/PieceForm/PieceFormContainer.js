@@ -68,16 +68,10 @@ export const PieceFormContainer = ({
 
   const {
     targetTenantId: tenantId,
-    isCentralOrderingEnabled,
     isCentralRouting,
   } = useReceivingSearchContext();
 
   /* Data fetching */
-
-  const {
-    isLoading: isLocationsLoading,
-    locations,
-  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   const {
     isLoading: isTitleLoading,
@@ -122,19 +116,12 @@ export const PieceFormContainer = ({
 
   const canDeletePiece = !(!orderLine?.checkinItems && order?.workflowStatus === ORDER_STATUSES.pending);
   const instanceId = title?.instanceId;
-  const pieceLocationId = initialValues?.locationId;
   const orderFormat = orderLine?.orderFormat;
   const pieceFormatOptions = orderFormat === ORDER_FORMATS.PEMix
     ? PIECE_FORMAT_OPTIONS.filter(({ value }) => [PIECE_FORMAT.electronic, PIECE_FORMAT.physical].includes(value))
     : PIECE_FORMAT_OPTIONS.filter(({ value }) => value === initialValues?.format);
 
   /* Memoized values */
-
-  const locationIds = useMemo(() => {
-    const poLineLocationIds = (orderLine?.locations?.map(({ locationId }) => locationId) ?? []).filter(Boolean);
-
-    return (pieceLocationId ? [...new Set([...poLineLocationIds, pieceLocationId])] : poLineLocationIds);
-  }, [orderLine, pieceLocationId]);
 
   const createInventoryValues = useMemo(() => ({
     [PIECE_FORMAT.physical]: orderLine?.physical?.createInventory,
@@ -301,7 +288,6 @@ export const PieceFormContainer = ({
     || isTitleLoading
     || isOrderLineLoading
     || isOrderLoading
-    || isLocationsLoading
     || isRestrictionsLoading
   );
 
@@ -320,8 +306,6 @@ export const PieceFormContainer = ({
         onQuickReceive={onQuickReceive}
         onSubmit={onSubmit}
         onUnreceive={onUnreceive}
-        locationIds={locationIds}
-        locations={locations}
         paneTitle={paneTitle}
         pieceFormatOptions={pieceFormatOptions}
         poLine={orderLine}

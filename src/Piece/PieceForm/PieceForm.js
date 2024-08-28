@@ -63,8 +63,6 @@ const PieceForm = ({
   onClose,
   onDelete: onDeleteProp,
   onUnreceive: onUnreceiveProp,
-  locationIds,
-  locations,
   paneTitle,
   pieceFormatOptions,
   poLine,
@@ -317,8 +315,6 @@ const PieceForm = ({
                       <PieceFields
                         createInventoryValues={createInventoryValues}
                         instanceId={instanceId}
-                        locationIds={locationIds}
-                        locations={locations}
                         pieceFormatOptions={pieceFormatOptions}
                         poLine={poLine}
                         setLocationValue={mutators.setLocationValue}
@@ -396,8 +392,6 @@ PieceForm.propTypes = {
   hasValidationErrors: PropTypes.bool.isRequired,
   initialValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
-  locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  locations: PropTypes.arrayOf(PropTypes.object),
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onUnreceive: PropTypes.func.isRequired,
