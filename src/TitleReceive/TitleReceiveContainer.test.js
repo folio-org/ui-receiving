@@ -28,6 +28,7 @@ jest.mock('@folio/stripes/components', () => ({
   LoadingPane: jest.fn().mockReturnValue('LoadingPane'),
 }));
 jest.mock('../common/hooks', () => ({
+  useHoldingsAndLocations: jest.fn().mockReturnValue({ locations: [] }),
   useReceive: jest.fn().mockReturnValue({}),
   useTitleHydratedPieces: jest.fn(),
 }));
