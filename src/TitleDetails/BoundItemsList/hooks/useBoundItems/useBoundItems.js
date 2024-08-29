@@ -52,9 +52,12 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
         })),
       };
 
-      const { items } = await ky.post(TENANT_ITEMS_API, { json: dto, signal }).json();
+      const { tenantItems, totalRecords } = await ky.post(TENANT_ITEMS_API, { json: dto, signal }).json();
 
-      return items.map(({ item, tenantId }) => ({ tenantId, ...item }));
+      return {
+        tenantItems: tenantItems.map(({ item, tenantId }) => ({ tenantId, ...item })),
+        totalRecords,
+      };
     },
     enabled: Boolean(enabled && titleId && poLineId),
     ...otherOptions,
@@ -64,7 +67,7 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
     isLoading,
     isFetching,
     refetch,
-    items: data,
-    totalRecords: data.length,
+    items: data?.tenantItems,
+    totalRecords: data?.totalRecords,
   });
 };
