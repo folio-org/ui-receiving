@@ -92,6 +92,7 @@
           "inventory-storage.locations.item.get",
           "inventory-storage.material-types.collection.get",
           "inventory.items.collection.get",
+          "inventory.tenant-items.collection.get",
           "orders.pieces.collection.get",
           "orders.po-lines.item.get",
           "organizations.organizations.collection.get",
