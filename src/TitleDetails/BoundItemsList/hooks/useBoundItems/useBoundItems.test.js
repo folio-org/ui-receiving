@@ -9,6 +9,8 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
+import { TENANT_ITEMS_API } from '../../../../common/constants';
+import { useReceivingSearchContext } from '../../../../contexts';
 import { useBoundItems } from './useBoundItems';
 
 const queryClient = new QueryClient();
@@ -24,38 +26,88 @@ const params = {
   poLineId: 'poLineId',
 };
 
-const items = [{
+const pieces = [{
   isBound: true,
   displaySummary: 'Electronic item',
-  status: { name: 'Available' },
   itemId: 'itemId',
   bindItemId: 'bindItemId',
-  id: 'id',
+  bindItemTenantId: 'tenantId',
+  id: 'piece-id',
 }];
 
-describe('useBoundItems', () => {
-  const getMock = jest.fn((url) => ({
-    json: () => {
-      if (url.includes('pieces')) {
-        return { pieces: [{ bindItemId: 'bindItemId' }] };
-      }
-
-      return { items };
+const items = [
+  {
+    item: {
+      id: 'itemId',
+      status: { name: 'Available' },
     },
+    tenantId: 'tenantId',
+  },
+];
+
+describe('useBoundItems', () => {
+  const getMock = jest.fn(() => ({
+    json: () => Promise.resolve({ pieces }),
+  }));
+
+  const postMock = jest.fn(() => ({
+    json: () => Promise.resolve({ items }),
   }));
 
   beforeEach(() => {
     useOkapiKy
       .mockClear()
-      .mockReturnValue({ get: getMock });
+      .mockReturnValue({
+        get: getMock,
+        post: postMock,
+      });
   });
 
-  it('should fetch items by id', async () => {
+  it('should fetch bound items', async () => {
     const { result } = renderHook(() => useBoundItems(params), { wrapper });
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
-    expect(result.current.items).toEqual(items);
+    expect(result.current.items).toEqual(items.map(({ item, tenantId }) => ({ ...item, tenantId })));
     expect(getMock).toHaveBeenCalled();
+    expect(postMock).toHaveBeenCalledWith(
+      TENANT_ITEMS_API,
+      expect.objectContaining({
+        json: {
+          tenantItemPairs: [{
+            itemId: 'bindItemId',
+            tenantId: 'activeTenantId',
+          }],
+        },
+      }),
+    );
+  });
+
+  describe('ECS - Central ordering', () => {
+    beforeEach(() => {
+      useReceivingSearchContext
+        .mockClear()
+        .mockReturnValue({ isCentralOrderingEnabled: true });
+    });
+
+    it('should fetch bound items with enabled central ordering', async () => {
+      const { result } = renderHook(() => useBoundItems(params), { wrapper });
+
+      await waitFor(() => expect(result.current.isFetching).toBeFalsy());
+
+      expect(result.current.items).toEqual(items.map(({ item, tenantId }) => ({ ...item, tenantId })));
+      expect(getMock).toHaveBeenCalled();
+      expect(postMock).toHaveBeenCalledWith(
+        TENANT_ITEMS_API,
+        expect.objectContaining({
+          json: {
+            tenantItemPairs: [{
+              itemId: 'bindItemId',
+              tenantId: 'tenantId',
+            }],
+          },
+        }),
+      );
+    });
   });
 });
