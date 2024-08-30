@@ -12,6 +12,7 @@ import {
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
+import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_COLUMN_MAPPING } from '../../Piece';
 import {
   BOUND_ITEMS_LIMIT,
@@ -24,6 +25,7 @@ export const BoundItemsList = ({ id, title }) => {
   const stripes = useStripes();
   const { isFetching, items, totalRecords } = useBoundItems({ titleId: title.id, poLineId: title.poLineId });
   const { paginatedData, pagination, setPagination } = useLocalPagination(items, BOUND_ITEMS_LIMIT);
+  const { activeTenantId } = useReceivingSearchContext();
 
   const onPageChange = newPagination => {
     setPagination({ ...newPagination, timestamp: new Date() });
@@ -31,8 +33,8 @@ export const BoundItemsList = ({ id, title }) => {
 
   const hasViewInventoryPermissions = stripes.hasPerm('ui-inventory.instance.view');
   const formatter = useMemo(() => {
-    return getColumnFormatter(hasViewInventoryPermissions, title?.instanceId);
-  }, [hasViewInventoryPermissions, title?.instanceId]);
+    return getColumnFormatter(hasViewInventoryPermissions, title?.instanceId, activeTenantId);
+  }, [hasViewInventoryPermissions, title?.instanceId, activeTenantId]);
 
   if (isFetching) return <Loading />;
 

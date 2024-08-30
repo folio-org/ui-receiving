@@ -9,14 +9,15 @@ import {
 import { getPieceStatusFromItem } from '../../common/utils';
 import { PIECE_COLUMNS } from '../../Piece';
 
-export const getColumnFormatter = (hasViewInventoryPermissions, instanceId) => {
+export const getColumnFormatter = (hasViewInventoryPermissions, instanceId, activeTenantId) => {
   return ({
     [PIECE_COLUMNS.barcode]: record => {
-      const { barcode, id, holdingsRecordId } = record;
+      const { barcode, id, holdingsRecordId, tenantId } = record;
+      const isForeignTenant = tenantId && activeTenantId && activeTenantId !== tenantId;
 
       if (!hasViewInventoryPermissions) return barcode;
 
-      if (instanceId && holdingsRecordId && id) {
+      if (instanceId && holdingsRecordId && id && !isForeignTenant) {
         const barcodeText = barcode || <FormattedMessage id="ui-receiving.piece.barcode.noBarcode" />;
 
         return (
