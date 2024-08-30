@@ -35,7 +35,7 @@ const pieces = [{
   id: 'piece-id',
 }];
 
-const items = [
+const tenantItems = [
   {
     item: {
       id: 'itemId',
@@ -51,7 +51,7 @@ describe('useBoundItems', () => {
   }));
 
   const postMock = jest.fn(() => ({
-    json: () => Promise.resolve({ items }),
+    json: () => Promise.resolve({ tenantItems }),
   }));
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe('useBoundItems', () => {
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
-    expect(result.current.items).toEqual(items.map(({ item, tenantId }) => ({ ...item, tenantId })));
+    expect(result.current.items).toEqual(tenantItems.map(({ item, tenantId }) => ({ ...item, tenantId })));
     expect(getMock).toHaveBeenCalled();
     expect(postMock).toHaveBeenCalledWith(
       TENANT_ITEMS_API,
@@ -95,7 +95,7 @@ describe('useBoundItems', () => {
 
       await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
-      expect(result.current.items).toEqual(items.map(({ item, tenantId }) => ({ ...item, tenantId })));
+      expect(result.current.items).toEqual(tenantItems.map(({ item, tenantId }) => ({ ...item, tenantId })));
       expect(getMock).toHaveBeenCalled();
       expect(postMock).toHaveBeenCalledWith(
         TENANT_ITEMS_API,
