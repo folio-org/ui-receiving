@@ -82,12 +82,10 @@ describe('useHoldingsAndLocations', () => {
   });
 
   it('should fetch holding locations with different tenants', async () => {
-    const tenants = ['1', '2'];
-    const { result } = renderHook(() => useHoldingsAndLocations({ instanceId: '1', tenants, tenantId: '2' }), { wrapper });
+    const receivingTenantIds = ['1', '2'];
+    const { result } = renderHook(() => useHoldingsAndLocations({ instanceId: '1', receivingTenantIds, tenantId: '2' }), { wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy());
-
-    console.log('locations', result.current);
 
     expect(result.current.locations).toHaveLength(2);
   });

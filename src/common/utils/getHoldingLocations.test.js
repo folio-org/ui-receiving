@@ -77,13 +77,13 @@ describe('utils', () => {
 
     it('should return locationsResponse', async () => {
       const instanceId = 'instance-id';
-      const tenants = ['tenant-id'];
+      const receivingTenantIds = ['tenant-id'];
 
-      const result = await getHoldingLocationsByTenants({ ky, instanceId, tenants });
+      const result = await getHoldingLocationsByTenants({ ky, instanceId, receivingTenantIds });
 
       expect(result).toEqual({
-        holdings: holdingsRecords.map(holding => ({ ...holding, tenantId: tenants[0] })),
-        locations: locations.map(location => ({ ...location, tenantId: tenants[0] })),
+        holdings: holdingsRecords.map(holding => ({ ...holding, tenantId: receivingTenantIds[0] })),
+        locations: locations.map(location => ({ ...location, tenantId: receivingTenantIds[0] })),
         locationIds: locations.map(({ id }) => id),
       });
     });
