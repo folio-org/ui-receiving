@@ -32,6 +32,7 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { useHoldingsAndLocations } from '../../common/hooks';
 import {
   getClaimingIntervalFromDate,
   setLocationValueFormMutator,
@@ -93,6 +94,15 @@ const PieceForm = ({
     metadata,
     receivingStatus,
   } = formValues;
+
+  const {
+    locations,
+    locationIds,
+    isFetching,
+  } = useHoldingsAndLocations({
+    instanceId,
+    tenantId: formValues.receivingTenantId,
+  });
 
   useEffect(() => {
     if (!id && format === PIECE_FORMAT.electronic) {
@@ -317,6 +327,9 @@ const PieceForm = ({
                         instanceId={instanceId}
                         pieceFormatOptions={pieceFormatOptions}
                         poLine={poLine}
+                        locationIds={locationIds}
+                        locations={locations}
+                        isLocationsLoading={isFetching}
                         setLocationValue={mutators.setLocationValue}
                         onChangeDisplayOnHolding={onChangeDisplayOnHolding}
                       />

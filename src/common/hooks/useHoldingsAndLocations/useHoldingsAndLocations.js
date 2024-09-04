@@ -17,7 +17,12 @@ export const useHoldingsAndLocations = ({
   instanceId,
   options = {},
   tenantId,
-  tenants = [],
+  /*
+   `receivingTenantIds` are uniq list of tenantIds from pieces list.
+    The purpose is, we need to be able to fetch locations from other
+    tenants so that we can display all the locations in the full screen page
+  */
+  receivingTenantIds = DEFAULT_DATA,
 }) => {
   const { enabled = true, ...queryOptions } = options;
 
@@ -33,10 +38,10 @@ export const useHoldingsAndLocations = ({
     isFetching,
     isLoading,
   } = useQuery({
-    queryKey: [namespace, tenantId, instanceId, tenants],
+    queryKey: [namespace, tenantId, instanceId, ...receivingTenantIds],
     queryFn: ({ signal }) => {
-      return tenants.length
-        ? getHoldingLocationsByTenants({ ky, instanceId, tenants })
+      return receivingTenantIds.length
+        ? getHoldingLocationsByTenants({ ky, instanceId, receivingTenantIds })
         : getHoldingLocations({ ky, searchParams, signal });
     },
     enabled: enabled && Boolean(instanceId),

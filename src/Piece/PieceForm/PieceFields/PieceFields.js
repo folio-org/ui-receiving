@@ -23,7 +23,6 @@ import {
   CreateItemField,
   LineLocationsView,
 } from '../../../common/components';
-import { useHoldingsAndLocations } from '../../../common/hooks';
 import { useReceivingSearchContext } from '../../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
@@ -32,6 +31,9 @@ import css from './PieceFields.css';
 export const PieceFields = ({
   createInventoryValues,
   instanceId,
+  locationIds,
+  locations,
+  isLocationsLoading,
   pieceFormatOptions,
   poLine,
   setLocationValue,
@@ -44,15 +46,6 @@ export const PieceFields = ({
   const isLocationSelectionDisabled = !isNotReceived || values.receivingStatus === PIECE_STATUS.unreceivable;
   const isLocationRequired = includes(createInventoryValues[values.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
   const isDisplayToPublic = values.displayOnHolding;
-
-  const {
-    locations,
-    locationIds,
-    isFetching,
-  } = useHoldingsAndLocations({
-    instanceId,
-    tenantId: values.receivingTenantId,
-  });
 
   // https://issues.folio.org/browse/UIREC-208
   const isDiscoverySuppressEnabled = false;
@@ -306,7 +299,7 @@ export const PieceFields = ({
             disabled={isLocationSelectionDisabled}
             isNonInteractive={isLocationSelectionDisabled}
             required={isLocationRequired}
-            isLoading={isFetching}
+            isLoading={isLocationsLoading}
           />
         </Col>
       </Row>
@@ -321,6 +314,9 @@ PieceFields.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
+  isLocationsLoading: PropTypes.bool,
+  locationIds: PropTypes.arrayOf(PropTypes.string),
+  locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
   setLocationValue: PropTypes.func.isRequired,
   onChangeDisplayOnHolding: PropTypes.func.isRequired,

@@ -18,7 +18,6 @@ import {
   PIECE_FORMAT,
   PIECE_FORMAT_OPTIONS,
   useAcqRestrictions,
-  useLocationsQuery,
   useOrderLine,
   useShowCallout,
 } from '@folio/stripes-acq-components';

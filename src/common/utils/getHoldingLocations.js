@@ -37,13 +37,13 @@ export const getHoldingLocations = async ({ ky, searchParams, signal, tenantId }
   };
 };
 
-export const getHoldingLocationsByTenants = async ({ ky, instanceId, tenants = DEFAULT_DATA }) => {
+export const getHoldingLocationsByTenants = async ({ ky, instanceId, receivingTenantIds = DEFAULT_DATA }) => {
   const searchParams = {
     query: `instanceId==${instanceId}`,
     limit: LIMIT_MAX,
   };
 
-  const locationsRequest = tenants.map(async (tenantId) => {
+  const locationsRequest = receivingTenantIds.map(async (tenantId) => {
     const tenantKy = extendKyWithTenant(ky, tenantId);
 
     return getHoldingLocations({ ky: tenantKy, searchParams, tenantId });
