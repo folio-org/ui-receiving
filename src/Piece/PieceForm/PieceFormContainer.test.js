@@ -1,14 +1,5 @@
-import {
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
-import { MemoryRouter } from 'react-router-dom';
-
 import user from '@folio/jest-config-stripes/testing-library/user-event';
-import {
-  render,
-  screen,
-} from '@folio/jest-config-stripes/testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
@@ -18,6 +9,7 @@ import {
   useOrderLine,
 } from '@folio/stripes-acq-components';
 
+import { renderWithRouter } from '../../../test/jest/helpers';
 import {
   useHoldingItems,
   useOrder,
@@ -29,16 +21,6 @@ import {
 } from '../../common/hooks';
 import { usePieceQuickReceiving } from '../hooks';
 import { PieceFormContainer } from './PieceFormContainer';
-
-const queryClient = new QueryClient();
-
-const wrapper = ({ children }) => (
-  <MemoryRouter>
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  </MemoryRouter>
-);
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
@@ -114,12 +96,11 @@ const defaultProps = {
   paneTitle: 'Piece form',
 };
 
-const renderPieceFormContainer = (props = {}) => render(
+const renderPieceFormContainer = (props = {}) => renderWithRouter(
   <PieceFormContainer
     {...defaultProps}
     {...props}
   />,
-  { wrapper },
 );
 
 describe('PieceFormContainer', () => {

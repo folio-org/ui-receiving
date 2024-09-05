@@ -18,9 +18,9 @@ export const useHoldingsAndLocations = ({
   options = {},
   tenantId,
   /*
-   `receivingTenantIds` are uniq list of tenantIds from pieces list.
-    The purpose is, we need to be able to fetch locations from other
-    tenants so that we can display all the locations in the full screen page
+   `receivingTenantIds` is a unique list of tenantIds from the pieces list.
+    The purpose is that we need to be able to fetch locations from other
+    tenants so that we can display all the locations on the full-screen page
   */
   receivingTenantIds = DEFAULT_DATA,
 }) => {

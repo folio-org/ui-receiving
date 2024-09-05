@@ -1,8 +1,7 @@
-import { MemoryRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
+import { renderWithRouter } from '../../../test/jest/helpers';
 import { usePiecesExportCSV } from './hooks';
 import { ExportSettingsModalContainer } from './ExportSettingsModalContainer';
 
@@ -16,22 +15,11 @@ const defaultProps = {
   query: '',
 };
 
-const queryClient = new QueryClient();
-// eslint-disable-next-line react/prop-types
-const wrapper = ({ children }) => (
-  <MemoryRouter>
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  </MemoryRouter>
-);
-
-const renderExportSettingsModalContainer = (props = {}) => render(
+const renderExportSettingsModalContainer = (props = {}) => renderWithRouter(
   <ExportSettingsModalContainer
     {...defaultProps}
     {...props}
   />,
-  { wrapper },
 );
 
 const mockExportCSV = {

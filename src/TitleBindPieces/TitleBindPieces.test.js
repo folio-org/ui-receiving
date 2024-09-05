@@ -1,16 +1,8 @@
-import {
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
-import { MemoryRouter } from 'react-router-dom';
-
-import {
-  render,
-  screen,
-} from '@folio/jest-config-stripes/testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { HasCommand } from '@folio/stripes/components';
 
+import { renderWithRouter } from '../../test/jest/helpers';
 import TitleBindPieces from './TitleBindPieces';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
@@ -51,21 +43,10 @@ const defaultProps = {
   initialValues,
 };
 
-const queryClient = new QueryClient();
-
-const wrapper = ({ children }) => (
-  <MemoryRouter>
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  </MemoryRouter>
-);
-
-const renderTitleBindPieces = (props = defaultProps) => render(
+const renderTitleBindPieces = (props = defaultProps) => renderWithRouter(
   <TitleBindPieces
     {...props}
   />,
-  { wrapper },
 );
 
 describe('TitleBindPieces', () => {
