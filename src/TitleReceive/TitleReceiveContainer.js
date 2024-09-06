@@ -60,10 +60,15 @@ function TitleReceiveContainer({ history, location, match }) {
   const { receive } = useReceive();
 
   const receivingTenantIds = useMemo(() => {
-    return pieces?.length
-      ? uniq(pieces?.map(({ receivingTenantId }) => receivingTenantId).filter(Boolean))
-      : [];
-  }, [pieces]);
+    if (pieces?.length) {
+      return uniq([
+        ...pieces.map(({ receivingTenantId }) => receivingTenantId),
+        targetTenantId,
+      ].filter(Boolean));
+    }
+
+    return [];
+  }, [pieces, targetTenantId]);
 
   const { locations, isFetching } = useHoldingsAndLocations({
     instanceId,

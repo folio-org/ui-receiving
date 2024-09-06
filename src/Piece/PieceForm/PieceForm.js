@@ -1,7 +1,9 @@
+import uniq from 'lodash/uniq';
 import PropTypes from 'prop-types';
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
 } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -95,12 +97,24 @@ const PieceForm = ({
     receivingStatus,
   } = formValues;
 
+  const receivingTenantIds = useMemo(() => {
+    if (poLine?.locations?.length) {
+      return uniq([
+        ...poLine.locations.map(({ tenantId }) => tenantId),
+        formValues.receivingTenantId,
+      ].filter(Boolean));
+    }
+
+    return [];
+  }, [formValues?.receivingTenantId, poLine?.locations]);
+
   const {
     locations,
     locationIds,
     isFetching,
   } = useHoldingsAndLocations({
     instanceId,
+    receivingTenantIds,
     tenantId: formValues.receivingTenantId,
   });
 
