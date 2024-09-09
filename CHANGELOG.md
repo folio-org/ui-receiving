@@ -35,6 +35,7 @@
 * ECS - Disable "Create item" checkbox/link from member tenant in "Receive" full-screen form. Refs UIREC-394.
 * ECS - Fix invalid reference for holding drop-down component. Refs UIREC-393.
 * Sort pieces on bind items screen by expected receipt date. Refs UIREC-392.
+* Disable `Delete` and `Unreceive` buttons if the piece is bound. Refs UIREC-382.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)

@@ -369,9 +369,12 @@ describe('PieceForm', () => {
       holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
     };
     const date = today.add(3, 'days');
+    let rerenderComponent;
 
     beforeEach(async () => {
-      renderPieceForm({ initialValues });
+      const { rerender } = renderPieceForm({ initialValues });
+
+      rerenderComponent = rerender;
 
       await user.click(screen.getByTestId('dropdown-trigger-button'));
     });
@@ -404,6 +407,24 @@ describe('PieceForm', () => {
         expect.anything(),
         expect.anything(),
       );
+    });
+
+    it('should `Delete` and `Unreceive` buttons be disabled if the piece is bound', async () => {
+      rerenderComponent(
+        <PieceForm
+          {...defaultProps}
+          initialValues={{
+            ...initialValues,
+            id: 'pieceId',
+            receivingStatus: PIECE_STATUS.received,
+            isBound: true,
+          }}
+        />,
+      );
+
+      await user.click(screen.getByTestId('dropdown-trigger-button'));
+      expect(screen.getByTestId('delete-piece-button')).toBeDisabled();
+      expect(screen.getByTestId('unReceive-piece-button')).toBeDisabled();
     });
   });
 });
