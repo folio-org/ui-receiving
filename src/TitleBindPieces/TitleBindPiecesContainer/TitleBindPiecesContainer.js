@@ -58,7 +58,7 @@ export const TitleBindPiecesContainer = () => {
     titleId,
     tenantId: targetTenantId,
     receivingStatus: PIECE_STATUS.received,
-    searchQuery: `isBound==false and format==${PIECE_FORMAT.physical}`,
+    searchQuery: `isBound==false and format==${PIECE_FORMAT.physical} sortby receiptDate`,
   });
 
   const handleMutationError = useCallback(async (error) => {

@@ -33,6 +33,8 @@
 * ECS - Fix the issue of creating new holdings instead of using existing ones in the bind form. Refs UIREC-391.
 * ECS - "Select holdings" and "Affiliation" fields on "Edit piece" form for Unreceivable piece should be NOT editable. Refs UIREC-361.
 * ECS - Disable "Create item" checkbox/link from member tenant in "Receive" full-screen form. Refs UIREC-394.
+* ECS - Fix invalid reference for holding drop-down component. Refs UIREC-393.
+* Sort pieces on bind items screen by expected receipt date. Refs UIREC-392.
 * Leverage new endpoint to get items across tenants. Refs UIREC-388.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)

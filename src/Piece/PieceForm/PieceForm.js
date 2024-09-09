@@ -1,7 +1,9 @@
+import uniq from 'lodash/uniq';
 import PropTypes from 'prop-types';
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
 } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -32,6 +34,7 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { useHoldingsAndLocations } from '../../common/hooks';
 import {
   getClaimingIntervalFromDate,
   setLocationValueFormMutator,
@@ -63,8 +66,6 @@ const PieceForm = ({
   onClose,
   onDelete: onDeleteProp,
   onUnreceive: onUnreceiveProp,
-  locationIds,
-  locations,
   paneTitle,
   pieceFormatOptions,
   poLine,
@@ -95,6 +96,27 @@ const PieceForm = ({
     metadata,
     receivingStatus,
   } = formValues;
+
+  const receivingTenantIds = useMemo(() => {
+    if (poLine?.locations?.length) {
+      return uniq([
+        ...poLine.locations.map(({ tenantId }) => tenantId),
+        formValues.receivingTenantId,
+      ].filter(Boolean));
+    }
+
+    return [];
+  }, [formValues?.receivingTenantId, poLine?.locations]);
+
+  const {
+    locations,
+    locationIds,
+    isFetching,
+  } = useHoldingsAndLocations({
+    instanceId,
+    receivingTenantIds,
+    tenantId: formValues.receivingTenantId,
+  });
 
   useEffect(() => {
     if (!id && format === PIECE_FORMAT.electronic) {
@@ -317,10 +339,11 @@ const PieceForm = ({
                       <PieceFields
                         createInventoryValues={createInventoryValues}
                         instanceId={instanceId}
-                        locationIds={locationIds}
-                        locations={locations}
                         pieceFormatOptions={pieceFormatOptions}
                         poLine={poLine}
+                        locationIds={locationIds}
+                        locations={locations}
+                        isLocationsLoading={isFetching}
                         setLocationValue={mutators.setLocationValue}
                         onChangeDisplayOnHolding={onChangeDisplayOnHolding}
                       />
@@ -396,8 +419,6 @@ PieceForm.propTypes = {
   hasValidationErrors: PropTypes.bool.isRequired,
   initialValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
-  locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  locations: PropTypes.arrayOf(PropTypes.object),
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onUnreceive: PropTypes.func.isRequired,

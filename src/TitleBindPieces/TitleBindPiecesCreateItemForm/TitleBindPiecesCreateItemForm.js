@@ -36,7 +36,7 @@ export const TitleBindPiecesCreateItemForm = ({
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
 
-  const { locations } = useHoldingsAndLocations({
+  const { locations, isFetching } = useHoldingsAndLocations({
     instanceId,
     tenantId: bindItemValues.tenantId,
   });
@@ -138,6 +138,7 @@ export const TitleBindPiecesCreateItemForm = ({
           onChange={selectLocation}
           locationLabelId="ui-receiving.piece.permanentLocationId"
           holdingLabelId="ui-receiving.piece.permanentLocationId"
+          isLoading={isFetching}
           required
         />
       </Col>
