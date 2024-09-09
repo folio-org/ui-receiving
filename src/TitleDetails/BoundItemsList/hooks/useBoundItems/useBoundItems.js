@@ -8,6 +8,7 @@ import {
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import { TENANT_ITEMS_API } from '../../../../common/constants';
@@ -17,6 +18,8 @@ const DEFAULT_DATA = [];
 
 export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
   const { enabled = true, ...otherOptions } = options;
+
+  const stripes = useStripes();
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'bound-items-list' });
 
@@ -31,6 +34,13 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
     limit: LIMIT_MAX,
     query: boundItemsQuery,
   };
+
+  const isEnabled = Boolean(
+    enabled
+    && titleId
+    && poLineId
+    && stripes.hasInterface('inventory', '13.2'),
+  );
 
   const {
     data = DEFAULT_DATA,
@@ -59,7 +69,7 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
         totalRecords,
       };
     },
-    enabled: Boolean(enabled && titleId && poLineId),
+    enabled: isEnabled,
     ...otherOptions,
   });
 
