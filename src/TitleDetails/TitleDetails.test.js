@@ -17,6 +17,7 @@ import {
   expandAllSections,
   collapseAllSections,
 } from '@folio/stripes/components';
+import { StripesContext } from '@folio/stripes/core';
 import {
   PIECE_STATUS, PIECE_FORMAT,
   INVENTORY_RECORDS_TYPE,
@@ -94,11 +95,25 @@ const defaultProps = {
   match: matchMock,
 };
 
+const StripesContextProvider = ({ children }) => {
+  const value = {
+    hasInterface: jest.fn(() => true),
+  };
+
+  return (
+    <StripesContext.Provider value={value}>
+      {children}
+    </StripesContext.Provider>
+  );
+};
+
 const queryClient = new QueryClient();
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     <MemoryRouter>
-      {children}
+      <StripesContextProvider>
+        {children}
+      </StripesContextProvider>
     </MemoryRouter>
   </QueryClientProvider>
 );
