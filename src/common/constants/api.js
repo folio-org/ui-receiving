@@ -4,6 +4,7 @@ export const CHECKIN_API = 'orders/check-in';
 export const CONSORTIUM_BATCH_HOLDINGS = 'search/consortium/batch/holdings';
 export const EXPECT_API = 'orders/expect';
 export const PIECE_AUDIT_API = `${ACQ_AUDIT_API}/piece`;
+export const TENANT_ITEMS_API = 'inventory/tenant-items';
 export const TITLES_API = 'orders/titles';
 export const TITLE_API = `${TITLES_API}/:{id}`;
 export const RECEIVE_API = 'orders/receive';
