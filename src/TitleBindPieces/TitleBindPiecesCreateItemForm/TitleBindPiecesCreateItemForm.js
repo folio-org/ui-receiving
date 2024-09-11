@@ -39,7 +39,12 @@ export const TitleBindPiecesCreateItemForm = ({
   const { locations, isFetching } = useHoldingsAndLocations({
     instanceId,
     tenantId: bindItemValues.tenantId,
+    additionalLocationIds: [bindItemValues.locationId],
+    additionalTenantLocationIdsMap: {
+      [bindItemValues.tenantId]: [bindItemValues.locationId],
+    },
   });
+
   const { crossTenant } = useReceivingSearchContext();
 
   const FieldInventoryComponent = crossTenant

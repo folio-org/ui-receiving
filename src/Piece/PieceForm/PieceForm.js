@@ -116,6 +116,10 @@ const PieceForm = ({
     instanceId,
     receivingTenantIds,
     tenantId: formValues.receivingTenantId,
+    additionalLocationIds: [formValues.locationId],
+    additionalTenantLocationIdsMap: {
+      [formValues.receivingTenantId]: [formValues.locationId],
+    },
   });
 
   useEffect(() => {
