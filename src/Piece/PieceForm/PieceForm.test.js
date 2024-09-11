@@ -1,8 +1,10 @@
 import moment from 'moment';
+import { MemoryRouter } from 'react-router-dom';
 
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   act,
+  render,
   screen,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
@@ -13,7 +15,6 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { renderWithRouter } from '../../../test/jest/helpers';
 import { usePieceStatusChangeLog } from '../hooks';
 import PieceForm from './PieceForm';
 
@@ -82,11 +83,12 @@ const logs = [
 const DATE_FORMAT = 'MM/DD/YYYY';
 const today = moment();
 
-const renderPieceForm = (props = {}) => renderWithRouter(
+const renderPieceForm = (props = {}) => render(
   <PieceForm
     {...defaultProps}
     {...props}
   />,
+  { wrapper: MemoryRouter },
 );
 
 const findButton = (name) => screen.findByRole('button', { name });

@@ -1,6 +1,16 @@
-import { useHistory } from 'react-router-dom';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+import {
+  MemoryRouter,
+  useHistory,
+} from 'react-router-dom';
 
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   HasCommand,
@@ -9,7 +19,6 @@ import {
 } from '@folio/stripes/components';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { renderWithRouter } from '../../test/jest/helpers';
 import TitleForm from './TitleForm';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
@@ -50,10 +59,20 @@ const kyMock = {
   })),
 };
 
-const renderTitleForm = (props = defaultProps) => renderWithRouter(
+const queryClient = new QueryClient();
+const wrapper = ({ children }) => (
+  <MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  </MemoryRouter>
+);
+
+const renderTitleForm = (props = defaultProps) => render(
   <TitleForm
     {...props}
   />,
+  { wrapper },
 );
 
 describe('TitleForm', () => {

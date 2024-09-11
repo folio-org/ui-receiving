@@ -1,4 +1,3 @@
-import uniq from 'lodash/uniq';
 import {
   useCallback,
   useMemo,
@@ -13,11 +12,11 @@ import {
 } from '@folio/stripes/components';
 import {
   PIECE_FORMAT,
+  useLocationsQuery,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import {
-  useHoldingsAndLocations,
   useReceive,
   useTitleHydratedPieces,
 } from '../common/hooks';
@@ -38,6 +37,7 @@ function TitleReceiveContainer({ history, location, match }) {
   const showCallout = useShowCallout();
   const {
     crossTenant,
+    isCentralOrderingEnabled,
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
@@ -45,7 +45,7 @@ function TitleReceiveContainer({ history, location, match }) {
   const titleId = match.params.id;
 
   const {
-    pieces = [],
+    pieces,
     title,
     orderLine: poLine,
     isLoading: isPiecesLoading,
@@ -59,22 +59,10 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const { receive } = useReceive();
 
-  const receivingTenantIds = useMemo(() => {
-    if (pieces?.length) {
-      return uniq([
-        ...pieces.map(({ receivingTenantId }) => receivingTenantId),
-        targetTenantId,
-      ].filter(Boolean));
-    }
-
-    return [];
-  }, [pieces, targetTenantId]);
-
-  const { locations, isFetching } = useHoldingsAndLocations({
-    instanceId,
-    receivingTenantIds,
-    tenantId: targetTenantId,
-  });
+  const {
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   const onCancel = useCallback(
     () => {
@@ -134,7 +122,7 @@ function TitleReceiveContainer({ history, location, match }) {
     [poLine],
   );
 
-  const isLoading = isPiecesLoading || isFetching;
+  const isLoading = isPiecesLoading || isLocationsLoading;
 
   if (isLoading) {
     return (
