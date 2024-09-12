@@ -36,13 +36,16 @@ export const TitleBindPiecesCreateItemForm = ({
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
 
+  const { locationId, tenantId: receivingTenantId } = bindItemValues;
+
+  const additionalLocationIds = locationId ? [locationId] : [];
+  const additionalTenantLocationIdsMap = receivingTenantId ? { [receivingTenantId]: additionalLocationIds } : {};
+
   const { locations, isFetching } = useHoldingsAndLocations({
     instanceId,
     tenantId: bindItemValues.tenantId,
-    additionalLocationIds: [bindItemValues.locationId],
-    additionalTenantLocationIdsMap: {
-      [bindItemValues.tenantId]: [bindItemValues.locationId],
-    },
+    additionalLocationIds,
+    additionalTenantLocationIdsMap,
   });
 
   const { crossTenant } = useReceivingSearchContext();

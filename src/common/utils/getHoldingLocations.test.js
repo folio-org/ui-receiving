@@ -87,5 +87,20 @@ describe('utils', () => {
         locationIds: locations.map(({ id }) => id),
       });
     });
+
+    it('should return empty array of holdings, locations and locationIds when `receivingTenantIds` and not present or empty array', async () => {
+      const instanceId = 'instance-id';
+
+      const result = await getHoldingLocationsByTenants({
+        ky,
+        instanceId,
+      });
+
+      expect(result).toEqual({
+        holdings: [],
+        locations: [],
+        locationIds: [],
+      });
+    });
   });
 });

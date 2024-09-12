@@ -67,6 +67,14 @@ export const getHoldingLocationsByTenants = async ({
     limit: LIMIT_MAX,
   };
 
+  if (!receivingTenantIds.length) {
+    return {
+      locations: DEFAULT_DATA,
+      locationIds: DEFAULT_DATA,
+      holdings: DEFAULT_DATA,
+    };
+  }
+
   const locationsRequest = receivingTenantIds.map(async (tenantId) => {
     const tenantKy = extendKyWithTenant(ky, tenantId);
 

@@ -93,20 +93,25 @@ const PieceForm = ({
     bindItemId,
     isBound,
     isCreateItem,
+    locationId,
     metadata,
     receivingStatus,
+    receivingTenantId,
   } = formValues;
 
   const receivingTenantIds = useMemo(() => {
     if (poLine?.locations?.length) {
       return uniq([
         ...poLine.locations.map(({ tenantId }) => tenantId),
-        formValues.receivingTenantId,
+        receivingTenantId,
       ].filter(Boolean));
     }
 
     return [];
-  }, [formValues?.receivingTenantId, poLine?.locations]);
+  }, [receivingTenantId, poLine?.locations]);
+
+  const additionalLocationIds = locationId ? [locationId] : [];
+  const additionalTenantLocationIdsMap = receivingTenantId ? { [receivingTenantId]: additionalLocationIds } : {};
 
   const {
     locations,
@@ -115,11 +120,9 @@ const PieceForm = ({
   } = useHoldingsAndLocations({
     instanceId,
     receivingTenantIds,
-    tenantId: formValues.receivingTenantId,
-    additionalLocationIds: [formValues.locationId],
-    additionalTenantLocationIdsMap: {
-      [formValues.receivingTenantId]: [formValues.locationId],
-    },
+    tenantId: receivingTenantId,
+    additionalLocationIds,
+    additionalTenantLocationIdsMap,
   });
 
   useEffect(() => {
