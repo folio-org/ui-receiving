@@ -1,10 +1,12 @@
 import {
   batchRequest,
   ITEMS_API,
-  SEARCH_API,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_REQUESTS_API } from '../../constants';
+import {
+  PIECE_REQUESTS_API,
+  TENANT_ITEMS_API,
+} from '../../constants';
 import { buildPieceRequestsSearchParams } from '../../utils';
 
 export const fetchLocalPieceItems = (ky, { pieces }) => {
@@ -22,25 +24,18 @@ export const fetchLocalPieceItems = (ky, { pieces }) => {
   );
 };
 
-export const fetchConsortiumPieceItems = (ky, { instanceId, pieces }) => {
-  const pieceItemIdsSet = new Set(pieces.map(({ itemId }) => itemId).filter(Boolean));
-  const tenantHoldingIdsMap = pieces.reduce((acc, { receivingTenantId, holdingId }) => {
-    if (acc.has(receivingTenantId)) {
-      acc.get(receivingTenantId).add(holdingId);
-
-      return acc;
-    }
-
-    return acc.set(receivingTenantId, new Set().add(holdingId));
-  }, new Map());
+export const fetchConsortiumPieceItems = (ky, { pieces }) => {
+  const dto = {
+    tenantItemPairs: pieces.map(({ itemId, receivingTenantId }) => ({
+      tenantId: receivingTenantId,
+      itemId,
+    })),
+  };
 
   return ky
-    .get(`${SEARCH_API}/consortium/items`, { searchParams: { instanceId } })
+    .post(TENANT_ITEMS_API, { json: dto })
     .json()
-    .then(({ items }) => items)
-    .then((items) => items.filter(({ id, holdingsRecordId, tenantId }) => {
-      return !!tenantHoldingIdsMap.get(tenantId)?.has(holdingsRecordId) && pieceItemIdsSet.has(id);
-    }));
+    .then(({ tenantItems }) => tenantItems.map(({ item, tenantId }) => ({ tenantId, ...item })));
 };
 
 export const fetchLocalPieceRequests = (ky, { pieces }) => {

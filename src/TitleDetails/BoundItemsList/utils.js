@@ -15,9 +15,15 @@ export const getColumnFormatter = (hasViewInventoryPermissions, instanceId, acti
       const { barcode, id, holdingsRecordId, tenantId } = record;
       const isForeignTenant = tenantId && activeTenantId && activeTenantId !== tenantId;
 
-      if (!hasViewInventoryPermissions) return barcode;
+      const isLink = (
+        instanceId
+        && holdingsRecordId
+        && id
+        && hasViewInventoryPermissions
+        && !isForeignTenant
+      );
 
-      if (instanceId && holdingsRecordId && id && !isForeignTenant) {
+      if (isLink) {
         const barcodeText = barcode || <FormattedMessage id="ui-receiving.piece.barcode.noBarcode" />;
 
         return (
@@ -30,7 +36,7 @@ export const getColumnFormatter = (hasViewInventoryPermissions, instanceId, acti
         );
       }
 
-      return barcode;
+      return barcode || <NoValue />;
     },
     [PIECE_COLUMNS.itemStatus]: record => getItemStatusLabel(getPieceStatusFromItem(record)) || <NoValue />,
     [PIECE_COLUMNS.displaySummary]: record => record.displaySummary || <NoValue />,

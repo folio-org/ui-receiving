@@ -1,9 +1,9 @@
-import {
-  ITEMS_API,
-  SEARCH_API,
-} from '@folio/stripes-acq-components';
+import { ITEMS_API } from '@folio/stripes-acq-components';
 
-import { PIECE_REQUESTS_API } from '../../constants';
+import {
+  PIECE_REQUESTS_API,
+  TENANT_ITEMS_API,
+} from '../../constants';
 import {
   fetchConsortiumPieceItems,
   fetchLocalPieceItems,
@@ -21,6 +21,9 @@ const requests = [{ id: 'request-id' }];
 
 const buildKyMock = (res) => ({
   get: jest.fn(() => ({
+    json: () => Promise.resolve(res),
+  })),
+  post: jest.fn(() => ({
     json: () => Promise.resolve(res),
   })),
 });
@@ -44,7 +47,7 @@ describe('Paginated pieces utilities', () => {
       const result = await fetchConsortiumPieceItems(kyMock, { pieces });
 
       expect(result).toEqual(items);
-      expect(kyMock.get).toHaveBeenCalledWith(`${SEARCH_API}/consortium/items`, expect.objectContaining({}));
+      expect(kyMock.post).toHaveBeenCalledWith(TENANT_ITEMS_API, expect.objectContaining({}));
     });
   });
 
