@@ -41,12 +41,13 @@ describe('Paginated pieces utilities', () => {
   });
 
   describe('fetchConsortiumPieceItems', () => {
-    const kyMock = buildKyMock({ items });
+    const tenantId = 'tenantId';
+    const kyMock = buildKyMock({ tenantItems: items.map((item) => ({ item, tenantId })) });
 
     it('should fetch pieces items from the all related tenants', async () => {
       const result = await fetchConsortiumPieceItems(kyMock, { pieces });
 
-      expect(result).toEqual(items);
+      expect(result).toEqual(items.map((item) => ({ ...item, tenantId })));
       expect(kyMock.post).toHaveBeenCalledWith(TENANT_ITEMS_API, expect.objectContaining({}));
     });
   });
