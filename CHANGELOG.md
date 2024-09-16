@@ -35,7 +35,6 @@
 * ECS - Disable "Create item" checkbox/link from member tenant in "Receive" full-screen form. Refs UIREC-394.
 * ECS - Fix invalid reference for holding drop-down component. Refs UIREC-393.
 * Sort pieces on bind items screen by expected receipt date. Refs UIREC-392.
-* Disable `Delete` and `Unreceive` buttons if the piece is bound. Refs UIREC-382.
 * Leverage new endpoint to get items across tenants. Refs UIREC-388.
 * *BREAKING* Bump up okapi interfaces for `pieces` (3.1) to support a new endpoint. Refs UIREC-396.
 

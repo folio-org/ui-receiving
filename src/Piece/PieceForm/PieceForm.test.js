@@ -405,19 +405,5 @@ describe('PieceForm', () => {
         expect.anything(),
       );
     });
-
-    it('should `Delete` and `Unreceive` buttons be disabled if the piece is bound', async () => {
-      renderPieceForm({
-        initialValues: {
-          ...initialValues,
-          id: 'pieceId',
-          receivingStatus: PIECE_STATUS.received,
-          isBound: true,
-        },
-      });
-
-      expect(screen.getByTestId('delete-piece-button')).toBeDisabled();
-      expect(screen.getByTestId('unReceive-piece-button')).toBeDisabled();
-    });
   });
 });

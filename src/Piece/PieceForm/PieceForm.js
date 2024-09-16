@@ -236,9 +236,9 @@ const PieceForm = ({
     [PIECE_ACTION_NAMES.saveAndClose]: isSaveAndCloseDisabled,
     [PIECE_ACTION_NAMES.saveAndCreate]: isSaveAndCreateDisabled,
     [PIECE_ACTION_NAMES.unReceivable]: isEditDisabled,
-    [PIECE_ACTION_NAMES.delete]: !canDeletePiece || protectDelete || isBound,
+    [PIECE_ACTION_NAMES.delete]: !canDeletePiece || protectDelete,
     [PIECE_ACTION_NAMES.expect]: isEditDisabled,
-    [PIECE_ACTION_NAMES.unReceive]: isEditDisabled || isBound,
+    [PIECE_ACTION_NAMES.unReceive]: isEditDisabled,
     [PIECE_ACTION_NAMES.sendClaim]: isEditDisabled,
     [PIECE_ACTION_NAMES.delayClaim]: isEditDisabled,
   };
