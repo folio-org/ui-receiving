@@ -26,7 +26,7 @@ export const fetchLocalPieceItems = (ky, { pieces }) => {
 
 export const fetchConsortiumPieceItems = (ky, { pieces }) => {
   const dto = {
-    tenantItemPairs: pieces.map(({ itemId, receivingTenantId }) => ({
+    tenantItemPairs: pieces.filter(({ itemId }) => Boolean(itemId)).map(({ itemId, receivingTenantId }) => ({
       tenantId: receivingTenantId,
       itemId,
     })),
