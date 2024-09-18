@@ -21,7 +21,7 @@ export const usePiecesList = ({
     crossTenant,
     targetTenantId,
     centralTenantId,
-    activeTenantId
+    activeTenantId,
   } = useReceivingSearchContext();
 
   const [sorting, setSorting] = useState(initialSorting);
