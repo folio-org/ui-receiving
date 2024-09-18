@@ -50,7 +50,6 @@ function TitleUnreceiveContainer({
   location,
   match,
   mutator,
-  stripes,
 }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
@@ -114,7 +113,6 @@ function TitleUnreceiveContainer({
               activeTenantId,
               centralTenantId,
               crossTenant,
-              userTenants: stripes.user.user.tenants?.map(({ id }) => id),
             });
 
             return hydratedPieces;

@@ -8,7 +8,6 @@ export function getHydratedPieces({
   crossTenant,
   activeTenantId,
   centralTenantId,
-  userTenants = [],
   fetchPieceItems,
   fetchPieceRequests,
   pieces,
@@ -27,13 +26,11 @@ export function getHydratedPieces({
 
       return piecesResponse
         .filter(piece => {
-          if (crossTenant && activeTenantId === centralTenantId) {
-            return userTenants.includes(piece.receivingTenantId);
-          } else if (crossTenant) {
+          if (crossTenant && activeTenantId !== centralTenantId) {
             return activeTenantId === piece.receivingTenantId;
-          } else {
-            return true;
           }
+
+          return true;
         })
         .map((piece) => ({
           ...piece,

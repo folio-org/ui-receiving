@@ -4,7 +4,6 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
-  useStripes,
 } from '@folio/stripes/core';
 import {
   HOLDINGS_API,
@@ -28,7 +27,6 @@ export const useTitleHydratedPieces = ({
   titleId,
   searchQuery = '',
 } = {}) => {
-  const stripes = useStripes();
   const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace('receiving-title-hydrated-pieces');
 
@@ -86,7 +84,6 @@ export const useTitleHydratedPieces = ({
       activeTenantId,
       crossTenant,
       centralTenantId,
-      userTenants: stripes.user.user.tenants?.map(({ id }) => id),
     });
 
     const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);

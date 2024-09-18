@@ -72,19 +72,16 @@ export const usePaginatedPieces = ({
 
     const itemsMap = items.reduce((acc, item) => ({ ...acc, [item.id]: item }), {});
     const requestsMap = requests.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
-    const userTenants = stripes.user.user.tenants?.map(({ id }) => id) || [];
 
     return {
       totalRecords,
       pieces: pieces
         .filter(piece => {
-          if (crossTenant && activeTenantId === centralTenantId) {
-            return userTenants.includes(piece.receivingTenantId);
-          } else if (crossTenant) {
+          if (crossTenant && activeTenantId !== centralTenantId) {
             return activeTenantId === piece.receivingTenantId;
-          } else {
-            return true;
           }
+
+          return true;
         })
         .map((piece) => ({
           ...piece,
