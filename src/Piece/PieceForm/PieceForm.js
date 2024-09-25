@@ -94,6 +94,7 @@ const PieceForm = ({
     isBound,
     isCreateItem,
     locationId,
+    holdingId,
     metadata,
     receivingStatus,
     receivingTenantId,
@@ -169,10 +170,10 @@ const PieceForm = ({
   }, [change]);
 
   const onSave = useCallback(async (e) => {
-    const holdingId = getState().values?.holdingId;
+    const currentHoldingId = getState().values?.holdingId;
     const initialHoldingId = getState().initialValues?.holdingId;
 
-    const shouldCheckHoldingAbandonment = (id && initialHoldingId) && (holdingId !== initialHoldingId);
+    const shouldCheckHoldingAbandonment = (id && initialHoldingId) && (currentHoldingId !== initialHoldingId);
 
     if (shouldCheckHoldingAbandonment) {
       return checkHoldingAbandonment(initialHoldingId)
@@ -357,7 +358,7 @@ const PieceForm = ({
                         poLine={poLine}
                         locationIds={locationIds}
                         locations={locations}
-                        isLocationsLoading={isEditMode && !locationId && isFetching}
+                        isLocationsLoading={isEditMode && (!locationId || !holdingId) && isFetching}
                         setLocationValue={mutators.setLocationValue}
                         onChangeDisplayOnHolding={onChangeDisplayOnHolding}
                       />
