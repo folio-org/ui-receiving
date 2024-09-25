@@ -357,7 +357,7 @@ const PieceForm = ({
                         poLine={poLine}
                         locationIds={locationIds}
                         locations={locations}
-                        isLocationsLoading={isEditMode && isFetching}
+                        isLocationsLoading={isEditMode && !locationId && isFetching}
                         setLocationValue={mutators.setLocationValue}
                         onChangeDisplayOnHolding={onChangeDisplayOnHolding}
                       />
