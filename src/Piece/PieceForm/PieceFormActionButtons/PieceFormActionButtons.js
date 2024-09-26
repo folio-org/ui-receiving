@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -28,13 +29,19 @@ export const PieceFormActionButtons = ({
   onUnreceivePiece,
   status = PIECE_STATUS.expected,
 }) => {
+  const [actionsKey, setActionsKey] = useState(new Date());
+
   const actionMenu = getPieceActionMenu({
     actionsDisabled,
     canDeletePiece,
     isEditMode,
     onClaimDelay,
     onClaimSend,
-    onCreateAnotherPiece,
+    onCreateAnotherPiece: () => {
+      setActionsKey(new Date());
+
+      return onCreateAnotherPiece();
+    },
     onDelete,
     onReceive,
     onStatusChange,
@@ -71,6 +78,7 @@ export const PieceFormActionButtons = ({
         <FormattedMessage id={saveButtonLabelId} />
       </Button>
       <Dropdown
+        key={actionsKey}
         buttonProps={{
           buttonStyle: 'primary',
           buttonClass: css.dropdownButton,
