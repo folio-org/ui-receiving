@@ -41,7 +41,7 @@
     },
     "optionalOkapiInterfaces": {
       "consortia": "1.0",
-      "consortium-search": "1.0"
+      "consortium-search": "2.0"
     },
     "queryResource": "query",
     "icons": [
@@ -77,7 +77,7 @@
           "circulation.requests.collection.get",
           "configuration.entries.collection.get",
           "consortium-search.campuses.collection.get",
-          "consortium-search.holdings.collection.get",
+          "consortium-search.holdings.batch.collection.get",
           "consortium-search.institutions.collection.get",
           "consortium-search.libraries.collection.get",
           "consortium-search.locations.collection.get",
