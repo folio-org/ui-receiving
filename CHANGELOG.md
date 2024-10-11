@@ -39,6 +39,7 @@
 * *BREAKING* Bump up okapi interfaces for `pieces` (3.1) to support a new endpoint. Refs UIREC-396.
 * Only Display pieces on receiving title view if user affiliation(s) matches piece location affiliation. Refs UIREC-390.
 * Action menu should be closed after 'Save and create another' action. Refs UIREC-399.
+* Upgrade `holdings-storage` to 8.0. Refs  UIREC-407.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)
