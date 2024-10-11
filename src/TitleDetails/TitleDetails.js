@@ -34,7 +34,6 @@ import {
   Row,
 } from '@folio/stripes/components';
 import {
-  IfInterface,
   IfPermission,
   TitleManager,
   useStripes,
