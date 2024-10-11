@@ -94,6 +94,7 @@
           "inventory.items.collection.get",
           "inventory.tenant-items.collection.get",
           "orders.pieces.collection.get",
+          "orders.piece-requests.collection.get",
           "orders.po-lines.item.get",
           "organizations.organizations.collection.get",
           "tags.collection.get",
