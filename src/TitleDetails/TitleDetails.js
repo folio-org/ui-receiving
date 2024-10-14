@@ -34,7 +34,6 @@ import {
   Row,
 } from '@folio/stripes/components';
 import {
-  IfInterface,
   IfPermission,
   TitleManager,
   useStripes,
@@ -574,22 +573,17 @@ const TitleDetails = ({
               )}
             </ColumnManager>
 
-            <IfInterface
-              name="inventory"
-              version="13.2"
+            <Accordion
+              id={TITLE_ACCORDION.boundItems}
+              label={TITLE_ACCORDION_LABELS.boundItems}
             >
-              <Accordion
-                id={TITLE_ACCORDION.boundItems}
-                label={TITLE_ACCORDION_LABELS.boundItems}
-              >
-                <BoundItemsList
-                  key={piecesExistence?.key}
-                  id="bound-items-list"
-                  filters={boundItemsFilters}
-                  title={title}
-                />
-              </Accordion>
-            </IfInterface>
+              <BoundItemsList
+                key={piecesExistence?.key}
+                id="bound-items-list"
+                filters={boundItemsFilters}
+                title={title}
+              />
+            </Accordion>
           </AccordionSet>
         </AccordionStatus>
 

@@ -39,7 +39,7 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
     enabled
     && titleId
     && poLineId
-    && stripes.hasInterface('inventory', '13.2'),
+    && stripes.hasInterface('inventory'),
   );
 
   const {
