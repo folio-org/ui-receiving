@@ -32,6 +32,7 @@ import {
   PIECE_FORMAT,
   PIECE_STATUS,
   useModalToggle,
+  useCurrentUserTenants,
 } from '@folio/stripes-acq-components';
 
 import { useHoldingsAndLocations } from '../../common/hooks';
@@ -75,6 +76,7 @@ const PieceForm = ({
 }) => {
   const stripes = useStripes();
   const accordionStatusRef = useRef();
+  const currentUserTenants = useCurrentUserTenants();
 
   const {
     batch,
@@ -102,14 +104,18 @@ const PieceForm = ({
 
   const receivingTenantIds = useMemo(() => {
     if (poLine?.locations?.length) {
+      const currentUserTenantIds = currentUserTenants?.map(({ id: tenantId }) => tenantId);
+
+      // should get unique tenantIds from poLine locations and filter out tenantIds where the current user has assigned
       return uniq([
         ...poLine.locations.map(({ tenantId }) => tenantId),
         receivingTenantId,
-      ].filter(Boolean));
+      ].filter((tenantId) => currentUserTenantIds.includes(tenantId))
+        .filter(Boolean));
     }
 
     return [];
-  }, [receivingTenantId, poLine?.locations]);
+  }, [poLine?.locations, currentUserTenants, receivingTenantId]);
 
   const additionalLocations = useMemo(() => {
     const locationIds = locationId ? [locationId] : [];
