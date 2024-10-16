@@ -1,4 +1,3 @@
-import uniq from 'lodash/uniq';
 import {
   useCallback,
   useMemo,
@@ -19,6 +18,7 @@ import {
 import {
   useHoldingsAndLocations,
   useReceive,
+  useReceivingTenantIdsAndLocations,
   useTitleHydratedPieces,
 } from '../common/hooks';
 import {
@@ -59,16 +59,18 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const { receive } = useReceive();
 
-  const receivingTenantIds = useMemo(() => {
+  const receivingTenants = useMemo(() => {
     if (pieces?.length) {
-      return uniq([
-        ...pieces.map(({ receivingTenantId }) => receivingTenantId),
-        targetTenantId,
-      ].filter(Boolean));
+      return pieces.map(({ receivingTenantId }) => receivingTenantId);
     }
 
     return [];
-  }, [pieces, targetTenantId]);
+  }, [pieces]);
+
+  const { receivingTenantIds } = useReceivingTenantIdsAndLocations({
+    receivingTenantIds: receivingTenants,
+    currentReceivingTenantId: targetTenantId,
+  });
 
   const { locations, isFetching } = useHoldingsAndLocations({
     instanceId,

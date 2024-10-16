@@ -11,19 +11,19 @@ import {
   INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT,
   PIECE_STATUS,
+  useCurrentUserTenants,
 } from '@folio/stripes-acq-components';
 
 import { renderWithRouter } from '../../../test/jest/helpers';
 import { usePieceStatusChangeLog } from '../hooks';
 import PieceForm from './PieceForm';
 
-jest.mock('@folio/stripes-acq-components', () => {
-  return {
-    ...jest.requireActual('@folio/stripes-acq-components'),
-    FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
-    useCentralOrderingContext: jest.fn(),
-  };
-});
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
+  useCentralOrderingContext: jest.fn(),
+  useCurrentUserTenants: jest.fn(),
+}));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
 jest.mock('../hooks', () => ({
   ...jest.requireActual('../hooks'),
@@ -66,6 +66,16 @@ const userData = {
     firstName: 'John',
   },
 };
+const tenants = [{
+  id: 'tenantId1',
+  name: 'tenantName1',
+  isPrimary: true,
+},
+{
+  id: 'tenantId1',
+  name: 'tenantName1',
+  isPrimary: false,
+}];
 const logs = [
   {
     eventDate: '2023-12-26T14:08:19.402Z',
@@ -106,6 +116,10 @@ describe('PieceForm', () => {
     usePieceStatusChangeLog
       .mockClear()
       .mockReturnValue({ data: logs });
+
+    useCurrentUserTenants
+      .mockClear()
+      .mockReturnValue(tenants);
   });
 
   it('should display the piece form', () => {

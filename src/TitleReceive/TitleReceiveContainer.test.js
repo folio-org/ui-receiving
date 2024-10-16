@@ -31,6 +31,7 @@ jest.mock('../common/hooks', () => ({
   useHoldingsAndLocations: jest.fn().mockReturnValue({ locations: [] }),
   useReceive: jest.fn().mockReturnValue({}),
   useTitleHydratedPieces: jest.fn(),
+  useReceivingTenantIdsAndLocations: jest.fn().mockReturnValue({}),
 }));
 jest.mock('./TitleReceive', () => jest.fn().mockReturnValue('TitleReceive'));
 

@@ -1,4 +1,3 @@
-import uniq from 'lodash/uniq';
 import PropTypes from 'prop-types';
 import {
   useCallback,
@@ -34,7 +33,10 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import { useHoldingsAndLocations } from '../../common/hooks';
+import {
+  useHoldingsAndLocations,
+  useReceivingTenantIdsAndLocations,
+} from '../../common/hooks';
 import {
   getClaimingIntervalFromDate,
   setLocationValueFormMutator,
@@ -100,26 +102,19 @@ const PieceForm = ({
     receivingTenantId,
   } = formValues;
 
-  const receivingTenantIds = useMemo(() => {
+  const receivingTenants = useMemo(() => {
     if (poLine?.locations?.length) {
-      return uniq([
-        ...poLine.locations.map(({ tenantId }) => tenantId),
-        receivingTenantId,
-      ].filter(Boolean));
+      return poLine.locations.map(({ tenantId }) => tenantId);
     }
 
     return [];
-  }, [receivingTenantId, poLine?.locations]);
+  }, [poLine?.locations]);
 
-  const additionalLocations = useMemo(() => {
-    const locationIds = locationId ? [locationId] : [];
-    const tenantLocationIdsMap = receivingTenantId ? { [receivingTenantId]: locationIds } : {};
-
-    return {
-      additionalLocationIds: locationIds,
-      additionalTenantLocationIdsMap: tenantLocationIdsMap,
-    };
-  }, [locationId, receivingTenantId]);
+  const receivingTenantIdsAndLocations = useReceivingTenantIdsAndLocations({
+    receivingTenantIds: receivingTenants,
+    currentReceivingTenantId: receivingTenantId,
+    currentLocationId: locationId,
+  });
 
   const {
     locations,
@@ -127,9 +122,7 @@ const PieceForm = ({
     isFetching,
   } = useHoldingsAndLocations({
     instanceId,
-    receivingTenantIds,
-    tenantId: receivingTenantId,
-    ...additionalLocations,
+    ...receivingTenantIdsAndLocations,
   });
 
   useEffect(() => {

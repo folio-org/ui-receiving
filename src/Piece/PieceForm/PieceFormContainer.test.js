@@ -7,6 +7,7 @@ import {
   useAcqRestrictions,
   useLocationsQuery,
   useOrderLine,
+  useCurrentUserTenants,
 } from '@folio/stripes-acq-components';
 
 import { renderWithRouter } from '../../../test/jest/helpers';
@@ -29,6 +30,7 @@ jest.mock('@folio/stripes-acq-components', () => ({
   useAcqRestrictions: jest.fn(),
   useLocationsQuery: jest.fn(),
   useOrderLine: jest.fn(),
+  useCurrentUserTenants: jest.fn(),
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
 jest.mock('../../common/hooks', () => ({
@@ -84,6 +86,17 @@ const title = {
   instanceId: 'instanceId',
   poLineId: orderLine.id,
 };
+
+const tenants = [{
+  id: 'tenantId1',
+  name: 'tenantName1',
+  isPrimary: true,
+},
+{
+  id: 'tenantId1',
+  name: 'tenantName1',
+  isPrimary: false,
+}];
 
 const restrictions = {};
 
@@ -143,6 +156,9 @@ describe('PieceFormContainer', () => {
     useUnreceive
       .mockClear()
       .mockReturnValue({ unreceive: unreceiveMock });
+    useCurrentUserTenants
+      .mockClear()
+      .mockReturnValue(tenants);
   });
 
   it('should display the piece form', () => {
