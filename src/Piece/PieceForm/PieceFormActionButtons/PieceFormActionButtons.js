@@ -79,6 +79,7 @@ export const PieceFormActionButtons = ({
       </Button>
       <Dropdown
         key={actionsKey}
+        disabled={isSaveDisabled}
         buttonProps={{
           buttonStyle: 'primary',
           buttonClass: css.dropdownButton,

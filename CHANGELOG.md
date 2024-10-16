@@ -43,6 +43,7 @@
 * cleanup permissions for ui-receiving. Refs UIREC-410.
 * ECS - fix user with no affiliation to the location in POL can not add pieces to the receiving title related to that POL. Refs UIREC-411.
 * Upgrade `holdings-storage` to 8.0. Refs UIREC-407.
+* Disable pieces dropdown button when "Save and close" button is disabled. UIREC-370.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)
