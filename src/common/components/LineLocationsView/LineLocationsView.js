@@ -17,7 +17,7 @@ import {
 const LineLocationsView = ({
   crossTenant = false,
   instanceId,
-  poLine,
+  poLine = {},
   locations,
 }) => {
   const intl = useIntl();
@@ -27,14 +27,14 @@ const LineLocationsView = ({
   const locationsToDisplay = useMemo(() => {
     const locationsMap = locations.reduce((acc, l) => ({ ...acc, [l.id]: l }), {});
     const holdingsMap = holdings.reduce((acc, h) => ({ ...acc, [h.id]: h }), {});
-    const lineLocations = poLine.locations.map(({ holdingId, locationId }) => (
+    const lineLocations = poLine.locations?.map(({ holdingId, locationId }) => (
       holdingId
         ? holdings.length && holdingsMap[holdingId] && getHoldingLocationName(holdingsMap[holdingId], locationsMap, intl.formatMessage({ id: 'ui-receiving.titles.invalidReference' }))
         : (locationsMap[locationId]?.name && `${locationsMap[locationId].name} (${locationsMap[locationId].code})`) || ''
     ));
 
     return lineLocations.filter(Boolean).join(', ');
-  }, [holdings, intl, locations, poLine.locations]);
+  }, [holdings, intl, locations, poLine?.locations]);
 
   return (
     <>

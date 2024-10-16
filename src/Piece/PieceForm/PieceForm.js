@@ -1,4 +1,3 @@
-import uniq from 'lodash/uniq';
 import PropTypes from 'prop-types';
 import {
   useCallback,
@@ -32,10 +31,12 @@ import {
   PIECE_FORMAT,
   PIECE_STATUS,
   useModalToggle,
-  useCurrentUserTenants,
 } from '@folio/stripes-acq-components';
 
-import { useHoldingsAndLocations } from '../../common/hooks';
+import {
+  useHoldingsAndLocations,
+  useReceivingTenantIdsAndLocations,
+} from '../../common/hooks';
 import {
   getClaimingIntervalFromDate,
   setLocationValueFormMutator,
@@ -76,7 +77,6 @@ const PieceForm = ({
 }) => {
   const stripes = useStripes();
   const accordionStatusRef = useRef();
-  const currentUserTenants = useCurrentUserTenants();
 
   const {
     batch,
@@ -102,30 +102,19 @@ const PieceForm = ({
     receivingTenantId,
   } = formValues;
 
-  const receivingTenantIds = useMemo(() => {
+  const receivingTenants = useMemo(() => {
     if (poLine?.locations?.length) {
-      const currentUserTenantIds = currentUserTenants?.map(({ id: tenantId }) => tenantId);
-
-      // should get unique tenantIds from poLine locations and filter out tenantIds where the current user has assigned
-      return uniq([
-        ...poLine.locations.map(({ tenantId }) => tenantId),
-        receivingTenantId,
-      ].filter((tenantId) => currentUserTenantIds.includes(tenantId))
-        .filter(Boolean));
+      return poLine.locations.map(({ tenantId }) => tenantId);
     }
 
     return [];
-  }, [poLine?.locations, currentUserTenants, receivingTenantId]);
+  }, [poLine?.locations]);
 
-  const additionalLocations = useMemo(() => {
-    const locationIds = locationId ? [locationId] : [];
-    const tenantLocationIdsMap = receivingTenantId ? { [receivingTenantId]: locationIds } : {};
-
-    return {
-      additionalLocationIds: locationIds,
-      additionalTenantLocationIdsMap: tenantLocationIdsMap,
-    };
-  }, [locationId, receivingTenantId]);
+  const receivingTenantIdsAndLocations = useReceivingTenantIdsAndLocations({
+    receivingTenantIds: receivingTenants,
+    currentReceivingTenantId: receivingTenantId,
+    currentLocationId: locationId,
+  });
 
   const {
     locations,
@@ -133,9 +122,7 @@ const PieceForm = ({
     isFetching,
   } = useHoldingsAndLocations({
     instanceId,
-    receivingTenantIds,
-    tenantId: receivingTenantId,
-    ...additionalLocations,
+    ...receivingTenantIdsAndLocations,
   });
 
   useEffect(() => {

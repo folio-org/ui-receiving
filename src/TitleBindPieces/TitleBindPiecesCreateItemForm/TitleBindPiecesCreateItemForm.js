@@ -18,7 +18,10 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
-import { useHoldingsAndLocations } from '../../common/hooks';
+import {
+  useHoldingsAndLocations,
+  useReceivingTenantIdsAndLocations,
+} from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import {
@@ -38,12 +41,18 @@ export const TitleBindPiecesCreateItemForm = ({
 
   const { locationId, tenantId: receivingTenantId } = bindItemValues;
 
-  const additionalLocationIds = locationId ? [locationId] : [];
-  const additionalTenantLocationIdsMap = receivingTenantId ? { [receivingTenantId]: additionalLocationIds } : {};
+  const {
+    additionalLocationIds,
+    additionalTenantLocationIdsMap,
+    tenantId,
+  } = useReceivingTenantIdsAndLocations({
+    currentLocationId: locationId,
+    currentReceivingTenantId: receivingTenantId,
+  });
 
   const { locations, isFetching } = useHoldingsAndLocations({
     instanceId,
-    tenantId: bindItemValues.tenantId,
+    tenantId,
     additionalLocationIds,
     additionalTenantLocationIdsMap,
   });

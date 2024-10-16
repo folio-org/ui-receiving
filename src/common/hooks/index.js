@@ -10,6 +10,7 @@ export * from './usePieces';
 export * from './usePiecesExpect';
 export * from './usePiecesRequests';
 export * from './useReceive';
+export * from './useReceivingTenantIdsAndLocations';
 export * from './useTitle';
 export * from './useTitleHydratedPieces';
 export * from './useUnreceive';
