@@ -18,7 +18,7 @@ export const useReceivingTenantIdsAndLocations = ({
       return uniq([
         ...receivingTenantIds,
         currentReceivingTenantId,
-      ].filter((tenantId) => currentUserTenantIds.includes(tenantId))
+      ].filter((tenantId) => currentUserTenantIds?.includes(tenantId))
         .filter(Boolean));
     }
 
