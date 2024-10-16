@@ -68,8 +68,9 @@
         ]
       },
       {
-        "permissionName": "ui-receiving.third-party-services",
+        "permissionName": "ui-receiving.third-party-services.execute",
         "displayName": "Receiving: Permissions required to call services",
+        "replaces": ["ui-receiving.third-party-services"],
         "visible": false,
         "subPermissions": [
           "acquisitions-units.memberships.collection.get",
@@ -121,7 +122,7 @@
           "orders.titles.item.get",
           "orders-storage.settings.collection.get",
           "orders-storage.settings.item.get",
-          "ui-receiving.third-party-services"
+          "ui-receiving.third-party-services.execute"
         ]
       },
       {
