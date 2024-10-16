@@ -40,6 +40,7 @@
 * Only Display pieces on receiving title view if user affiliation(s) matches piece location affiliation. Refs UIREC-390.
 * Action menu should be closed after 'Save and create another' action. Refs UIREC-399.
 * Update `consortium-search` interface. Refs UIREC-405.
+* cleanup permissions for ui-receiving. Refs UIREC-410.
 
 ## [5.0.5](https://github.com/folio-org/ui-receiving/tree/v5.0.5) (2024-08-05)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.4...v5.0.5)
