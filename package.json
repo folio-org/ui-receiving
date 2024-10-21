@@ -130,6 +130,7 @@
         "displayName": "Receiving: View",
         "visible": true,
         "subPermissions": [
+          "acquisition.piece.events.history.get",
           "acquisition.piece.events.get",
           "orders.check-in.collection.post",
           "orders.expect.collection.post",
