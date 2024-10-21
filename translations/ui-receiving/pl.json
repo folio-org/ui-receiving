@@ -254,7 +254,7 @@
     "title.details.button.bindPieces": "Bind pieces",
     "bind.pieces.modal.button.transfer": "Transfer",
     "bind.pieces.modal.button.not.transfer": "Do not transfer",
-    "piece.materialTypeId": "Material type",
+    "piece.materialTypeId": "Rodzaj materiału",
     "piece.materialTypeId.empty": "Select material type",
     "piece.permanentLoanTypeId": "Permanent loan type",
     "piece.permanentLoanTypeId.empty": "Select loan type",
