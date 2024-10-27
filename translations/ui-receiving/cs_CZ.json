@@ -145,7 +145,7 @@
     "piece.enumeration": "Výčet",
     "piece.chronology": "Chronologie",
     "piece.displayOnHolding": "Zobrazit holding kusu",
-    "piece.discoverySuppress": "Potlačit z vyhledávání",
+    "piece.discoverySuppress": "Vyřadit z vyhledávání",
     "piece.lineLocations": "Lokace řádku objednávky",
     "piece.delete.deleteHoldingsAndItem.message": "Tento kus je spojen se záznamy v katalogu. K souvisejícímu záznamu holdingu nejsou připojeny žádné další jednotky. Chcete po smazání tohoto kusu, aby FOLIO smazal holdingy?",
     "shortcut.receive": "Příjem kusů/Rychlý příjem",
