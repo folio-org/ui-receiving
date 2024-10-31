@@ -1,6 +1,9 @@
 # Change history for ui-receiving
 
-## 6.0.0 (IN PROGRESS)
+## 6.1.0 (IN PROGRESS)
+
+## [6.0.0](https://github.com/folio-org/ui-receiving/tree/v6.0.0) (2024-10-31)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.5...v6.0.0)
 
 * UX Consistency: Update HTML Page Title display when third pane (detail record) displays. Refs UIREC-319.
 * Add "Display to public" toggle on piece form. Refs UIREC-333.
