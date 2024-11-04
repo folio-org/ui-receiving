@@ -2,6 +2,8 @@
 
 ## 6.1.0 (IN PROGRESS)
 
+* Do not call mod-search viewing member titles. Refs UIREC-415.
+
 ## [6.0.0](https://github.com/folio-org/ui-receiving/tree/v6.0.0) (2024-10-31)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v5.0.5...v6.0.0)
 
