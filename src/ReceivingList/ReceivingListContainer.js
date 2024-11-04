@@ -28,6 +28,7 @@ const ReceivingListContainer = () => {
   const stripes = useStripes();
 
   const {
+    isLoading: isSearchModeLoading,
     crossTenant,
     isCentralOrderingEnabled,
     isTargetTenantCentral,
@@ -38,15 +39,16 @@ const ReceivingListContainer = () => {
 
   const fetchReferences = useCallback(async (titles, ky) => {
     const orderLinesResponse = await fetchTitleOrderLines(ky, titles, {});
+    const isConsortiaRequest = isCentralOrderingEnabled && isTargetTenantCentral;
 
     const holdingsResponse = await (
-      isCentralOrderingEnabled
+      isConsortiaRequest
         ? fetchConsortiumOrderLineHoldings(ky, stripes)
         : fetchOrderLineHoldings(ky)
     )(orderLinesResponse);
 
     const locationsResponse = await (
-      isCentralOrderingEnabled
+      isConsortiaRequest
         ? fetchConsortiumOrderLineLocations(ky, stripes)
         : fetchOrderLineLocations(ky)
     )(
@@ -99,7 +101,7 @@ const ReceivingListContainer = () => {
     }, {});
 
     return { orderLinesMap };
-  }, [invalidReferenceMessage, isCentralOrderingEnabled, stripes]);
+  }, [invalidReferenceMessage, isCentralOrderingEnabled, isTargetTenantCentral, stripes]);
 
   const { pagination, changePage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
   const {
@@ -112,7 +114,7 @@ const ReceivingListContainer = () => {
     fetchReferences,
     options: {
       tenantId: targetTenantId,
-      enabled: Boolean(targetTenantId),
+      enabled: Boolean(targetTenantId) && !isSearchModeLoading,
     },
   });
 
