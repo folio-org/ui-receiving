@@ -6,8 +6,8 @@ import {
 } from 'react-intl';
 
 import {
-  Label,
   Loading,
+  KeyValue,
 } from '@folio/stripes/components';
 import {
   getHoldingLocationName,
@@ -36,14 +36,10 @@ const LineLocationsView = ({
     return lineLocations.filter(Boolean).join(', ');
   }, [holdings, intl, locations, poLine?.locations]);
 
-  return (
-    <>
-      <Label>
-        <FormattedMessage id="ui-receiving.piece.lineLocations" />
-      </Label>
-      {isLoading ? <Loading /> : locationsToDisplay}
-    </>
-  );
+  return <KeyValue
+    label={<FormattedMessage id="ui-receiving.piece.lineLocations" />}
+    value={isLoading ? <Loading /> : locationsToDisplay}
+  />
 };
 
 LineLocationsView.propTypes = {
