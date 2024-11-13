@@ -160,7 +160,7 @@
     "filter.supplements": "Suplementos",
     "filter.nonSupplements": "Não suplementos",
     "piece.itemStatus.info": "Ao receber partes que tenham exemplares conectados. Um exemplar conectado com o status de \"Pedido fechado\" ou \"Em pedido\" será atualizado para um status de \"Em processamento\". Exemplares em outros status não terão seu status alterado.",
-    "filter.rush": "Prioritário",
+    "filter.rush": "Urgente",
     "exportSettings.error": "Falha na carga de dados para exportar resultados (CSV)",
     "exportSettings.export": "Exportar",
     "exportSettings.export.all": "Todos",
