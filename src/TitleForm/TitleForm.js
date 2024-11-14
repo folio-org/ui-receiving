@@ -77,7 +77,7 @@ const TitleForm = ({
 
   const { isCentralRouting } = useReceivingSearchContext();
 
-  const disabled = hasValidationErrors || restrictions?.protectUpdate || isRestrictionsLoading;
+  const disabled = restrictions?.protectUpdate || isRestrictionsLoading;
 
   const paneFooter = (
     <FormFooter
