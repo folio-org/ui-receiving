@@ -58,7 +58,6 @@ const validateClaimingInterval = (value, { claimingActive }) => {
 
 const TitleForm = ({
   handleSubmit,
-  hasValidationErrors,
   form,
   onCancel,
   pristine,
@@ -77,7 +76,7 @@ const TitleForm = ({
 
   const { isCentralRouting } = useReceivingSearchContext();
 
-  const disabled = hasValidationErrors || restrictions?.protectUpdate || isRestrictionsLoading;
+  const disabled = restrictions?.protectUpdate || isRestrictionsLoading;
 
   const paneFooter = (
     <FormFooter
@@ -391,7 +390,6 @@ const TitleForm = ({
 TitleForm.propTypes = {
   contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
   handleSubmit: PropTypes.func.isRequired,
-  hasValidationErrors: PropTypes.bool.isRequired,
   identifierTypes: PropTypes.arrayOf(PropTypes.object),
   form: PropTypes.object,  // form object to get initialValues
   onCancel: PropTypes.func.isRequired,
