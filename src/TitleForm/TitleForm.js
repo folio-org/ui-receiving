@@ -76,7 +76,8 @@ const TitleForm = ({
 
   const { isCentralRouting } = useReceivingSearchContext();
 
-  const disabled = restrictions?.protectUpdate || isRestrictionsLoading;
+  const isEditMode = Boolean(id);
+  const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
 
   const paneFooter = (
     <FormFooter
@@ -88,7 +89,6 @@ const TitleForm = ({
     />
   );
 
-  const isEditMode = Boolean(id);
   const paneTitle = isEditMode
     ? title
     : <FormattedMessage id="ui-receiving.title.paneTitle.create" />;
@@ -298,7 +298,7 @@ const TitleForm = ({
                             name="acqUnitIds"
                             perm={isEditMode ? MANAGE_ACQ_UNITS_PERM : ASSIGN_ACQ_UNITS_PERM}
                             isEdit={isEditMode}
-                            preselectedUnits={values.acqUnitIds}
+                            preselectedUnits={acqUnitIds}
                             tenantId={tenantId}
                             isFinal
                           />
