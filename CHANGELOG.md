@@ -4,6 +4,7 @@
 
 * Do not overlap components on Edit piece page when location is long. Refs UIREC-419.
 * Do not disable title submit button when form has errors. Refs UIREC-420.
+* Disable piece actions menu only  when all actions are disabled. Refs UIREC-418.
 
 ## [6.0.1](https://github.com/folio-org/ui-receiving/tree/v6.0.1) (2024-11-08)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.0...v6.0.1)
