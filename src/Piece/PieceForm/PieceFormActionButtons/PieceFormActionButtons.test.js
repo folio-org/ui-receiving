@@ -13,7 +13,6 @@ const onDelete = jest.fn();
 const defaultProps = {
   disabled: false,
   isCreateAnother: false,
-  canDeletePiece: false,
   onDelete,
   onSave,
   status: PIECE_STATUS.expected,
