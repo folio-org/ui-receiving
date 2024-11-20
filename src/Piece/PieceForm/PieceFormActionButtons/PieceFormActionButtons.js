@@ -17,7 +17,6 @@ import css from './PieceFormActionButtons.css';
 
 export const PieceFormActionButtons = ({
   actionsDisabled,
-  canDeletePiece = false,
   isEditMode,
   onClaimDelay,
   onClaimSend,
@@ -33,7 +32,6 @@ export const PieceFormActionButtons = ({
 
   const actionMenu = getPieceActionMenu({
     actionsDisabled,
-    canDeletePiece,
     isEditMode,
     onClaimDelay,
     onClaimSend,
@@ -50,6 +48,7 @@ export const PieceFormActionButtons = ({
   });
   const saveButtonLabelId = 'stripes-components.saveAndClose';
   const isSaveDisabled = actionsDisabled?.[PIECE_ACTION_NAMES.saveAndClose];
+  const isActionsMenuDisabled = isSaveDisabled && actionsDisabled?.[PIECE_ACTION_NAMES.delete];
 
   if (actionMenu.length === 0) {
     return (
@@ -79,7 +78,7 @@ export const PieceFormActionButtons = ({
       </Button>
       <Dropdown
         key={actionsKey}
-        disabled={isSaveDisabled}
+        disabled={isActionsMenuDisabled}
         buttonProps={{
           buttonStyle: 'primary',
           buttonClass: css.dropdownButton,
@@ -97,7 +96,6 @@ export const PieceFormActionButtons = ({
 
 PieceFormActionButtons.propTypes = {
   actionsDisabled: PropTypes.objectOf(PropTypes.bool),
-  canDeletePiece: PropTypes.bool,
   isEditMode: PropTypes.bool.isRequired,
   onClaimDelay: PropTypes.func.isRequired,
   onClaimSend: PropTypes.func.isRequired,
