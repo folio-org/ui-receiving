@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
 } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -34,10 +33,6 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  useHoldingsAndLocations,
-  useReceivingTenantIdsAndLocations,
-} from '../../common/hooks';
-import {
   getClaimingIntervalFromDate,
   setLocationValueFormMutator,
 } from '../../common/utils';
@@ -68,6 +63,8 @@ const PieceForm = ({
   onClose,
   onDelete: onDeleteProp,
   onUnreceive: onUnreceiveProp,
+  locationIds,
+  locations,
   paneTitle,
   pieceFormatOptions,
   poLine,
@@ -95,35 +92,9 @@ const PieceForm = ({
     bindItemId,
     isBound,
     isCreateItem,
-    locationId,
-    holdingId,
     metadata,
     receivingStatus,
-    receivingTenantId,
   } = formValues;
-
-  const receivingTenants = useMemo(() => {
-    if (poLine?.locations?.length) {
-      return poLine.locations.map(({ tenantId }) => tenantId);
-    }
-
-    return [];
-  }, [poLine?.locations]);
-
-  const receivingTenantIdsAndLocations = useReceivingTenantIdsAndLocations({
-    receivingTenantIds: receivingTenants,
-    currentReceivingTenantId: receivingTenantId,
-    currentLocationId: locationId,
-  });
-
-  const {
-    locations,
-    locationIds,
-    isFetching,
-  } = useHoldingsAndLocations({
-    instanceId,
-    ...receivingTenantIdsAndLocations,
-  });
 
   useEffect(() => {
     if (!id && format === PIECE_FORMAT.electronic) {
@@ -351,7 +322,6 @@ const PieceForm = ({
                         poLine={poLine}
                         locationIds={locationIds}
                         locations={locations}
-                        isLocationsLoading={isEditMode && (!locationId || !holdingId) && isFetching}
                         setLocationValue={mutators.setLocationValue}
                         onChangeDisplayOnHolding={onChangeDisplayOnHolding}
                       />
@@ -427,6 +397,8 @@ PieceForm.propTypes = {
   hasValidationErrors: PropTypes.bool.isRequired,
   initialValues: PropTypes.object.isRequired,
   instanceId: PropTypes.string,
+  locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locations: PropTypes.arrayOf(PropTypes.object),
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onUnreceive: PropTypes.func.isRequired,

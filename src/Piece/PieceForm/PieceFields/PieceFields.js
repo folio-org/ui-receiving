@@ -33,7 +33,6 @@ export const PieceFields = ({
   instanceId,
   locationIds,
   locations,
-  isLocationsLoading,
   pieceFormatOptions,
   poLine,
   setLocationValue,
@@ -299,7 +298,6 @@ export const PieceFields = ({
             disabled={isLocationSelectionDisabled}
             isNonInteractive={isLocationSelectionDisabled}
             required={isLocationRequired}
-            isLoading={isLocationsLoading}
           />
         </Col>
       </Row>
@@ -314,7 +312,6 @@ PieceFields.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
-  isLocationsLoading: PropTypes.bool,
   locationIds: PropTypes.arrayOf(PropTypes.string),
   locations: PropTypes.arrayOf(PropTypes.object),
   poLine: PropTypes.object.isRequired,
