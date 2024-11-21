@@ -18,10 +18,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
-import {
-  useHoldingsAndLocations,
-  useReceivingTenantIdsAndLocations,
-} from '../../common/hooks';
+import { useHoldingsAndLocations } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import {
@@ -39,22 +36,9 @@ export const TitleBindPiecesCreateItemForm = ({
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
 
-  const { locationId, tenantId: receivingTenantId } = bindItemValues;
-
-  const {
-    additionalLocationIds,
-    additionalTenantLocationIdsMap,
-    tenantId,
-  } = useReceivingTenantIdsAndLocations({
-    currentLocationId: locationId,
-    currentReceivingTenantId: receivingTenantId,
-  });
-
-  const { locations, isFetching } = useHoldingsAndLocations({
+  const { locations } = useHoldingsAndLocations({
     instanceId,
-    tenantId,
-    additionalLocationIds,
-    additionalTenantLocationIdsMap,
+    tenantId: bindItemValues.tenantId,
   });
 
   const { crossTenant } = useReceivingSearchContext();
@@ -155,7 +139,6 @@ export const TitleBindPiecesCreateItemForm = ({
           onChange={selectLocation}
           locationLabelId="ui-receiving.piece.permanentLocationId"
           holdingLabelId="ui-receiving.piece.permanentLocationId"
-          isLoading={isFetching}
           required
         />
       </Col>

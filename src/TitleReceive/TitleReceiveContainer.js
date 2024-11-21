@@ -12,13 +12,12 @@ import {
 } from '@folio/stripes/components';
 import {
   PIECE_FORMAT,
+  useLocationsQuery,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import {
-  useHoldingsAndLocations,
   useReceive,
-  useReceivingTenantIdsAndLocations,
   useTitleHydratedPieces,
 } from '../common/hooks';
 import {
@@ -38,6 +37,7 @@ function TitleReceiveContainer({ history, location, match }) {
   const showCallout = useShowCallout();
   const {
     crossTenant,
+    isCentralOrderingEnabled,
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
@@ -59,24 +59,10 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const { receive } = useReceive();
 
-  const receivingTenants = useMemo(() => {
-    if (pieces?.length) {
-      return pieces.map(({ receivingTenantId }) => receivingTenantId);
-    }
-
-    return [];
-  }, [pieces]);
-
-  const { receivingTenantIds } = useReceivingTenantIdsAndLocations({
-    receivingTenantIds: receivingTenants,
-    currentReceivingTenantId: targetTenantId,
-  });
-
-  const { locations, isFetching } = useHoldingsAndLocations({
-    instanceId,
-    receivingTenantIds,
-    tenantId: targetTenantId,
-  });
+  const {
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   const onCancel = useCallback(
     () => {
@@ -136,7 +122,7 @@ function TitleReceiveContainer({ history, location, match }) {
     [poLine],
   );
 
-  const isLoading = isPiecesLoading || isFetching;
+  const isLoading = isPiecesLoading || isLocationsLoading;
 
   if (isLoading) {
     return (
