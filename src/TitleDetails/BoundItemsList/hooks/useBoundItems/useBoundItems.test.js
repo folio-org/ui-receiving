@@ -109,5 +109,34 @@ describe('useBoundItems', () => {
         }),
       );
     });
+
+    it('should fetch bound items with enabled central ordering and active tenant items', async () => {
+      useReceivingSearchContext
+        .mockReturnValue({
+          isCentralOrderingEnabled: true,
+          activeTenantId: 'activeTenantId',
+          targetTenantId: 'targetTenantId',
+          isTargetTenantCentral: true,
+          centralTenantId: 'centralTenantId',
+        });
+
+      const { result } = renderHook(() => useBoundItems(params), { wrapper });
+
+      await waitFor(() => expect(result.current.isFetching).toBeFalsy());
+
+      expect(result.current.items).toEqual(tenantItems.map(({ item, tenantId }) => ({ ...item, tenantId })));
+      expect(getMock).toHaveBeenCalled();
+      expect(postMock).toHaveBeenCalledWith(
+        TENANT_ITEMS_API,
+        expect.objectContaining({
+          json: {
+            tenantItemPairs: [{
+              itemId: 'bindItemId',
+              tenantId: 'activeTenantId',
+            }],
+          },
+        }),
+      );
+    });
   });
 });

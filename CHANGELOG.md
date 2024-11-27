@@ -2,6 +2,8 @@
 
 ## 6.1.0 (IN PROGRESS)
 
+* ECS - Display active tenant bound items. Refs UIREC-421.
+
 ## [6.0.2](https://github.com/folio-org/ui-receiving/tree/v6.0.2) (2024-11-22)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.1...v6.0.2)
 
