@@ -20,15 +20,27 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
   const { enabled = true, ...otherOptions } = options;
 
   const stripes = useStripes();
-  const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'bound-items-list' });
 
   const {
     activeTenantId,
     isCentralOrderingEnabled,
+    targetTenantId,
+    isTargetTenantCentral,
+    centralTenantId,
   } = useReceivingSearchContext();
+  const ky = useOkapiKy({ tenant: targetTenantId });
 
-  const boundItemsQuery = `titleId==${titleId} and poLineId==${poLineId} and isBound==true`;
+  let boundItemsQuery = `titleId==${titleId} and poLineId==${poLineId} and isBound==true`;
+  const showActiveTenantItems = (
+    isCentralOrderingEnabled
+    && isTargetTenantCentral
+    && (centralTenantId !== activeTenantId)
+  );
+
+  if (showActiveTenantItems) {
+    boundItemsQuery += ` and bindItemTenantId=${activeTenantId}`;
+  }
 
   const searchParams = {
     limit: LIMIT_MAX,
