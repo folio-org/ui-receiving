@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import {
   useCallback,
-  useEffect,
-  useState,
 } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
@@ -14,23 +12,12 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 import {
-  baseManifest,
-  batchFetch,
-  LIMIT_MAX,
-  LINES_API,
-  locationsManifest,
   PIECE_STATUS,
-  piecesResource,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
+import { receivingResource } from '../common/resources';
 import {
-  receivingResource,
-  titleResource,
-  holdingsResource,
-} from '../common/resources';
-import {
-  getHydratedPieces,
   handleUnrecieveErrorResponse,
   unreceivePieces,
 } from '../common/utils';
@@ -38,12 +25,9 @@ import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
 } from '../constants';
-import {
-  usePieceItemsFetch,
-  usePieceRequestsFetch,
-} from '../common/hooks/usePaginatedPieces/hooks';
 import { useReceivingSearchContext } from '../contexts';
 import TitleUnreceive from './TitleUnreceive';
+import { useTitleHydratedPieces } from '../common/hooks';
 
 function TitleUnreceiveContainer({
   history,
@@ -53,97 +37,24 @@ function TitleUnreceiveContainer({
 }) {
   const showCallout = useShowCallout();
   const titleId = match.params.id;
-  const [pieces, setPieces] = useState();
-  const [title, setTitle] = useState();
-  const [poLine, setPoLine] = useState();
-  const [pieceLocationMap, setPieceLocationMap] = useState();
-  const [pieceHoldingMap, setPieceHoldingMap] = useState();
-  const poLineId = title?.poLineId;
 
   const {
-    activeTenantId,
-    centralTenantId,
-    crossTenant,
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
-  const { fetchPieceItems } = usePieceItemsFetch({
-    instanceId: title?.instanceId,
+
+  const {
+    pieces = [],
+    title,
+    orderLine: poLine,
+    isLoading: isPiecesLoading,
+    pieceHoldingMap,
+    pieceLocationMap,
+  } = useTitleHydratedPieces({
+    titleId,
     tenantId: targetTenantId,
+    receivingStatus: PIECE_STATUS.received,
   });
-  const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId: targetTenantId });
-
-  useEffect(
-    () => {
-      mutator.title.GET()
-        .then(setTitle);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titleId],
-  );
-
-  useEffect(
-    () => {
-      if (poLineId) {
-        mutator.poLine.GET({
-          path: `${LINES_API}/${poLineId}`,
-        }).then(setPoLine);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [poLineId],
-  );
-
-  useEffect(
-    () => {
-      if (poLineId) {
-        const filterQuery = `titleId=${titleId} and poLineId==${poLineId} and receivingStatus==${PIECE_STATUS.received}`;
-
-        mutator.pieces.GET({
-          params: {
-            limit: `${LIMIT_MAX}`,
-            query: `${filterQuery} sortby locationId`,
-          },
-        })
-          .then(async (piecesResponse) => {
-            const hydratedPieces = await getHydratedPieces({
-              pieces: piecesResponse,
-              fetchPieceItems,
-              fetchPieceRequests,
-              activeTenantId,
-              centralTenantId,
-              crossTenant,
-            });
-
-            return hydratedPieces;
-          })
-          .then(hydratedPieces => {
-            setPieces(hydratedPieces);
-            const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
-            const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);
-            const holdingsPromise = holdingIds.length ? batchFetch(mutator.holdings, holdingIds) : Promise.resolve([]);
-
-            return Promise.all([holdingsPromise, locationIds]);
-          })
-          .then(([holdingsResponse, locationIds]) => {
-            setPieceHoldingMap(holdingsResponse.reduce((acc, h) => ({ ...acc, [h.id]: h }), {}));
-
-            const holdingLocations = holdingsResponse.map(({ permanentLocationId }) => permanentLocationId);
-
-            return batchFetch(mutator.locations, [...new Set([...holdingLocations, ...locationIds])]);
-          })
-          .then(locationsResponse => {
-            setPieceLocationMap(locationsResponse.reduce((acc, l) => ({ ...acc, [l.id]: l }), {}));
-          })
-          .catch(() => {
-            setPieceHoldingMap({});
-            setPieceLocationMap({});
-          });
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [titleId, poLineId],
-  );
 
   const onCancel = useCallback(
     () => {
@@ -154,6 +65,7 @@ function TitleUnreceiveContainer({
     },
     [history, isCentralRouting, titleId, location.search],
   );
+
   const onSubmit = useCallback(
     // eslint-disable-next-line no-unused-vars
     ({ receivedItems }) => {
@@ -172,7 +84,7 @@ function TitleUnreceiveContainer({
     [onCancel, showCallout],
   );
 
-  if (!(pieces && poLine && title && pieceLocationMap && pieceHoldingMap)) {
+  if (isPiecesLoading || !title || !poLine) {
     return (
       <Paneset>
         <LoadingPane />
@@ -196,31 +108,6 @@ function TitleUnreceiveContainer({
 }
 
 TitleUnreceiveContainer.manifest = Object.freeze({
-  title: {
-    ...titleResource,
-    accumulate: true,
-    fetch: false,
-    tenant: '!{tenantId}',
-  },
-  pieces: {
-    ...piecesResource,
-    tenant: '!{tenantId}',
-  },
-  poLine: {
-    ...baseManifest,
-    accumulate: true,
-    fetch: false,
-    tenant: '!{tenantId}',
-  },
-  locations: {
-    ...locationsManifest,
-    fetch: false,
-  },
-  holdings: {
-    ...holdingsResource,
-    fetch: false,
-  },
-
   unreceive: {
     ...receivingResource,
     tenant: '!{tenantId}',

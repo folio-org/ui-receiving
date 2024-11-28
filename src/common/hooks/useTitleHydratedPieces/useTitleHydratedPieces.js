@@ -1,15 +1,11 @@
 import keyBy from 'lodash/keyBy';
 import { useQuery } from 'react-query';
 
+import { useNamespace } from '@folio/stripes/core';
 import {
-  useNamespace,
-  useOkapiKy,
-} from '@folio/stripes/core';
-import {
-  HOLDINGS_API,
-  LOCATIONS_API,
-  batchFetch,
   useOrderLine,
+  useLocationsQuery,
+  useInstanceHoldingsQuery,
 } from '@folio/stripes-acq-components';
 
 import { useReceivingSearchContext } from '../../../contexts';
@@ -21,14 +17,15 @@ import {
 import { usePieces } from '../usePieces';
 import { useTitle } from '../useTitle';
 
+const DEFAULT_DATA = [];
+
 export const useTitleHydratedPieces = ({
   receivingStatus,
   tenantId,
   titleId,
   searchQuery = '',
 } = {}) => {
-  const ky = useOkapiKy({ tenant: tenantId });
-  const [namespace] = useNamespace('receiving-title-hydrated-pieces');
+  const [namespace] = useNamespace({ key: 'title-hydrated-pieces' });
 
   const { activeTenantId, crossTenant, centralTenantId } = useReceivingSearchContext();
 
@@ -59,64 +56,53 @@ export const useTitleHydratedPieces = ({
     instanceId: title?.instanceId,
     tenantId,
   });
-
   const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId });
+
+  const {
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: crossTenant });
+
+  const {
+    holdings,
+    isLoading: isHoldingsLoading,
+  } = useInstanceHoldingsQuery(title?.instanceId, { consortium: crossTenant });
 
   const isReferenceDataLoading = (
     isTitleLoading
     || isOrderLineLoading
     || isPiecesLoading
+    || isLocationsLoading
+    || isHoldingsLoading
   );
 
-  const queryFn = async ({ signal }) => {
-    const mutatorAdapter = (api, recordsKey) => ({
-      GET: ({ params: searchParams }) => {
-        return ky.get(api, { searchParams, signal })
-          .json()
-          .then((response) => response[recordsKey]);
-      },
-    });
-
-    const hydratedPieces = await getHydratedPieces({
-      pieces,
-      fetchPieceItems,
-      fetchPieceRequests,
-      activeTenantId,
-      crossTenant,
-      centralTenantId,
-    });
-
-    const holdingIds = hydratedPieces.map(({ holdingId }) => holdingId).filter(Boolean);
-    const locationIds = hydratedPieces.map(({ locationId }) => locationId).filter(Boolean);
-
-    const holdings = holdingIds.length
-      ? await batchFetch(mutatorAdapter(HOLDINGS_API, 'holdingsRecords'), holdingIds)
-      : [];
-
-    const holdingLocationIds = holdings.map(({ permanentLocationId }) => permanentLocationId);
-    const holdingLocations = await batchFetch(mutatorAdapter(LOCATIONS_API, 'locations'), [...new Set([...holdingLocationIds, ...locationIds])]);
-
-    return {
-      holdingLocations,
-      pieces: hydratedPieces,
-      pieceLocationMap: keyBy(holdingLocations, 'id'),
-      pieceHoldingMap: keyBy(holdings, 'id'),
-    };
-  };
-
   const { data, isLoading } = useQuery({
-    queryKey: [namespace, pieces],
-    queryFn,
+    queryKey: [namespace, pieces, receivingStatus, tenantId, titleId],
+    queryFn: async () => {
+      const hydratedPieces = await getHydratedPieces({
+        pieces,
+        fetchPieceItems,
+        fetchPieceRequests,
+        activeTenantId,
+        crossTenant,
+        centralTenantId,
+      });
+
+      return {
+        pieces: hydratedPieces,
+      };
+    },
     enabled: !isReferenceDataLoading && Boolean(pieces?.length),
   });
 
   return {
+    holdings,
     isLoading: isLoading || isReferenceDataLoading,
+    locations,
     orderLine,
-    pieces: data?.pieces,
-    holdingLocations: data?.holdingLocations,
+    pieceHoldingMap: keyBy(holdings, 'id'),
+    pieceLocationMap: keyBy(locations, 'id'),
+    pieces: data?.pieces || DEFAULT_DATA,
     title,
-    pieceLocationMap: data?.pieceLocationMap,
-    pieceHoldingMap: data?.pieceHoldingMap,
   };
 };

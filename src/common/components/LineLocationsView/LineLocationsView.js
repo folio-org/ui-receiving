@@ -36,10 +36,12 @@ const LineLocationsView = ({
     return lineLocations.filter(Boolean).join(', ');
   }, [holdings, intl, locations, poLine?.locations]);
 
-  return <KeyValue
-    label={<FormattedMessage id="ui-receiving.piece.lineLocations" />}
-    value={isLoading ? <Loading /> : locationsToDisplay}
-  />
+  return (
+    <KeyValue
+      label={<FormattedMessage id="ui-receiving.piece.lineLocations" />}
+      value={isLoading ? <Loading /> : locationsToDisplay}
+    />
+  );
 };
 
 LineLocationsView.propTypes = {

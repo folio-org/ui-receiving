@@ -5,7 +5,6 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import {
   useReceive,
@@ -17,7 +16,6 @@ import TitleReceive from './TitleReceive';
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
-  useLocationsQuery: jest.fn(),
 }));
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
@@ -28,7 +26,6 @@ jest.mock('@folio/stripes/components', () => ({
   LoadingPane: jest.fn().mockReturnValue('LoadingPane'),
 }));
 jest.mock('../common/hooks', () => ({
-  useHoldingsAndLocations: jest.fn().mockReturnValue({ locations: [] }),
   useReceive: jest.fn().mockReturnValue({}),
   useTitleHydratedPieces: jest.fn(),
   useReceivingTenantIdsAndLocations: jest.fn().mockReturnValue({}),
@@ -66,14 +63,12 @@ describe('TitleReceiveContainer', () => {
   beforeEach(() => {
     TitleReceive.mockClear();
     historyMock.push.mockClear();
-    useLocationsQuery
-      .mockClear()
-      .mockReturnValue({ locations: [{ id: 'locationId' }] });
     useTitleHydratedPieces.mockClear().mockReturnValue({
       title: mockTitle,
       pieces: mockPieces,
       orderLine: mockPoLine,
       isLoading: false,
+      locations: [{ id: 'locationId' }],
     });
   });
 
@@ -82,6 +77,7 @@ describe('TitleReceiveContainer', () => {
       title: {},
       pieces: [],
       orderLine: {},
+      locations: [],
       isLoading: true,
     });
     renderTitleReceiveContainer();

@@ -37,7 +37,6 @@ function TitleReceiveContainer({ history, location, match }) {
   const showCallout = useShowCallout();
   const {
     crossTenant,
-    isCentralOrderingEnabled,
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
@@ -48,6 +47,7 @@ function TitleReceiveContainer({ history, location, match }) {
     pieces = [],
     title,
     orderLine: poLine,
+    locations,
     isLoading: isPiecesLoading,
   } = useTitleHydratedPieces({
     titleId,
@@ -58,11 +58,6 @@ function TitleReceiveContainer({ history, location, match }) {
   const instanceId = title?.instanceId;
 
   const { receive } = useReceive();
-
-  const {
-    isLoading: isLocationsLoading,
-    locations,
-  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
 
   const onCancel = useCallback(
     () => {
@@ -122,9 +117,7 @@ function TitleReceiveContainer({ history, location, match }) {
     [poLine],
   );
 
-  const isLoading = isPiecesLoading || isLocationsLoading;
-
-  if (isLoading) {
+  if (isPiecesLoading) {
     return (
       <Paneset>
         <LoadingPane />

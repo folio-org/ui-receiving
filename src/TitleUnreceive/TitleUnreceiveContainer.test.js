@@ -2,13 +2,12 @@ import React from 'react';
 import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { getHydratedPieces } from '../common/utils';
+import { useTitleHydratedPieces } from '../common/hooks';
 import TitleUnreceiveContainer from './TitleUnreceiveContainer';
 import TitleUnreceive from './TitleUnreceive';
 
-jest.mock('../common/utils', () => ({
-  ...jest.requireActual('../common/utils'),
-  getHydratedPieces: jest.fn(),
+jest.mock('../../common/hooks', () => ({
+  useTitleHydratedPieces: jest.fn(),
 }));
 
 jest.mock('./TitleUnreceive', () => jest.fn().mockReturnValue('TitleUnreceive'));
@@ -16,7 +15,6 @@ jest.mock('./TitleUnreceive', () => jest.fn().mockReturnValue('TitleUnreceive'))
 const mockTitle = { title: 'Title', id: '001', poLineId: '002' };
 const mockPoLine = { id: '002', locations: [{ locationId: '1' }] };
 const mockPieces = [{ id: '01', locationId: '1' }];
-const mockRequests = [{ id: '01', itemId: '01', locationId: '1' }];
 const locationMock = { hash: 'hash', pathname: 'pathname', search: 'search' };
 const historyMock = {
   push: jest.fn(),
@@ -29,33 +27,12 @@ const historyMock = {
   location: locationMock,
 };
 const mutatorMock = {
-  title: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(mockTitle)),
-  },
-  pieces: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(mockPieces)),
-  },
-  poLine: {
-    GET: jest.fn().mockReturnValue(Promise.resolve(mockPoLine)),
-  },
-  locations: {
-    GET: jest.fn().mockReturnValue(Promise.resolve([])),
-    reset: jest.fn(),
-  },
-  requests: {
-    GET: jest.fn(),
-    reset: jest.fn(),
-  },
-  items: {
-    GET: jest.fn(),
-    reset: jest.fn(),
-  },
   unreceive: {
     POST: jest.fn().mockReturnValue(Promise.resolve({ receivingResults: [] })),
   },
 };
 
-const renderTitleUnreceiveContainer = () => (render(
+const renderTitleUnreceiveContainer = () => render(
   <TitleUnreceiveContainer
     history={historyMock}
     location={locationMock}
@@ -63,7 +40,7 @@ const renderTitleUnreceiveContainer = () => (render(
     mutator={mutatorMock}
   />,
   { wrapper: MemoryRouter },
-));
+);
 
 describe('TitleUnreceiveContainer', () => {
   let mutator;
@@ -71,7 +48,16 @@ describe('TitleUnreceiveContainer', () => {
   beforeEach(() => {
     TitleUnreceive.mockClear();
     historyMock.push.mockClear();
-    getHydratedPieces.mockClear().mockReturnValue(Promise.resolve(mockRequests));
+    useTitleHydratedPieces.mockClear().mockReturnValue({
+      pieces: mockPieces,
+      title: mockTitle,
+      orderLine: mockPoLine,
+      isLoading: false,
+      locations: [{ id: '1', name: 'location1' }],
+      holdings: [{ id: '1', name: 'holding1' }],
+      pieceHoldingMap: { '01': '1' },
+      pieceLocationMap: { '01': '1' },
+    });
   });
 
   it('should display title unreceive', async () => {
