@@ -1,12 +1,15 @@
-import React from 'react';
-import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { useTitleHydratedPieces } from '../common/hooks';
-import TitleUnreceiveContainer from './TitleUnreceiveContainer';
-import TitleUnreceive from './TitleUnreceive';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 
-jest.mock('../../common/hooks', () => ({
+import { useTitleHydratedPieces } from '../common/hooks';
+import TitleUnreceive from './TitleUnreceive';
+import TitleUnreceiveContainer from './TitleUnreceiveContainer';
+
+jest.mock('../common/hooks', () => ({
   useTitleHydratedPieces: jest.fn(),
 }));
 
@@ -60,35 +63,28 @@ describe('TitleUnreceiveContainer', () => {
     });
   });
 
-  it('should display title unreceive', async () => {
-    await act(async () => {
-      renderTitleUnreceiveContainer();
-    });
+  it('should display title unreceive', () => {
+    renderTitleUnreceiveContainer();
 
     expect(screen.getByText('TitleUnreceive')).toBeDefined();
   });
 
-  it('should load all data', async () => {
-    await act(async () => {
-      renderTitleUnreceiveContainer();
-    });
+  it('should call `useTitleHydratedPieces`', () => {
+    renderTitleUnreceiveContainer();
 
-    expect(mutatorMock.title.GET).toHaveBeenCalled();
-    expect(mutatorMock.pieces.GET).toHaveBeenCalled();
-    expect(mutatorMock.poLine.GET).toHaveBeenCalled();
-    expect(mutatorMock.locations.GET).toHaveBeenCalled();
+    expect(useTitleHydratedPieces).toHaveBeenCalled();
   });
 
-  it('should redirect to title details when unreceive is cancelled', async () => {
-    await act(async () => renderTitleUnreceiveContainer());
+  it('should redirect to title details when unreceive is cancelled', () => {
+    renderTitleUnreceiveContainer();
 
     TitleUnreceive.mock.calls[0][0].onCancel();
 
     expect(historyMock.push).toHaveBeenCalled();
   });
 
-  it('should unreceive pieces', async () => {
-    await act(async () => renderTitleUnreceiveContainer(mutator));
+  it('should unreceive pieces', () => {
+    renderTitleUnreceiveContainer(mutator);
 
     TitleUnreceive.mock.calls[0][0].onSubmit({ receivedItems: [{ id: 'pieceId', isChecked: true }] });
 

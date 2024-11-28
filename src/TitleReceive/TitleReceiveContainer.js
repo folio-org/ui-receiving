@@ -12,7 +12,6 @@ import {
 } from '@folio/stripes/components';
 import {
   PIECE_FORMAT,
-  useLocationsQuery,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
