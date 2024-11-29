@@ -68,7 +68,7 @@ export const PieceFormContainer = ({
 
   const {
     targetTenantId: tenantId,
-    isCentralOrderingEnabled,
+    crossTenant,
     isCentralRouting,
   } = useReceivingSearchContext();
 
@@ -77,7 +77,7 @@ export const PieceFormContainer = ({
   const {
     isLoading: isLocationsLoading,
     locations,
-  } = useLocationsQuery({ consortium: isCentralOrderingEnabled });
+  } = useLocationsQuery({ consortium: crossTenant });
 
   const {
     isLoading: isTitleLoading,
