@@ -2,7 +2,12 @@
 
 ## 6.1.0 (IN PROGRESS)
 
-## [6.0.3](https://github.com/folio-org/ui-receiving/tree/v6.0.3) (2024-04-12)
+## [6.0.4](https://github.com/folio-org/ui-receiving/tree/v6.0.4) (2024-12-06)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.3...v6.0.4)
+
+* ECS - Fix invalid reference for holding drop-down component. Refs UIREC-393.
+
+## [6.0.3](https://github.com/folio-org/ui-receiving/tree/v6.0.3) (2024-12-04)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.2...v6.0.3)
 
 * ECS - Display active tenant bound items. Refs UIREC-421.
