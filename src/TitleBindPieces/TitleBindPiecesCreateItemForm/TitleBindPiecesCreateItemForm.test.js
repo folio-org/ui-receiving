@@ -11,6 +11,7 @@ import {
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 import stripesFinalForm from '@folio/stripes/final-form';
+import { useLocationsQuery } from '@folio/stripes-acq-components';
 
 import { TitleBindPiecesCreateItemForm } from './TitleBindPiecesCreateItemForm';
 
@@ -18,6 +19,7 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   ConsortiumFieldInventory: () => 'ConsortiumFieldInventory',
   FieldInventory: () => 'FieldInventory',
+  useLocationsQuery: jest.fn(),
 }));
 jest.mock('../hooks', () => ({
   useMaterialTypes: jest.fn().mockReturnValue({ materialTypes: [] }),
@@ -59,6 +61,14 @@ const renderComponent = (props = defaultProps) => render(
 );
 
 describe('TitleBindPiecesCreateItemForm', () => {
+  beforeEach(() => {
+    useLocationsQuery.mockReturnValue({ locations: [] });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render component', () => {
     renderComponent();
 
