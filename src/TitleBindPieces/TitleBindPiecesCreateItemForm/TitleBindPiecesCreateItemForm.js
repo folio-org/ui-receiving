@@ -7,9 +7,10 @@ import {
 } from 'react-intl';
 
 import {
-  validateRequired,
   ConsortiumFieldInventory,
   FieldInventory,
+  useLocationsQuery,
+  validateRequired,
 } from '@folio/stripes-acq-components';
 import {
   Col,
@@ -18,7 +19,6 @@ import {
   TextField,
 } from '@folio/stripes/components';
 
-import { useHoldingsAndLocations } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../constants';
 import {
@@ -29,19 +29,18 @@ import { buildOptions } from '../utils';
 
 export const TitleBindPiecesCreateItemForm = ({
   instanceId,
-  bindItemValues = {},
   selectLocation,
 }) => {
   const { materialTypes } = useMaterialTypes();
   const { loanTypes } = useLoanTypes();
   const intl = useIntl();
 
-  const { locations } = useHoldingsAndLocations({
-    instanceId,
-    tenantId: bindItemValues.tenantId,
-  });
-
   const { crossTenant } = useReceivingSearchContext();
+
+  const {
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: crossTenant });
 
   const FieldInventoryComponent = crossTenant
     ? ConsortiumFieldInventory
@@ -132,6 +131,7 @@ export const TitleBindPiecesCreateItemForm = ({
         <FieldInventoryComponent
           affiliationName={PIECE_FORM_FIELD_NAMES.tenantId}
           instanceId={instanceId}
+          isLoading={isLocationsLoading}
           locationIds={locationIds}
           locations={locations}
           holdingName={PIECE_FORM_FIELD_NAMES.holdingId}
@@ -149,5 +149,4 @@ export const TitleBindPiecesCreateItemForm = ({
 TitleBindPiecesCreateItemForm.propTypes = {
   instanceId: PropTypes.string.isRequired,
   selectLocation: PropTypes.func.isRequired,
-  bindItemValues: PropTypes.object,
 };
