@@ -77,7 +77,6 @@ const TitleBindPieces = ({
             <TitleBindPiecesCreateItemForm
               instanceId={instanceId}
               selectLocation={form.mutators.setLocationValue}
-              bindItemValues={values?.bindItem}
             />
             <FieldArray
               id={FIELD_NAME}
