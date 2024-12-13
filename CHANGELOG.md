@@ -2,6 +2,9 @@
 
 ## 6.1.0 (IN PROGRESS)
 
+## [6.0.5](https://github.com/folio-org/ui-receiving/tree/v6.0.5) (2024-12-13)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.4...v6.0.5)
+
 * Provide the `<FieldInventory>` component with the complete list of locations for mapping. Refs UIREC-423.
 
 ## [6.0.4](https://github.com/folio-org/ui-receiving/tree/v6.0.4) (2024-12-06)
