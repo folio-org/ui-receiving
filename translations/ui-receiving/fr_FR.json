@@ -261,7 +261,7 @@
     "piece.permanentLocationId": "Emplacement permanent",
     "title.boundItems": "Bound items",
     "bind.pieces.create.error.generic": "Échec de la création des unités liées",
-    "bind.pieces.create.error.bindItemMustIncludeEitherHoldingIdOrLocationId": "A holdings or location reference must present",
+    "bind.pieces.create.error.bindItemMustIncludeEitherHoldingIdOrLocationId": "Une référence de localisation ou d'emplacement doit être présente",
     "bind.pieces.create.success.withBarcode": "Exemplaire <b>{barcode}</b> créé avec succès",
     "bind.pieces.create.success.noBarcode": "Exemplaire créé avec succès",
     "piece.barcode.noBarcode": "Pas de code-barres",
