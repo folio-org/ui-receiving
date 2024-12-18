@@ -316,10 +316,10 @@ const TitleDetails = ({
 
   const expectedPiecesActions = useMemo(() => (
     <TitleDetailsExpectedActions
+      actionsHidden={expectedPiecesProtectedActions}
       applyFilters={applyExpectedPiecesFilters}
       filters={expectedPiecesFilters}
       hasReceive={hasReceive}
-      hiddenActions={expectedPiecesProtectedActions}
       openReceiveList={onReceivePieces}
       onPieceCreate={onPieceCreate}
       titleId={titleId}

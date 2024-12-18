@@ -22,10 +22,10 @@ import {
 } from '../../Piece';
 
 export function TitleDetailsExpectedActions({
+  actionsDisabled,
+  actionsHidden,
   applyFilters,
-  disabledActions,
   filters,
-  hiddenActions,
   onPieceCreate,
   openReceiveList,
   hasReceive,
@@ -48,13 +48,13 @@ export function TitleDetailsExpectedActions({
           label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
           id="expected-pieces-menu-actions"
         >
-          {(!hiddenActions?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]) && (
+          {(!actionsHidden?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]) && (
             <Button
               data-testid="add-piece-button"
               data-test-add-piece-button
               buttonStyle="dropdownItem"
               onClick={onPieceCreate}
-              disabled={disabledActions?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]}
+              disabled={actionsDisabled?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]}
             >
               <Icon size="small" icon="plus-sign">
                 <FormattedMessage id="ui-receiving.piece.button.addPiece" />
@@ -62,13 +62,13 @@ export function TitleDetailsExpectedActions({
             </Button>
           )}
 
-          {(!hiddenActions?.[EXPECTED_PIECES_ACTION_NAMES.receive]) && (
+          {(!actionsHidden?.[EXPECTED_PIECES_ACTION_NAMES.receive]) && (
             <Button
               data-testid="receive-button"
               data-test-title-receive-button
               buttonStyle="dropdownItem"
               onClick={openReceiveList}
-              disabled={disabledActions?.[EXPECTED_PIECES_ACTION_NAMES.receive]}
+              disabled={actionsDisabled?.[EXPECTED_PIECES_ACTION_NAMES.receive]}
             >
               <Icon size="small" icon="receive">
                 <FormattedMessage id="ui-receiving.title.details.button.receive" />
@@ -100,11 +100,11 @@ export function TitleDetailsExpectedActions({
 }
 
 TitleDetailsExpectedActions.propTypes = {
+  actionsDisabled: PropTypes.object,
+  actionsHidden: PropTypes.object,
   applyFilters: PropTypes.func.isRequired,
-  disabledActions: PropTypes.object,
   filters: PropTypes.object.isRequired,
   hasReceive: PropTypes.bool.isRequired,
-  hiddenActions: PropTypes.object,
   onPieceCreate: PropTypes.func.isRequired,
   openReceiveList: PropTypes.func.isRequired,
   toggleColumn: PropTypes.func.isRequired,

@@ -4,7 +4,10 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
+import {
+  EXPECTED_PIECE_VISIBLE_COLUMNS,
+  EXPECTED_PIECES_ACTION_NAMES,
+} from '../../Piece';
 import { TitleDetailsExpectedActions } from './TitleDetailsExpectedActions';
 
 const defaultProps = {
@@ -57,7 +60,11 @@ describe('TitleDetailsExpectedActions', () => {
 
   it('should not call openReceiveList when receive button is pressed and actions are disabled', async () => {
     defaultProps.openReceiveList.mockClear();
-    renderTitleDetailsExpectedActions({ ...defaultProps, disabled: true });
+    renderTitleDetailsExpectedActions({
+      actionsDisabled: {
+        [EXPECTED_PIECES_ACTION_NAMES.receive]: true,
+      },
+    });
 
     await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
     await user.click(screen.getByTestId('receive-button'));
@@ -65,14 +72,42 @@ describe('TitleDetailsExpectedActions', () => {
     expect(defaultProps.openReceiveList).not.toHaveBeenCalled();
   });
 
+  it('should not render "Receive" button when the action is hidden', async () => {
+    renderTitleDetailsExpectedActions({
+      actionsHidden: {
+        [EXPECTED_PIECES_ACTION_NAMES.receive]: true,
+      },
+    });
+
+    await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+
+    expect(screen.queryByTestId('receive-button')).not.toBeInTheDocument();
+  });
+
   it('should not call onPieceCreate when add piece button is pressed and actions are disabled', async () => {
     defaultProps.onPieceCreate.mockClear();
-    renderTitleDetailsExpectedActions({ ...defaultProps, disabled: true });
+    renderTitleDetailsExpectedActions({
+      actionsDisabled: {
+        [EXPECTED_PIECES_ACTION_NAMES.addPiece]: true,
+      },
+    });
 
     await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
     await user.click(screen.getByTestId('add-piece-button'));
 
     expect(defaultProps.onPieceCreate).not.toHaveBeenCalled();
+  });
+
+  it('should not render "Add piece" button when the action is hidden', async () => {
+    renderTitleDetailsExpectedActions({
+      actionsHidden: {
+        [EXPECTED_PIECES_ACTION_NAMES.addPiece]: true,
+      },
+    });
+
+    await user.click(screen.getByTestId('expected-pieces-action-dropdown'));
+
+    expect(screen.queryByTestId('add-piece-button')).not.toBeInTheDocument();
   });
 });
 
