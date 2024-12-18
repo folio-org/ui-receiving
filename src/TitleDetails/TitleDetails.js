@@ -69,6 +69,7 @@ import {
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import {
+  EXPECTED_PIECES_ACTION_NAMES,
   EXPECTED_PIECES_SEARCH_VALUE,
   EXPECTED_PIECE_COLUMN_MAPPING,
   MENU_FILTERS,
@@ -123,10 +124,11 @@ const TitleDetails = ({
   const titleId = title.id;
   const isAcknowledged = title.isAcknowledged;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
+  const isOrderPending = order.workflowStatus === ORDER_STATUSES.pending;
   const showRoutingList = orderFormat === ORDER_FORMATS.PEMix || orderFormat === ORDER_FORMATS.physicalResource;
   const numberOfPhysicalUnits = useMemo(() => {
     return poLine?.locations?.reduce((acc, { quantityPhysical = 0 }) => acc + quantityPhysical, 0);
-  }, [poLine?.locations]);
+  }, [poLine.locations]);
   const vendor = vendorsMap[order?.vendor];
   const accessProvider = vendorsMap[poLine?.eresource?.accessProvider];
   const materialSupplier = vendorsMap[poLine?.physical?.materialSupplier];
@@ -141,7 +143,7 @@ const TitleDetails = ({
   );
 
   const isRestrictedByAcqUnit = isRestrictionsLoading || restrictions?.protectUpdate;
-  const isPiecesLock = !checkinItems && order.workflowStatus === ORDER_STATUSES.pending;
+  const isPiecesLock = !checkinItems && isOrderPending;
   const isBinderyActive = get(poLine, 'details.isBinderyActive', false);
 
   const acknowledgeNoteModalLabel = intl.formatMessage({ id: 'ui-receiving.piece.receivingNoteModal.title' });
@@ -293,34 +295,48 @@ const TitleDetails = ({
   } = useFilters(noop);
   const { filters: boundItemsFilters } = useFilters(noop, { [MENU_FILTERS.bound]: ['true'] });
 
-  const expectedPiecesActions = useMemo(
-    () => (
-      <TitleDetailsExpectedActions
-        applyFilters={applyExpectedPiecesFilters}
-        filters={expectedPiecesFilters}
-        hasReceive={hasReceive}
-        onPieceCreate={onPieceCreate}
-        openReceiveList={onReceivePieces}
-        titleId={titleId}
-        disabled={isPiecesLock || restrictions?.protectUpdate}
-        canAddPiece={!restrictions?.protectCreate}
-        toggleColumn={toggleExpectedPiecesColumn}
-        visibleColumns={expectedPiecesVisibleColumns}
-      />
+  const expectedPiecesProtectedActions = useMemo(() => ({
+    [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
+      restrictions?.protectCreate
+      || (isOrderPending && poLine.checkinItems === false)
     ),
-    [
-      applyExpectedPiecesFilters,
-      expectedPiecesFilters,
-      onPieceCreate,
-      hasReceive,
-      restrictions,
-      onReceivePieces,
-      titleId,
-      isPiecesLock,
-      toggleExpectedPiecesColumn,
-      expectedPiecesVisibleColumns,
-    ],
-  );
+    [EXPECTED_PIECES_ACTION_NAMES.receive]: (
+      !hasReceive
+      || isPiecesLock
+      || restrictions?.protectUpdate
+    ),
+  }), [
+    hasReceive,
+    isOrderPending,
+    isPiecesLock,
+    poLine.checkinItems,
+    restrictions.protectCreate,
+    restrictions.protectUpdate,
+  ]);
+
+  const expectedPiecesActions = useMemo(() => (
+    <TitleDetailsExpectedActions
+      applyFilters={applyExpectedPiecesFilters}
+      filters={expectedPiecesFilters}
+      hasReceive={hasReceive}
+      hiddenActions={expectedPiecesProtectedActions}
+      openReceiveList={onReceivePieces}
+      onPieceCreate={onPieceCreate}
+      titleId={titleId}
+      toggleColumn={toggleExpectedPiecesColumn}
+      visibleColumns={expectedPiecesVisibleColumns}
+    />
+  ), [
+    applyExpectedPiecesFilters,
+    expectedPiecesProtectedActions,
+    expectedPiecesFilters,
+    onPieceCreate,
+    hasReceive,
+    onReceivePieces,
+    titleId,
+    toggleExpectedPiecesColumn,
+    expectedPiecesVisibleColumns,
+  ]);
 
   const hasUnreceive = Boolean(piecesExistence?.[PIECE_STATUS.received]);
   const receivedPiecesActions = useMemo(

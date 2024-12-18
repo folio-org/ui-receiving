@@ -16,18 +16,19 @@ import {
 
 import {
   EXPECTED_PIECE_COLUMN_MAPPING,
+  EXPECTED_PIECES_ACTION_NAMES,
   MENU_FILTERS,
   SUPPLEMENT_MENU_FILTER_OPTIONS,
 } from '../../Piece';
 
 export function TitleDetailsExpectedActions({
   applyFilters,
+  disabledActions,
   filters,
+  hiddenActions,
   onPieceCreate,
   openReceiveList,
   hasReceive,
-  disabled,
-  canAddPiece,
   toggleColumn,
   visibleColumns,
 }) {
@@ -47,25 +48,27 @@ export function TitleDetailsExpectedActions({
           label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
           id="expected-pieces-menu-actions"
         >
-          <Button
-            data-testid="add-piece-button"
-            data-test-add-piece-button
-            buttonStyle="dropdownItem"
-            onClick={onPieceCreate}
-            disabled={!canAddPiece}
-          >
-            <Icon size="small" icon="plus-sign">
-              <FormattedMessage id="ui-receiving.piece.button.addPiece" />
-            </Icon>
-          </Button>
+          {(!hiddenActions?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]) && (
+            <Button
+              data-testid="add-piece-button"
+              data-test-add-piece-button
+              buttonStyle="dropdownItem"
+              onClick={onPieceCreate}
+              disabled={disabledActions?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]}
+            >
+              <Icon size="small" icon="plus-sign">
+                <FormattedMessage id="ui-receiving.piece.button.addPiece" />
+              </Icon>
+            </Button>
+          )}
 
-          {hasReceive && (
+          {(!hiddenActions?.[EXPECTED_PIECES_ACTION_NAMES.receive]) && (
             <Button
               data-testid="receive-button"
               data-test-title-receive-button
               buttonStyle="dropdownItem"
               onClick={openReceiveList}
-              disabled={disabled}
+              disabled={disabledActions?.[EXPECTED_PIECES_ACTION_NAMES.receive]}
             >
               <Icon size="small" icon="receive">
                 <FormattedMessage id="ui-receiving.title.details.button.receive" />
@@ -98,12 +101,12 @@ export function TitleDetailsExpectedActions({
 
 TitleDetailsExpectedActions.propTypes = {
   applyFilters: PropTypes.func.isRequired,
+  disabledActions: PropTypes.object,
   filters: PropTypes.object.isRequired,
   hasReceive: PropTypes.bool.isRequired,
+  hiddenActions: PropTypes.object,
   onPieceCreate: PropTypes.func.isRequired,
   openReceiveList: PropTypes.func.isRequired,
   toggleColumn: PropTypes.func.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  disabled: PropTypes.bool,
-  canAddPiece: PropTypes.bool,
 };
