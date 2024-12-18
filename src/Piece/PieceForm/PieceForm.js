@@ -213,6 +213,7 @@ const PieceForm = ({
     [PIECE_ACTION_NAMES.unReceive]: isEditDisabled,
     [PIECE_ACTION_NAMES.sendClaim]: isEditDisabled,
     [PIECE_ACTION_NAMES.delayClaim]: isEditDisabled,
+    [PIECE_ACTION_NAMES.markLate]: isEditDisabled,
   };
 
   const start = (

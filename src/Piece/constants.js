@@ -199,6 +199,7 @@ export const PIECE_ACTION_NAMES = {
   saveAndClose: 'saveAndClose',
   saveAndCreate: 'saveAndCreate',
   quickReceive: 'quickReceive',
+  markLate: 'markLate',
   sendClaim: 'sendClaim',
   delayClaim: 'delayClaim',
   unReceivable: 'unReceivable',
