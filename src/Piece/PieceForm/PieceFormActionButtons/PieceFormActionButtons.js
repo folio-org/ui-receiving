@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import noop from 'lodash/noop';
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -28,21 +29,18 @@ export const PieceFormActionButtons = ({
   onUnreceivePiece,
   status = PIECE_STATUS.expected,
 }) => {
-  const [actionsKey, setActionsKey] = useState(new Date());
+  const onToggleRef = useRef(noop);
 
   const actionMenu = getPieceActionMenu({
     actionsDisabled,
     isEditMode,
     onClaimDelay,
     onClaimSend,
-    onCreateAnotherPiece: () => {
-      setActionsKey(new Date());
-
-      return onCreateAnotherPiece();
-    },
+    onCreateAnotherPiece,
     onDelete,
     onReceive,
     onStatusChange,
+    onToggle: onToggleRef.current,
     onUnreceivePiece,
     status,
   });
@@ -77,7 +75,6 @@ export const PieceFormActionButtons = ({
         <FormattedMessage id={saveButtonLabelId} />
       </Button>
       <Dropdown
-        key={actionsKey}
         disabled={isActionsMenuDisabled}
         buttonProps={{
           buttonStyle: 'primary',
@@ -86,9 +83,15 @@ export const PieceFormActionButtons = ({
           'data-testid': 'dropdown-trigger-button',
         }}
       >
-        <DropdownMenu data-role="menu">
-          {actionMenu}
-        </DropdownMenu>
+        {({ onToggle }) => {
+          onToggleRef.current = onToggle;
+
+          return (
+            <DropdownMenu data-role="menu">
+              {actionMenu}
+            </DropdownMenu>
+          );
+        }}
       </Dropdown>
     </ButtonGroup>
   );
