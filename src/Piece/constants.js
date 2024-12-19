@@ -207,3 +207,8 @@ export const PIECE_ACTION_NAMES = {
   expect: 'expect',
   delete: 'delete',
 };
+
+export const EXPECTED_PIECES_ACTION_NAMES = {
+  addPiece: 'addPiece',
+  receive: 'receive',
+};
