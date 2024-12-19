@@ -1,3 +1,4 @@
+import without from 'lodash/without';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -12,6 +13,7 @@ export const EXPECTED_PIECES_ACTIONS = [
   PIECE_ACTION_NAMES.saveAndCreate,
   PIECE_ACTION_NAMES.quickReceive,
   PIECE_ACTION_NAMES.sendClaim,
+  PIECE_ACTION_NAMES.markLate,
   PIECE_ACTION_NAMES.delayClaim,
   PIECE_ACTION_NAMES.unReceivable,
   PIECE_ACTION_NAMES.delete,
@@ -21,7 +23,7 @@ export const PIECE_ACTIONS_BY_STATUS = {
   [PIECE_STATUS.expected]: EXPECTED_PIECES_ACTIONS,
   [PIECE_STATUS.claimDelayed]: EXPECTED_PIECES_ACTIONS,
   [PIECE_STATUS.claimSent]: EXPECTED_PIECES_ACTIONS,
-  [PIECE_STATUS.late]: EXPECTED_PIECES_ACTIONS,
+  [PIECE_STATUS.late]: without(EXPECTED_PIECES_ACTIONS, PIECE_ACTION_NAMES.markLate),
   [PIECE_STATUS.received]: [
     PIECE_ACTION_NAMES.saveAndCreate,
     PIECE_ACTION_NAMES.unReceive,
@@ -40,17 +42,21 @@ export const PIECE_ACTIONS = ({
   onClaimDelay,
   onClaimSend,
   onCreateAnotherPiece,
-  onStatusChange,
   onDelete,
   onReceive,
+  onStatusChange,
+  onToggle,
   onUnreceivePiece,
 }) => ({
   [PIECE_ACTION_NAMES.delayClaim]: (
     <Button
-      disabled={actionsDisabled[PIECE_ACTION_NAMES.delayClaim]}
       buttonStyle="dropdownItem"
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.delayClaim]}
       data-testid="delay-claim-button"
-      onClick={onClaimDelay}
+      onClick={() => {
+        onToggle();
+        onClaimDelay();
+      }}
     >
       <Icon icon="calendar">
         <FormattedMessage id="ui-receiving.piece.action.button.delayClaim" />
@@ -59,10 +65,13 @@ export const PIECE_ACTIONS = ({
   ),
   [PIECE_ACTION_NAMES.delete]: isEditMode ? (
     <Button
-      onClick={onDelete}
       buttonStyle="dropdownItem"
       data-testid="delete-piece-button"
       disabled={actionsDisabled[PIECE_ACTION_NAMES.delete]}
+      onClick={() => {
+        onToggle();
+        onDelete();
+      }}
     >
       <Icon icon="trash">
         <FormattedMessage id="ui-receiving.piece.action.button.delete" />
@@ -74,7 +83,10 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.expect]}
       buttonStyle="dropdownItem"
       data-testid="expect-piece-button"
-      onClick={() => onStatusChange(PIECE_STATUS.expected)}
+      onClick={() => {
+        onToggle();
+        onStatusChange(PIECE_STATUS.expected);
+      }}
     >
       <Icon icon="calendar">
         <FormattedMessage id="ui-receiving.piece.action.button.expect" />
@@ -86,7 +98,10 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.quickReceive]}
       data-testid="quickReceive"
       buttonStyle="dropdownItem"
-      onClick={onReceive}
+      onClick={() => {
+        onToggle();
+        onReceive();
+      }}
     >
       <Icon icon="receive">
         <FormattedMessage id="ui-receiving.piece.action.button.quickReceive" />
@@ -98,7 +113,10 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.saveAndCreate]}
       buttonStyle="dropdownItem"
       data-testid="create-another-piece-button"
-      onClick={onCreateAnotherPiece}
+      onClick={() => {
+        onToggle();
+        onCreateAnotherPiece();
+      }}
     >
       <Icon icon="save">
         <FormattedMessage id="ui-receiving.piece.action.button.saveAndCreateAnother" />
@@ -110,7 +128,10 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.sendClaim]}
       buttonStyle="dropdownItem"
       data-testid="send-claim-button"
-      onClick={onClaimSend}
+      onClick={() => {
+        onToggle();
+        onClaimSend();
+      }}
     >
       <Icon icon="envelope">
         <FormattedMessage id="ui-receiving.piece.action.button.sendClaim" />
@@ -122,7 +143,10 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceive]}
       buttonStyle="dropdownItem"
       data-testid="unReceive-piece-button"
-      onClick={onUnreceivePiece}
+      onClick={() => {
+        onToggle();
+        onUnreceivePiece();
+      }}
     >
       <Icon icon="cancel">
         <FormattedMessage id="ui-receiving.piece.action.button.unReceive" />
@@ -134,10 +158,28 @@ export const PIECE_ACTIONS = ({
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceivable]}
       buttonStyle="dropdownItem"
       data-testid="unReceivable-piece-button"
-      onClick={() => onStatusChange(PIECE_STATUS.unreceivable)}
+      onClick={() => {
+        onToggle();
+        onStatusChange(PIECE_STATUS.unreceivable);
+      }}
     >
       <Icon icon="cancel">
         <FormattedMessage id="ui-receiving.piece.action.button.unReceivable" />
+      </Icon>
+    </Button>
+  ),
+  [PIECE_ACTION_NAMES.markLate]: (
+    <Button
+      disabled={actionsDisabled[PIECE_ACTION_NAMES.markLate]}
+      buttonStyle="dropdownItem"
+      data-testid="mark-late-piece-button"
+      onClick={() => {
+        onToggle();
+        onStatusChange(PIECE_STATUS.late);
+      }}
+    >
+      <Icon icon="clock">
+        <FormattedMessage id="ui-receiving.piece.action.button.markLate" />
       </Icon>
     </Button>
   ),

@@ -2,6 +2,7 @@
 
 ## 6.1.0 (IN PROGRESS)
 
+* Add "Mark late" action to the piece form action menu. Refs UIREC-413.
 * Hide "Add piece" action when related order has "Pending" status and "Synchronized" workflow. Refs UIREC-362.
 
 ## [6.0.5](https://github.com/folio-org/ui-receiving/tree/v6.0.5) (2024-12-13)

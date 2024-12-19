@@ -208,6 +208,7 @@
   "piece.action.button.unReceive": "Unreceive",
   "piece.action.button.delete": "Delete",
   "piece.action.button.expect": "Expect",
+  "piece.action.button.markLate": "Mark late",
   "piece.callNumber": "Call number",
   "piece.displaySummary": "Display summary",
   "piece.copyNumber": "Copy number",
