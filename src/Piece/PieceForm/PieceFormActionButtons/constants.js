@@ -5,15 +5,20 @@ import {
   Button,
   Icon,
 } from '@folio/stripes/components';
-import { PIECE_STATUS } from '@folio/stripes-acq-components';
+import {
+  DelayClaimActionMenuItem,
+  MarkUnreceivableActionMenuItem,
+  PIECE_STATUS,
+  SendClaimActionMenuItem,
+} from '@folio/stripes-acq-components';
 
 import { PIECE_ACTION_NAMES } from '../../constants';
 
 export const EXPECTED_PIECES_ACTIONS = [
   PIECE_ACTION_NAMES.saveAndCreate,
   PIECE_ACTION_NAMES.quickReceive,
-  PIECE_ACTION_NAMES.sendClaim,
   PIECE_ACTION_NAMES.markLate,
+  PIECE_ACTION_NAMES.sendClaim,
   PIECE_ACTION_NAMES.delayClaim,
   PIECE_ACTION_NAMES.unReceivable,
   PIECE_ACTION_NAMES.delete,
@@ -49,19 +54,13 @@ export const PIECE_ACTIONS = ({
   onUnreceivePiece,
 }) => ({
   [PIECE_ACTION_NAMES.delayClaim]: (
-    <Button
-      buttonStyle="dropdownItem"
+    <DelayClaimActionMenuItem
       disabled={actionsDisabled[PIECE_ACTION_NAMES.delayClaim]}
-      data-testid="delay-claim-button"
-      onClick={() => {
-        onToggle();
+      onClick={(e) => {
+        onToggle(e);
         onClaimDelay();
       }}
-    >
-      <Icon icon="calendar">
-        <FormattedMessage id="ui-receiving.piece.action.button.delayClaim" />
-      </Icon>
-    </Button>
+    />
   ),
   [PIECE_ACTION_NAMES.delete]: isEditMode ? (
     <Button
@@ -124,19 +123,13 @@ export const PIECE_ACTIONS = ({
     </Button>
   ),
   [PIECE_ACTION_NAMES.sendClaim]: (
-    <Button
+    <SendClaimActionMenuItem
       disabled={actionsDisabled[PIECE_ACTION_NAMES.sendClaim]}
-      buttonStyle="dropdownItem"
-      data-testid="send-claim-button"
-      onClick={() => {
-        onToggle();
+      onClick={(e) => {
+        onToggle(e);
         onClaimSend();
       }}
-    >
-      <Icon icon="envelope">
-        <FormattedMessage id="ui-receiving.piece.action.button.sendClaim" />
-      </Icon>
-    </Button>
+    />
   ),
   [PIECE_ACTION_NAMES.unReceive]: (
     <Button
@@ -154,19 +147,13 @@ export const PIECE_ACTIONS = ({
     </Button>
   ),
   [PIECE_ACTION_NAMES.unReceivable]: (
-    <Button
+    <MarkUnreceivableActionMenuItem
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceivable]}
-      buttonStyle="dropdownItem"
-      data-testid="unReceivable-piece-button"
-      onClick={() => {
-        onToggle();
+      onClick={(e) => {
+        onToggle(e);
         onStatusChange(PIECE_STATUS.unreceivable);
       }}
-    >
-      <Icon icon="cancel">
-        <FormattedMessage id="ui-receiving.piece.action.button.unReceivable" />
-      </Icon>
-    </Button>
+    />
   ),
   [PIECE_ACTION_NAMES.markLate]: (
     <Button

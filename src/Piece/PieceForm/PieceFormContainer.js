@@ -17,6 +17,7 @@ import {
   ORDER_STATUSES,
   PIECE_FORMAT,
   PIECE_FORMAT_OPTIONS,
+  SendClaimsModal,
   useAcqRestrictions,
   useLocationsQuery,
   useOrderLine,
@@ -48,6 +49,7 @@ import {
   PIECE_FORM_SERVICE_FIELD_NAMES,
 } from '../constants';
 import {
+  usePieceClaimSend,
   usePieceHoldingAbandonmentCheck,
   usePieceQuickReceiving,
 } from '../hooks';
@@ -118,6 +120,19 @@ export const PieceFormContainer = ({
     tenantId,
   });
 
+  const {
+    claimSendModalProps,
+    isClaimSendModalOpen,
+    isLoading: isClaimSendLoading,
+    onCancelClaimSend,
+    onClaimSend,
+    onConfirmClaimSend,
+    sendClaimsHandler,
+  } = usePieceClaimSend({
+    organizationId: order?.vendor,
+    tenantId,
+  });
+
   /* Constants */
 
   const canDeletePiece = !(!orderLine?.checkinItems && order?.workflowStatus === ORDER_STATUSES.pending);
@@ -176,11 +191,13 @@ export const PieceFormContainer = ({
     });
   }, [history, isCentralRouting, search, titleId]);
 
-  const onSubmit = useCallback((formValues) => {
+  const onSubmit = useCallback((formValues, form) => {
     const {
       deleteHolding,
       postSubmitAction,
     } = formValues;
+
+    form.change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, null);
 
     const options = {
       searchParams: { ...(deleteHolding ? { deleteHolding } : {}) },
@@ -203,6 +220,7 @@ export const PieceFormContainer = ({
         const postSubmitHandler = new Map([
           [PIECE_ACTION_NAMES.saveAndCreate, onCreateAnother],
           [PIECE_ACTION_NAMES.quickReceive, onQuickReceive],
+          [PIECE_ACTION_NAMES.sendClaim, sendClaimsHandler],
         ]).get(postSubmitAction) || identity;
 
         return postSubmitHandler(data);
@@ -227,6 +245,7 @@ export const PieceFormContainer = ({
     onCloseForm,
     onCreateAnother,
     onQuickReceive,
+    sendClaimsHandler,
     showCallout,
   ]);
 
@@ -315,9 +334,9 @@ export const PieceFormContainer = ({
         createInventoryValues={createInventoryValues}
         initialValues={formInitialValues}
         instanceId={instanceId}
+        onClaimSend={onClaimSend}
         onClose={onCloseForm}
         onDelete={onDelete}
-        onQuickReceive={onQuickReceive}
         onSubmit={onSubmit}
         onUnreceive={onUnreceive}
         locationIds={locationIds}
@@ -332,6 +351,14 @@ export const PieceFormContainer = ({
         open={isConfirmReceiving}
         onCancel={onCancelReceive}
         onConfirm={onConfirmReceive}
+      />
+
+      <SendClaimsModal
+        disabled={isClaimSendLoading}
+        onCancel={onCancelClaimSend}
+        onSubmit={onConfirmClaimSend}
+        open={isClaimSendModalOpen}
+        {...claimSendModalProps}
       />
     </>
   );
