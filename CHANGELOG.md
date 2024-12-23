@@ -1,6 +1,6 @@
 # Change history for ui-receiving
 
-## 6.1.0 (IN PROGRESS)
+## 7.0.0 (IN PROGRESS)
 
 * Add "Mark late" action to the piece form action menu. Refs UIREC-413.
 * Hide "Add piece" action when related order has "Pending" status and "Synchronized" workflow. Refs UIREC-362.
