@@ -1,14 +1,18 @@
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { dayjs } from '@folio/stripes/components';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
   useAcqRestrictions,
+  useClaimsSend,
+  useCurrentUserTenants,
   useLocationsQuery,
   useOrderLine,
-  useCurrentUserTenants,
+  usePiecesStatusBatchUpdate,
 } from '@folio/stripes-acq-components';
+import { useOkapiKy } from '@folio/stripes/core';
 
 import { renderWithRouter } from '../../../test/jest/helpers';
 import {
@@ -26,11 +30,13 @@ import { PieceFormContainer } from './PieceFormContainer';
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
-  useCentralOrderingContext: jest.fn(),
   useAcqRestrictions: jest.fn(),
+  useCentralOrderingContext: jest.fn(),
+  useClaimsSend: jest.fn(),
+  useCurrentUserTenants: jest.fn(),
   useLocationsQuery: jest.fn(),
   useOrderLine: jest.fn(),
-  useCurrentUserTenants: jest.fn(),
+  usePiecesStatusBatchUpdate: jest.fn(),
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
 jest.mock('../../common/hooks', () => ({
@@ -58,7 +64,10 @@ jest.mock('../hooks', () => ({
   usePieceStatusChangeLog: jest.fn(() => ({ data: [] })),
 }));
 
-const mutatePieceMock = jest.fn(() => Promise.resolve());
+const DATE_FORMAT = 'MM/DD/YYYY';
+const today = dayjs();
+
+const mutatePieceMock = jest.fn(() => Promise.resolve({ id: 'piece-id' }));
 const unreceiveMock = jest.fn(() => Promise.resolve());
 const onQuickReceiveMock = jest.fn(() => Promise.resolve());
 const receiveMock = jest.fn(() => Promise.resolve());
@@ -117,48 +126,37 @@ const renderPieceFormContainer = (props = {}) => renderWithRouter(
 );
 
 describe('PieceFormContainer', () => {
+  const sendClaims = jest.fn(() => Promise.resolve());
+  const updatePiecesStatus = jest.fn(() => Promise.resolve());
+
+  const kyMock = {
+    get: jest.fn(() => ({ json: () => Promise.resolve({ configs: [] }) })),
+  };
+
   beforeEach(() => {
-    mutatePieceMock.mockClear();
-    useAcqRestrictions
-      .mockClear()
-      .mockReturnValue({ restrictions });
-    useHoldingItems
-      .mockClear()
-      .mockReturnValue({ itemsCount: 2 });
-    useOrder
-      .mockClear()
-      .mockReturnValue({ order });
-    useOrderLine
-      .mockClear()
-      .mockReturnValue({ orderLine });
-    useLocationsQuery
-      .mockClear()
-      .mockReturnValue({ locations });
-    usePieceMutator
-      .mockClear()
-      .mockReturnValue({ mutatePiece: mutatePieceMock });
-    usePieces
-      .mockClear()
-      .mockReturnValue({ piecesCount: 2 });
-    usePieceQuickReceiving
-      .mockClear()
-      .mockReturnValue({
-        onCancelReceive: jest.fn(),
-        onConfirmReceive: jest.fn(),
-        onQuickReceive: onQuickReceiveMock,
-      });
-    useTitle
-      .mockClear()
-      .mockReturnValue({ title });
-    useReceive
-      .mockClear()
-      .mockReturnValue({ receive: receiveMock });
-    useUnreceive
-      .mockClear()
-      .mockReturnValue({ unreceive: unreceiveMock });
-    useCurrentUserTenants
-      .mockClear()
-      .mockReturnValue(tenants);
+    useAcqRestrictions.mockReturnValue({ restrictions });
+    useClaimsSend.mockReturnValue({ sendClaims });
+    useCurrentUserTenants.mockReturnValue(tenants);
+    useHoldingItems.mockReturnValue({ itemsCount: 2 });
+    useOkapiKy.mockReturnValue(kyMock);
+    useOrder.mockReturnValue({ order });
+    useOrderLine.mockReturnValue({ orderLine });
+    useLocationsQuery.mockReturnValue({ locations });
+    usePieceMutator.mockReturnValue({ mutatePiece: mutatePieceMock });
+    usePieces.mockReturnValue({ piecesCount: 2 });
+    usePiecesStatusBatchUpdate.mockReturnValue({ updatePiecesStatus });
+    usePieceQuickReceiving.mockReturnValue({
+      onCancelReceive: jest.fn(),
+      onConfirmReceive: jest.fn(),
+      onQuickReceive: onQuickReceiveMock,
+    });
+    useTitle.mockReturnValue({ title });
+    useReceive.mockReturnValue({ receive: receiveMock });
+    useUnreceive.mockReturnValue({ unreceive: unreceiveMock });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should display the piece form', () => {
@@ -234,5 +232,48 @@ describe('PieceFormContainer', () => {
         method: 'delete',
       }),
     }));
+  });
+
+  it('should handle "Send claim" action with claiming integration', async () => {
+    kyMock.get.mockReturnValueOnce({ json: () => Promise.resolve({ configs: [{ value: 'val' }] }) });
+
+    renderPieceFormContainer();
+
+    await user.click(await screen.findByTestId('dropdown-trigger-button'));
+    await user.click(screen.getByTestId('send-claim-button'));
+
+    expect(screen.getByText('ui-receiving.piece.sendClaim.withIntegration.message')).toBeInTheDocument();
+
+    await user.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    await user.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
+
+    expect(sendClaims).toHaveBeenCalledWith({
+      data: {
+        claimingInterval: 3,
+        externalNote: undefined,
+        internalNote: undefined,
+        claimingPieceIds: ['piece-id'],
+      },
+    });
+  });
+
+  it('should handle "Send claim" action without claiming integration', async () => {
+    renderPieceFormContainer();
+
+    await user.click(await screen.findByTestId('dropdown-trigger-button'));
+    await user.click(screen.getByTestId('send-claim-button'));
+
+    expect(screen.getByText('ui-receiving.piece.sendClaim.withoutIntegration.message')).toBeInTheDocument();
+
+    await user.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    await user.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
+
+    expect(updatePiecesStatus).toHaveBeenCalledWith({
+      data: {
+        claimingInterval: 3,
+        pieceIds: ['piece-id'],
+        receivingStatus: PIECE_STATUS.claimSent,
+      },
+    });
   });
 });

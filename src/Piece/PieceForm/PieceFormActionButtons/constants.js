@@ -148,6 +148,7 @@ export const PIECE_ACTIONS = ({
   ),
   [PIECE_ACTION_NAMES.unReceivable]: (
     <MarkUnreceivableActionMenuItem
+      data-testid="unreceivable-button"
       disabled={actionsDisabled[PIECE_ACTION_NAMES.unReceivable]}
       onClick={(e) => {
         onToggle(e);

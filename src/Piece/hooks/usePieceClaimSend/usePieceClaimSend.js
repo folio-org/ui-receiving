@@ -23,7 +23,7 @@ export const usePieceClaimSend = (options = {}) => {
   const ky = useOkapiKy({ tenant: tenantId });
   const confirmClaimSendPromise = useRef(Promise);
   const [isClaimSendModalOpen, toggleClaimSendModal] = useModalToggle();
-  const [isIntegrationExists, setIntegrationExists] = useState();
+  const [isIntegrationExists, setIsIntegrationExists] = useState();
   const [claimSendModalProps, setClaimSendModalProps] = useState({});
 
   /* Callback to handle claim send after form submit */
@@ -47,6 +47,7 @@ export const usePieceClaimSend = (options = {}) => {
     };
 
     return ky.get(DATA_EXPORT_CONFIGS_API, { searchParams })
+      .json()
       .then(({ configs }) => configs.length > 0)
       .catch(() => false);
   }, [ky, organizationId]);
@@ -60,7 +61,7 @@ export const usePieceClaimSend = (options = {}) => {
       />
     );
 
-    setIntegrationExists(isExists);
+    setIsIntegrationExists(isExists);
     toggleClaimSendModal();
 
     return new Promise((resolve, reject) => {
