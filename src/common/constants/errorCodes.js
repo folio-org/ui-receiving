@@ -1,6 +1,8 @@
 export const ERROR_CODES = {
+  cannotFindPiecesWithLatestStatusToProcess: 'cannotFindPiecesWithLatestStatusToProcess',
   createItemForPieceIsNotAllowedError: 'createItemForPieceIsNotAllowedError',
   createPiecePendingOrderError: 'createPiecePendingOrderError',
+  barcodeIsNotUnique: 'barcodeIsNotUnique',
   forbiddenDeleteSystemValues: 'forbiddenDeleteSystemValues',
   forbiddenDeleteUsedValue: 'forbiddenDeleteUsedValue',
   holdingsByIdNotFoundError: 'holdingsByIdNotFoundError',
@@ -18,7 +20,7 @@ export const ERROR_CODES = {
   pieceUpdateFailed: 'pieceUpdateFailed',
   receivingProcessEncumbrancesError: 'receivingProcessEncumbrancesError',
   titleNotFound: 'titleNotFound',
+  unableToGenerateClaimsForOrgNoIntegrationDetails: 'unableToGenerateClaimsForOrgNoIntegrationDetails',
   userHasNoPermission: 'userHasNoPermission',
   userNotAMemberOfTheAcq: 'userNotAMemberOfTheAcq',
-  barcodeIsNotUnique: 'barcodeIsNotUnique',
 };

@@ -1,9 +1,10 @@
 # Change history for ui-receiving
 
-## 6.1.0 (IN PROGRESS)
+## 7.0.0 (IN PROGRESS)
 
 * Add "Mark late" action to the piece form action menu. Refs UIREC-413.
 * Hide "Add piece" action when related order has "Pending" status and "Synchronized" workflow. Refs UIREC-362.
+* *Breaking* Update "Send claim" action to use `pieces.send-claims` interface. Refs UIREC-412.
 
 ## [6.0.5](https://github.com/folio-org/ui-receiving/tree/v6.0.5) (2024-12-13)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.4...v6.0.5)

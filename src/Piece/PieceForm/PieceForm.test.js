@@ -1,11 +1,10 @@
-import moment from 'moment';
-
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   act,
   screen,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { dayjs } from '@folio/stripes/components';
 import {
   FieldInventory,
   INVENTORY_RECORDS_TYPE,
@@ -90,7 +89,7 @@ const logs = [
 ];
 
 const DATE_FORMAT = 'MM/DD/YYYY';
-const today = moment();
+const today = dayjs();
 
 const renderPieceForm = (props = {}) => renderWithRouter(
   <PieceForm
@@ -345,9 +344,9 @@ describe('PieceForm', () => {
 
     await user.click(dropdownButton);
 
-    const unReceiveButton = screen.getByTestId('unReceivable-piece-button');
+    const unreceivableButton = screen.getByTestId('unreceivable-button');
 
-    await user.click(unReceiveButton);
+    await user.click(unreceivableButton);
 
     expect(defaultProps.onSubmit).toHaveBeenCalled();
   });
@@ -392,28 +391,13 @@ describe('PieceForm', () => {
 
     it('should handle "Delay claim" action', async () => {
       await user.click(screen.getByTestId('delay-claim-button'));
-      await user.type(screen.getByRole('textbox', { name: 'ui-receiving.modal.delayClaim.field.delayTo' }), date.format(DATE_FORMAT));
+      await user.type(screen.getByRole('textbox', { name: /field.delayTo/ }), date.format(DATE_FORMAT));
       await user.click(await findButton('stripes-acq-components.FormFooter.save'));
 
       expect(defaultProps.onSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           claimingInterval: 3,
           receivingStatus: PIECE_STATUS.claimDelayed,
-        }),
-        expect.anything(),
-        expect.anything(),
-      );
-    });
-
-    it('should handle "Send claim" action', async () => {
-      await user.click(screen.getByTestId('send-claim-button'));
-      await user.type(screen.getByRole('textbox', { name: 'ui-receiving.modal.sendClaim.field.claimExpiryDate' }), date.format(DATE_FORMAT));
-      await user.click(await findButton('stripes-acq-components.FormFooter.save'));
-
-      expect(defaultProps.onSubmit).toHaveBeenCalledWith(
-        expect.objectContaining({
-          claimingInterval: 3,
-          receivingStatus: PIECE_STATUS.claimSent,
         }),
         expect.anything(),
         expect.anything(),

@@ -25,17 +25,16 @@ import {
 import { useStripes } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
+  DelayClaimsModal,
   DeleteHoldingsModal,
+  getClaimingIntervalFromDate,
   handleKeyCommand,
   PIECE_FORMAT,
   PIECE_STATUS,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import {
-  getClaimingIntervalFromDate,
-  setLocationValueFormMutator,
-} from '../../common/utils';
+import { setLocationValueFormMutator } from '../../common/utils';
 import {
   PIECE_ACTION_NAMES,
   PIECE_FORM_FIELD_NAMES,
@@ -43,10 +42,8 @@ import {
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,
 } from '../constants';
-import { DelayClaimModal } from '../DelayClaimModal';
 import { DeletePieceModal } from '../DeletePieceModal';
 import { ReceivingStatusChangeLog } from '../ReceivingStatusChangeLog';
-import { SendClaimModal } from '../SendClaimModal';
 import { ItemFields } from './ItemFields';
 import { PieceFields } from './PieceFields';
 import { PieceFormActionButtons } from './PieceFormActionButtons';
@@ -60,6 +57,7 @@ const PieceForm = ({
   hasValidationErrors,
   initialValues,
   instanceId,
+  onClaimSend: onClaimSendProp,
   onClose,
   onDelete: onDeleteProp,
   onUnreceive: onUnreceiveProp,
@@ -84,10 +82,8 @@ const PieceForm = ({
 
   const {
     enumeration,
-    externalNote,
     format,
     id,
-    internalNote,
     itemId,
     bindItemId,
     isBound,
@@ -110,7 +106,6 @@ const PieceForm = ({
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
   const [isClaimDelayModalOpen, toggleClaimDelayModal] = useModalToggle();
-  const [isClaimSendModalOpen, toggleClaimSendModal] = useModalToggle();
 
   const { protectCreate, protectUpdate, protectDelete } = restrictionsByAcqUnit;
   const isEditMode = Boolean(id);
@@ -123,6 +118,11 @@ const PieceForm = ({
   const itemDetailsAccordionLabelId = isOriginalItemDetailsVisible
     ? PIECE_MODAL_ACCORDION.originalItemDetails
     : PIECE_MODAL_ACCORDION.itemDetails;
+
+  const onDeleteHoldingsModalCancel = useCallback(() => {
+    change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, null);
+    toggleDeleteHoldingsConfirmation();
+  }, [change, toggleDeleteHoldingsConfirmation]);
 
   const onChangeDisplayOnHolding = useCallback(({ target: { checked } }) => {
     change(PIECE_FORM_FIELD_NAMES.displayOnHolding, checked);
@@ -191,13 +191,15 @@ const PieceForm = ({
     onStatusChange(PIECE_STATUS.claimDelayed);
   }, [change, onStatusChange]);
 
-  const onClaimSend = useCallback(({ claimingDate, ...rest }) => {
+  const onClaimSend = useCallback(async () => {
+    const updatedFields = await onClaimSendProp(formValues);
+
     batch(() => {
-      change(PIECE_FORM_FIELD_NAMES.claimingInterval, getClaimingIntervalFromDate(claimingDate));
-      Object.entries(rest).forEach(([field, value]) => change(field, value));
+      change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.sendClaim);
+      Object.entries(updatedFields).forEach(([field, value]) => change(field, value));
     });
-    onStatusChange(PIECE_STATUS.claimSent);
-  }, [batch, change, onStatusChange]);
+    onSave();
+  }, [batch, change, formValues, onClaimSendProp, onSave]);
 
   const onDelete = useCallback((options) => {
     return onDeleteProp({ id, enumeration }, options);
@@ -232,7 +234,7 @@ const PieceForm = ({
       isEditMode={isEditMode}
       onCreateAnotherPiece={onCreateAnotherPiece}
       onClaimDelay={toggleClaimDelayModal}
-      onClaimSend={toggleClaimSendModal}
+      onClaimSend={onClaimSend}
       onDelete={toggleDeleteConfirmation}
       onReceive={onQuickReceive}
       onUnreceivePiece={onUnreceive}
@@ -364,24 +366,17 @@ const PieceForm = ({
           {
             isDeleteHoldingsConfirmation && (
               <DeleteHoldingsModal
-                onCancel={toggleDeleteHoldingsConfirmation}
+                onCancel={onDeleteHoldingsModalCancel}
                 onKeepHoldings={handleSubmit}
                 onConfirm={onDeleteHoldings}
               />
             )
           }
 
-          <DelayClaimModal
+          <DelayClaimsModal
             open={isClaimDelayModalOpen}
             onCancel={toggleClaimDelayModal}
             onSubmit={onClaimDelay}
-          />
-
-          <SendClaimModal
-            open={isClaimSendModalOpen}
-            onCancel={toggleClaimSendModal}
-            onSubmit={onClaimSend}
-            initialValues={{ internalNote, externalNote }}
           />
         </Pane>
       </Paneset>
@@ -400,6 +395,7 @@ PieceForm.propTypes = {
   instanceId: PropTypes.string,
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
+  onClaimSend: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onUnreceive: PropTypes.func.isRequired,

@@ -81,9 +81,9 @@ describe('getPieceActionMenus', () => {
         onToggle,
         onUnreceivePiece,
       });
-      const receiveButton = result.find(i => i.props['data-testid'] === 'unReceive-piece-button');
+      const unreceiveButton = result.find(i => i.props['data-testid'] === 'unReceive-piece-button');
 
-      receiveButton.props.onClick();
+      unreceiveButton.props.onClick();
 
       expect(onUnreceivePiece).toHaveBeenCalledWith();
     });
@@ -97,9 +97,9 @@ describe('getPieceActionMenus', () => {
         onStatusChange,
         onToggle,
       });
-      const receiveButton = result.find(i => i.props['data-testid'] === 'unReceivable-piece-button');
+      const unreceivableButton = result.find(i => i.props['data-testid'] === 'unreceivable-button');
 
-      receiveButton.props.onClick();
+      unreceivableButton.props.onClick();
 
       expect(onStatusChange).toHaveBeenCalledWith(PIECE_STATUS.unreceivable);
     });
