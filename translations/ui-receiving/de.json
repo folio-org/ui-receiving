@@ -202,9 +202,6 @@
     "title.claimingInterval": "Mahnintervall",
     "piece.action.button.saveAndCreateAnother": "Speichern und ein weiteres erstellen",
     "piece.action.button.quickReceive": "Schnelles inventarisieren",
-    "piece.action.button.sendClaim": "Mahnung versenden",
-    "piece.action.button.delayClaim": "Mahnung verzögern",
-    "piece.action.button.unReceivable": "Nicht inventarisierbar",
     "piece.action.button.delete": "Löschen",
     "piece.action.button.expect": "Erwarten",
     "piece.action.button.unReceive": "deinventarisieren",
@@ -224,10 +221,6 @@
     "permission.acq-units.assignment.manage": "Inventarisierung: Erwerbungsteams verwalten",
     "piece.externalNote": "Externe Bemerkungen",
     "piece.internalNote": "Interne Bemerkungen",
-    "modal.delayClaim.heading": "Teil verzögern",
-    "modal.delayClaim.field.delayTo": "Verzögern bis",
-    "modal.sendClaim.heading": "Mahnung versenden",
-    "modal.sendClaim.field.claimExpiryDate": "Ablaufdatum der Mahnung",
     "validation.dateAfter": "Das ausgewählte Datum muss nach dem aktuellen Datum liegen",
     "piece.displaySummary": "Anzeigeübersicht",
     "errors.userNotAMemberOfTheAcq": "Vorgang ist auf Erwerbungsteams beschränkt. Die Person gehört nicht zum ausgewählten Erwerbungsteam",
@@ -270,5 +263,10 @@
     "bind.pieces.modal.delete.message": "There are requests on the following pieces: <b>{barcodes}</b>. Please <b>delete requests</b> before proceeding.",
     "piece.accordion.originalItemDetails": "Item details (original)",
     "piece.pieceForm.edit.title": "Edit piece",
-    "piece.pieceForm.create.title": "Add piece"
+    "piece.pieceForm.create.title": "Add piece",
+    "piece.action.button.markLate": "Mark late",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
+    "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
+    "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
 }
