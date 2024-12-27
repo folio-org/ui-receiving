@@ -202,9 +202,6 @@
     "title.claimingInterval": "Intervalo de reclamação",
     "piece.action.button.saveAndCreateAnother": "Salvar e criar outro",
     "piece.action.button.quickReceive": "Recebimento rápido",
-    "piece.action.button.sendClaim": "Enviar reclamação",
-    "piece.action.button.delayClaim": "Reclamação de atraso",
-    "piece.action.button.unReceivable": "Não recebível",
     "piece.action.button.delete": "Excluir",
     "piece.action.button.expect": "Esperar",
     "piece.action.button.unReceive": "Cancelar recebimento",
@@ -224,10 +221,6 @@
     "permission.acq-units.assignment.manage": "Recebimento: Gerenciar unidades de aquisição",
     "piece.externalNote": "Nota externa",
     "piece.internalNote": "Nota interna",
-    "modal.delayClaim.heading": "Peça em atraso",
-    "modal.delayClaim.field.delayTo": "Atrasar para",
-    "modal.sendClaim.heading": "Enviar reclamação",
-    "modal.sendClaim.field.claimExpiryDate": "Data de expiração da reclamação",
     "validation.dateAfter": "A data selecionada deve ser posterior à data atual",
     "piece.displaySummary": "Exibir resumo",
     "errors.userNotAMemberOfTheAcq": "A ação é restrita por unidade de aquisição. O usuário não está atribuído à unidade de aquisição especificada.",
@@ -270,5 +263,10 @@
     "bind.pieces.modal.delete.message": "Há reservas nas seguintes partes: <b>{barcodes}</b>. Por favor, <b>exclua as reservas</b> antes de prosseguir.",
     "piece.accordion.originalItemDetails": "Detalhes do item (original)",
     "piece.pieceForm.edit.title": "Editar peça",
-    "piece.pieceForm.create.title": "Adicionar peça"
+    "piece.pieceForm.create.title": "Adicionar peça",
+    "piece.action.button.markLate": "Marcar como atrasado",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "A peça deve ter status \"Atrasado\" para ser processada.",
+    "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Não é possível gerar reclamações porque não existem integrações de reclamações para a organização.",
+    "piece.sendClaim.withIntegration.message": "Isso gerará uma reclamação que pode ser visualizado no Gerenciador de Exportação. Continuar?",
+    "piece.sendClaim.withoutIntegration.message": "Não existe nenhuma integração de reclamação para esta organização. A peça será definida para o status \"Reclamação enviada\". Continuar?"
 }

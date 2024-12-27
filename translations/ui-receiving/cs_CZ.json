@@ -202,9 +202,6 @@
     "title.claimingInterval": "Interval reklamace",
     "piece.action.button.saveAndCreateAnother": "Uložit a vytvořit další",
     "piece.action.button.quickReceive": "Rychlý příjem",
-    "piece.action.button.sendClaim": "Odeslat nárok",
-    "piece.action.button.delayClaim": "Zpozdit nárok",
-    "piece.action.button.unReceivable": "Nepřijatelné",
     "piece.action.button.delete": "Smazat",
     "piece.action.button.expect": "Očekávat",
     "piece.action.button.unReceive": "Nepřijmout",
@@ -224,10 +221,6 @@
     "permission.acq-units.assignment.manage": "Příjem: Správa akvizičních jednotek",
     "piece.externalNote": "Externí poznámka",
     "piece.internalNote": "Vnitřní poznámka",
-    "modal.delayClaim.heading": "Zpozdit kus",
-    "modal.delayClaim.field.delayTo": "Zpoždění do",
-    "modal.sendClaim.heading": "Odeslat nárok",
-    "modal.sendClaim.field.claimExpiryDate": "Datum vypršení platnosti nároku",
     "validation.dateAfter": "Vybrané datum musí být pozdější než aktuální datum",
     "piece.displaySummary": "Zobrazit shrnutí",
     "errors.userNotAMemberOfTheAcq": "Akce je omezena akviziční jednotkou. Uživatel není přiřazen k uvedené akviziční jednotce.",
@@ -270,5 +263,10 @@
     "bind.pieces.modal.delete.message": "Existují žádanky na následující kusy: <b>{barcodes}</b>. Prosím, než budete pokračovat, <b>smažte žádanky</b>.",
     "piece.accordion.originalItemDetails": "Detaily jednotky (originál)",
     "piece.pieceForm.edit.title": "Upravit kus",
-    "piece.pieceForm.create.title": "Přidat kus"
+    "piece.pieceForm.create.title": "Přidat kus",
+    "piece.action.button.markLate": "Mark late",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
+    "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
+    "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
 }

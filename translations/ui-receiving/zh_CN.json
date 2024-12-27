@@ -202,9 +202,6 @@
     "title.claimingInterval": "催缺间隔",
     "piece.action.button.saveAndCreateAnother": "保存并创建另一个",
     "piece.action.button.quickReceive": "快速接收",
-    "piece.action.button.sendClaim": "发送催缺",
-    "piece.action.button.delayClaim": "延误索赔",
-    "piece.action.button.unReceivable": "不可接收",
     "piece.action.button.delete": "删除",
     "piece.action.button.expect": "预计",
     "piece.action.button.unReceive": "拒收",
@@ -224,10 +221,6 @@
     "permission.acq-units.assignment.manage": "接收：管理采购单位",
     "piece.externalNote": "外部附注",
     "piece.internalNote": "内部附注",
-    "modal.delayClaim.heading": "延时件",
-    "modal.delayClaim.field.delayTo": "延迟至",
-    "modal.sendClaim.heading": "发送催缺",
-    "modal.sendClaim.field.claimExpiryDate": "催缺到期日",
     "validation.dateAfter": "所选日期必须晚于当前日期",
     "piece.displaySummary": "显示摘要",
     "errors.userNotAMemberOfTheAcq": "操作受到采购单位的限制。用户未分配到指定的采购单位。",
@@ -270,5 +263,10 @@
     "bind.pieces.modal.delete.message": "存在针对以下件的请求： <b> {barcodes} </b> 。请先<b>删除请求</b> ，然后再继续。",
     "piece.accordion.originalItemDetails": "单件详情（原始）",
     "piece.pieceForm.edit.title": "编辑件",
-    "piece.pieceForm.create.title": "添加件"
+    "piece.pieceForm.create.title": "添加件",
+    "piece.action.button.markLate": "Mark late",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
+    "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
+    "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
 }
