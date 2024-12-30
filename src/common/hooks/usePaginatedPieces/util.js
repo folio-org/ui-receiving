@@ -1,9 +1,13 @@
+import chunk from 'lodash/chunk';
+
 import {
   batchRequest,
   ITEMS_API,
 } from '@folio/stripes-acq-components';
 
 import {
+  CHUNK_SIZE,
+  MAX_PARALLEL_REQUESTS,
   PIECE_REQUESTS_API,
   TENANT_ITEMS_API,
 } from '../../constants';
@@ -38,15 +42,30 @@ export const fetchConsortiumPieceItems = (ky, { pieces }) => {
     .then(({ tenantItems }) => tenantItems.map(({ item, tenantId }) => ({ tenantId, ...item })));
 };
 
-export const fetchLocalPieceRequests = (ky, { pieces }) => {
-  if (!pieces.length) {
-    return Promise.resolve([]);
+export const fetchLocalPieceRequests = async (ky, { pieces }) => {
+  const results = [];
+
+  if (!pieces?.length) {
+    return Promise.resolve(results);
   }
 
-  return ky
-    .get(PIECE_REQUESTS_API, {
-      searchParams: buildPieceRequestsSearchParams(pieces),
-    })
-    .json()
-    .then(({ circulationRequests }) => circulationRequests);
+  const pieceChunks = chunk(pieces, CHUNK_SIZE);
+  const pieceChunksGroups = chunk(pieceChunks, MAX_PARALLEL_REQUESTS);
+
+  for (const group of pieceChunksGroups) {
+    const responses = await Promise.all(
+      group.map(async (_chunk) => {
+        return ky.get(
+          PIECE_REQUESTS_API,
+          { searchParams: buildPieceRequestsSearchParams(_chunk) },
+        )
+          .json()
+          .then(({ circulationRequests }) => circulationRequests);
+      }),
+    );
+
+    results.push(...responses);
+  }
+
+  return results.flat();
 };

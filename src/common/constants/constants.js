@@ -16,3 +16,6 @@ export const BATCH_IDENTIFIER_TYPE = {
   instanceHrid: 'instanceHrid',
   itemBarcode: 'itemBarcode',
 };
+
+export const CHUNK_SIZE = 25;
+export const MAX_PARALLEL_REQUESTS = 5;
