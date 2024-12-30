@@ -202,9 +202,6 @@
     "title.claimingInterval": "Claiming interval",
     "piece.action.button.saveAndCreateAnother": "Zapisz i utwórz kolejny",
     "piece.action.button.quickReceive": "Szybki odbiór",
-    "piece.action.button.sendClaim": "Wyślij monit",
-    "piece.action.button.delayClaim": "Opóźnij monit",
-    "piece.action.button.unReceivable": "Unreceivable",
     "piece.action.button.delete": "Usuń",
     "piece.action.button.expect": "Oczekiwanie",
     "piece.action.button.unReceive": "Nieodebrane",
@@ -224,10 +221,6 @@
     "permission.acq-units.assignment.manage": "Dostawy: zarządzanie jednostkami gromadzenia",
     "piece.externalNote": "Uwaga zewnętrzna",
     "piece.internalNote": "Uwaga wewnętrzna",
-    "modal.delayClaim.heading": "Delay piece",
-    "modal.delayClaim.field.delayTo": "Opóźnienie do",
-    "modal.sendClaim.heading": "Wyślij monit",
-    "modal.sendClaim.field.claimExpiryDate": "Data wygaśnięcia monitu",
     "validation.dateAfter": "Wybrana data musi być późniejsza od daty aktualnej",
     "piece.displaySummary": "Wyświetl podsumowanie",
     "errors.userNotAMemberOfTheAcq": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
@@ -270,5 +263,10 @@
     "bind.pieces.modal.delete.message": "There are requests on the following pieces: <b>{barcodes}</b>. Please <b>delete requests</b> before proceeding.",
     "piece.accordion.originalItemDetails": "Item details (original)",
     "piece.pieceForm.edit.title": "Edit piece",
-    "piece.pieceForm.create.title": "Dodaj część"
+    "piece.pieceForm.create.title": "Dodaj część",
+    "piece.action.button.markLate": "Mark late",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
+    "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
+    "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
 }

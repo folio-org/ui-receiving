@@ -202,9 +202,6 @@
     "title.claimingInterval": "Reclamatie-interval",
     "piece.action.button.saveAndCreateAnother": "Opslaan en een andere aanmaken",
     "piece.action.button.quickReceive": "Snelle ontvangst",
-    "piece.action.button.sendClaim": "Claim verzenden",
-    "piece.action.button.delayClaim": "Claim uitstellen",
-    "piece.action.button.unReceivable": "Niet ontvangbaar",
     "piece.action.button.delete": "Verwijderen",
     "piece.action.button.expect": "Verwacht",
     "piece.action.button.unReceive": "Ontvangen ongedaan maken",
@@ -224,10 +221,6 @@
     "permission.acq-units.assignment.manage": "Ontvangst: Acquisitie-units beheren",
     "piece.externalNote": "Externe opmerking",
     "piece.internalNote": "Interne opmerking",
-    "modal.delayClaim.heading": "Stuk vertragen",
-    "modal.delayClaim.field.delayTo": "Vertragen tot",
-    "modal.sendClaim.heading": "Claim verzenden",
-    "modal.sendClaim.field.claimExpiryDate": "Vervaldatum claim",
     "validation.dateAfter": "Geselecteerde datum moet later zijn dan de huidige datum",
     "piece.displaySummary": "Overzicht weergeven",
     "errors.userNotAMemberOfTheAcq": "Actie is beperkt door acquisitie-unit. Gebruiker is niet toegewezen aan de opgegeven acquisitie-unit.",
@@ -270,5 +263,10 @@
     "bind.pieces.modal.delete.message": "Er zijn aanvragen voor de volgende stukken: <b>{barcodes}</b>. <b>Aanvragen verwijderen</b> alvorens verder te gaan.",
     "piece.accordion.originalItemDetails": "Itemdetails (origineel)",
     "piece.pieceForm.edit.title": "Stuk bewerken",
-    "piece.pieceForm.create.title": "Stuk toevoegen"
+    "piece.pieceForm.create.title": "Stuk toevoegen",
+    "piece.action.button.markLate": "Mark late",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
+    "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
+    "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
 }
