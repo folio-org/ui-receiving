@@ -1,6 +1,7 @@
 # Change history for ui-receiving
 
-## 7.0.0 (IN PROGRESS)
+## [6.0.6](https://github.com/folio-org/ui-receiving/tree/v6.0.6) (2025-01-06)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.5...v6.0.6)
 
 * Chunk HTTP requests to get pieces "requests" by piece IDs. Refs UIREC-427.
 
