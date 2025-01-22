@@ -138,6 +138,8 @@
           "orders.routing-lists.collection.get",
           "orders.routing-lists-template.item.get",
           "orders.routing-lists.item.get",
+          "orders.wrapper-pieces.collection.get",
+          "orders.wrapper-pieces.item.get",
           "settings.receiving.enabled",
           "ui-receiving.basic.view",
           "users.collection.get",
