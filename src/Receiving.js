@@ -1,4 +1,6 @@
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { AppContextMenu } from '@folio/stripes/core';
 import {
@@ -34,7 +36,7 @@ const receivingCommands = [
 ];
 const shortcutCommands = [...receivingCommands, ...defaultKeyboardShortcuts];
 
-const Receiving = () => {
+const Receiving = ({ actAs, location, match, ...props }) => {
   const [isOpen, toggleModal] = useModalToggle();
   const focusSearchField = () => {
     const el = document.getElementById('input-record-search');
@@ -96,7 +98,12 @@ const Receiving = () => {
               )}
             </AppContextMenu>
 
-            <ReceivingRoutes />
+            <ReceivingRoutes
+              actAs={actAs}
+              location={location}
+              match={match}
+              {...props}
+            />
           </HasCommand>
         </CommandList>
         {isOpen && (
@@ -108,6 +115,12 @@ const Receiving = () => {
       </ReceivingSearchContextProvider>
     </CentralOrderingContextProvider>
   );
+};
+
+Receiving.propTypes = {
+  actAs: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired,
+  match: ReactRouterPropTypes.match.isRequired,
 };
 
 export default Receiving;

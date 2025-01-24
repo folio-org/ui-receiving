@@ -6,6 +6,7 @@
 * Hide "Add piece" action when related order has "Pending" status and "Synchronized" workflow. Refs UIREC-362.
 * *Breaking* Update "Send claim" action to use `pieces.send-claims` interface. Refs UIREC-412.
 * Add permissions to view claims. Refs UIREC-430.
+* Add setting options for number gernerator - accessing number equals call number. Refs UIREC-284.
 
 ## [6.0.6](https://github.com/folio-org/ui-receiving/tree/v6.0.6) (2025-01-06)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.5...v6.0.6)

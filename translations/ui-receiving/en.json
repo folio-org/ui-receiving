@@ -283,5 +283,7 @@
   "permission.delete": "Receiving: View, edit, delete",
   "permission.acq-units.assignment.assign": "Receiving: Assign acquisition units to new receiving title",
   "permission.acq-units.assignment.manage": "Receiving: Manage acquisition units",
-  "permission.exportCSV": "Receiving: Export search results"
+  "permission.exportCSV": "Receiving: Export search results",
+
+  "settings.numberGenerator.options": "Number generator options"
 }

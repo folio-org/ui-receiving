@@ -3,6 +3,8 @@ import {
   Route,
 } from 'react-router-dom';
 
+import PropTypes from 'prop-types';
+
 import { LoadingPane } from '@folio/stripes/components';
 
 import {
@@ -40,13 +42,24 @@ import { TitleEditContainer } from './TitleEdit';
 import { TitleExpectContainer } from './TitleExpect';
 import { TitleReceiveContainer } from './TitleReceive';
 import { TitleUnreceiveContainer } from './TitleUnreceive';
+import Settings from './Settings';
 
-export const ReceivingRoutes = () => {
+export const ReceivingRoutes = ({ actAs, location, match, ...appProps }) => {
   const {
     targetTenantId,
   } = useReceivingSearchContext();
 
   if (!targetTenantId) return <LoadingPane />;
+
+  if (actAs === 'settings') {
+    return (
+      <Settings
+        location={location}
+        match={match}
+        {...appProps}
+      />
+    );
+  }
 
   return (
     <Switch>
@@ -112,4 +125,10 @@ export const ReceivingRoutes = () => {
       />
     </Switch>
   );
+};
+
+ReceivingRoutes.propTypes = {
+  actAs: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 };

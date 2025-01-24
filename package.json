@@ -7,7 +7,8 @@
   "license": "Apache-2.0",
   "stripes": {
     "actsAs": [
-      "app"
+      "app",
+      "settings"
     ],
     "displayName": "ui-receiving.meta.title",
     "route": "/receiving",
@@ -42,7 +43,8 @@
     },
     "optionalOkapiInterfaces": {
       "consortia": "1.0",
-      "consortium-search": "2.0"
+      "consortium-search": "2.0",
+      "servint": "4.0"
     },
     "queryResource": "query",
     "icons": [
@@ -53,6 +55,7 @@
       }
     ],
     "stripesDeps": [
+      "@folio/service-interaction",
       "@folio/stripes-acq-components"
     ],
     "permissionSets": [
@@ -213,6 +216,30 @@
         "description": "",
         "visible": true,
         "subPermissions": []
+      },
+      {
+        "permissionName": "ui-receiving.settings.view",
+        "displayName": "Settings (Receiving): View settings",
+        "visible": true,
+        "subPermissions": [
+          "settings.receiving.enabled"
+        ]
+      },
+      {
+        "permissionName": "ui-receiving.settings",
+        "displayName": "Settings (Receiving): Can view and edit settings",
+        "visible": true,
+        "subPermissions": [
+          "ui-receiving.settings.view"
+        ]
+      },
+      {
+        "permissionName": "ui-receiving.settings.numberGenerator.manage",
+        "displayName": "Settings (Receiving): Manage number generator options",
+        "subPermissions": [
+          "settings.receiving.enabled"
+        ],
+        "visible": true
       }
     ]
   },
@@ -238,6 +265,7 @@
     "@babel/preset-react": "^7.7.4",
     "@folio/eslint-config-stripes": "^7.0.0",
     "@folio/jest-config-stripes": "^2.0.0",
+    "@folio/service-interaction": "^3.1.0",
     "@folio/stripes": "^9.0.0",
     "@folio/stripes-cli": "^3.0.0",
     "@formatjs/cli": "^6.1.3",
@@ -279,6 +307,7 @@
   },
   "peerDependencies": {
     "@folio/stripes": "^9.0.0",
+    "@folio/service-interaction": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^6.4.4",
