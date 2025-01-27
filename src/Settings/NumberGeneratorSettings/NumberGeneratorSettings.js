@@ -1,5 +1,9 @@
+import NumberGeneratorSettingsForm from './NumberGeneratorSettingsForm';
+
+const onSubmit = async () => {};
+
 const NumberGeneratorSettings = () => {
-  return (<></>);
+  return (<NumberGeneratorSettingsForm initialValues={{}} onSubmit={onSubmit} />);
 };
 
 export default NumberGeneratorSettings;

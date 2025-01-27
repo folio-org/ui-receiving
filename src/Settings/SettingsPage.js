@@ -4,13 +4,14 @@ import { FormattedMessage } from 'react-intl';
 import { Settings } from '@folio/stripes/smart-components';
 
 import { NumberGeneratorSettings } from './NumberGeneratorSettings';
+import { SETTINGS_RECEIVING_NUMBER_GENERATOR_ROUTE } from '../constants';
 
 const SettingsPage = ({ location, match, ...props }) => {
   const pages = [
     {
       component: NumberGeneratorSettings,
-      label: <FormattedMessage id="ui-receiving.settings.numberGenerator.label" />,
-      route: 'numberGeneratorOptions',
+      label: <FormattedMessage id="ui-receiving.settings.numberGenerator.options" />,
+      route: SETTINGS_RECEIVING_NUMBER_GENERATOR_ROUTE,
       perm: 'ui-receiving.settings.numberGenerator.options',
     },
   ];

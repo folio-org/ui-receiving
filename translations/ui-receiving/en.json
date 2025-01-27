@@ -285,5 +285,13 @@
   "permission.acq-units.assignment.manage": "Receiving: Manage acquisition units",
   "permission.exportCSV": "Receiving: Export search results",
 
-  "settings.numberGenerator.options": "Number generator options"
+  "settings.numberGenerator.options": "Number generator options",
+  "settings.numberGenerator.info": "Fields which are usually filled using a numeric sequence can use the number generator. When the generator is switched on the field can either be fixed to prevent manual update, or made fully editable. When switched off, the field must be filled manually.",
+  "settings.numberGenerator.barcode": "Barcode",
+  "settings.numberGenerator.accessionNumber": "Accession number",
+  "settings.numberGenerator.callNumber": "Call number",
+  "settings.numberGenerator.setManually": "Number generator off: the {number} can be filled manually only.",
+  "settings.numberGenerator.setGeneratorOrManually": "Number generator on, editable: the {number} can be filled using the generator and be edited, or filled manually.",
+  "settings.numberGenerator.setGenerator": "Number generator on, fixed: the {number} can be filled using the generator only.",
+  "settings.numberGenerator.accessionNumberEqualCallNumber": "Use the same generated number for Accession number and Call number"
 }
