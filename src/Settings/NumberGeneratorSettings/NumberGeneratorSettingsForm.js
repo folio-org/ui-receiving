@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Field, useFormState } from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
+import { upperFirst } from 'lodash';
 
 import {
   Button,
@@ -17,21 +18,20 @@ import {
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import css from './NumberGeneratorSettings.css';
+import {
+  ACCESSION_NUMBER_SETTING,
+  BARCODE_SETTING,
+  CALL_NUMBER_SETTING,
+  NUMBER_GENERATOR_OPTIONS,
+  USE_SHARED_NUMBER,
+} from '../../common/constants/numberGenerator';
 
 const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => {
   const { values } = useFormState();
 
-  const USE_TEXT_FIELD = 'useTextField';
-  const USE_GENERATOR = 'useGenerator';
-  const USE_BOTH = 'useBoth';
-
-  const ACCESSION_NUMBER_SETTING = 'accessionNumber';
-  const BARCODE_SETTING = 'barcode';
-  const CALL_NUMBER_SETTING = 'callNumber';
-
-  const USE_SHARED_NUMBER = 'useSharedNumber';
-
-  const disableSharedNumber = values?.accessionNumber === USE_TEXT_FIELD || values?.callNumber === USE_TEXT_FIELD;
+  const disableSharedNumber =
+    values?.accessionNumber === NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD ||
+    values?.callNumber === NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD;
   const disableGeneratorOffOption = values?.useSharedNumber;
 
   const paneHeader = (renderProps) => (
@@ -58,7 +58,7 @@ const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => 
   );
 
   return (
-    <Pane defaultWidth="fill" footer={paneFooter} id="vendor-code-settings" renderHeader={paneHeader}>
+    <Pane defaultWidth="fill" footer={paneFooter} id="number-generator-settings-form" renderHeader={paneHeader}>
       <Row className={css.marginBottomGutter}>
         <Col xs={12}>
           <MessageBanner>
@@ -71,27 +71,27 @@ const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => 
           <Label><FormattedMessage id="ui-receiving.settings.numberGenerator.barcode" /></Label>
           <Field
             component={RadioButton}
-            id={`${USE_TEXT_FIELD}Barcode`}
+            id={`${BARCODE_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setManually" values={{ number: 'barcode' }} />}
             name={BARCODE_SETTING}
             type="radio"
-            value={USE_TEXT_FIELD}
+            value={NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD}
           />
           <Field
             component={RadioButton}
-            id={`${USE_BOTH}Barcode`}
+            id={`${BARCODE_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_BOTH)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setGeneratorOrManually" values={{ number: 'barcode' }} />}
             name={BARCODE_SETTING}
             type="radio"
-            value={USE_BOTH}
+            value={NUMBER_GENERATOR_OPTIONS.USE_BOTH}
           />
           <Field
             component={RadioButton}
-            id={`${USE_GENERATOR}Barcode`}
+            id={`${BARCODE_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_GENERATOR)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setGenerator" values={{ number: 'barcode' }} />}
             name={BARCODE_SETTING}
             type="radio"
-            value={USE_GENERATOR}
+            value={NUMBER_GENERATOR_OPTIONS.USE_GENERATOR}
           />
         </Col>
       </Row>
@@ -102,27 +102,27 @@ const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => 
             className={disableGeneratorOffOption ? css.greyLabel : null}
             component={RadioButton}
             disabled={disableGeneratorOffOption}
-            id={`${USE_TEXT_FIELD}AccessionNumber`}
+            id={`${ACCESSION_NUMBER_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setManually" values={{ number: 'accession number' }} />}
             name={ACCESSION_NUMBER_SETTING}
             type="radio"
-            value={USE_TEXT_FIELD}
+            value={NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD}
           />
           <Field
             component={RadioButton}
-            id={`${USE_BOTH}AccessionNumber`}
+            id={`${ACCESSION_NUMBER_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_BOTH)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setGeneratorOrManually" values={{ number: 'accession number' }} />}
             name={ACCESSION_NUMBER_SETTING}
             type="radio"
-            value={USE_BOTH}
+            value={NUMBER_GENERATOR_OPTIONS.USE_BOTH}
           />
           <Field
             component={RadioButton}
-            id={`${USE_GENERATOR}AccessionNumber`}
+            id={`${ACCESSION_NUMBER_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_GENERATOR)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setGenerator" values={{ number: 'accession number' }} />}
             name={ACCESSION_NUMBER_SETTING}
             type="radio"
-            value={USE_GENERATOR}
+            value={NUMBER_GENERATOR_OPTIONS.USE_GENERATOR}
           />
         </Col>
       </Row>
@@ -133,25 +133,27 @@ const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => 
             className={disableGeneratorOffOption ? css.greyLabel : null}
             component={RadioButton}
             disabled={disableGeneratorOffOption}
-            id={`${USE_TEXT_FIELD}CallNumber`}
+            id={`${CALL_NUMBER_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setManually" values={{ number: 'call number' }} />}
             name={CALL_NUMBER_SETTING}
             type="radio"
-            value={USE_TEXT_FIELD}
+            value={NUMBER_GENERATOR_OPTIONS.USE_TEXT_FIELD}
           />
           <Field
             component={RadioButton}
+            id={`${CALL_NUMBER_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_BOTH)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setGeneratorOrManually" values={{ number: 'call number' }} />}
             name={CALL_NUMBER_SETTING}
             type="radio"
-            value={USE_BOTH}
+            value={NUMBER_GENERATOR_OPTIONS.USE_BOTH}
           />
           <Field
             component={RadioButton}
+            id={`${CALL_NUMBER_SETTING}${upperFirst(NUMBER_GENERATOR_OPTIONS.USE_GENERATOR)}`}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.setGenerator" values={{ number: 'call number' }} />}
             name={CALL_NUMBER_SETTING}
             type="radio"
-            value={USE_GENERATOR}
+            value={NUMBER_GENERATOR_OPTIONS.USE_GENERATOR}
           />
         </Col>
       </Row>
@@ -160,6 +162,7 @@ const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => 
           <Field
             component={Checkbox}
             disabled={disableSharedNumber}
+            id={USE_SHARED_NUMBER}
             label={<FormattedMessage id="ui-receiving.settings.numberGenerator.accessionNumberEqualCallNumber" />}
             name={USE_SHARED_NUMBER}
             type="checkbox"
