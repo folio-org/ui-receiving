@@ -57,7 +57,7 @@ describe('NumberGeneratorSettingsForm', () => {
     });
   });
 
-  it('should disable useSharedNumber-checkbox if clicking callNumber or accessionNumber to use manually', async () => {
+  it('should disable useSharedNumber-checkbox and show warning if clicking callNumber or accessionNumber to use manually', async () => {
     renderComponent();
 
     const callNumberUseManually = document.getElementById('callNumberUseTextField');
@@ -78,6 +78,7 @@ describe('NumberGeneratorSettingsForm', () => {
 
     await userEvent.click(accessionNumberUseManually);
     expect(useSharedNumberCheckbox).toHaveAttribute('disabled');
+    expect(screen.getByText('ui-receiving.settings.numberGenerator.accessionNumberEqualCallNumber.warning')).toBeInTheDocument();
   });
 
   it('should disable callNumber or accessionNumber to use manually if clicking useSharedNumber-checkbox', async () => {

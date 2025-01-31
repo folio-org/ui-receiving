@@ -167,6 +167,11 @@ const NumberGeneratorSettingsForm = ({ handleSubmit, pristine, submitting }) => 
             name={USE_SHARED_NUMBER}
             type="checkbox"
           />
+          {disableSharedNumber &&
+            <MessageBanner type="warning">
+              <FormattedMessage id="ui-receiving.settings.numberGenerator.accessionNumberEqualCallNumber.warning" />
+            </MessageBanner>
+          }
         </Col>
       </Row>
     </Pane>

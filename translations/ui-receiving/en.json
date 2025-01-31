@@ -290,8 +290,9 @@
   "settings.numberGenerator.barcode": "Barcode",
   "settings.numberGenerator.accessionNumber": "Accession number",
   "settings.numberGenerator.callNumber": "Call number",
-  "settings.numberGenerator.setManually": "Number generator off: the {number} can be filled manually only.",
-  "settings.numberGenerator.setGeneratorOrManually": "Number generator on, editable: the {number} can be filled using the generator and be edited, or filled manually.",
-  "settings.numberGenerator.setGenerator": "Number generator on, fixed: the {number} can be filled using the generator only.",
-  "settings.numberGenerator.accessionNumberEqualCallNumber": "Use the same generated number for Accession number and Call number"
+  "settings.numberGenerator.setManually": "Number generator off: The {number} can be filled manually only.",
+  "settings.numberGenerator.setGeneratorOrManually": "Number generator on, editable: The {number} can be filled using the generator and be edited, or filled manually.",
+  "settings.numberGenerator.setGenerator": "Number generator on, fixed: The {number} can be filled using the generator only.",
+  "settings.numberGenerator.accessionNumberEqualCallNumber": "Use the same generated number for accession number and call number",
+  "settings.numberGenerator.accessionNumberEqualCallNumber.warning": " Warning: The checkbox has been disabled because the accession number and/or the call number have been set to manual completion."
 }
