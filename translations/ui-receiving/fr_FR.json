@@ -267,6 +267,6 @@
     "piece.action.button.markLate": "Mark late",
     "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
-    "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
+    "piece.sendClaim.withIntegration.message": "Cette opération génère une demande de remboursement qui peut être consultée dans le module d'export. Poursuivre ?",
     "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
 }
