@@ -46,7 +46,7 @@ export const PieceFormActionButtons = ({
   });
   const saveButtonLabelId = 'stripes-components.saveAndClose';
   const isSaveDisabled = actionsDisabled?.[PIECE_ACTION_NAMES.saveAndClose];
-  const isActionsMenuDisabled = isSaveDisabled && actionsDisabled?.[PIECE_ACTION_NAMES.delete];
+  const isActionsMenuDisabled = isSaveDisabled && (actionsDisabled?.[PIECE_ACTION_NAMES.delete] || !isEditMode);
 
   if (actionMenu.length === 0) {
     return (
