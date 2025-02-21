@@ -1,5 +1,6 @@
 export * from './useHoldingItems';
 export * from './useItem';
+export * from './useNumberGeneratorOptions';
 export * from './useOrder';
 export * from './useOrganizationsBatch';
 export * from './usePaginatedPieces';
