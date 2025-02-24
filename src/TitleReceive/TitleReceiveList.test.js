@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form } from 'react-final-form';
 import {
   QueryClient,
@@ -8,6 +9,7 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { TitleReceiveList } from './TitleReceiveList';
 import { useNumberGeneratorOptions } from '../common/hooks';
@@ -82,5 +84,34 @@ describe('Render TitleReceiveList', () => {
     const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 
     expect(button).toBeEnabled();
+  });
+
+  it('should show the number generator modal when a number generator is enabled', async () => {
+    const setNumberGeneratorModalRecordMock = jest.fn();
+
+    jest.spyOn(React, 'useState').mockImplementationOnce((initialState) => [initialState, setNumberGeneratorModalRecordMock]);
+
+    useNumberGeneratorOptions.mockReturnValue({
+      data: {
+        [ACCESSION_NUMBER_SETTING]: GENERATOR_ON,
+        [BARCODE_SETTING]: GENERATOR_ON,
+        [CALL_NUMBER_SETTING]: GENERATOR_ON,
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    renderTitleReceiveList({
+      props: {
+        ...defaultProps.props,
+        setNumberGeneratorModalRecord: setNumberGeneratorModalRecordMock,
+      },
+    });
+
+    const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
+
+    user.click(button);
+
+    expect(setNumberGeneratorModalRecordMock).toHaveBeenCalled();
   });
 });
