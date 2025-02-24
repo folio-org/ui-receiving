@@ -1,4 +1,9 @@
 import React from 'react';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
 import { render, cleanup } from '@folio/jest-config-stripes/testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
@@ -24,21 +29,25 @@ const initialValues = {
 const poLine = { locations: [{ locationId: '001' }] };
 const locations = [{ id: '001', name: 'Annex', code: 'AN' }];
 
+const queryClient = new QueryClient();
+
 const renderTitleReceive = ({ receivingNote, paneTitle }) => (render(
   <IntlProvider locale="en">
-    <MemoryRouter>
-      <TitleReceive
-        createInventoryValues={{}}
-        initialValues={initialValues}
-        instanceId="instanceId"
-        locations={locations}
-        poLine={poLine}
-        onCancel={noop}
-        onSubmit={noop}
-        paneTitle={paneTitle}
-        receivingNote={receivingNote}
-      />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <TitleReceive
+          createInventoryValues={{}}
+          initialValues={initialValues}
+          instanceId="instanceId"
+          locations={locations}
+          poLine={poLine}
+          onCancel={noop}
+          onSubmit={noop}
+          paneTitle={paneTitle}
+          receivingNote={receivingNote}
+        />
+      </MemoryRouter>
+    </QueryClientProvider>
   </IntlProvider>,
 ));
 

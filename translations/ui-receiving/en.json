@@ -54,6 +54,14 @@
   "search.poLine.vendorDetail.referenceNumbers": "Vendor reference number",
   "search.barcode": "Barcode",
 
+  "numberGenerator.accessionAndCallNumberSequence": "Accession and call number sequence",
+  "numberGenerator.accessionNumberSequence": "Accession number sequence",
+  "numberGenerator.barcodeSequence": "Barcode sequence",
+  "numberGenerator.callNumberSequence": "Call number sequence",
+  "numberGenerator.generateForRow": "Generate numbers for row {rowIndex}",
+  "numberGenerator.generateNumbers": "Generate numbers",
+  "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead.",
+
   "filter.orderStatus": "Order status",
   "filter.vendor": "Vendor",
   "filter.orderType": "Order type",
