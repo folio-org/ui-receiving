@@ -31,7 +31,7 @@ jest.mock('@folio/service-interaction', () => {
   };
 });
 
-const renderComponent = (numberGeneratorData, useAccessionForCallNumber = false) => {
+const renderNumberGeneratorModal = (numberGeneratorData, useAccessionForCallNumber = false) => {
   render(
     <NumberGeneratorModal
       numberGeneratorData={numberGeneratorData}
@@ -48,7 +48,7 @@ const renderComponent = (numberGeneratorData, useAccessionForCallNumber = false)
 
 describe('Render NumberGeneratorModal', () => {
   it('should render modal with label', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'onEditable',
       barcode: 'onEditable',
       callNumber: 'onEditable',
@@ -59,7 +59,7 @@ describe('Render NumberGeneratorModal', () => {
   });
 
   it('should show all fields if values are "onEditable"', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'onEditable',
       barcode: 'onEditable',
       callNumber: 'onEditable',
@@ -72,7 +72,7 @@ describe('Render NumberGeneratorModal', () => {
   });
 
   it('should show all fields if values are "onNotEditable"', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'onNotEditable',
       barcode: 'onNotEditable',
       callNumber: 'onNotEditable',
@@ -85,7 +85,7 @@ describe('Render NumberGeneratorModal', () => {
   });
 
   it('should not show accessionNumber if its value is "off"', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'off',
       barcode: 'onEditable',
       callNumber: 'onEditable',
@@ -98,7 +98,7 @@ describe('Render NumberGeneratorModal', () => {
   });
 
   it('should not show barcode if its value is "off"', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'onEditable',
       barcode: 'off',
       callNumber: 'onEditable',
@@ -111,7 +111,7 @@ describe('Render NumberGeneratorModal', () => {
   });
 
   it('should not show callNumber if its value is "off"', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'onEditable',
       barcode: 'onEditable',
       callNumber: 'off',
@@ -124,7 +124,7 @@ describe('Render NumberGeneratorModal', () => {
   });
 
   it('should show one field for callNumber and accessionNumber together if useSharedNumber is "true"', () => {
-    renderComponent({
+    renderNumberGeneratorModal({
       accessionNumber: 'onEditable',
       barcode: 'onEditable',
       callNumber: 'onEditable',

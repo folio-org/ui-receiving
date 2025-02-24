@@ -154,7 +154,10 @@ const getResultFormatter = ({
     <Field
       name={BARCODE_FIELD_NAME(field, record.rowIndex)}
       component={TextField}
-      disabled={(!record.itemId && !record.isCreateItem) || numberGeneratorData[BARCODE_SETTING] === GENERATOR_ON}
+      disabled={
+        (!record.itemId && !record.isCreateItem) ||
+        numberGeneratorData[BARCODE_SETTING] === GENERATOR_ON
+      }
       marginBottom0
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.barcode' })}
       fullWidth
@@ -213,7 +216,10 @@ const getResultFormatter = ({
     <Field
       name={CALL_NUMBER_FIELD_NAME(field, record.rowIndex)}
       component={TextField}
-      disabled={(!record.itemId && !record.isCreateItem) || numberGeneratorData[CALL_NUMBER_SETTING] === GENERATOR_ON}
+      disabled={
+        (!record.itemId && !record.isCreateItem) ||
+        numberGeneratorData[CALL_NUMBER_SETTING] === GENERATOR_ON
+      }
       marginBottom0
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.callNumber' })}
       fullWidth
@@ -274,18 +280,17 @@ const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
   actions: <FormattedMessage id="ui-receiving.button.actions" />,
 });
 
-export const TitleReceiveList = ({
-  fields,
-  props: {
-    crossTenant,
-    createInventoryValues,
+export const TitleReceiveList = ({ fields, props }) => {
+  const {
+    crossTenant = false,
+    createInventoryValues = {},
     instanceId,
-    selectLocation,
-    toggleCheckedAll,
-    locations,
-    poLineLocationIds,
-  },
-}) => {
+    selectLocation = () => {},
+    toggleCheckedAll = () => {},
+    locations = [],
+    poLineLocationIds = [],
+  } = props || {};
+
   const intl = useIntl();
   const { change } = useForm();
   const { data: numberGeneratorData } = useNumberGeneratorOptions();

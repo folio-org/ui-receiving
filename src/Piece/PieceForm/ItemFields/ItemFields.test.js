@@ -25,7 +25,7 @@ jest.mock('../../../common/hooks', () => ({
 }));
 
 const queryClient = new QueryClient();
-const renderComponent = (props = {}) => {
+const renderItemFields = (props = {}) => {
   return render(
     <QueryClientProvider client={queryClient}>
       <Form
@@ -50,28 +50,28 @@ describe('Render ItemFields with number generator settings "on"', () => {
   });
 
   it('should render all input fields', () => {
-    renderComponent();
+    renderItemFields();
     expect(screen.getByLabelText('ui-receiving.piece.barcode')).toBeInTheDocument();
     expect(screen.getByLabelText('ui-receiving.piece.callNumber')).toBeInTheDocument();
     expect(screen.getByLabelText('ui-receiving.piece.accessionNumber')).toBeInTheDocument();
   });
 
   it('should disable all fields if disabled prop is true', () => {
-    renderComponent({ disabled: true });
+    renderItemFields({ disabled: true });
     expect(screen.getByLabelText('ui-receiving.piece.barcode')).toBeDisabled();
     expect(screen.getByLabelText('ui-receiving.piece.callNumber')).toBeDisabled();
     expect(screen.getByLabelText('ui-receiving.piece.accessionNumber')).toBeDisabled();
   });
 
   it('should enabled the fields with number generator setting "onNotEditable"', () => {
-    renderComponent({ disabled: false });
+    renderItemFields({ disabled: false });
     expect(screen.getByLabelText('ui-receiving.piece.barcode')).toBeDisabled();
     expect(screen.getByLabelText('ui-receiving.piece.callNumber')).toBeEnabled();
     expect(screen.getByLabelText('ui-receiving.piece.accessionNumber')).toBeEnabled();
   });
 
   it('should enabled the generateNumbers button', async () => {
-    renderComponent({
+    renderItemFields({
       disabled: false,
     });
 
@@ -96,14 +96,14 @@ describe('Render ItemFields with all number generator settings "off"', () => {
   });
 
   it('should render all input fields', () => {
-    renderComponent();
+    renderItemFields();
     expect(screen.getByLabelText('ui-receiving.piece.barcode')).toBeInTheDocument();
     expect(screen.getByLabelText('ui-receiving.piece.callNumber')).toBeInTheDocument();
     expect(screen.getByLabelText('ui-receiving.piece.accessionNumber')).toBeInTheDocument();
   });
 
   it('should disable the generateNumbers button', () => {
-    renderComponent({
+    renderItemFields({
       disabled: false,
     });
 

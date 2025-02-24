@@ -1,7 +1,13 @@
 import { Form } from 'react-final-form';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import { TitleReceiveList } from './TitleReceiveList';
 import { useNumberGeneratorOptions } from '../common/hooks';
@@ -25,7 +31,6 @@ const defaultProps = {
   props: {
     crossTenant: false,
     createInventoryValues: {},
-    instanceId: '123',
     selectLocation: jest.fn(),
     toggleCheckedAll: jest.fn(),
     poLineLocationIds: [],
@@ -34,7 +39,7 @@ const defaultProps = {
 };
 
 const queryClient = new QueryClient();
-const renderComponent = (props = {}) => {
+const renderTitleReceiveList = (props = {}) => {
   return render(
     <QueryClientProvider client={queryClient}>
       <Form onSubmit={() => {}} render={() => <TitleReceiveList {...defaultProps} {...props} />} />
@@ -54,7 +59,7 @@ describe('Render TitleReceiveList', () => {
       error: null,
     });
 
-    renderComponent();
+    renderTitleReceiveList();
 
     const button = screen.queryByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 
@@ -72,7 +77,7 @@ describe('Render TitleReceiveList', () => {
       error: null,
     });
 
-    renderComponent();
+    renderTitleReceiveList();
 
     const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 
