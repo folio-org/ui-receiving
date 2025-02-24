@@ -21,6 +21,14 @@ const defaultProps = {
   toggleColumn: jest.fn(),
 };
 
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorSelector: jest.fn(() => null),
+  useGenerateNumber: jest.fn(() => ({
+    generate: jest.fn(),
+    isLoading: false,
+  })),
+}));
+
 const renderTitleDetailsReceivedActions = (props = defaultProps) => (render(
   <TitleDetailsReceivedActions
     {...props}
