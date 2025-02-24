@@ -210,6 +210,50 @@ describe('Render NumberGeneratorModal', () => {
     });
   });
 
+  it('should call generateCallNumber when the sequence is selected', async () => {
+    callback.mockClear();
+    mockOnClick.mockClear();
+    const mockNumberGeneratorData = {
+      accessionNumber: 'off',
+      barcode: 'off',
+      callNumber: 'onEditable',
+      useSharedNumber: false,
+    };
+
+    renderNumberGeneratorModal(mockNumberGeneratorData);
+
+    user.click(screen.getByText('ChangeSelector'));
+
+    user.click(screen.getByText('ui-receiving.numberGenerator.generateNumbers'));
+
+    await waitFor(() => {
+      expect(mockGenerate).toHaveBeenCalled();
+      expect(mockGenerate).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should call generateBarcode when the sequence is selected', async () => {
+    callback.mockClear();
+    mockOnClick.mockClear();
+    const mockNumberGeneratorData = {
+      accessionNumber: 'off',
+      barcode: 'onEditable',
+      callNumber: 'off',
+      useSharedNumber: false,
+    };
+
+    renderNumberGeneratorModal(mockNumberGeneratorData);
+
+    user.click(screen.getByText('ChangeSelector'));
+
+    user.click(screen.getByText('ui-receiving.numberGenerator.generateNumbers'));
+
+    await waitFor(() => {
+      expect(mockGenerate).toHaveBeenCalled();
+      expect(mockGenerate).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it('should call generateAccessionNumber and generateCallNumber when useSharedNumber is true', async () => {
     callback.mockClear();
     mockOnClick.mockClear();
@@ -228,32 +272,6 @@ describe('Render NumberGeneratorModal', () => {
 
     await waitFor(() => {
       expect(mockGenerate).toHaveBeenCalled();
-      expect(mockGenerate).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  it('should call generateBarcode and generateCallNumber when the sequences are selected', async () => {
-    callback.mockClear();
-    mockOnClick.mockClear();
-    const mockNumberGeneratorData = {
-      accessionNumber: 'off',
-      barcode: 'onEditable',
-      callNumber: 'onEditable',
-      useSharedNumber: false,
-    };
-
-    renderNumberGeneratorModal(mockNumberGeneratorData);
-
-    const changeSelectorButtons = screen.getAllByText('ChangeSelector');
-
-    // selector for barcode
-    user.click(changeSelectorButtons[0]);
-    // selector for callNumber
-    user.click(changeSelectorButtons[1]);
-
-    user.click(screen.getByText('ui-receiving.numberGenerator.generateNumbers'));
-
-    await waitFor(() => {
       expect(mockGenerate).toHaveBeenCalledTimes(2);
     });
   });
