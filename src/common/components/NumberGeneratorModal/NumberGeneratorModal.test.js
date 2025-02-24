@@ -1,53 +1,103 @@
 import {
   render,
   screen,
+  waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import user from '@folio/jest-config-stripes/testing-library/user-event';
+import { Button as MockButton } from '@folio/stripes/components';
 
 import NumberGeneratorModal from './NumberGeneratorModal';
+
+const callback = jest.fn();
+const mockOnClick = jest.fn();
 
 const mockOnClose = jest.fn();
 const mockOnGenerateAccessionNumber = jest.fn();
 const mockOnGenerateBarcode = jest.fn();
 const mockOnGenerateCallNumber = jest.fn();
 
+const mockGenerate = jest.fn(() => {
+  return jest.fn(() => {
+    callback();
+  });
+});
+
 jest.mock('@folio/service-interaction', () => {
   const mockUseGenerateNumber = jest.fn(() => ({
-    generate: jest.fn(),
+    generate: mockGenerate,
   }));
+
+  const numberGenerator1 = {
+    id: 'number-generator-1',
+    code: 'numberGen1',
+    name: 'Number generator 1',
+    sequences: [
+      {
+        id: 'ng1-seq1',
+        code: 'seq1.1',
+        description: 'this is a description',
+        name: 'sequence 1.1',
+        nextValue: 1,
+        outputTemplate: 'sequence-1.1-1-2',
+        owner: {
+          id: 'number-generator-1',
+        },
+        enabled: true,
+      },
+    ],
+  };
 
   return {
     NumberGeneratorSelector: ({ onSequenceChange, label }) => (
       <div>
-        {label}
-        <button
-          type="button"
-          onClick={() => onSequenceChange({ code: 'seq1' })}
+        {label || 'NumberGeneratorSelector'}
+        <MockButton
+          onClick={() => onSequenceChange(numberGenerator1.sequences[0])}
         >
           ChangeSelector
-        </button>
+        </MockButton>
       </div>
     ),
     useGenerateNumber: mockUseGenerateNumber,
   };
 });
 
-const renderNumberGeneratorModal = (numberGeneratorData, useAccessionForCallNumber = false) => {
+jest.mock('../NumberGeneratorButton', () => ({ callback: callbackProp, sequence }) => (
+  <MockButton
+    disabled={sequence === ''}
+    onClick={() => {
+      mockOnClick();
+      callbackProp();
+    }}
+  >
+    NumberGeneratorButton
+  </MockButton>
+));
+
+const NumberGeneratorModalProps = {
+  callback,
+  generator: 'numberGen1',
+  id: 'test',
+  label: 'test label',
+  modalLabel: 'Number Generator',
+  open: true,
+  onClose: mockOnClose,
+  onGenerateAccessionNumber: mockOnGenerateAccessionNumber,
+  onGenerateBarcode: mockOnGenerateBarcode,
+  onGenerateCallNumber: mockOnGenerateCallNumber,
+};
+
+const renderNumberGeneratorModal = (numberGeneratorData) => {
   render(
     <NumberGeneratorModal
+      {...NumberGeneratorModalProps}
       numberGeneratorData={numberGeneratorData}
-      modalLabel="Number Generator Modal"
-      onClose={mockOnClose}
-      onGenerateAccessionNumber={mockOnGenerateAccessionNumber}
-      onGenerateBarcode={mockOnGenerateBarcode}
-      onGenerateCallNumber={mockOnGenerateCallNumber}
-      open
-      useAccessionForCallNumber={useAccessionForCallNumber}
     />,
   );
 };
 
 describe('Render NumberGeneratorModal', () => {
-  it('should render modal with label', () => {
+  it('should render modal with label and help text', () => {
     renderNumberGeneratorModal({
       accessionNumber: 'onEditable',
       barcode: 'onEditable',
@@ -55,7 +105,8 @@ describe('Render NumberGeneratorModal', () => {
       useSharedNumber: false,
     });
 
-    expect(screen.getByText('Number Generator Modal')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.numberGenerator.generateNumbers')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.numberGenerator.generateHelpText')).toBeInTheDocument();
   });
 
   it('should show all fields if values are "onEditable"', () => {
@@ -135,5 +186,26 @@ describe('Render NumberGeneratorModal', () => {
     expect(screen.getByText('ui-receiving.numberGenerator.barcodeSequence')).toBeInTheDocument();
     expect(screen.queryByText('ui-receiving.numberGenerator.accessionNumberSequence')).not.toBeInTheDocument();
     expect(screen.queryByText('ui-receiving.numberGenerator.callNumberSequence')).not.toBeInTheDocument();
+  });
+
+  it('should call generateAccessionNumber when the sequence is selected', async () => {
+    callback.mockClear();
+    mockOnClick.mockClear();
+    const mockNumberGeneratorData = {
+      accessionNumber: 'onEditable',
+      barcode: 'off',
+      callNumber: 'off',
+      useSharedNumber: false,
+    };
+
+    renderNumberGeneratorModal(mockNumberGeneratorData);
+
+    user.click(screen.getByText('ChangeSelector'));
+
+    user.click(screen.getByText('ui-receiving.numberGenerator.generateNumbers'));
+
+    await waitFor(() => {
+      expect(mockGenerate).toHaveBeenCalled();
+    });
   });
 });
