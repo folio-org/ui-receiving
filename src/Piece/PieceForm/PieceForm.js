@@ -419,6 +419,7 @@ export default stripesFinalForm({
   subscription: {
     hasValidationErrors: true,
     values: true,
+    errors: true,
   },
   mutators: {
     setLocationValue: setLocationValueFormMutator,

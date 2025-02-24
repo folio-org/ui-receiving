@@ -7,6 +7,7 @@
 * *Breaking* Update "Send claim" action to use `pieces.send-claims` interface. Refs UIREC-412.
 * Add permissions to view claims. Refs UIREC-430.
 * Migrate to shared GA workflows. Refs UIREC-431.
+* Fix disable state on Piece form. Refs UIREC-428.
 
 ## [6.0.6](https://github.com/folio-org/ui-receiving/tree/v6.0.6) (2025-01-06)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.5...v6.0.6)
