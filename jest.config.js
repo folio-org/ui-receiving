@@ -9,4 +9,7 @@ module.exports = {
     ...acqConfig.setupFiles,
     path.join(__dirname, './test/jest/setupFiles.js'),
   ],
+  transformIgnorePatterns: [
+    '/node_modules/(?!@k-int/stripes-kint-components|@folio/.*|ky/.*|uuid/.*)',
+  ],
 };
