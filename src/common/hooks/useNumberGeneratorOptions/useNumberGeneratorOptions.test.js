@@ -38,16 +38,19 @@ const mockData = {
 
 describe('useNumberGeneratorOptions', () => {
   beforeEach(() => {
-    useOkapiKy
-      .mockClear()
-      .mockReturnValue({
-        get: () => ({
-          json: () => Promise.resolve({ settings: [mockData] }),
-        }),
-      });
+    queryClient.clear();
+    useOkapiKy.mockClear();
   });
 
   it('should fetch and normalize number generator options', async () => {
+    useOkapiKy
+      .mockClear()
+      .mockReturnValue({
+        get: jest.fn(() => ({
+          json: jest.fn().mockResolvedValue({ settings: [mockData] }),
+        })),
+      });
+
     const { result } = renderHook(() => useNumberGeneratorOptions(), { wrapper });
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy());
@@ -56,5 +59,47 @@ describe('useNumberGeneratorOptions', () => {
       isLoading: false,
       data: NUMBER_GENERATOR,
     }));
+  });
+
+  it('should return default values when data is missing', async () => {
+    useOkapiKy
+      .mockClear()
+      .mockReturnValue({
+        get: jest.fn(() => ({
+          json: jest.fn().mockResolvedValue({ settings: [{ }] }),
+        })),
+      });
+
+    const { result } = renderHook(() => useNumberGeneratorOptions(), { wrapper });
+
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy());
+
+    expect(result.current.data).toEqual({
+      accessionNumber: '',
+      barcode: '',
+      callNumber: '',
+      useSharedNumber: false,
+    });
+  });
+
+  it('should handle partial data', async () => {
+    useOkapiKy
+      .mockClear()
+      .mockReturnValue({
+        get: jest.fn(() => ({
+          json: jest.fn().mockResolvedValue({ settings: [{ value: JSON.stringify({ accessionNumber: '1234' }) }] }),
+        })),
+      });
+
+    const { result } = renderHook(() => useNumberGeneratorOptions(), { wrapper });
+
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy());
+
+    expect(result.current.data).toEqual({
+      accessionNumber: '1234',
+      barcode: '',
+      callNumber: '',
+      useSharedNumber: false,
+    });
   });
 });
