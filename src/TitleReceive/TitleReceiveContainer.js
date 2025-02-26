@@ -56,7 +56,7 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const instanceId = title?.instanceId;
 
-  const { receive } = useReceive();
+  const { receive } = useReceive({ tenantId: targetTenantId });
 
   const onCancel = useCallback(
     () => {

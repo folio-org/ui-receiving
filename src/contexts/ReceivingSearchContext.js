@@ -62,7 +62,10 @@ export const ReceivingSearchContextProvider = ({ children }) => {
   const {
     data,
     isDefaultReceivingSearchSettingsLoading,
-  } = useDefaultReceivingSearchSettings({ enabled: isCentralOrderingEnabled });
+  } = useDefaultReceivingSearchSettings({
+    enabled: isCentralOrderingEnabled,
+    keepPreviousData: true,
+  });
 
   const defaultReceivingSearchSetting = data?.value;
 

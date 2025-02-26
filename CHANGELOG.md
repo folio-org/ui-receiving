@@ -8,6 +8,7 @@
 * Add permissions to view claims. Refs UIREC-430.
 * Migrate to shared GA workflows. Refs UIREC-431.
 * Fix disable state on Piece form. Refs UIREC-428.
+* Provide target tenant to piece mutations. Fixes UIREC-422.
 * *BREAKING* Migrate stripes dependencies to their Sunflower versions. Refs UIREC-432.
 * *BREAKING* Migrate `react-intl` to v7. Refs UIREC-433.
 
