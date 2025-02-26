@@ -47,7 +47,7 @@ export const TitleBindPiecesContainer = () => {
   const [open, toggleOpen] = useToggle(false);
   const [listOfOpenRequests, setListOfOpenRequests] = useState([]);
   const [bindPieceData, setBindPieceData] = useState({});
-  const { bindPieces, isBinding } = useBindPiecesMutation();
+  const { bindPieces, isBinding } = useBindPiecesMutation({ tenantId: targetTenantId });
 
   const {
     isLoading,

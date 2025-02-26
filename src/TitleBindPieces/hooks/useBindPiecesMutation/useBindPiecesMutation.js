@@ -4,8 +4,9 @@ import { useOkapiKy } from '@folio/stripes/core';
 
 import { BIND_PIECES_API } from '../../../common/constants';
 
-export const useBindPiecesMutation = () => {
-  const ky = useOkapiKy();
+export const useBindPiecesMutation = (options = {}) => {
+  const { tenantId } = options;
+  const ky = useOkapiKy({ tenant: tenantId });
 
   const createMutationFn = (value) => {
     return ky.post(BIND_PIECES_API, {
