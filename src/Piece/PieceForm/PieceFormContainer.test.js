@@ -42,6 +42,7 @@ jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => j
 jest.mock('../../common/hooks', () => ({
   ...jest.requireActual('../../common/hooks'),
   useHoldingItems: jest.fn(),
+  useNumberGeneratorOptions: jest.fn(() => ({ data: [] })),
   useOrder: jest.fn(),
   usePieceMutator: jest.fn(),
   usePieces: jest.fn(),
@@ -234,28 +235,28 @@ describe('PieceFormContainer', () => {
     }));
   });
 
-  // it('should handle "Send claim" action with claiming integration', async () => {
-  //   kyMock.get.mockReturnValueOnce({ json: () => Promise.resolve({ configs: [{ value: 'val' }] }) });
+  it('should handle "Send claim" action with claiming integration', async () => {
+    kyMock.get.mockReturnValueOnce({ json: () => Promise.resolve({ configs: [{ value: 'val' }] }) });
 
-  //   renderPieceFormContainer();
+    renderPieceFormContainer();
 
-  //   await user.click(await screen.findByTestId('dropdown-trigger-button'));
-  //   await user.click(screen.getByTestId('send-claim-button'));
+    await user.click(await screen.findByTestId('dropdown-trigger-button'));
+    await user.click(screen.getByTestId('send-claim-button'));
 
-  //   expect(screen.getByText('ui-receiving.piece.sendClaim.withIntegration.message')).toBeInTheDocument();
+    expect(screen.getByText('ui-receiving.piece.sendClaim.withIntegration.message')).toBeInTheDocument();
 
-  //   await user.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
-  //   await user.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
+    await user.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    await user.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
 
-  //   expect(sendClaims).toHaveBeenCalledWith({
-  //     data: {
-  //       claimingInterval: 3,
-  //       externalNote: undefined,
-  //       internalNote: undefined,
-  //       claimingPieceIds: ['piece-id'],
-  //     },
-  //   });
-  // });
+    expect(sendClaims).toHaveBeenCalledWith({
+      data: {
+        claimingInterval: 3,
+        externalNote: undefined,
+        internalNote: undefined,
+        claimingPieceIds: ['piece-id'],
+      },
+    });
+  });
 
   it('should handle "Send claim" action without claiming integration', async () => {
     renderPieceFormContainer();
