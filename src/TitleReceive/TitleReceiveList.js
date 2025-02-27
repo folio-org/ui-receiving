@@ -71,9 +71,9 @@ const visibleColumns = [
   PIECE_COLUMNS.supplement,
 ];
 
-const ACCESSION_NUMBER_FIELD_NAME = (field, index) => `${field}[${index}].accessionNumber`;
-const BARCODE_FIELD_NAME = (field, index) => `${field}[${index}].barcode`;
-const CALL_NUMBER_FIELD_NAME = (field, index) => `${field}[${index}].callNumber`;
+const accessionNumberFieldName = (field, index) => `${field}[${index}].accessionNumber`;
+const barcodeFieldName = (field, index) => `${field}[${index}].barcode`;
+const callNumberFieldName = (field, index) => `${field}[${index}].callNumber`;
 
 const columnWidths = {
   location: '250px',
@@ -139,7 +139,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.accessionNumber]: record => (
     <Field
-      name={ACCESSION_NUMBER_FIELD_NAME(field, record.rowIndex)}
+      name={accessionNumberFieldName(field, record.rowIndex)}
       component={TextField}
       disabled={
         (!record.itemId && !record.isCreateItem) ||
@@ -152,7 +152,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.barcode]: record => (
     <Field
-      name={BARCODE_FIELD_NAME(field, record.rowIndex)}
+      name={barcodeFieldName(field, record.rowIndex)}
       component={TextField}
       disabled={
         (!record.itemId && !record.isCreateItem) ||
@@ -214,7 +214,7 @@ const getResultFormatter = ({
   },
   [PIECE_COLUMNS.callNumber]: record => (
     <Field
-      name={CALL_NUMBER_FIELD_NAME(field, record.rowIndex)}
+      name={callNumberFieldName(field, record.rowIndex)}
       component={TextField}
       disabled={
         (!record.itemId && !record.isCreateItem) ||
@@ -384,13 +384,13 @@ export const TitleReceiveList = ({ fields, props }) => {
         open={!!numberGeneratorModalRecord}
         onClose={() => setNumberGeneratorModalRecord()}
         onGenerateAccessionNumber={val => {
-          change(ACCESSION_NUMBER_FIELD_NAME(field, numberGeneratorModalRecord.rowIndex), val);
+          change(accessionNumberFieldName(field, numberGeneratorModalRecord.rowIndex), val);
         }}
         onGenerateBarcode={val => {
-          change(BARCODE_FIELD_NAME(field, numberGeneratorModalRecord.rowIndex), val);
+          change(barcodeFieldName(field, numberGeneratorModalRecord.rowIndex), val);
         }}
         onGenerateCallNumber={val => {
-          change(CALL_NUMBER_FIELD_NAME(field, numberGeneratorModalRecord.rowIndex), val);
+          change(callNumberFieldName(field, numberGeneratorModalRecord.rowIndex), val);
         }}
       />
     </>
