@@ -1,5 +1,13 @@
 import PropTypes from 'prop-types';
-import { Field, useFormState } from 'react-final-form';
+import {
+  useMemo,
+  useState,
+} from 'react';
+import {
+  Field,
+  useForm,
+  useFormState,
+} from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -12,10 +20,48 @@ import {
 } from '@folio/stripes/components';
 import { getItemStatusLabel } from '@folio/stripes-acq-components';
 
+import {
+  NumberGeneratorButton,
+  NumberGeneratorModal,
+} from '../../../common/components';
+import {
+  ACCESSION_NUMBER_SETTING,
+  BARCODE_SETTING,
+  CALL_NUMBER_SETTING,
+  GENERATOR_ON_EDITABLE,
+  GENERATOR_ON,
+} from '../../../common/constants';
+import { useNumberGeneratorOptions } from '../../../common/hooks';
+
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
 export const ItemFields = ({ disabled }) => {
   const { values } = useFormState();
+  const { change } = useForm();
+
+  const { data: numberGeneratorData } = useNumberGeneratorOptions();
+
+  const barcodeFieldDisabled = useMemo(() => {
+    return disabled || numberGeneratorData[BARCODE_SETTING] === GENERATOR_ON;
+  }, [numberGeneratorData, disabled]);
+
+  const callNumberFieldDisabled = useMemo(() => {
+    return disabled || numberGeneratorData[CALL_NUMBER_SETTING] === GENERATOR_ON;
+  }, [numberGeneratorData, disabled]);
+
+  const accessionNumberFieldDisabled = useMemo(() => {
+    return disabled || numberGeneratorData[ACCESSION_NUMBER_SETTING] === GENERATOR_ON;
+  }, [numberGeneratorData, disabled]);
+
+  const [openGenerateModal, setOpenGenerateModal] = useState(false);
+
+  const isNumberGeneratorButtonDisabled = numberGeneratorData &&
+    numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON &&
+    numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON_EDITABLE &&
+    numberGeneratorData[ACCESSION_NUMBER_SETTING] !== GENERATOR_ON &&
+    numberGeneratorData[ACCESSION_NUMBER_SETTING] !== GENERATOR_ON_EDITABLE &&
+    numberGeneratorData[CALL_NUMBER_SETTING] !== GENERATOR_ON &&
+    numberGeneratorData[CALL_NUMBER_SETTING] !== GENERATOR_ON_EDITABLE;
 
   return (
     <>
@@ -28,7 +74,7 @@ export const ItemFields = ({ disabled }) => {
             name={PIECE_FORM_FIELD_NAMES.barcode}
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.barcode" />}
-            disabled={disabled}
+            disabled={barcodeFieldDisabled}
             fullWidth
           />
         </Col>
@@ -40,7 +86,7 @@ export const ItemFields = ({ disabled }) => {
             name={PIECE_FORM_FIELD_NAMES.callNumber}
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.callNumber" />}
-            disabled={disabled}
+            disabled={callNumberFieldDisabled}
             fullWidth
           />
         </Col>
@@ -52,8 +98,24 @@ export const ItemFields = ({ disabled }) => {
             name={PIECE_FORM_FIELD_NAMES.accessionNumber}
             component={TextField}
             label={<FormattedMessage id="ui-receiving.piece.accessionNumber" />}
-            disabled={disabled}
+            disabled={accessionNumberFieldDisabled}
             fullWidth
+          />
+        </Col>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <KeyValue
+            label={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
+            value={
+              <NumberGeneratorButton
+                disabled={disabled || isNumberGeneratorButtonDisabled}
+                onClick={() => setOpenGenerateModal(true)}
+                tooltipId="generate-numbers-btn"
+                tooltipLabel={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
+              />
+            }
           />
         </Col>
       </Row>
@@ -82,6 +144,21 @@ export const ItemFields = ({ disabled }) => {
           />
         </Col>
       </Row>
+      <NumberGeneratorModal
+        numberGeneratorData={numberGeneratorData}
+        modalLabel={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
+        open={openGenerateModal}
+        onClose={() => setOpenGenerateModal(false)}
+        onGenerateAccessionNumber={val => {
+          change('accessionNumber', val);
+        }}
+        onGenerateBarcode={val => {
+          change('barcode', val);
+        }}
+        onGenerateCallNumber={val => {
+          change('callNumber', val);
+        }}
+      />
     </>
   );
 };

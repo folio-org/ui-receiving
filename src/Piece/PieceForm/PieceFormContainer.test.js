@@ -42,6 +42,7 @@ jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => j
 jest.mock('../../common/hooks', () => ({
   ...jest.requireActual('../../common/hooks'),
   useHoldingItems: jest.fn(),
+  useNumberGeneratorOptions: jest.fn(() => ({ data: [] })),
   useOrder: jest.fn(),
   usePieceMutator: jest.fn(),
   usePieces: jest.fn(),
