@@ -268,5 +268,12 @@
     "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
     "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
-    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?",
+    "numberGenerator.accessionAndCallNumberSequence": "Kolejność numeru dowodu wpływu i sygnatury",
+    "numberGenerator.accessionNumberSequence": "Kolejność numeru dowodu wpływu",
+    "numberGenerator.barcodeSequence": "Kolejność kodu kreskowego",
+    "numberGenerator.callNumberSequence": "Kolejność sygnatury",
+    "numberGenerator.generateForRow": "Wygeneruj liczby dla wiersza {rowIndex}",
+    "numberGenerator.generateNumbers": "Generuj liczby",
+    "numberGenerator.generateHelpText": "Wybrane sekwencje zostaną użyte do wygenerowania nowych liczb. Wybierz „Generuj liczby” aby kontynuować."
 }
