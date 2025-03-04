@@ -268,5 +268,12 @@
     "errors.cannotFindPiecesWithLatestStatusToProcess": "A peça deve ter status \"Atrasado\" para ser processada.",
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Não é possível gerar reclamações porque não existem integrações de reclamações para a organização.",
     "piece.sendClaim.withIntegration.message": "Isso gerará uma reclamação que pode ser visualizado no Gerenciador de Exportação. Continuar?",
-    "piece.sendClaim.withoutIntegration.message": "Não existe nenhuma integração de reclamação para esta organização. A peça será definida para o status \"Reclamação enviada\". Continuar?"
+    "piece.sendClaim.withoutIntegration.message": "Não existe nenhuma integração de reclamação para esta organização. A peça será definida para o status \"Reclamação enviada\". Continuar?",
+    "numberGenerator.accessionAndCallNumberSequence": "Sequência de acesso e número de chamada",
+    "numberGenerator.accessionNumberSequence": "Sequência do número de acesso",
+    "numberGenerator.barcodeSequence": "Sequência de código de barras",
+    "numberGenerator.callNumberSequence": "Sequência de números de chamada",
+    "numberGenerator.generateForRow": "Gerar números para a linha {rowIndex}",
+    "numberGenerator.generateNumbers": "Gerar números",
+    "numberGenerator.generateHelpText": "As sequências selecionadas serão usadas para gerar novos números. Selecione \"Gerar números\" para prosseguir."
 }

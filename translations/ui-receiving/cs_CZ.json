@@ -197,7 +197,7 @@
     "errors.piecePolMismatch": "Kus neodpovídá řádku NO",
     "errors.pieceUpdateFailed": "Záznam kusu se nepodařilo aktualizovat",
     "errors.titleNotFound": "Přijímané názvy se nepodařilo nalézt",
-    "piece.accessionNumber": "Přístupové číslo",
+    "piece.accessionNumber": "Přírůstkové číslo",
     "title.claimingActive": "Nárokování je aktivní",
     "title.claimingInterval": "Interval reklamace",
     "piece.action.button.saveAndCreateAnother": "Uložit a vytvořit další",
@@ -264,9 +264,16 @@
     "piece.accordion.originalItemDetails": "Detaily jednotky (originál)",
     "piece.pieceForm.edit.title": "Upravit kus",
     "piece.pieceForm.create.title": "Přidat kus",
-    "piece.action.button.markLate": "Mark late",
-    "errors.cannotFindPiecesWithLatestStatusToProcess": "The piece must have \"Late\" status to process.",
+    "piece.action.button.markLate": "Označit jako zpožděné",
+    "errors.cannotFindPiecesWithLatestStatusToProcess": "Pro zpracování musí mít kus stav „Pozdní“.",
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
     "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
-    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?"
+    "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?",
+    "numberGenerator.accessionAndCallNumberSequence": "Accession and call number sequence",
+    "numberGenerator.accessionNumberSequence": "Accession number sequence",
+    "numberGenerator.barcodeSequence": "Barcode sequence",
+    "numberGenerator.callNumberSequence": "Call number sequence",
+    "numberGenerator.generateForRow": "Generate numbers for row {rowIndex}",
+    "numberGenerator.generateNumbers": "Generate numbers",
+    "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead."
 }
