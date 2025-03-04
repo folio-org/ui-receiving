@@ -21,8 +21,9 @@ const parseAndNormalizeNumberGeneratorData = (data) => {
   };
 };
 
-export const useNumberGeneratorOptions = () => {
-  const ky = useOkapiKy();
+export const useNumberGeneratorOptions = (options = {}) => {
+  const { tenantId } = options;
+  const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace('number-generator-options');
 
   const searchParams = {
@@ -35,9 +36,9 @@ export const useNumberGeneratorOptions = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: [namespace],
-    queryFn: async () => {
-      const response = await ky.get(ORDERS_STORAGE_SETTINGS_API, { searchParams }).json();
+    queryKey: [namespace, tenantId],
+    queryFn: async ({ signal }) => {
+      const response = await ky.get(ORDERS_STORAGE_SETTINGS_API, { searchParams, signal }).json();
 
       if (!response?.settings || !Array.isArray(response.settings)) {
         return null;
