@@ -32,14 +32,16 @@ import {
   GENERATOR_ON,
 } from '../../../common/constants';
 import { useNumberGeneratorOptions } from '../../../common/hooks';
-
+import { useReceivingSearchContext } from '../../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
 export const ItemFields = ({ disabled }) => {
+  const { targetTenantId } = useReceivingSearchContext();
+
   const { values } = useFormState();
   const { change } = useForm();
 
-  const { data: numberGeneratorData } = useNumberGeneratorOptions();
+  const { data: numberGeneratorData } = useNumberGeneratorOptions({ tenantId: targetTenantId });
 
   const barcodeFieldDisabled = useMemo(() => {
     return disabled || numberGeneratorData[BARCODE_SETTING] === GENERATOR_ON;

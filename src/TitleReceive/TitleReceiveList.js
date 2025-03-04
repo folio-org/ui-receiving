@@ -44,6 +44,7 @@ import {
   GENERATOR_ON,
 } from '../common/constants';
 import { useNumberGeneratorOptions } from '../common/hooks';
+import { useReceivingSearchContext } from '../contexts';
 import {
   PIECE_COLUMN_MAPPING,
   PIECE_COLUMNS,
@@ -293,7 +294,8 @@ export const TitleReceiveList = ({ fields, props }) => {
 
   const intl = useIntl();
   const { change } = useForm();
-  const { data: numberGeneratorData } = useNumberGeneratorOptions();
+  const { targetTenantId } = useReceivingSearchContext();
+  const { data: numberGeneratorData } = useNumberGeneratorOptions({ tenantId: targetTenantId });
 
   const [numberGeneratorModalRecord, setNumberGeneratorModalRecord] = useState();
 
