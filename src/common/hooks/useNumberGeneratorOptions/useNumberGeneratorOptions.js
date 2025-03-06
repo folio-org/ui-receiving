@@ -24,7 +24,7 @@ const parseAndNormalizeNumberGeneratorData = (data) => {
 export const useNumberGeneratorOptions = (options = {}) => {
   const { tenantId } = options;
   const ky = useOkapiKy({ tenant: tenantId });
-  const [namespace] = useNamespace('number-generator-options');
+  const [namespace] = useNamespace({ key: 'number-generator-options' });
 
   const searchParams = {
     limit: 1,
