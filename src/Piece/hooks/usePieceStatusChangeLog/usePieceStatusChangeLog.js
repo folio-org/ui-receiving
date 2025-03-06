@@ -25,7 +25,7 @@ export const usePieceStatusChangeLog = (pieceId, options = {}) => {
   } = options;
 
   const ky = useOkapiKy({ tenant: tenantId });
-  const [namespace] = useNamespace('piece-status-changelog');
+  const [namespace] = useNamespace({ key: 'piece-status-changelog' });
 
   const searchParams = {
     limit: LIMIT_MAX,

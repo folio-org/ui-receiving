@@ -14,7 +14,7 @@ export const useTitle = (titleId, options = {}) => {
   } = options;
 
   const ky = useOkapiKy({ tenant: tenantId });
-  const [namespace] = useNamespace('receiving-title');
+  const [namespace] = useNamespace({ key: 'receiving-title' });
 
   const {
     data,
