@@ -9,7 +9,7 @@
     "titles.lineNumber": "POL number",
     "title.titleLookUp": "Title look-up",
     "title.lineLookUp": "POL number look-up",
-    "title.titleLookUpNoPlugin": "[no instance-selection plugin]",
+    "title.titleLookUpNoPlugin": "[відсутній плагін для відбору біб.записів (інстансів)]",
     "title.actions.load.error": "Failed to load Title or PO line data",
     "title.contributors": "Contributors",
     "title.edition": "Edition",
