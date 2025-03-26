@@ -2,6 +2,8 @@
 
 ## 7.1.0 (IN PROGRESS)
 
+* Use "Selection" component for order type filter. Refs UIREC-375.
+
 ## [7.0.0](https://github.com/folio-org/ui-receiving/tree/v7.0.0) (2025-03-13)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v6.0.6...v7.0.0)
 
