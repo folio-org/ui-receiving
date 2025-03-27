@@ -35,7 +35,7 @@ const ReceivingListFilter = ({
 
   return (
     <AccordionSet>
-      <AcqCheckboxFilter
+      <SelectionFilter
         id={`filter-${FILTERS.ORDER_STATUS}`}
         activeFilters={activeFilters[FILTERS.ORDER_STATUS]}
         disabled={disabled}
