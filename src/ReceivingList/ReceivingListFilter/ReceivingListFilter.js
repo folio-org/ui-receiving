@@ -17,6 +17,7 @@ import {
   PIECE_STATUS_OPTIONS,
   PluggableOrganizationFilter,
   PluggableUserFilter,
+  SelectionFilter,
 } from '@folio/stripes-acq-components';
 
 import { FILTERS } from '../constants';
@@ -34,7 +35,7 @@ const ReceivingListFilter = ({
 
   return (
     <AccordionSet>
-      <AcqCheckboxFilter
+      <SelectionFilter
         id={`filter-${FILTERS.ORDER_STATUS}`}
         activeFilters={activeFilters[FILTERS.ORDER_STATUS]}
         disabled={disabled}
@@ -54,7 +55,7 @@ const ReceivingListFilter = ({
         tenantId={tenantId}
       />
 
-      <AcqCheckboxFilter
+      <SelectionFilter
         id={`filter-${FILTERS.ORDER_TYPE}`}
         activeFilters={activeFilters[FILTERS.ORDER_TYPE]}
         disabled={disabled}
