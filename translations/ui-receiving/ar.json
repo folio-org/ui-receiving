@@ -269,11 +269,11 @@
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
     "piece.sendClaim.withIntegration.message": "This will generate a claim job which can be viewed in Export manager. Continue?",
     "piece.sendClaim.withoutIntegration.message": "No claiming integration exists for this organization. Piece will be set to \"Claim sent\" status. Continue?",
-    "numberGenerator.accessionAndCallNumberSequence": "Accession and call number sequence",
-    "numberGenerator.accessionNumberSequence": "Accession number sequence",
-    "numberGenerator.barcodeSequence": "Barcode sequence",
-    "numberGenerator.callNumberSequence": "Call number sequence",
-    "numberGenerator.generateForRow": "Generate numbers for row {rowIndex}",
-    "numberGenerator.generateNumbers": "Generate numbers",
-    "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead."
+    "numberGenerator.accessionAndCallNumberSequence": "تسلسل أرقام انضمام وأرقام استدعاء",
+    "numberGenerator.accessionNumberSequence": "تسلسل رقم الانضمام",
+    "numberGenerator.barcodeSequence": "تسلسل الباركود",
+    "numberGenerator.callNumberSequence": "تسلسل أرقام الاستدعاء",
+    "numberGenerator.generateForRow": "توليد أرقام للصف {rowIndex}",
+    "numberGenerator.generateNumbers": "توليد الأرقام",
+    "numberGenerator.generateHelpText": "سيتم استخدام التسلسلات المحددة لتوليد أرقام جديدة. حدد \"توليد الأرقام\" للمتابعة."
 }
