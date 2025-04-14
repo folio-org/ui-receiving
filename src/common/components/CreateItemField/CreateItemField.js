@@ -33,7 +33,6 @@ function CreateItemField({
   const { activeTenantId: currentTenantId } = useReceivingSearchContext();
 
   const {
-    id,
     bindItemId,
     format,
     holdingsRecordId,
@@ -44,11 +43,11 @@ function CreateItemField({
   } = piece;
 
   const isReceived = receivingStatus === PIECE_STATUS.received;
-  const isAddItemAvailable =
-  includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
-  && Boolean(instanceId)
-  && !itemId
-  && (!id || receivingStatus === PIECE_STATUS.expected);
+  const isAddItemAvailable = (
+    includes(createInventoryValues[format], INVENTORY_RECORDS_TYPE.all)
+      && Boolean(instanceId)
+      && !itemId
+  );
 
   const currentItemId = isBound ? bindItemId : itemId;
   const isLinkDisabled = (receivingTenantId && currentTenantId) && (receivingTenantId !== currentTenantId);
