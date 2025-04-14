@@ -306,7 +306,7 @@ const PieceForm = ({
             >
               <AccordionStatus ref={accordionStatusRef}>
                 <AccordionSet>
-                  {metadata && (
+                  {Boolean(isEditMode && metadata) && (
                     <ViewMetaData
                       id={PIECE_MODAL_ACCORDION.metadata}
                       metadata={metadata}
