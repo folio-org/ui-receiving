@@ -2,6 +2,8 @@
 
 ## 7.1.0 (IN PROGRESS)
 
+* Remove the limitation of displaying the "Create item" checkbox by the status of a piece. Fixes UIREC-443.
+
 ## [7.0.1](https://github.com/folio-org/ui-receiving/tree/v7.0.1) (2025-04-03)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.0...v7.0.1)
 
