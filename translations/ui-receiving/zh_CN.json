@@ -269,11 +269,11 @@
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "无法生成催缺，因为该组织不存在催缺集成。",
     "piece.sendClaim.withIntegration.message": "这将生成一个可以在导出管理器中查看的催缺任务。继续吗？",
     "piece.sendClaim.withoutIntegration.message": "此组织不存在催缺集成。件将设置为“催缺已发送”状态。继续吗？",
-    "numberGenerator.accessionAndCallNumberSequence": "Accession and call number sequence",
-    "numberGenerator.accessionNumberSequence": "Accession number sequence",
-    "numberGenerator.barcodeSequence": "Barcode sequence",
-    "numberGenerator.callNumberSequence": "Call number sequence",
-    "numberGenerator.generateForRow": "Generate numbers for row {rowIndex}",
-    "numberGenerator.generateNumbers": "Generate numbers",
-    "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead."
+    "numberGenerator.accessionAndCallNumberSequence": "入藏和索书号序列",
+    "numberGenerator.accessionNumberSequence": "入藏号序列",
+    "numberGenerator.barcodeSequence": "条码序列",
+    "numberGenerator.callNumberSequence": "索书号序列",
+    "numberGenerator.generateForRow": "为行{rowIndex}生成数字",
+    "numberGenerator.generateNumbers": "生成数字",
+    "numberGenerator.generateHelpText": "所选序列将用于生成新数字。选择“生成数字”继续。"
 }
