@@ -1,6 +1,7 @@
 # Change history for ui-receiving
 
 ## 7.1.0 (IN PROGRESS)
+* Allow user to "Unlink" title from package POL view. Refs UIREC-448.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)
