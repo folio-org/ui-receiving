@@ -1,6 +1,6 @@
 {
   "name": "@folio/receiving",
-  "version": "7.0.2",
+  "version": "8.0.0",
   "description": "Description for receiving",
   "main": "index.js",
   "repository": "",
@@ -28,8 +28,8 @@
       "material-types": "2.2",
       "modes-of-issuance": "1.0",
       "nature-of-content-terms": "1.0",
-      "order-lines": "2.0 3.0",
-      "orders": "11.0 12.0",
+      "order-lines": "4.0",
+      "orders": "13.0",
       "orders-storage.settings": "1.0",
       "organizations.organizations": "1.0",
       "pieces": "3.1",
