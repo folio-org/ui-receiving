@@ -28,10 +28,11 @@ import {
   ExpandAllButton,
   expandAllSections,
   HasCommand,
+  MenuSection,
   MessageBanner,
   Pane,
-  PaneMenu,
   Row,
+  Icon,
 } from '@folio/stripes/components';
 import {
   IfPermission,
@@ -53,9 +54,10 @@ import {
   useAcqRestrictions,
   useFilters,
   useModalToggle,
+  useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import { ConfirmReceivingModal } from '../common/components';
+import { ConfirmReceivingModal, ConfirmRemoveFromPackageModal } from '../common/components';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -94,6 +96,7 @@ import TitleInformation from './TitleInformation';
 import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
+import { useUnlinkTitleMutation } from '../common/hooks';
 
 const TitleDetails = ({
   history,
@@ -108,9 +111,11 @@ const TitleDetails = ({
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
-  const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
+  const showCallout = useShowCallout();
   const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
+  const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
+  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useModalToggle();
   const confirmReceivingPromise = useRef({});
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
@@ -119,6 +124,7 @@ const TitleDetails = ({
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
+  const { unlinkTitle } = useUnlinkTitleMutation({ tenantId: targetTenantId });
 
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
@@ -200,12 +206,19 @@ const TitleDetails = ({
     });
   }, [history, isCentralRouting, location.search, titleId]);
 
-  const goToReceiveList = useCallback(() => {
+  const goToReceiveListItem = useCallback(() => {
     history.push({
       pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
       search: location.search,
     });
   }, [titleId, history, isCentralRouting, location.search]);
+
+  const goToReceiveList = useCallback(() => {
+    history.push({
+      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive`,
+      search: location.search,
+    });
+  }, [history, isCentralRouting, location.search]);
 
   const onPieceCreate = useCallback(() => {
     setConfirmAcknowledgeNote(() => goToPieceCreateForm);
@@ -231,15 +244,15 @@ const TitleDetails = ({
 
   const openReceiveList = useCallback(
     () => {
-      setConfirmAcknowledgeNote(() => goToReceiveList);
+      setConfirmAcknowledgeNote(() => goToReceiveListItem);
 
       return (
         isAcknowledged
           ? toggleAcknowledgeNote()
-          : goToReceiveList()
+          : goToReceiveListItem()
       );
     },
-    [goToReceiveList, isAcknowledged, toggleAcknowledgeNote],
+    [goToReceiveListItem, isAcknowledged, toggleAcknowledgeNote],
   );
 
   const confirmReceiving = useCallback(
@@ -264,6 +277,21 @@ const TitleDetails = ({
   const onCancelReceiving = () => {
     confirmReceivingPromise.current.reject();
     toggleConfirmReceiving();
+  };
+
+  const onConfirmRemoveFromPackage = async (id) => {
+    toggleRemoveFromPackageModal();
+
+    try {
+      await unlinkTitle({ id });
+      goToReceiveList();
+      showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
+    } catch (error) {
+      showCallout({
+        messageId: error,
+        type: 'error',
+      });
+    }
   };
 
   const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
@@ -376,19 +404,43 @@ const TitleDetails = ({
     />
   );
 
-  const lastMenu = (
-    <PaneMenu>
+  const renderActionMenu = () => (
+    <MenuSection id="budget-actions">
       <IfPermission perm="ui-receiving.edit">
-        <Button
-          onClick={onEdit}
-          marginBottom0
-          disabled={isRestrictedByAcqUnit}
-          buttonStyle="primary"
-        >
-          <FormattedMessage id="ui-receiving.title.details.button.edit" />
-        </Button>
+        <FormattedMessage id="ui-receiving.title.details.button.edit">
+          {ariaLabel => (
+            <Button
+              onClick={onEdit}
+              disabled={isRestrictedByAcqUnit}
+              aria-label={ariaLabel}
+              buttonStyle="dropdownItem"
+              marginBottom0
+            >
+              <Icon size="small" icon="edit">
+                <FormattedMessage id="ui-receiving.title.details.button.edit" />
+              </Icon>
+            </Button>
+          )}
+        </FormattedMessage>
       </IfPermission>
-    </PaneMenu>
+
+      <IfPermission perm="ui-receiving.delete">
+        <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
+          {ariaLabel => (
+            <Button
+              onClick={toggleRemoveFromPackageModal}
+              aria-label={ariaLabel}
+              buttonStyle="dropdownItem"
+              marginBottom0
+            >
+              <Icon size="small" icon="cancel">
+                <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
+              </Icon>
+            </Button>
+          )}
+        </FormattedMessage>
+      </IfPermission>
+    </MenuSection>
   );
 
   return (
@@ -398,13 +450,13 @@ const TitleDetails = ({
       scope={document.body}
     >
       <Pane
+        actionMenu={renderActionMenu}
         id="pane-title-details"
         defaultWidth="fill"
         dismissible
         paneTitle={title.title}
         paneSub={poLineNumber}
         onClose={onClose}
-        lastMenu={lastMenu}
       >
         <TitleManager record={title.title} />
         <AccordionStatus ref={accordionStatusRef}>
@@ -615,6 +667,12 @@ const TitleDetails = ({
             toggleAcknowledgeNote();
             confirmAcknowledgeNote();
           }}
+        />
+
+        <ConfirmRemoveFromPackageModal
+          open={isRemoveFromPackageOpen}
+          onConfirm={() => onConfirmRemoveFromPackage(titleId)}
+          onCancel={toggleRemoveFromPackageModal}
         />
 
         <ConfirmReceivingModal

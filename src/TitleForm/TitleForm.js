@@ -10,6 +10,7 @@ import {
   Accordion,
   AccordionSet,
   AccordionStatus,
+  Button,
   Checkbox,
   checkScope,
   Col,
@@ -35,6 +36,8 @@ import {
   useAcqRestrictions,
   validateRequired,
   validateRequiredPositiveNumber,
+  useShowCallout,
+  useToggle,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -43,8 +46,10 @@ import {
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import { SECTIONS } from './constants';
-import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
+import { useUnlinkTitleMutation } from '../common/hooks';
+import ProductIdDetailsForm from './ProductIdDetailsForm';
+import { ConfirmRemoveFromPackageModal } from '../common/components';
 
 const ALLOWED_YEAR_LENGTH = 4;
 const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.assign';
@@ -67,17 +72,46 @@ const TitleForm = ({
   contributorNameTypes,
   tenantId,
 }) => {
+  const showCallout = useShowCallout();
   const history = useHistory();
   const accordionStatusRef = useRef();
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata, acqUnitIds } = initialValues;
   const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds, { tenantId });
+  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useToggle();
 
   const { isCentralRouting } = useReceivingSearchContext();
+  const { unlinkTitle } = useUnlinkTitleMutation({ tenantId });
+
+  const onConfirmRemoveFromPackage = (titleId) => {
+    toggleRemoveFromPackageModal();
+
+    return unlinkTitle({ id: titleId })
+      .then(() => {
+        onCancel();
+        showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
+      })
+      .catch((error) => {
+        showCallout({
+          messageId: error,
+          type: 'error',
+        });
+      });
+  };
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
+
+  const lastMenu = (
+    <Button
+      onClick={toggleRemoveFromPackageModal}
+      buttonStyle="primary paneHeaderNewButton"
+      marginBottom0
+    >
+      <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
+    </Button>
+  );
 
   const paneFooter = (
     <FormFooter
@@ -145,6 +179,7 @@ const TitleForm = ({
             onClose={onCancel}
             paneTitle={paneTitle}
             footer={paneFooter}
+            lastMenu={isEditMode && lastMenu}
           >
             <Row>
               <Col
@@ -380,6 +415,13 @@ const TitleForm = ({
                 </AccordionStatus>
               </Col>
             </Row>
+
+            <ConfirmRemoveFromPackageModal
+              open={isRemoveFromPackageOpen}
+              onConfirm={() => onConfirmRemoveFromPackage(id)}
+              onCancel={toggleRemoveFromPackageModal}
+            />
+
           </Pane>
         </Paneset>
       </HasCommand>

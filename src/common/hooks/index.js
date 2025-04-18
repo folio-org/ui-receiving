@@ -13,4 +13,5 @@ export * from './useReceive';
 export * from './useReceivingTenantIdsAndLocations';
 export * from './useTitle';
 export * from './useTitleHydratedPieces';
+export * from './useUnlinkTitleMutation';
 export * from './useUnreceive';
