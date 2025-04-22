@@ -54,10 +54,13 @@ import {
   useAcqRestrictions,
   useFilters,
   useModalToggle,
-  useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import { ConfirmReceivingModal, ConfirmRemoveFromPackageModal } from '../common/components';
+import {
+  ConfirmReceivingModal,
+  RemoveFromPackageModals,
+} from '../common/components';
+import { useRemoveFromPackage } from '../common/hooks';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -96,10 +99,6 @@ import TitleInformation from './TitleInformation';
 import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
-import {
-  useInstanceHoldingsHaveNoOtherItems,
-  useTitleMutation,
-} from '../common/hooks';
 
 const TitleDetails = ({
   history,
@@ -114,11 +113,9 @@ const TitleDetails = ({
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
-  const showCallout = useShowCallout();
   const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
-  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useModalToggle(false);
   const confirmReceivingPromise = useRef({});
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
@@ -127,7 +124,6 @@ const TitleDetails = ({
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
-  const { deleteTitle } = useTitleMutation({ tenantId: targetTenantId });
 
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
@@ -165,12 +161,6 @@ const TitleDetails = ({
     visibleColumns: receivedPiecesVisibleColumns,
     toggleColumn: toggleReceivedPiecesColumn,
   } = useColumnManager('received-pieces-column-manager', RECEIVED_PIECE_COLUMN_MAPPING);
-  // Get rid if this logic since it is implemented in the BE
-  const displayDeleteHoldingsConfirmation = useInstanceHoldingsHaveNoOtherItems({
-    tenantId: targetTenantId,
-    instanceId: title.instanceId,
-    isCentralRouting,
-  });
 
   const shortcuts = [
     {
@@ -288,21 +278,6 @@ const TitleDetails = ({
     toggleConfirmReceiving();
   };
 
-  const onConfirmRemoveFromPackage = useCallback(async (searchParams = {}) => {
-    try {
-      await deleteTitle({ id: titleId, searchParams });
-      goToReceiveList();
-      showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
-    } catch (error) {
-      // Implement display second modal here
-    }
-  }, [
-    titleId,
-    deleteTitle,
-    goToReceiveList,
-    showCallout,
-  ]);
-
   const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
@@ -331,6 +306,13 @@ const TitleDetails = ({
     searchQuery: unreceivablePiecesSearchQuery,
   } = useFilters(noop);
   const { filters: boundItemsFilters } = useFilters(noop, { [MENU_FILTERS.bound]: ['true'] });
+  const {
+    isRemoveFromPackageOpen,
+    toggleRemoveFromPackageModal,
+    isRemoveHoldingsOpen,
+    toggleRemoveHoldingsModal,
+    onConfirmRemoveFromPackage,
+  } = useRemoveFromPackage({ id: titleId, onSuccess: goToReceiveList });
 
   const expectedPiecesProtectedActions = useMemo(() => ({
     [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
@@ -677,12 +659,12 @@ const TitleDetails = ({
             confirmAcknowledgeNote();
           }}
         />
-
-        <ConfirmRemoveFromPackageModal
-          displayDeleteHoldingsConfirmation={displayDeleteHoldingsConfirmation}
-          open={isRemoveFromPackageOpen}
-          onConfirm={onConfirmRemoveFromPackage}
-          onCancel={toggleRemoveFromPackageModal}
+        <RemoveFromPackageModals
+          isRemoveFromPackageOpen={isRemoveFromPackageOpen}
+          isRemoveHoldingsOpen={isRemoveHoldingsOpen}
+          onConfirmRemoveFromPackage={onConfirmRemoveFromPackage}
+          toggleRemoveFromPackageModal={toggleRemoveFromPackageModal}
+          toggleRemoveHoldingsModal={toggleRemoveHoldingsModal}
         />
 
         <ConfirmReceivingModal

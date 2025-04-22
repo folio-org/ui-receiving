@@ -36,14 +36,10 @@ import {
   useAcqRestrictions,
   validateRequired,
   validateRequiredPositiveNumber,
-  useShowCallout,
-  useToggle,
 } from '@folio/stripes-acq-components';
 
-import {
-  useInstanceHoldingsHaveNoOtherItems,
-  useTitleMutation,
-} from '../common/hooks';
+import { RemoveFromPackageModals } from '../common/components';
+import { useRemoveFromPackage } from '../common/hooks';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -52,7 +48,6 @@ import { useReceivingSearchContext } from '../contexts';
 import { SECTIONS } from './constants';
 import ContributorsForm from './ContributorsForm';
 import ProductIdDetailsForm from './ProductIdDetailsForm';
-import { ConfirmRemoveFromPackageModal } from '../common/components';
 
 const ALLOWED_YEAR_LENGTH = 4;
 const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.assign';
@@ -75,41 +70,21 @@ const TitleForm = ({
   contributorNameTypes,
   tenantId,
 }) => {
-  const showCallout = useShowCallout();
   const history = useHistory();
   const accordionStatusRef = useRef();
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata, acqUnitIds } = initialValues;
   const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds, { tenantId });
-  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useToggle(false);
 
   const { isCentralRouting } = useReceivingSearchContext();
-  const { deleteTitle } = useTitleMutation({ tenantId });
-  // Get rid if this logic since it is implemented in the BE
-  const displayDeleteHoldingsConfirmation = useInstanceHoldingsHaveNoOtherItems({
-    instanceId: get(values, 'instanceId'),
-    isCentralRouting,
-    tenantId,
-  });
-
-  const onConfirmRemoveFromPackage = useCallback(async (searchParams = {}) => {
-    try {
-      await deleteTitle({ id, searchParams });
-      onCancel();
-      showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
-    } catch (error) {
-      showCallout({
-        messageId: error,
-        type: 'error',
-      });
-    }
-  }, [
-    id,
-    deleteTitle,
-    showCallout,
-    onCancel,
-  ]);
+  const {
+    isRemoveFromPackageOpen,
+    isRemoveHoldingsOpen,
+    onConfirmRemoveFromPackage,
+    toggleRemoveFromPackageModal,
+    toggleRemoveHoldingsModal,
+  } = useRemoveFromPackage({ id, onSuccess: onCancel });
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
@@ -427,11 +402,12 @@ const TitleForm = ({
               </Col>
             </Row>
 
-            <ConfirmRemoveFromPackageModal
-              displayDeleteHoldingsConfirmation={displayDeleteHoldingsConfirmation}
-              open={isRemoveFromPackageOpen}
-              onConfirm={onConfirmRemoveFromPackage}
-              onCancel={toggleRemoveFromPackageModal}
+            <RemoveFromPackageModals
+              isRemoveFromPackageOpen={isRemoveFromPackageOpen}
+              isRemoveHoldingsOpen={isRemoveHoldingsOpen}
+              onConfirmRemoveFromPackage={onConfirmRemoveFromPackage}
+              toggleRemoveFromPackageModal={toggleRemoveFromPackageModal}
+              toggleRemoveHoldingsModal={toggleRemoveHoldingsModal}
             />
 
           </Pane>

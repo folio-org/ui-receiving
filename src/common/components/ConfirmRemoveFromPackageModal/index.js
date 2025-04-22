@@ -1,1 +1,0 @@
-export { ConfirmRemoveFromPackageModal } from './ConfirmRemoveFromPackageModal';

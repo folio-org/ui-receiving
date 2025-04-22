@@ -1,5 +1,4 @@
 export * from './useHoldingItems';
-export * from './useInstanceHoldingsHaveNoOtherItems';
 export * from './useItem';
 export * from './useNumberGeneratorOptions';
 export * from './useOrder';
@@ -12,6 +11,7 @@ export * from './usePiecesExpect';
 export * from './usePiecesRequests';
 export * from './useReceive';
 export * from './useReceivingTenantIdsAndLocations';
+export * from './useRemoveFromPackage';
 export * from './useTitle';
 export * from './useTitleHydratedPieces';
 export * from './useTitleMutation';
