@@ -269,11 +269,11 @@
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Unable to generate claims because no claim integrations exist for the organization.",
     "piece.sendClaim.withIntegration.message": "Буде згенерований процес створення скарг, який можна переглянути в Менеджері експорту. Продовжити?",
     "piece.sendClaim.withoutIntegration.message": "Для цієї організації не існує інтеграції з системою, що надсилає скарги. Частина примірників назви отримає статус \"Скарга надіслана\". Продовжити?",
-    "numberGenerator.accessionAndCallNumberSequence": "Accession and call number sequence",
+    "numberGenerator.accessionAndCallNumberSequence": "Послідовність інвентарного номера та шифру",
     "numberGenerator.accessionNumberSequence": "Послідовність інвентарного номера",
     "numberGenerator.barcodeSequence": "Послідовність штрихкодів",
     "numberGenerator.callNumberSequence": "Послідовність шифрів",
     "numberGenerator.generateForRow": "Згенерувати номери для рядка {rowIndex}",
     "numberGenerator.generateNumbers": "Згенерувати номери",
-    "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead."
+    "numberGenerator.generateHelpText": "Вибрані послідовності будуть використані для генерування нових номерів. Щоб продовжити, виберіть \"Генерувати номери\"."
 }
