@@ -1,6 +1,8 @@
 # Change history for ui-receiving
 
-## 7.1.0 (IN PROGRESS)
+## 8.0.0 (IN PROGRESS)
+
+* *BREAKING* Update `orders` and `order-lines` interfaces to `13.0` and `4.0` accordingly. Refs UIREC-447.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)
