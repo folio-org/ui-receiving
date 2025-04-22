@@ -55,7 +55,7 @@ export function RemoveFromPackageModals({
         open={isRemoveFromPackageOpen}
         heading={<FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />}
         message={<FormattedMessage id="ui-receiving.title.confirmationModal.removeFromPackage.message" />}
-        onConfirm={onConfirmRemoveFromPackage}
+        onConfirm={() => onConfirmRemoveFromPackage()}
         onCancel={toggleRemoveFromPackageModal}
         confirmLabel={<FormattedMessage id="ui-receiving.title.confirmationModal.removeFromPackage.confirm" />}
       />

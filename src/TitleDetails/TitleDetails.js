@@ -396,7 +396,7 @@ const TitleDetails = ({
   );
 
   const renderActionMenu = () => (
-    <MenuSection id="budget-actions">
+    <MenuSection id="receiving-actions">
       <IfPermission perm="ui-receiving.edit">
         <FormattedMessage id="ui-receiving.title.details.button.edit">
           {ariaLabel => (
@@ -659,6 +659,7 @@ const TitleDetails = ({
             confirmAcknowledgeNote();
           }}
         />
+
         <RemoveFromPackageModals
           isRemoveFromPackageOpen={isRemoveFromPackageOpen}
           isRemoveHoldingsOpen={isRemoveHoldingsOpen}

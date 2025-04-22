@@ -4,6 +4,10 @@ import { useModalToggle, useShowCallout } from '@folio/stripes-acq-components';
 
 import { useTitleMutation } from '../useTitleMutation';
 
+const ERROR_CODES = {
+  emptyHoldings: 'existingHoldingsForDeleteConfirmation',
+};
+
 export function useRemoveFromPackage({ id, onSuccess }) {
   const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useModalToggle();
   const [isRemoveHoldingsOpen, toggleRemoveHoldingsModal] = useModalToggle();
@@ -19,7 +23,7 @@ export function useRemoveFromPackage({ id, onSuccess }) {
       const { errors } = await error.response.json();
       const { message, code } = errors[0];
 
-      if (code === 'existingHoldingsForDeleteConfirmation') {
+      if (code === ERROR_CODES.emptyHoldings) {
         toggleRemoveFromPackageModal();
         toggleRemoveHoldingsModal();
       } else {
@@ -31,8 +35,8 @@ export function useRemoveFromPackage({ id, onSuccess }) {
     id,
     onSuccess,
     showCallout,
-    toggleRemoveHoldingsModal,
     toggleRemoveFromPackageModal,
+    toggleRemoveHoldingsModal,
   ]);
 
   return {
