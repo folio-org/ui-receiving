@@ -20,16 +20,12 @@ export const ConfirmRemoveFromPackageModal = ({
         message={<FormattedMessage id="ui-receiving.title.confirmationModal.removeFromPackage.message" />}
         onConfirm={() => {
           onCancel();
-          if (displayDeleteHoldingsConfirmation) {
-            toggleDeleteHoldingsConfirmationModal();
-          } else {
-            onConfirm();
-          }
+          onConfirm();
         }}
         onCancel={onCancel}
         confirmLabel={<FormattedMessage id="ui-receiving.title.confirmationModal.removeFromPackage.confirm" />}
       />
-      <ConfirmationModal
+      {/* <ConfirmationModal
         open={isDeleteHoldingsConfirmationOpen}
         heading={<FormattedMessage id="ui-receiving.title.confirmationModal.removeHolding.heading" />}
         message={<FormattedMessage id="ui-receiving.title.confirmationModal.removeHolding.message" />}
@@ -43,7 +39,7 @@ export const ConfirmRemoveFromPackageModal = ({
           onConfirm({ deleteHoldings: true });
           toggleDeleteHoldingsConfirmationModal();
         }}
-      />
+      /> */}
     </>
   );
 };

@@ -86,6 +86,7 @@ const TitleForm = ({
 
   const { isCentralRouting } = useReceivingSearchContext();
   const { deleteTitle } = useTitleMutation({ tenantId });
+  // Get rid if this logic since it is implemented in the BE
   const displayDeleteHoldingsConfirmation = useInstanceHoldingsHaveNoOtherItems({
     instanceId: get(values, 'instanceId'),
     isCentralRouting,

@@ -165,6 +165,7 @@ const TitleDetails = ({
     visibleColumns: receivedPiecesVisibleColumns,
     toggleColumn: toggleReceivedPiecesColumn,
   } = useColumnManager('received-pieces-column-manager', RECEIVED_PIECE_COLUMN_MAPPING);
+  // Get rid if this logic since it is implemented in the BE
   const displayDeleteHoldingsConfirmation = useInstanceHoldingsHaveNoOtherItems({
     tenantId: targetTenantId,
     instanceId: title.instanceId,
@@ -293,10 +294,7 @@ const TitleDetails = ({
       goToReceiveList();
       showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
     } catch (error) {
-      showCallout({
-        messageId: error,
-        type: 'error',
-      });
+      // Implement display second modal here
     }
   }, [
     titleId,
