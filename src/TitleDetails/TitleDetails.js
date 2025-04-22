@@ -96,7 +96,10 @@ import TitleInformation from './TitleInformation';
 import { UnreceivablePiecesList } from './UnreceivablePiecesList';
 
 import css from './TitleDetails.css';
-import { useUnlinkTitleMutation } from '../common/hooks';
+import {
+  useInstanceHoldingsHaveNoOtherItems,
+  useTitleMutation,
+} from '../common/hooks';
 
 const TitleDetails = ({
   history,
@@ -115,7 +118,7 @@ const TitleDetails = ({
   const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
   const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
-  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useModalToggle();
+  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useModalToggle(false);
   const confirmReceivingPromise = useRef({});
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
@@ -124,7 +127,7 @@ const TitleDetails = ({
     isCentralRouting,
     targetTenantId,
   } = useReceivingSearchContext();
-  const { unlinkTitle } = useUnlinkTitleMutation({ tenantId: targetTenantId });
+  const { deleteTitle } = useTitleMutation({ tenantId: targetTenantId });
 
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
@@ -162,6 +165,11 @@ const TitleDetails = ({
     visibleColumns: receivedPiecesVisibleColumns,
     toggleColumn: toggleReceivedPiecesColumn,
   } = useColumnManager('received-pieces-column-manager', RECEIVED_PIECE_COLUMN_MAPPING);
+  const displayDeleteHoldingsConfirmation = useInstanceHoldingsHaveNoOtherItems({
+    tenantId: targetTenantId,
+    instanceId: title.instanceId,
+    isCentralRouting,
+  });
 
   const shortcuts = [
     {
@@ -279,11 +287,9 @@ const TitleDetails = ({
     toggleConfirmReceiving();
   };
 
-  const onConfirmRemoveFromPackage = async (id) => {
-    toggleRemoveFromPackageModal();
-
+  const onConfirmRemoveFromPackage = useCallback(async (searchParams = {}) => {
     try {
-      await unlinkTitle({ id });
+      await deleteTitle({ id: titleId, searchParams });
       goToReceiveList();
       showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
     } catch (error) {
@@ -292,7 +298,12 @@ const TitleDetails = ({
         type: 'error',
       });
     }
-  };
+  }, [
+    titleId,
+    deleteTitle,
+    goToReceiveList,
+    showCallout,
+  ]);
 
   const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
@@ -670,8 +681,9 @@ const TitleDetails = ({
         />
 
         <ConfirmRemoveFromPackageModal
+          displayDeleteHoldingsConfirmation={displayDeleteHoldingsConfirmation}
           open={isRemoveFromPackageOpen}
-          onConfirm={() => onConfirmRemoveFromPackage(titleId)}
+          onConfirm={onConfirmRemoveFromPackage}
           onCancel={toggleRemoveFromPackageModal}
         />
 

@@ -41,13 +41,16 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  useInstanceHoldingsHaveNoOtherItems,
+  useTitleMutation,
+} from '../common/hooks';
+import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import { SECTIONS } from './constants';
 import ContributorsForm from './ContributorsForm';
-import { useUnlinkTitleMutation } from '../common/hooks';
 import ProductIdDetailsForm from './ProductIdDetailsForm';
 import { ConfirmRemoveFromPackageModal } from '../common/components';
 
@@ -79,26 +82,33 @@ const TitleForm = ({
   const initialValues = get(form.getState(), 'initialValues', {});
   const { id, title, metadata, acqUnitIds } = initialValues;
   const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds, { tenantId });
-  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useToggle();
+  const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useToggle(false);
 
   const { isCentralRouting } = useReceivingSearchContext();
-  const { unlinkTitle } = useUnlinkTitleMutation({ tenantId });
+  const { deleteTitle } = useTitleMutation({ tenantId });
+  const displayDeleteHoldingsConfirmation = useInstanceHoldingsHaveNoOtherItems({
+    instanceId: get(values, 'instanceId'),
+    isCentralRouting,
+    tenantId,
+  });
 
-  const onConfirmRemoveFromPackage = (titleId) => {
-    toggleRemoveFromPackageModal();
-
-    return unlinkTitle({ id: titleId })
-      .then(() => {
-        onCancel();
-        showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
-      })
-      .catch((error) => {
-        showCallout({
-          messageId: error,
-          type: 'error',
-        });
+  const onConfirmRemoveFromPackage = useCallback(async (searchParams = {}) => {
+    try {
+      await deleteTitle({ id, searchParams });
+      onCancel();
+      showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
+    } catch (error) {
+      showCallout({
+        messageId: error,
+        type: 'error',
       });
-  };
+    }
+  }, [
+    id,
+    deleteTitle,
+    showCallout,
+    onCancel,
+  ]);
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
@@ -417,8 +427,9 @@ const TitleForm = ({
             </Row>
 
             <ConfirmRemoveFromPackageModal
+              displayDeleteHoldingsConfirmation={displayDeleteHoldingsConfirmation}
               open={isRemoveFromPackageOpen}
-              onConfirm={() => onConfirmRemoveFromPackage(id)}
+              onConfirm={onConfirmRemoveFromPackage}
               onCancel={toggleRemoveFromPackageModal}
             />
 
