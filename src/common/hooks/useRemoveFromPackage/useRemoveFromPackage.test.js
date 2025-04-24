@@ -1,13 +1,24 @@
-import { renderHook, act } from '@folio/jest-config-stripes/testing-library/react';
-import { useModalToggle, useShowCallout } from '@folio/stripes-acq-components';
+import {
+  act,
+  renderHook,
+} from '@folio/jest-config-stripes/testing-library/react';
+import {
+  useModalToggle,
+  useShowCallout,
+  ResponseErrorsContainer,
+} from '@folio/stripes-acq-components';
 
-import { useRemoveFromPackage } from './useRemoveFromPackage';
+import { ERROR_CODES } from '../../constants';
 import { useTitleMutation } from '../useTitleMutation';
+import { useRemoveFromPackage } from './useRemoveFromPackage';
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   useModalToggle: jest.fn(),
   useShowCallout: jest.fn(),
+  ResponseErrorsContainer: {
+    create: jest.fn(),
+  },
 }));
 
 jest.mock('../useTitleMutation', () => ({
@@ -21,12 +32,14 @@ const deleteTitle = jest.fn();
 
 describe('useRemoveFromPackage', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+
     useModalToggle
-      .mockClear()
       .mockReturnValueOnce([false, toggleRemoveFromPackageModal])
       .mockReturnValueOnce([false, toggleRemoveHoldingsModal]);
-    useShowCallout.mockClear().mockReturnValue(showCallout);
-    useTitleMutation.mockClear().mockReturnValue({ deleteTitle });
+
+    useShowCallout.mockReturnValue(showCallout);
+    useTitleMutation.mockReturnValue({ deleteTitle });
   });
 
   it('calls deleteTitle and onSuccess on successful deletion', async () => {
@@ -47,20 +60,19 @@ describe('useRemoveFromPackage', () => {
     });
   });
 
-  it('opens holdings modal on known error code', async () => {
+  it('opens holdings modal on existingHoldingsForDeleteConfirmation error code', async () => {
     const onSuccess = jest.fn();
-    const errorResponse = {
-      response: {
-        json: async () => ({
-          errors: [{
-            code: 'existingHoldingsForDeleteConfirmation',
-            message: 'some.message.code',
-          }],
+
+    ResponseErrorsContainer.create.mockResolvedValue({
+      handler: {
+        getError: () => ({
+          code: ERROR_CODES.existingHoldingsForDeleteConfirmation,
+          message: 'some.message.code',
         }),
       },
-    };
+    });
 
-    deleteTitle.mockRejectedValueOnce(errorResponse);
+    deleteTitle.mockRejectedValueOnce({ response: {} });
 
     const { result } = renderHook(() => useRemoveFromPackage({ id: 'title-id', onSuccess }));
 
@@ -74,18 +86,17 @@ describe('useRemoveFromPackage', () => {
 
   it('shows error callout on unknown error code', async () => {
     const onSuccess = jest.fn();
-    const errorResponse = {
-      response: {
-        json: async () => ({
-          errors: [{
-            code: 'someOtherError',
-            message: 'ui-error.unknown',
-          }],
+
+    ResponseErrorsContainer.create.mockResolvedValue({
+      handler: {
+        getError: () => ({
+          code: 'someOtherError',
+          message: 'ui-error.unknown',
         }),
       },
-    };
+    });
 
-    deleteTitle.mockRejectedValueOnce(errorResponse);
+    deleteTitle.mockRejectedValueOnce({ response: {} });
 
     const { result } = renderHook(() => useRemoveFromPackage({ id: 'title-id', onSuccess }));
 

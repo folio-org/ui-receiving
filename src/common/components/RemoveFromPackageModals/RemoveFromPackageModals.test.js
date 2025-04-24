@@ -57,7 +57,7 @@ describe('Render RemoveFromPackageModals', () => {
 
     await userEvent.click(button);
 
-    expect(screen.getByText('ui-receiving.title.confirmationModal.removeHolding.heading')).toBeDefined();
+    expect(screen.getByRole('heading', { level: 1, name: 'stripes-acq-components.holdings.deleteModal.heading' })).toBeDefined();
     expect(screen.getByText('ui-receiving.title.confirmationModal.removeHolding.message')).toBeDefined();
   });
 
@@ -68,10 +68,10 @@ describe('Render RemoveFromPackageModals', () => {
 
     await userEvent.click(button);
 
-    expect(screen.getByText('ui-receiving.title.confirmationModal.removeHolding.heading')).toBeDefined();
+    expect(screen.getByRole('heading', { level: 1, name: 'stripes-acq-components.holdings.deleteModal.heading' })).toBeDefined();
     expect(screen.getByText('ui-receiving.title.confirmationModal.removeHolding.message')).toBeDefined();
 
-    const keepHoldings = screen.getByText('ui-receiving.title.confirmationModal.removeHolding.keepHoldings');
+    const keepHoldings = screen.getByText('stripes-acq-components.holdings.deleteModal.keepHoldings');
 
     await userEvent.click(keepHoldings);
 
@@ -85,10 +85,10 @@ describe('Render RemoveFromPackageModals', () => {
 
     await userEvent.click(button);
 
-    expect(screen.getByText('ui-receiving.title.confirmationModal.removeHolding.heading')).toBeDefined();
+    expect(screen.getByRole('heading', { level: 1, name: 'stripes-acq-components.holdings.deleteModal.heading' })).toBeDefined();
     expect(screen.getByText('ui-receiving.title.confirmationModal.removeHolding.message')).toBeDefined();
 
-    const deleteHoldings = screen.getByText('ui-receiving.title.confirmationModal.removeHolding.deleteHoldings');
+    const deleteHoldings = screen.getByRole('button', { name: 'stripes-acq-components.holdings.deleteModal.heading' });
 
     await userEvent.click(deleteHoldings);
 
