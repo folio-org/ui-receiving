@@ -108,6 +108,7 @@ const TitleDetails = ({
   order,
   piecesExistence,
   poLine,
+  refreshList,
   title,
   vendorsMap = {},
 }) => {
@@ -271,6 +272,11 @@ const TitleDetails = ({
     toggleConfirmReceiving();
   };
 
+  const onDeleteSuccess = () => {
+    onClose();
+    refreshList();
+  };
+
   const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
@@ -305,7 +311,7 @@ const TitleDetails = ({
     isRemoveHoldingsOpen,
     toggleRemoveHoldingsModal,
     onConfirmRemoveFromPackage,
-  } = useRemoveFromPackage({ id: titleId, onSuccess: onClose });
+  } = useRemoveFromPackage({ id: titleId, onSuccess: onDeleteSuccess });
 
   const expectedPiecesProtectedActions = useMemo(() => ({
     [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
@@ -680,6 +686,7 @@ TitleDetails.propTypes = {
   order: PropTypes.object.isRequired,
   piecesExistence: PropTypes.object,
   poLine: PropTypes.object.isRequired,
+  refreshList: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,
   vendorsMap: PropTypes.object.isRequired,
 };

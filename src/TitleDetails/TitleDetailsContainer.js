@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   useCallback,
   useState,
@@ -39,6 +40,7 @@ const TitleDetailsContainer = ({
   history,
   location,
   match,
+  refreshList,
 }) => {
   const titleId = match.params.id;
 
@@ -158,6 +160,7 @@ const TitleDetailsContainer = ({
       order={order || DEFAULT_DATA_OBJECT}
       piecesExistence={piecesExistence}
       poLine={poLine || DEFAULT_DATA_OBJECT}
+      refreshList={refreshList}
       title={title || DEFAULT_DATA_OBJECT}
       vendorsMap={vendorsMap}
     />
@@ -168,6 +171,7 @@ TitleDetailsContainer.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
+  refreshList: PropTypes.func.isRequired,
 };
 
 export default TitleDetailsContainer;

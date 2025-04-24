@@ -100,6 +100,7 @@ const ReceivingList = ({
   onNeedMoreData,
   pagination,
   query,
+  refreshList,
   resetData,
   tenantId,
   titles,
@@ -155,6 +156,13 @@ const ReceivingList = ({
       toggleFilters={toggleFilters}
     />
   );
+
+  const renderTitleDetailsContainer = useCallback((props) => (
+    <TitleDetailsContainer
+      {...props}
+      refreshList={refreshList}
+    />
+  ), [refreshList]);
 
   const shortcuts = [
     {
@@ -274,7 +282,7 @@ const ReceivingList = ({
 
         <Route
           path={`${match.path}/:id/view`}
-          component={TitleDetailsContainer}
+          render={renderTitleDetailsContainer}
         />
       </PersistedPaneset>
     </HasCommand>
@@ -291,6 +299,7 @@ ReceivingList.propTypes = {
   onNeedMoreData: PropTypes.func.isRequired,
   pagination: PropTypes.object.isRequired,
   query: PropTypes.string,
+  refreshList: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired,
   titles: PropTypes.arrayOf(PropTypes.object),

@@ -26,8 +26,8 @@ export function useRemoveFromPackage({ id, onSuccess }) {
       const { code, message } = handler.getError();
       const errorCode = get(ERROR_CODES, code);
 
+      toggleRemoveFromPackageModal();
       if (errorCode === ERROR_CODES.existingHoldingsForDeleteConfirmation) {
-        toggleRemoveFromPackageModal();
         toggleRemoveHoldingsModal();
       } else {
         showCallout({ messageId: message, type: 'error' });
