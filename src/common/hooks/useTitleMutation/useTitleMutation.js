@@ -13,10 +13,10 @@ export const useTitleMutation = (options = {}) => {
     return ky.delete(`${TITLES_API}/${id}`, { searchParams });
   };
 
-  const { mutateAsync: deleteTitle, isLoading: isDeleting } = useMutation({ mutationFn: deleteTitleMutationFn });
+  const { mutateAsync: deleteTitle, isLoading } = useMutation({ mutationFn: deleteTitleMutationFn });
 
   return {
     deleteTitle,
-    isDeleting,
+    isLoading,
   };
 };

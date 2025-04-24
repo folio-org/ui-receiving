@@ -205,19 +205,12 @@ const TitleDetails = ({
     });
   }, [history, isCentralRouting, location.search, titleId]);
 
-  const goToReceiveListItem = useCallback(() => {
+  const goToReceiveList = useCallback(() => {
     history.push({
       pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
       search: location.search,
     });
   }, [titleId, history, isCentralRouting, location.search]);
-
-  const goToReceiveList = useCallback(() => {
-    history.push({
-      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive`,
-      search: location.search,
-    });
-  }, [history, isCentralRouting, location.search]);
 
   const onPieceCreate = useCallback(() => {
     setConfirmAcknowledgeNote(() => goToPieceCreateForm);
@@ -243,15 +236,15 @@ const TitleDetails = ({
 
   const openReceiveList = useCallback(
     () => {
-      setConfirmAcknowledgeNote(() => goToReceiveListItem);
+      setConfirmAcknowledgeNote(() => goToReceiveList);
 
       return (
         isAcknowledged
           ? toggleAcknowledgeNote()
-          : goToReceiveListItem()
+          : goToReceiveList()
       );
     },
-    [goToReceiveListItem, isAcknowledged, toggleAcknowledgeNote],
+    [goToReceiveList, isAcknowledged, toggleAcknowledgeNote],
   );
 
   const confirmReceiving = useCallback(
@@ -312,7 +305,7 @@ const TitleDetails = ({
     isRemoveHoldingsOpen,
     toggleRemoveHoldingsModal,
     onConfirmRemoveFromPackage,
-  } = useRemoveFromPackage({ id: titleId, onSuccess: goToReceiveList });
+  } = useRemoveFromPackage({ id: titleId, onSuccess: onClose });
 
   const expectedPiecesProtectedActions = useMemo(() => ({
     [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
@@ -396,7 +389,7 @@ const TitleDetails = ({
   );
 
   const renderActionMenu = () => (
-    <MenuSection id="receiving-actions">
+    <MenuSection id="receiving-title-actions">
       <IfPermission perm="ui-receiving.edit">
         <FormattedMessage id="ui-receiving.title.details.button.edit">
           {ariaLabel => (

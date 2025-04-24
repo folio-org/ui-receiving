@@ -1,12 +1,14 @@
+import get from 'lodash/get';
 import { useCallback } from 'react';
 
-import { useModalToggle, useShowCallout } from '@folio/stripes-acq-components';
+import {
+  useModalToggle,
+  useShowCallout,
+  ResponseErrorsContainer,
+} from '@folio/stripes-acq-components';
 
+import { ERROR_CODES } from '../../constants';
 import { useTitleMutation } from '../useTitleMutation';
-
-const ERROR_CODES = {
-  emptyHoldings: 'existingHoldingsForDeleteConfirmation',
-};
 
 export function useRemoveFromPackage({ id, onSuccess }) {
   const [isRemoveFromPackageOpen, toggleRemoveFromPackageModal] = useModalToggle();
@@ -20,10 +22,11 @@ export function useRemoveFromPackage({ id, onSuccess }) {
       onSuccess();
       showCallout({ messageId: 'ui-receiving.title.confirmationModal.removeFromPackage.success' });
     } catch (error) {
-      const { errors } = await error.response.json();
-      const { message, code } = errors[0];
+      const { handler } = await ResponseErrorsContainer.create(error.response);
+      const { code, message } = handler.getError();
+      const errorCode = get(ERROR_CODES, code);
 
-      if (code === ERROR_CODES.emptyHoldings) {
+      if (errorCode === ERROR_CODES.existingHoldingsForDeleteConfirmation) {
         toggleRemoveFromPackageModal();
         toggleRemoveHoldingsModal();
       } else {
