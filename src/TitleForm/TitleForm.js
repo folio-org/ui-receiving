@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useRef } from 'react';
 import { Field } from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
-import {
-  useHistory,
-  useLocation,
-} from 'react-router';
+import { useHistory } from 'react-router';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
@@ -73,7 +70,6 @@ const TitleForm = ({
   contributorNameTypes,
   tenantId,
 }) => {
-  const location = useLocation();
   const history = useHistory();
   const accordionStatusRef = useRef();
   const { change } = form;
@@ -83,23 +79,13 @@ const TitleForm = ({
 
   const { isCentralRouting } = useReceivingSearchContext();
 
-  const onClose = useCallback(
-    () => {
-      history.push({
-        pathname: isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE,
-        search: location.search,
-      });
-    },
-    [location.search, history, isCentralRouting],
-  );
-
   const {
     isRemoveFromPackageOpen,
     isRemoveHoldingsOpen,
     onConfirmRemoveFromPackage,
     toggleRemoveFromPackageModal,
     toggleRemoveHoldingsModal,
-  } = useRemoveFromPackage({ id, onSuccess: onClose });
+  } = useRemoveFromPackage({ id, onSuccess: onCancel });
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
