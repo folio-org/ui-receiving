@@ -103,7 +103,7 @@ const ReceivingListContainer = () => {
     return { orderLinesMap };
   }, [invalidReferenceMessage, isCentralOrderingEnabled, isTargetTenantCentral, stripes]);
 
-  const { pagination, changePage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
+  const { pagination, changePage, refreshPage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
   const {
     isFetching,
     query,
@@ -122,17 +122,18 @@ const ReceivingListContainer = () => {
 
   return (
     <ReceivingList
+      crossTenant={crossTenant}
+      filtersStorageKey={filtersStorageKey}
+      isLoading={isFetching}
       key={targetTenantId}
       onNeedMoreData={changePage}
-      resetData={resetData}
-      titlesCount={totalRecords}
-      isLoading={isFetching}
-      titles={titles}
       pagination={pagination}
       query={query}
-      crossTenant={crossTenant}
+      refreshList={refreshPage}
+      resetData={resetData}
       tenantId={targetTenantId}
-      filtersStorageKey={filtersStorageKey}
+      titles={titles}
+      titlesCount={totalRecords}
     />
   );
 };

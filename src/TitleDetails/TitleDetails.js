@@ -28,10 +28,11 @@ import {
   ExpandAllButton,
   expandAllSections,
   HasCommand,
+  MenuSection,
   MessageBanner,
   Pane,
-  PaneMenu,
   Row,
+  Icon,
 } from '@folio/stripes/components';
 import {
   IfPermission,
@@ -55,7 +56,11 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import { ConfirmReceivingModal } from '../common/components';
+import {
+  ConfirmReceivingModal,
+  RemoveFromPackageModals,
+} from '../common/components';
+import { useRemoveFromPackage } from '../common/hooks';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -103,13 +108,14 @@ const TitleDetails = ({
   order,
   piecesExistence,
   poLine,
+  refreshList,
   title,
   vendorsMap = {},
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
-  const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [confirmAcknowledgeNote, setConfirmAcknowledgeNote] = useState();
+  const [isAcknowledgeNote, toggleAcknowledgeNote] = useModalToggle();
   const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
   const confirmReceivingPromise = useRef({});
   const accordionStatusRef = useRef();
@@ -266,6 +272,11 @@ const TitleDetails = ({
     toggleConfirmReceiving();
   };
 
+  const onDeleteSuccess = () => {
+    onClose();
+    refreshList();
+  };
+
   const hasReceive = Boolean(piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE]);
 
   const [isExpectedPiecesLoading, setExpectedPiecesLoading] = useState(false);
@@ -294,6 +305,13 @@ const TitleDetails = ({
     searchQuery: unreceivablePiecesSearchQuery,
   } = useFilters(noop);
   const { filters: boundItemsFilters } = useFilters(noop, { [MENU_FILTERS.bound]: ['true'] });
+  const {
+    isRemoveFromPackageOpen,
+    toggleRemoveFromPackageModal,
+    isRemoveHoldingsOpen,
+    toggleRemoveHoldingsModal,
+    onConfirmRemoveFromPackage,
+  } = useRemoveFromPackage({ id: titleId, onSuccess: onDeleteSuccess });
 
   const expectedPiecesProtectedActions = useMemo(() => ({
     [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
@@ -376,19 +394,43 @@ const TitleDetails = ({
     />
   );
 
-  const lastMenu = (
-    <PaneMenu>
+  const renderActionMenu = () => (
+    <MenuSection id="receiving-title-actions">
       <IfPermission perm="ui-receiving.edit">
-        <Button
-          onClick={onEdit}
-          marginBottom0
-          disabled={isRestrictedByAcqUnit}
-          buttonStyle="primary"
-        >
-          <FormattedMessage id="ui-receiving.title.details.button.edit" />
-        </Button>
+        <FormattedMessage id="ui-receiving.title.details.button.edit">
+          {ariaLabel => (
+            <Button
+              onClick={onEdit}
+              disabled={isRestrictedByAcqUnit}
+              aria-label={ariaLabel}
+              buttonStyle="dropdownItem"
+              marginBottom0
+            >
+              <Icon size="small" icon="edit">
+                <FormattedMessage id="ui-receiving.title.details.button.edit" />
+              </Icon>
+            </Button>
+          )}
+        </FormattedMessage>
       </IfPermission>
-    </PaneMenu>
+
+      <IfPermission perm="ui-receiving.delete">
+        <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
+          {ariaLabel => (
+            <Button
+              onClick={toggleRemoveFromPackageModal}
+              aria-label={ariaLabel}
+              buttonStyle="dropdownItem"
+              marginBottom0
+            >
+              <Icon size="small" icon="cancel">
+                <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
+              </Icon>
+            </Button>
+          )}
+        </FormattedMessage>
+      </IfPermission>
+    </MenuSection>
   );
 
   return (
@@ -398,13 +440,13 @@ const TitleDetails = ({
       scope={document.body}
     >
       <Pane
+        actionMenu={renderActionMenu}
         id="pane-title-details"
         defaultWidth="fill"
         dismissible
         paneTitle={title.title}
         paneSub={poLineNumber}
         onClose={onClose}
-        lastMenu={lastMenu}
       >
         <TitleManager record={title.title} />
         <AccordionStatus ref={accordionStatusRef}>
@@ -617,6 +659,14 @@ const TitleDetails = ({
           }}
         />
 
+        <RemoveFromPackageModals
+          isRemoveFromPackageOpen={isRemoveFromPackageOpen}
+          isRemoveHoldingsOpen={isRemoveHoldingsOpen}
+          onConfirmRemoveFromPackage={onConfirmRemoveFromPackage}
+          toggleRemoveFromPackageModal={toggleRemoveFromPackageModal}
+          toggleRemoveHoldingsModal={toggleRemoveHoldingsModal}
+        />
+
         <ConfirmReceivingModal
           open={isConfirmReceiving}
           onCancel={onCancelReceiving}
@@ -636,6 +686,7 @@ TitleDetails.propTypes = {
   order: PropTypes.object.isRequired,
   piecesExistence: PropTypes.object,
   poLine: PropTypes.object.isRequired,
+  refreshList: PropTypes.object.isRequired,
   title: PropTypes.object.isRequired,
   vendorsMap: PropTypes.object.isRequired,
 };

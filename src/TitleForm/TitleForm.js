@@ -10,6 +10,7 @@ import {
   Accordion,
   AccordionSet,
   AccordionStatus,
+  Button,
   Checkbox,
   checkScope,
   Col,
@@ -37,14 +38,16 @@ import {
   validateRequiredPositiveNumber,
 } from '@folio/stripes-acq-components';
 
+import { RemoveFromPackageModals } from '../common/components';
+import { useRemoveFromPackage } from '../common/hooks';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import { SECTIONS } from './constants';
-import ProductIdDetailsForm from './ProductIdDetailsForm';
 import ContributorsForm from './ContributorsForm';
+import ProductIdDetailsForm from './ProductIdDetailsForm';
 
 const ALLOWED_YEAR_LENGTH = 4;
 const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.assign';
@@ -76,8 +79,26 @@ const TitleForm = ({
 
   const { isCentralRouting } = useReceivingSearchContext();
 
+  const {
+    isRemoveFromPackageOpen,
+    isRemoveHoldingsOpen,
+    onConfirmRemoveFromPackage,
+    toggleRemoveFromPackageModal,
+    toggleRemoveHoldingsModal,
+  } = useRemoveFromPackage({ id, onSuccess: onCancel });
+
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
+
+  const lastMenu = (
+    <Button
+      onClick={toggleRemoveFromPackageModal}
+      buttonStyle="primary paneHeaderNewButton"
+      marginBottom0
+    >
+      <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
+    </Button>
+  );
 
   const paneFooter = (
     <FormFooter
@@ -145,6 +166,7 @@ const TitleForm = ({
             onClose={onCancel}
             paneTitle={paneTitle}
             footer={paneFooter}
+            lastMenu={isEditMode && lastMenu}
           >
             <Row>
               <Col
@@ -380,6 +402,15 @@ const TitleForm = ({
                 </AccordionStatus>
               </Col>
             </Row>
+
+            <RemoveFromPackageModals
+              isRemoveFromPackageOpen={isRemoveFromPackageOpen}
+              isRemoveHoldingsOpen={isRemoveHoldingsOpen}
+              onConfirmRemoveFromPackage={onConfirmRemoveFromPackage}
+              toggleRemoveFromPackageModal={toggleRemoveFromPackageModal}
+              toggleRemoveHoldingsModal={toggleRemoveHoldingsModal}
+            />
+
           </Pane>
         </Paneset>
       </HasCommand>

@@ -2,6 +2,7 @@ export const ERROR_CODES = {
   cannotFindPiecesWithLatestStatusToProcess: 'cannotFindPiecesWithLatestStatusToProcess',
   createItemForPieceIsNotAllowedError: 'createItemForPieceIsNotAllowedError',
   createPiecePendingOrderError: 'createPiecePendingOrderError',
+  existingHoldingsForDeleteConfirmation: 'existingHoldingsForDeleteConfirmation',
   barcodeIsNotUnique: 'barcodeIsNotUnique',
   forbiddenDeleteSystemValues: 'forbiddenDeleteSystemValues',
   forbiddenDeleteUsedValue: 'forbiddenDeleteUsedValue',
