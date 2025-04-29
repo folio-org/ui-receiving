@@ -194,7 +194,7 @@
     "errors.pieceFormatIsNotValid": "Формат частини пимірників назви не сумісний з форматом рядка замовлення на придбання",
     "errors.pieceNotFound": "Запис частини примірників назви не вдалося знайти",
     "errors.pieceNotRetrieved": "Запис частини примірників назви не може бути отриманий",
-    "errors.piecePolMismatch": "Ця частина примірників назви не відповідає дяку замовлення на придбання",
+    "errors.piecePolMismatch": "Ця частина примірників назви не відповідає рядку замовлення на придбання",
     "errors.pieceUpdateFailed": "Запис частини примірників назви не вдалося оновити",
     "errors.titleNotFound": "The receiving title(s) could not be found",
     "piece.accessionNumber": "Інвентарний номер",
@@ -275,5 +275,10 @@
     "numberGenerator.callNumberSequence": "Послідовність шифрів",
     "numberGenerator.generateForRow": "Згенерувати номери для рядка {rowIndex}",
     "numberGenerator.generateNumbers": "Згенерувати номери",
-    "numberGenerator.generateHelpText": "Вибрані послідовності будуть використані для генерування нових номерів. Щоб продовжити, виберіть \"Генерувати номери\"."
+    "numberGenerator.generateHelpText": "Вибрані послідовності будуть використані для генерування нових номерів. Щоб продовжити, виберіть \"Генерувати номери\".",
+    "title.paneTitle.removeFromPackage": "Remove from package",
+    "title.confirmationModal.removeFromPackage.message": "Removing this title from the package will delete all related pieces and any related inventory Holdings and Items.",
+    "title.confirmationModal.removeFromPackage.confirm": "Confirm",
+    "title.confirmationModal.removeFromPackage.success": "Related pieces and any related inventory Holdings and Items have been deleted.",
+    "title.confirmationModal.removeHolding.message": "Related Holdings do not reference any other pieces or items. Do you want to delete them?"
 }

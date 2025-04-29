@@ -275,5 +275,10 @@
     "numberGenerator.callNumberSequence": "Sekvence signatur",
     "numberGenerator.generateForRow": "Vygenerovat čísla pro řádek {rowIndex}",
     "numberGenerator.generateNumbers": "Generovat čísla",
-    "numberGenerator.generateHelpText": "Vybrané sekvence budou použity ke generování nových čísel. Chcete-li pokračovat, vyberte možnost \"Generovat čísla\"."
+    "numberGenerator.generateHelpText": "Vybrané sekvence budou použity ke generování nových čísel. Chcete-li pokračovat, vyberte možnost \"Generovat čísla\".",
+    "title.paneTitle.removeFromPackage": "Remove from package",
+    "title.confirmationModal.removeFromPackage.message": "Removing this title from the package will delete all related pieces and any related inventory Holdings and Items.",
+    "title.confirmationModal.removeFromPackage.confirm": "Confirm",
+    "title.confirmationModal.removeFromPackage.success": "Related pieces and any related inventory Holdings and Items have been deleted.",
+    "title.confirmationModal.removeHolding.message": "Related Holdings do not reference any other pieces or items. Do you want to delete them?"
 }

@@ -65,7 +65,7 @@
     "piece.actions.unreceivePiece.error": "Teil <b>{enumeration}</b> wurde nicht deinventarisiert",
     "piece.actions.unreceivePiece.success": "Teil <b>{enumeration}</b> wurde erfolgreich <b>deinventarisiert</b>",
     "title.contributors.add": "Mitwirkende/-n hinzufügen",
-    "title.contributors.contributor": "Mitwirkende/-r",
+    "title.contributors.contributor": "Name",
     "title.contributors.contributorType": "Mitwirkenden-ID Typ",
     "title.expectedReceiptDate": "Erwartetes Eingangsdatum",
     "title.isAcknowledged": "Inventarisierungsnotiz bestätigen",
@@ -275,5 +275,10 @@
     "numberGenerator.callNumberSequence": "Signatur",
     "numberGenerator.generateForRow": "Nummern generieren für Zeile {rowIndex}",
     "numberGenerator.generateNumbers": "Nummern generieren",
-    "numberGenerator.generateHelpText": "Ausgewählte Nummernkreise werden zum Generieren neuer Nummern verwendet. \"Nummern generieren\" auswählen, um fortzufahren."
+    "numberGenerator.generateHelpText": "Ausgewählte Nummernkreise werden zum Generieren neuer Nummern verwendet. \"Nummern generieren\" auswählen, um fortzufahren.",
+    "title.paneTitle.removeFromPackage": "Remove from package",
+    "title.confirmationModal.removeFromPackage.message": "Removing this title from the package will delete all related pieces and any related inventory Holdings and Items.",
+    "title.confirmationModal.removeFromPackage.confirm": "Confirm",
+    "title.confirmationModal.removeFromPackage.success": "Related pieces and any related inventory Holdings and Items have been deleted.",
+    "title.confirmationModal.removeHolding.message": "Related Holdings do not reference any other pieces or items. Do you want to delete them?"
 }

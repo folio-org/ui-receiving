@@ -275,5 +275,10 @@
     "numberGenerator.callNumberSequence": "Sequência de números de chamada",
     "numberGenerator.generateForRow": "Gerar números para a linha {rowIndex}",
     "numberGenerator.generateNumbers": "Gerar números",
-    "numberGenerator.generateHelpText": "As sequências selecionadas serão usadas para gerar novos números. Selecione \"Gerar números\" para prosseguir."
+    "numberGenerator.generateHelpText": "As sequências selecionadas serão usadas para gerar novos números. Selecione \"Gerar números\" para prosseguir.",
+    "title.paneTitle.removeFromPackage": "Remove from package",
+    "title.confirmationModal.removeFromPackage.message": "Removing this title from the package will delete all related pieces and any related inventory Holdings and Items.",
+    "title.confirmationModal.removeFromPackage.confirm": "Confirm",
+    "title.confirmationModal.removeFromPackage.success": "Related pieces and any related inventory Holdings and Items have been deleted.",
+    "title.confirmationModal.removeHolding.message": "Related Holdings do not reference any other pieces or items. Do you want to delete them?"
 }
