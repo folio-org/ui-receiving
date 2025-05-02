@@ -1,9 +1,15 @@
 import get from 'lodash/get';
 import PropTypes from 'prop-types';
-import { useCallback, useRef } from 'react';
+import {
+  useCallback,
+  useRef,
+} from 'react';
 import { Field } from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router';
+import {
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
@@ -71,13 +77,31 @@ const TitleForm = ({
   tenantId,
 }) => {
   const history = useHistory();
+  const location = useLocation();
   const accordionStatusRef = useRef();
   const { change } = form;
   const initialValues = get(form.getState(), 'initialValues', {});
-  const { id, title, metadata, acqUnitIds } = initialValues;
-  const { restrictions, isLoading: isRestrictionsLoading } = useAcqRestrictions(id, acqUnitIds, { tenantId });
+
+  const {
+    acqUnitIds,
+    id,
+    title,
+    metadata,
+  } = initialValues;
+
+  const {
+    restrictions,
+    isLoading: isRestrictionsLoading,
+  } = useAcqRestrictions(id, acqUnitIds, { tenantId });
 
   const { isCentralRouting } = useReceivingSearchContext();
+
+  const onAfterTitleRemove = useCallback(() => {
+    history.push({
+      pathname: location.state?.backPathname || (isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE),
+      search: location.search,
+    });
+  }, [history, isCentralRouting, location.search, location.state?.backPathname]);
 
   const {
     isRemoveFromPackageOpen,
@@ -85,7 +109,7 @@ const TitleForm = ({
     onConfirmRemoveFromPackage,
     toggleRemoveFromPackageModal,
     toggleRemoveHoldingsModal,
-  } = useRemoveFromPackage({ id, onSuccess: onCancel });
+  } = useRemoveFromPackage({ id, onSuccess: onAfterTitleRemove });
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
