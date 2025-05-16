@@ -276,9 +276,9 @@
     "numberGenerator.generateForRow": "Wygeneruj liczby dla wiersza {rowIndex}",
     "numberGenerator.generateNumbers": "Generuj liczby",
     "numberGenerator.generateHelpText": "Wybrane sekwencje zostaną użyte do wygenerowania nowych liczb. Wybierz „Generuj liczby” aby kontynuować.",
-    "title.paneTitle.removeFromPackage": "Remove from package",
-    "title.confirmationModal.removeFromPackage.message": "Removing this title from the package will delete all related pieces and any related inventory Holdings and Items.",
-    "title.confirmationModal.removeFromPackage.confirm": "Confirm",
-    "title.confirmationModal.removeFromPackage.success": "Related pieces and any related inventory Holdings and Items have been deleted.",
-    "title.confirmationModal.removeHolding.message": "Related Holdings do not reference any other pieces or items. Do you want to delete them?"
+    "title.paneTitle.removeFromPackage": "Usuń z pakietu",
+    "title.confirmationModal.removeFromPackage.message": "Usunięcie tego tytułu z pakietu spowoduje usunięcie wszystkich powiązanych elementów oraz wszelkich powiązanych zasobów i egzemplarzy.",
+    "title.confirmationModal.removeFromPackage.confirm": "Potwierdzić",
+    "title.confirmationModal.removeFromPackage.success": "Powiązane elementy i wszelkie powiązane zasoby i egzemplarze zostały usunięte.",
+    "title.confirmationModal.removeHolding.message": "Powiązane zasoby nie odnoszą się do żadnych innych elementów ani egzemplarzy. Czy chcesz je usunąć?"
 }
