@@ -191,7 +191,7 @@
     "errors.partiallyReturnedCollection": "Запис частини примірників назви вже був отриманий",
     "errors.pgException": "Database error occured during request processing",
     "errors.pieceAlreadyReceived": "Запис частини примірників назви вже був отриманий",
-    "errors.pieceFormatIsNotValid": "Формат частини пимірників назви не сумісний з форматом рядка замовлення на придбання",
+    "errors.pieceFormatIsNotValid": "Формат частини примірників назви не сумісний з форматом рядка замовлення на придбання",
     "errors.pieceNotFound": "Запис частини примірників назви не вдалося знайти",
     "errors.pieceNotRetrieved": "Запис частини примірників назви не може бути отриманий",
     "errors.piecePolMismatch": "Ця частина примірників назви не відповідає рядку замовлення на придбання",
