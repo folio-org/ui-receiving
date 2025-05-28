@@ -128,12 +128,15 @@ const renderTitleDetails = (props = {}) => render(
 
 describe('TitleDetails', () => {
   beforeEach(() => {
-    historyMock.push.mockClear();
-    usePaginatedPieces.mockClear().mockReturnValue({
+    usePaginatedPieces.mockReturnValue({
       pieces: defaultProps.pieces,
       totalCount: defaultProps.pieces.length,
       isFetching: false,
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should display title details accordions', () => {
@@ -186,13 +189,6 @@ describe('TitleDetails', () => {
   });
 
   describe('Shortcuts', () => {
-    beforeEach(() => {
-      HasCommand.mockClear();
-      expandAllSections.mockClear();
-      collapseAllSections.mockClear();
-      historyMock.push.mockClear();
-    });
-
     it('should call expandAllSections when expandAllSections shortcut is called', async () => {
       await act(async () => renderTitleDetails());
 
@@ -215,6 +211,25 @@ describe('TitleDetails', () => {
       HasCommand.mock.calls[0][0].commands.find(c => c.name === 'edit').handler();
 
       expect(defaultProps.onEdit).toHaveBeenCalled();
+    });
+  });
+
+  describe('Actions menu', () => {
+    it('should display "Remove from package" action for packaged title', async () => {
+      renderTitleDetails({
+        poLine: {
+          ...defaultProps.poLine,
+          isPackage: true,
+        },
+      });
+
+      expect(screen.getByLabelText('ui-receiving.title.paneTitle.removeFromPackage')).toBeInTheDocument();
+    });
+
+    it('should not display "Remove from package" action for non-packaged title', () => {
+      renderTitleDetails();
+
+      expect(screen.queryByLabelText('ui-receiving.title.paneTitle.removeFromPackage')).not.toBeInTheDocument();
     });
   });
 });
