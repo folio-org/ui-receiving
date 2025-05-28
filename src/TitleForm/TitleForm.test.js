@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/components';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { renderWithRouter } from '../../test/jest/helpers';
+import { renderWithRouter } from 'helpers';
 import TitleForm from './TitleForm';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
@@ -48,20 +48,23 @@ const kyMock = {
   get: jest.fn(() => ({
     json: () => Promise.resolve({}),
   })),
+  delete: jest.fn(() => Promise.resolve()),
 };
 
-const renderTitleForm = (props = defaultProps) => renderWithRouter(
+const renderTitleForm = (props = {}) => renderWithRouter(
   <TitleForm
+    {...defaultProps}
     {...props}
   />,
 );
 
 describe('TitleForm', () => {
   beforeEach(() => {
-    kyMock.get.mockClear();
-    useOkapiKy
-      .mockClear()
-      .mockReturnValue(kyMock);
+    useOkapiKy.mockReturnValue(kyMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should display title', () => {
@@ -71,7 +74,7 @@ describe('TitleForm', () => {
   });
 
   it('should display edit title', () => {
-    const { getByText } = renderTitleForm({ ...defaultProps, initialValues: { id: 'id', title: 'TEST' } });
+    const { getByText } = renderTitleForm({ initialValues: { id: 'id', title: 'TEST' } });
 
     expect(getByText('TEST')).toBeDefined();
   });
@@ -189,6 +192,40 @@ describe('TitleForm', () => {
       HasCommand.mock.calls[0][0].commands.find(c => c.name === 'search').handler();
 
       expect(pushMock).toHaveBeenCalledWith('/receiving');
+    });
+  });
+
+  describe('Actions', () => {
+    it('should handle "Remove from package" action for packaged title', async () => {
+      renderTitleForm({
+        initialValues: {
+          id: 'id',
+          title: 'TEST',
+          poLine: {
+            isPackage: true,
+          },
+        },
+
+      });
+
+      await user.click(screen.getByRole('button', { name: 'ui-receiving.title.paneTitle.removeFromPackage' }));
+      await user.click(screen.getByRole('button', { name: 'ui-receiving.title.confirmationModal.removeFromPackage.confirm' }));
+
+      expect(kyMock.delete).toHaveBeenCalled();
+    });
+
+    it('should not display "Remove from package" action for non-packaged title', () => {
+      renderTitleForm({
+        initialValues: {
+          id: 'id',
+          title: 'TEST',
+          poLine: {
+            isPackage: false,
+          },
+        },
+      });
+
+      expect(screen.queryByRole('button', { name: 'ui-receiving.title.paneTitle.removeFromPackage' })).not.toBeInTheDocument();
     });
   });
 });

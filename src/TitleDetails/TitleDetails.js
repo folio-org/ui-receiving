@@ -414,22 +414,24 @@ const TitleDetails = ({
         </FormattedMessage>
       </IfPermission>
 
-      <IfPermission perm="ui-receiving.delete">
-        <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
-          {ariaLabel => (
-            <Button
-              onClick={toggleRemoveFromPackageModal}
-              aria-label={ariaLabel}
-              buttonStyle="dropdownItem"
-              marginBottom0
-            >
-              <Icon size="small" icon="cancel">
-                <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
-              </Icon>
-            </Button>
-          )}
-        </FormattedMessage>
-      </IfPermission>
+      {Boolean(poLine?.isPackage) && (
+        <IfPermission perm="ui-receiving.delete">
+          <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
+            {ariaLabel => (
+              <Button
+                onClick={toggleRemoveFromPackageModal}
+                aria-label={ariaLabel}
+                buttonStyle="dropdownItem"
+                marginBottom0
+              >
+                <Icon size="small" icon="cancel">
+                  <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
+                </Icon>
+              </Button>
+            )}
+          </FormattedMessage>
+        </IfPermission>
+      )}
     </MenuSection>
   );
 
