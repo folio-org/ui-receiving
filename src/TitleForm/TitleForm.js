@@ -114,16 +114,6 @@ const TitleForm = ({
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
 
-  const lastMenu = (
-    <Button
-      onClick={toggleRemoveFromPackageModal}
-      buttonStyle="primary paneHeaderNewButton"
-      marginBottom0
-    >
-      <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
-    </Button>
-  );
-
   const paneFooter = (
     <FormFooter
       handleSubmit={handleSubmit}
@@ -174,6 +164,16 @@ const TitleForm = ({
       handler: handleKeyCommand(() => history.push(isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE)),
     },
   ];
+
+  const lastMenu = isPackage && (
+    <Button
+      onClick={toggleRemoveFromPackageModal}
+      buttonStyle="primary paneHeaderNewButton"
+      marginBottom0
+    >
+      <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage" />
+    </Button>
+  );
 
   return (
     <form>
