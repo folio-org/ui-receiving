@@ -49,7 +49,6 @@ import {
 
 import { RemoveFromPackageModals } from '../common/components';
 import { useRemoveFromPackage } from '../common/hooks';
-import { isForeignTenant } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -80,7 +79,6 @@ const TitleForm = ({
   contributorNameTypes,
   tenantId,
 }) => {
-  const stripes = useStripes();
   const history = useHistory();
   const location = useLocation();
   const accordionStatusRef = useRef();
@@ -99,7 +97,10 @@ const TitleForm = ({
     isLoading: isRestrictionsLoading,
   } = useAcqRestrictions(id, acqUnitIds, { tenantId });
 
-  const { isCentralRouting } = useReceivingSearchContext();
+  const {
+    isCentralRouting,
+    isTargetTenantForeign,
+  } = useReceivingSearchContext();
 
   const onAfterTitleRemove = useCallback(() => {
     history.push({
@@ -174,7 +175,7 @@ const TitleForm = ({
     },
   ];
 
-  const lastMenu = (isPackage && !isForeignTenant(stripes, tenantId)) && (
+  const lastMenu = (isPackage && !isTargetTenantForeign) && (
     <Button
       onClick={toggleRemoveFromPackageModal}
       buttonStyle="primary paneHeaderNewButton"

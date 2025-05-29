@@ -11,6 +11,7 @@ import { useOkapiKy } from '@folio/stripes/core';
 
 import { renderWithRouter } from 'helpers';
 import TitleForm from './TitleForm';
+import { useReceivingSearchContext } from '../contexts';
 
 jest.mock('@folio/stripes-components/lib/Commander', () => ({
   HasCommand: jest.fn(({ children }) => <div>{children}</div>),
@@ -51,6 +52,12 @@ const kyMock = {
   delete: jest.fn(() => Promise.resolve()),
 };
 
+const defaultReceivingSearchContextValue = {
+  isCentralRouting: false,
+  isTargetTenantForeign: false,
+  targetTenantId: 'tenant-1',
+};
+
 const renderTitleForm = (props = {}) => renderWithRouter(
   <TitleForm
     {...defaultProps}
@@ -61,6 +68,7 @@ const renderTitleForm = (props = {}) => renderWithRouter(
 describe('TitleForm', () => {
   beforeEach(() => {
     useOkapiKy.mockReturnValue(kyMock);
+    useReceivingSearchContext.mockReturnValue(defaultReceivingSearchContextValue);
   });
 
   afterEach(() => {
@@ -215,6 +223,26 @@ describe('TitleForm', () => {
     });
 
     it('should not display "Remove from package" action for non-packaged title', () => {
+      renderTitleForm({
+        initialValues: {
+          id: 'id',
+          title: 'TEST',
+          poLine: {
+            isPackage: false,
+          },
+        },
+      });
+
+      expect(screen.queryByRole('button', { name: 'ui-receiving.title.paneTitle.removeFromPackage' })).not.toBeInTheDocument();
+    });
+
+    it('should not display "Remove from package" action for title from foreign tenant', () => {
+      useReceivingSearchContext.mockReturnValue({
+        ...defaultReceivingSearchContextValue,
+        isTargetTenantForeign: true,
+        isCentralRouting: true,
+      });
+
       renderTitleForm({
         initialValues: {
           id: 'id',

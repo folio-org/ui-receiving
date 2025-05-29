@@ -61,7 +61,6 @@ import {
   RemoveFromPackageModals,
 } from '../common/components';
 import { useRemoveFromPackage } from '../common/hooks';
-import { isForeignTenant } from '../common/utils';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -124,6 +123,7 @@ const TitleDetails = ({
 
   const {
     isCentralRouting,
+    isTargetTenantForeign,
     targetTenantId,
   } = useReceivingSearchContext();
 
@@ -419,7 +419,7 @@ const TitleDetails = ({
         </FormattedMessage>
       </IfPermission>
 
-      {Boolean(poLine?.isPackage && !isForeignTenant(stripes, targetTenantId)) && (
+      {Boolean(poLine?.isPackage && !isTargetTenantForeign) && (
         <IfPermission perm="ui-receiving.delete">
           <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
             {ariaLabel => (
