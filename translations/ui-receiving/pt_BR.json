@@ -277,8 +277,8 @@
     "numberGenerator.generateNumbers": "Gerar números",
     "numberGenerator.generateHelpText": "As sequências selecionadas serão usadas para gerar novos números. Selecione \"Gerar números\" para prosseguir.",
     "title.paneTitle.removeFromPackage": "Remover do pacote",
-    "title.confirmationModal.removeFromPackage.message": "A remoção deste título do pacote excluirá todas as peças relacionadas e quaisquer coleções e itens de inventário relacionados.",
+    "title.confirmationModal.removeFromPackage.message": "Remover este título do pacote excluirá todas as peças relacionadas e excluirá todos as coleções de inventário e itens relacionados. As coleções que contêm itens que não estão relacionados a esse pedido e ao título de recebimento não serão excluídos.",
     "title.confirmationModal.removeFromPackage.confirm": "Confirmar",
     "title.confirmationModal.removeFromPackage.success": "As peças relacionadas de todas as coleções e os itens de inventário relacionados foram excluídos.",
-    "title.confirmationModal.removeHolding.message": "As Coleções Relacionadas não fazem referência a nenhuma outra peça ou item. Deseja excluí-los?"
+    "title.confirmationModal.removeHolding.message": "Uma ou mais coleções relacionadas não fazem referência a nenhuma outra peça ou item. Deseja excluí-los?"
 }

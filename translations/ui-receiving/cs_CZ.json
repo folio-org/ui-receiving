@@ -277,8 +277,8 @@
     "numberGenerator.generateNumbers": "Generovat čísla",
     "numberGenerator.generateHelpText": "Vybrané sekvence budou použity ke generování nových čísel. Chcete-li pokračovat, vyberte možnost \"Generovat čísla\".",
     "title.paneTitle.removeFromPackage": "Odebrat z balíčku",
-    "title.confirmationModal.removeFromPackage.message": "Odebráním tohoto titulu z balíčku smažete všechny související kusy a veškeré související Holdingy a Jednotky z katalogu.",
+    "title.confirmationModal.removeFromPackage.message": "Odebráním tohoto titulu z balíčku smažete všechny související kusy a veškeré související Holdingy a Jednotky z katalogu. Holdingy s jednotkami, jež nesouvisí s touto obědnávkou a přijímajícím titulem nebudou odstraněny.",
     "title.confirmationModal.removeFromPackage.confirm": "Potvrdit",
     "title.confirmationModal.removeFromPackage.success": "Související kusy a veškeré související Holdingy a Jednotky v kataloku byly smazány.",
-    "title.confirmationModal.removeHolding.message": "Související Holdingy neodkazují na žádné jiné kusy nebo jednotky. Chcete je odstranit?"
+    "title.confirmationModal.removeHolding.message": "Jeden nebo více souvisejících holdingů neodkazuje na žádné jiné kusy nebo jednotky. Chcete je odstranit?"
 }
