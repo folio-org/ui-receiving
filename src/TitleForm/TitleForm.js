@@ -31,10 +31,7 @@ import {
   Row,
   TextField,
 } from '@folio/stripes/components';
-import {
-  Pluggable,
-  useStripes,
-} from '@folio/stripes/core';
+import { Pluggable } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   AcqUnitsField,
