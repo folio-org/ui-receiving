@@ -31,7 +31,10 @@ import {
   Row,
   TextField,
 } from '@folio/stripes/components';
-import { Pluggable } from '@folio/stripes/core';
+import {
+  Pluggable,
+  useStripes,
+} from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   AcqUnitsField,
@@ -46,6 +49,7 @@ import {
 
 import { RemoveFromPackageModals } from '../common/components';
 import { useRemoveFromPackage } from '../common/hooks';
+import { isForeignTenant } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -76,6 +80,7 @@ const TitleForm = ({
   contributorNameTypes,
   tenantId,
 }) => {
+  const stripes = useStripes();
   const history = useHistory();
   const location = useLocation();
   const accordionStatusRef = useRef();
@@ -109,7 +114,11 @@ const TitleForm = ({
     onConfirmRemoveFromPackage,
     toggleRemoveFromPackageModal,
     toggleRemoveHoldingsModal,
-  } = useRemoveFromPackage({ id, onSuccess: onAfterTitleRemove });
+  } = useRemoveFromPackage({
+    id,
+    onSuccess: onAfterTitleRemove,
+    tenantId,
+  });
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
@@ -165,7 +174,7 @@ const TitleForm = ({
     },
   ];
 
-  const lastMenu = isPackage && (
+  const lastMenu = (isPackage && !isForeignTenant(stripes, tenantId)) && (
     <Button
       onClick={toggleRemoveFromPackageModal}
       buttonStyle="primary paneHeaderNewButton"

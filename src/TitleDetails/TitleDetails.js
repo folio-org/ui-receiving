@@ -61,6 +61,7 @@ import {
   RemoveFromPackageModals,
 } from '../common/components';
 import { useRemoveFromPackage } from '../common/hooks';
+import { isForeignTenant } from '../common/utils';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -311,7 +312,11 @@ const TitleDetails = ({
     isRemoveHoldingsOpen,
     toggleRemoveHoldingsModal,
     onConfirmRemoveFromPackage,
-  } = useRemoveFromPackage({ id: titleId, onSuccess: onDeleteSuccess });
+  } = useRemoveFromPackage({
+    id: titleId,
+    onSuccess: onDeleteSuccess,
+    tenantId: targetTenantId,
+  });
 
   const expectedPiecesProtectedActions = useMemo(() => ({
     [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
@@ -414,7 +419,7 @@ const TitleDetails = ({
         </FormattedMessage>
       </IfPermission>
 
-      {Boolean(poLine?.isPackage) && (
+      {Boolean(poLine?.isPackage && !isForeignTenant(stripes, targetTenantId)) && (
         <IfPermission perm="ui-receiving.delete">
           <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
             {ariaLabel => (

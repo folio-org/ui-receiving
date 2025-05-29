@@ -56,3 +56,7 @@ export const fetchConsortiumInstanceHoldings = (ky, options = {}) => {
 export const fetchConsortiumInstanceLocations = (ky, options = {}) => {
   return ky.get(CONSORTIUM_LOCATIONS_API, options).json();
 };
+
+export const isForeignTenant = (stripes, tenantId) => {
+  return stripes?.okapi?.tenant !== tenantId;
+};
