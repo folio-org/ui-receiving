@@ -94,7 +94,10 @@ const TitleForm = ({
     isLoading: isRestrictionsLoading,
   } = useAcqRestrictions(id, acqUnitIds, { tenantId });
 
-  const { isCentralRouting } = useReceivingSearchContext();
+  const {
+    isCentralRouting,
+    isTargetTenantForeign,
+  } = useReceivingSearchContext();
 
   const onAfterTitleRemove = useCallback(() => {
     history.push({
@@ -109,7 +112,11 @@ const TitleForm = ({
     onConfirmRemoveFromPackage,
     toggleRemoveFromPackageModal,
     toggleRemoveHoldingsModal,
-  } = useRemoveFromPackage({ id, onSuccess: onAfterTitleRemove });
+  } = useRemoveFromPackage({
+    id,
+    onSuccess: onAfterTitleRemove,
+    tenantId,
+  });
 
   const isEditMode = Boolean(id);
   const disabled = (isEditMode && restrictions?.protectUpdate) || isRestrictionsLoading;
@@ -165,7 +172,7 @@ const TitleForm = ({
     },
   ];
 
-  const lastMenu = isPackage && (
+  const lastMenu = (isPackage && !isTargetTenantForeign) && (
     <Button
       onClick={toggleRemoveFromPackageModal}
       buttonStyle="primary paneHeaderNewButton"

@@ -123,6 +123,7 @@ const TitleDetails = ({
 
   const {
     isCentralRouting,
+    isTargetTenantForeign,
     targetTenantId,
   } = useReceivingSearchContext();
 
@@ -311,7 +312,11 @@ const TitleDetails = ({
     isRemoveHoldingsOpen,
     toggleRemoveHoldingsModal,
     onConfirmRemoveFromPackage,
-  } = useRemoveFromPackage({ id: titleId, onSuccess: onDeleteSuccess });
+  } = useRemoveFromPackage({
+    id: titleId,
+    onSuccess: onDeleteSuccess,
+    tenantId: targetTenantId,
+  });
 
   const expectedPiecesProtectedActions = useMemo(() => ({
     [EXPECTED_PIECES_ACTION_NAMES.addPiece]: (
@@ -414,7 +419,7 @@ const TitleDetails = ({
         </FormattedMessage>
       </IfPermission>
 
-      {Boolean(poLine?.isPackage) && (
+      {Boolean(poLine?.isPackage && !isTargetTenantForeign) && (
         <IfPermission perm="ui-receiving.delete">
           <FormattedMessage id="ui-receiving.title.paneTitle.removeFromPackage">
             {ariaLabel => (

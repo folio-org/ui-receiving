@@ -1,4 +1,5 @@
 import escapeRegExp from 'lodash/escapeRegExp';
+import { useMemo } from 'react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -29,6 +30,7 @@ import {
   RECEIVING_PIECE_CREATE_ROUTE,
   RECEIVING_PIECE_EDIT_ROUTE,
 } from '../constants';
+import { useReceivingSearchContext } from '../contexts';
 import TitleDetails from './TitleDetails';
 
 jest.mock('react-router-dom', () => ({
@@ -95,10 +97,21 @@ const defaultProps = {
   match: matchMock,
 };
 
+const defaultReceivingSearchContextValue = {
+  isCentralRouting: false,
+  isTargetTenantForeign: false,
+  targetTenantId: 'tenant-1',
+};
+
 const StripesContextProvider = ({ children }) => {
-  const value = {
-    hasInterface: jest.fn(() => true),
-  };
+  const value = useMemo(() => (
+    {
+      hasInterface: jest.fn(() => true),
+      okapi: {
+        tenant: 'tenant-1',
+      },
+    }
+  ), []);
 
   return (
     <StripesContext.Provider value={value}>
@@ -133,6 +146,7 @@ describe('TitleDetails', () => {
       totalCount: defaultProps.pieces.length,
       isFetching: false,
     });
+    useReceivingSearchContext.mockReturnValue(defaultReceivingSearchContextValue);
   });
 
   afterEach(() => {
@@ -228,6 +242,23 @@ describe('TitleDetails', () => {
 
     it('should not display "Remove from package" action for non-packaged title', () => {
       renderTitleDetails();
+
+      expect(screen.queryByLabelText('ui-receiving.title.paneTitle.removeFromPackage')).not.toBeInTheDocument();
+    });
+
+    it('should not display "Remove from package" action for title from foreign tenant', () => {
+      useReceivingSearchContext.mockReturnValue({
+        ...defaultReceivingSearchContextValue,
+        isTargetTenantForeign: true,
+        isCentralRouting: true,
+      });
+
+      renderTitleDetails({
+        poLine: {
+          ...defaultProps.poLine,
+          isPackage: true,
+        },
+      });
 
       expect(screen.queryByLabelText('ui-receiving.title.paneTitle.removeFromPackage')).not.toBeInTheDocument();
     });
