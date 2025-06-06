@@ -276,9 +276,9 @@
     "numberGenerator.generateForRow": "为行{rowIndex}生成数字",
     "numberGenerator.generateNumbers": "生成数字",
     "numberGenerator.generateHelpText": "所选序列将用于生成新数字。选择“生成数字”继续。",
-    "title.paneTitle.removeFromPackage": "Remove from package",
-    "title.confirmationModal.removeFromPackage.message": "Removing this title from the package will delete all related pieces and delete any related inventory Holdings and Items. Holdings that contain items that are not related to this order and receiving title will not be deleted.",
-    "title.confirmationModal.removeFromPackage.confirm": "Confirm",
-    "title.confirmationModal.removeFromPackage.success": "Related pieces and any related inventory Holdings and Items have been deleted.",
-    "title.confirmationModal.removeHolding.message": "One or more related Holdings do not reference any other pieces or items. Do you want to delete them?"
+    "title.paneTitle.removeFromPackage": "从资源包中移除",
+    "title.confirmationModal.removeFromPackage.message": "从资源包中移除此标题将删除所有相关件，并删除所有相关的典藏馆藏和单件。包含与此订单和接收标题无关的单件的馆藏不会被删除。",
+    "title.confirmationModal.removeFromPackage.confirm": "确认",
+    "title.confirmationModal.removeFromPackage.success": "相关件和任何相关典藏馆藏和单件均已被删除。",
+    "title.confirmationModal.removeHolding.message": "一个或多个相关馆藏未引用任何其他件或单件。是否要删除它们？"
 }
