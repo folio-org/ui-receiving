@@ -6,6 +6,7 @@
 * Allow user to "Unlink" title from package POL view. Refs UIREC-448.
 * Hide "Remove from package" actions for titles related to non-package PO Lines. Refs UIREC-452.
 * Hide "Remove from package" actions for titles created in "foreign" tenants. Refs UIREC-454.
+* Populate internal and external note fields when user sets new piece to "Claim sent". Fixes UIREC-450.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)

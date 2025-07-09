@@ -97,6 +97,8 @@ export const usePieceClaimSend = (options = {}) => {
             claimingInterval,
             pieceIds: [id],
             receivingStatus: PIECE_STATUS.claimSent,
+            internalNote,
+            externalNote,
           },
         });
 
