@@ -35,7 +35,8 @@
       "pieces": "3.1",
       "pieces.send-claims": "1.0",
       "receiving": "2.0",
-      "search": "0.5 0.6 1.0",
+      "search-inventory": "1.0",
+      "search-facets": "1.0",
       "tags": "1.0",
       "titles": "1.2",
       "users": "16.0"
