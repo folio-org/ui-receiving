@@ -30,7 +30,7 @@
     "title.edit.cancel": "Anuluj",
     "title.actions.save.success": "Tytuł <b>{title}</b> został pomyślnie dodany do <b>pozycji zamówienia {poLineNumber}</b>",
     "search.keyword": "Słowo kluczowe",
-    "search.title": "Tytuł (tytuły dostawy)",
+    "search.title": "Tytuł (odebrane tytuły)",
     "search.poLine.titleOrPackage": "Pakiet (nazwa pakietu pozycji zamówienia)",
     "search.productIds": "ID produktu (dla konkretnego tytułu lub pakietu)",
     "search.purchaseOrder.poNumber": "Numer zamówienia",
