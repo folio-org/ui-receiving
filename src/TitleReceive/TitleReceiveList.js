@@ -29,6 +29,9 @@ import {
   getItemStatusLabel,
   INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT_LABELS,
+  PrevNextPagination,
+  RESULT_COUNT_INCREMENT,
+  useLocalPagination,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -51,6 +54,8 @@ import {
   PIECE_FORM_FIELD_NAMES,
 } from '../Piece';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
+
+import css from './TitleReceiveList.css';
 
 const visibleColumns = [
   'checked',
@@ -89,6 +94,7 @@ const getResultFormatter = ({
   instanceId,
   intl,
   locations,
+  pagination,
   poLineLocationIds,
   selectLocation,
   setNumberGeneratorModalRecord,
@@ -96,7 +102,7 @@ const getResultFormatter = ({
   checked: record => (
     <Field
       data-test-title-receive-checked
-      name={`${field}[${record.rowIndex}].checked`}
+      name={`${field}[${pagination.offset + record.rowIndex}].checked`}
       component={Checkbox}
       type="checkbox"
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.actions.select' })}
@@ -104,7 +110,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.displaySummary]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].displaySummary`}
+      name={`${field}[${pagination.offset + record.rowIndex}].displaySummary`}
       component={TextField}
       marginBottom0
       fullWidth
@@ -113,7 +119,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.enumeration]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].enumeration`}
+      name={`${field}[${pagination.offset + record.rowIndex}].enumeration`}
       component={TextField}
       marginBottom0
       fullWidth
@@ -122,7 +128,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.chronology]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].chronology`}
+      name={`${field}[${pagination.offset + record.rowIndex}].chronology`}
       component={TextField}
       marginBottom0
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.chronology' })}
@@ -131,7 +137,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.copyNumber]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].copyNumber`}
+      name={`${field}[${pagination.offset + record.rowIndex}].copyNumber`}
       component={TextField}
       marginBottom0
       fullWidth
@@ -140,7 +146,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.accessionNumber]: record => (
     <Field
-      name={accessionNumberFieldName(field, record.rowIndex)}
+      name={accessionNumberFieldName(field, pagination.offset + record.rowIndex)}
       component={TextField}
       disabled={
         (!record.itemId && !record.isCreateItem) ||
@@ -153,7 +159,7 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.barcode]: record => (
     <Field
-      name={barcodeFieldName(field, record.rowIndex)}
+      name={barcodeFieldName(field, pagination.offset + record.rowIndex)}
       component={TextField}
       disabled={
         (!record.itemId && !record.isCreateItem) ||
@@ -167,7 +173,7 @@ const getResultFormatter = ({
   [PIECE_COLUMNS.format]: ({ format }) => PIECE_FORMAT_LABELS[format],
   [PIECE_COLUMNS.receiptDate]: record => (
     <FieldDatepickerFinal
-      name={`${field}[${record.rowIndex}].receiptDate`}
+      name={`${field}[${pagination.offset + record.rowIndex}].receiptDate`}
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.receiptDate' })}
       marginBottom0
       usePortal
@@ -180,14 +186,14 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.comment]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].comment`}
+      name={`${field}[${pagination.offset + record.rowIndex}].comment`}
       component={TextArea}
       aria-label={intl.formatMessage({ id: 'ui-receiving.piece.comment' })}
       fullWidth
     />
   ),
   [PIECE_COLUMNS.location]: record => {
-    const locationId = fieldsValue[record.rowIndex]?.locationId;
+    const locationId = fieldsValue[pagination.offset + record.rowIndex]?.locationId;
     const locationIds = locationId ? [...new Set([...poLineLocationIds, locationId])] : poLineLocationIds;
     const isHolding = includes(createInventoryValues[record.format], INVENTORY_RECORDS_TYPE.instanceAndHolding);
 
@@ -197,13 +203,13 @@ const getResultFormatter = ({
 
     return (
       <FieldInventoryComponent
-        affiliationName={`${field}[${record.rowIndex}].${PIECE_FORM_FIELD_NAMES.receivingTenantId}`}
+        affiliationName={`${field}[${pagination.offset + record.rowIndex}].${PIECE_FORM_FIELD_NAMES.receivingTenantId}`}
         instanceId={isHolding ? instanceId : undefined}
         locationIds={locationIds}
         locations={locations}
         locationLookupLabel={<FormattedMessage id="ui-receiving.piece.locationLookup" />}
-        holdingName={`${field}[${record.rowIndex}].holdingId`}
-        locationName={`${field}[${record.rowIndex}].locationId`}
+        holdingName={`${field}[${pagination.offset + record.rowIndex}].holdingId`}
+        locationName={`${field}[${pagination.offset + record.rowIndex}].locationId`}
         onChange={selectLocation}
         labelless
         vertical
@@ -215,7 +221,7 @@ const getResultFormatter = ({
   },
   [PIECE_COLUMNS.callNumber]: record => (
     <Field
-      name={callNumberFieldName(field, record.rowIndex)}
+      name={callNumberFieldName(field, pagination.offset + record.rowIndex)}
       component={TextField}
       disabled={
         (!record.itemId && !record.isCreateItem) ||
@@ -236,14 +242,14 @@ const getResultFormatter = ({
   ),
   [PIECE_COLUMNS.displayOnHolding]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].displayOnHolding`}
+      name={`${field}[${pagination.offset + record.rowIndex}].displayOnHolding`}
       component={Checkbox}
       type="checkbox"
     />
   ),
   [PIECE_COLUMNS.supplement]: record => (
     <Field
-      name={`${field}[${record.rowIndex}].supplement`}
+      name={`${field}[${pagination.offset + record.rowIndex}].supplement`}
       component={Checkbox}
       type="checkbox"
     />
@@ -252,11 +258,11 @@ const getResultFormatter = ({
     <NumberGeneratorButton
       disabled={(!record.itemId && !record.isCreateItem)}
       onClick={() => setNumberGeneratorModalRecord(record)}
-      tooltipId={`generate-numbers-btn-${record.rowIndex}`}
+      tooltipId={`generate-numbers-btn-${pagination.offset + record.rowIndex}`}
       tooltipLabel={
         <FormattedMessage
           id="ui-receiving.numberGenerator.generateForRow"
-          values={{ rowIndex: record.rowIndex + 1 }}
+          values={{ rowIndex: pagination.offset + record.rowIndex + 1 }}
         />
       }
     />
@@ -284,18 +290,19 @@ const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
 export const TitleReceiveList = ({ fields, props }) => {
   const {
     crossTenant = false,
-    createInventoryValues = {},
+    createInventoryValues,
     instanceId,
-    selectLocation = () => {},
-    toggleCheckedAll = () => {},
+    selectLocation,
+    toggleCheckedAll,
     locations = [],
     poLineLocationIds = [],
-  } = props || {};
+  } = props;
 
   const intl = useIntl();
   const { change } = useForm();
   const { targetTenantId } = useReceivingSearchContext();
   const { data: numberGeneratorData } = useNumberGeneratorOptions({ tenantId: targetTenantId });
+  const { paginatedData, pagination, setPagination } = useLocalPagination(fields.value, RESULT_COUNT_INCREMENT);
 
   const [numberGeneratorModalRecord, setNumberGeneratorModalRecord] = useState();
 
@@ -312,6 +319,7 @@ export const TitleReceiveList = ({ fields, props }) => {
     instanceId,
     intl,
     locations,
+    pagination,
     poLineLocationIds,
     selectLocation,
     setNumberGeneratorModalRecord,
@@ -326,13 +334,14 @@ export const TitleReceiveList = ({ fields, props }) => {
     locations,
     poLineLocationIds,
     selectLocation,
+    pagination,
   ]);
 
   const isAllChecked = fields.value.every(({ checked }) => !!checked);
 
   const toggleAll = useCallback(() => {
-    toggleCheckedAll(!isAllChecked);
-  }, [isAllChecked, toggleCheckedAll]);
+    toggleCheckedAll(!isAllChecked, pagination.offset);
+  }, [isAllChecked, pagination.offset, toggleCheckedAll]);
 
   const columnMapping = useMemo(() => getColumnMappings({
     intl,
@@ -364,17 +373,31 @@ export const TitleReceiveList = ({ fields, props }) => {
 
   return (
     <>
-      <MultiColumnList
-        rowProps={rowProps}
-        columnMapping={columnMapping}
-        columnWidths={columnWidths}
-        contentData={fields.value}
-        formatter={cellFormatters}
-        id="title-receive-list"
-        interactive={false}
-        totalCount={fields.value.length}
-        visibleColumns={visibleColumnsWithActions}
-      />
+      <div className={css.listContainer}>
+        <div className={css.list}>
+          <MultiColumnList
+            autosize
+            rowProps={rowProps}
+            columnMapping={columnMapping}
+            columnWidths={columnWidths}
+            contentData={paginatedData}
+            formatter={cellFormatters}
+            id="title-receive-list"
+            interactive={false}
+            totalCount={fields.value.length}
+            visibleColumns={visibleColumnsWithActions}
+            // virtualize
+          />
+        </div>
+      </div>
+      {fields.value?.length > 0 && (
+        <PrevNextPagination
+          {...pagination}
+          totalCount={fields.value.length}
+          onChange={setPagination}
+          disabled={false}
+        />
+      )}
       <NumberGeneratorModal
         numberGeneratorData={numberGeneratorData}
         modalLabel={
@@ -386,13 +409,13 @@ export const TitleReceiveList = ({ fields, props }) => {
         open={!!numberGeneratorModalRecord}
         onClose={() => setNumberGeneratorModalRecord()}
         onGenerateAccessionNumber={val => {
-          change(accessionNumberFieldName(field, numberGeneratorModalRecord.rowIndex), val);
+          change(accessionNumberFieldName(field, numberGeneratorModalpagination.offset + record.rowIndex), val);
         }}
         onGenerateBarcode={val => {
-          change(barcodeFieldName(field, numberGeneratorModalRecord.rowIndex), val);
+          change(barcodeFieldName(field, numberGeneratorModalpagination.offset + record.rowIndex), val);
         }}
         onGenerateCallNumber={val => {
-          change(callNumberFieldName(field, numberGeneratorModalRecord.rowIndex), val);
+          change(callNumberFieldName(field, numberGeneratorModalpagination.offset + record.rowIndex), val);
         }}
       />
     </>

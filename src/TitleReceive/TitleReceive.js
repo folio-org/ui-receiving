@@ -84,33 +84,38 @@ const TitleReceive = ({
             onClose={onCancel}
             paneTitle={paneTitle}
           >
-            <LineLocationsView
-              crossTenant={crossTenant}
-              instanceId={instanceId}
-              poLine={poLine}
-              locations={locations}
-            />
-            {receivingNote && (
-              <Layout className="marginTopHalf">
-                <MessageBanner>
-                  {receivingNote}
-                </MessageBanner>
-              </Layout>
-            )}
-            <FieldArray
-              component={TitleReceiveList}
-              id="receivedItems"
-              name={FIELD_NAME}
-              props={{
-                crossTenant,
-                createInventoryValues,
-                instanceId,
-                selectLocation: form.mutators.setLocationValue,
-                toggleCheckedAll: form.mutators.toggleCheckedAll,
-                locations,
-                poLineLocationIds,
-              }}
-            />
+            <Layout
+              className="display-flex flex-direction-column"
+              style={{ height: '100%' }}
+            >
+              <LineLocationsView
+                crossTenant={crossTenant}
+                instanceId={instanceId}
+                poLine={poLine}
+                locations={locations}
+              />
+              {receivingNote && (
+                <Layout className="marginTopHalf">
+                  <MessageBanner>
+                    {receivingNote}
+                  </MessageBanner>
+                </Layout>
+              )}
+              <FieldArray
+                component={TitleReceiveList}
+                id="receivedItems"
+                name={FIELD_NAME}
+                props={{
+                  crossTenant,
+                  createInventoryValues,
+                  instanceId,
+                  selectLocation: form.mutators.setLocationValue,
+                  toggleCheckedAll: form.mutators.toggleCheckedAll,
+                  locations,
+                  poLineLocationIds,
+                }}
+              />
+            </Layout>
           </Pane>
         </Paneset>
       </HasCommand>
@@ -141,9 +146,10 @@ export default stripesFinalForm({
     setLocationValue: setLocationValueFormMutator,
     toggleCheckedAll: (args, state, tools) => {
       const isChecked = !!args[0];
+      const offset = args[1] || 0;
 
       state.formState.values[FIELD_NAME].forEach((_, i) => {
-        tools.changeValue(state, `${FIELD_NAME}[${i}].checked`, () => isChecked);
+        tools.changeValue(state, `${FIELD_NAME}[${offset + i}].checked`, () => isChecked);
       });
     },
   },

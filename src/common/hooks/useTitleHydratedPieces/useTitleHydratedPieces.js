@@ -46,7 +46,7 @@ export const useTitleHydratedPieces = ({
     {
       tenantId,
       searchParams: {
-        query: `titleId=${titleId} and poLineId==${orderLine?.id} and receivingStatus==${receivingStatus}` + (searchQuery ? ` and ${searchQuery}` : ''),
+        query: `titleId=${titleId} and poLineId==${orderLine?.id} and receivingStatus==${receivingStatus}` + (searchQuery ? ` and ${searchQuery}` : '') + ' sortby receiptDate',
       },
     },
     { enabled: Boolean(titleId && orderLine?.id && receivingStatus) },
