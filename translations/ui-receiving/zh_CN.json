@@ -261,7 +261,7 @@
     "bind.pieces.create.error.barcodeIsNotUnique": "条码必须唯一，件和单件数据无法更新。",
     "bind.pieces.modal.transfer.message": "存在针对以下件的请求 :  <b> {barcodes} </b> 。 <b>转移请求</b>至新记录？",
     "bind.pieces.modal.delete.message": "存在针对以下件的请求 :  <b> {barcodes} </b> 。请先<b>删除请求</b> ，然后再继续。",
-    "piece.accordion.originalItemDetails": "单件详情 : 原始 ) ",
+    "piece.accordion.originalItemDetails": "单件详情（ 原始 ）",
     "piece.pieceForm.edit.title": "编辑件",
     "piece.pieceForm.create.title": "添加件",
     "piece.action.button.markLate": "标记延误",
