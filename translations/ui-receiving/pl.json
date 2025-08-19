@@ -165,7 +165,7 @@
     "exportSettings.export": "Eksport",
     "exportSettings.export.all": "Wszystko",
     "exportSettings.label": "Ustawienia eksportu",
-    "exportSettings.message": "Ten eksport może potrwać kilka minut. Jeśli przeładujesz lub zamkniesz stronę, eksport nie zostanie ukończony. Gdy plik będzie gotowy, może minąć kolejna minuta, zanim przeglądarka zakończy jego pobieranie. W razie potrzeby możesz kontynuować pracę z zamówieniami i pozycjami zamówień w innej zakładce przeglądarki.",
+    "exportSettings.message": "Eksport może potrwać kilka minut. Jeśli odświeżysz lub zamkniesz stronę, eksport nie zostanie ukończony. Gdy plik będzie gotowy, może minąć jeszcze około minuta, zanim przeglądarka zakończy pobieranie. Możesz w tym czasie pracować z tytułami i częściami w osobnej karcie przeglądarki.",
     "exportSettings.piece.all": "Export all piece fields",
     "exportSettings.piece.fieldsLabel": "Piece fields",
     "exportSettings.piece.selected": "Export selected piece fields",
