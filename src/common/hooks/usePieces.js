@@ -20,7 +20,7 @@ export const usePieces = (
   const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace();
 
-  const queryKey = [namespace, 'pieces'];
+  const queryKey = [namespace, 'pieces', ...Object.values(kyOptions)];
 
   const options = {
     ...restKyOptions,

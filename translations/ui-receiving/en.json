@@ -273,6 +273,13 @@
   "piece.delete.message": "Are you sure you want to delete piece?",
   "piece.delete.deleteHoldingsAndItem.message": "This piece is connected to records in inventory. There are no other items connected to the related Holdings record. After deleting this piece would you like FOLIO to delete the Holdings?",
 
+  "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
+  "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
+
+  "piece.modal.expectedDateRange.heading": "Select expected date range",
+  "piece.modal.expectedDateRange.startDate": "Start date",
+  "piece.modal.expectedDateRange.endDate": "End date",
+
   "find-po-line-plugin-unavailable": "Find PO line plugin is not available",
 
   "requests.title.single": "An item has an open request",
@@ -289,6 +296,8 @@
   "systemUser.label": "System",
 
   "validation.dateAfter": "Selected date must be later than the current date",
+  "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
+  "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
 
   "permission.view": "Receiving: View",
   "permission.edit": "Receiving: View, edit",

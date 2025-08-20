@@ -1,4 +1,5 @@
 export * from './buildPieceRequestsSearchParams';
+export * from './dates';
 export * from './getDehydratedPiece';
 export * from './getHoldingsItemsAndPieces';
 export * from './getItemById';

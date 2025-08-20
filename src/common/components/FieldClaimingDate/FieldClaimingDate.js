@@ -6,7 +6,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  excludePreviousDays,
+  excludeClaimingPreviousDays,
   validateClaimingDate,
 } from './utils';
 
@@ -28,7 +28,7 @@ export const FieldClaimingDate = ({
       name={name}
       required={required}
       validate={validate}
-      exclude={excludePreviousDays}
+      exclude={excludeClaimingPreviousDays}
       {...props}
     />
   );

@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  useIntl,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import {
   CheckboxFilter,
@@ -41,7 +38,6 @@ export function TitleDetailsReceivedActions({
   toggleColumn,
   visibleColumns,
 }) {
-  const intl = useIntl();
   const { isCentralRouting } = useReceivingSearchContext();
 
   if (!hasUnreceive) return null;
@@ -56,10 +52,7 @@ export function TitleDetailsReceivedActions({
       }}
     >
       <DropdownMenu>
-        <MenuSection
-          label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
-          id="received-pieces-menu-actions"
-        >
+        <MenuSection id="received-pieces-menu-actions">
           <Button
             data-test-title-unreceive-button
             to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/unreceive/${titleId}`}

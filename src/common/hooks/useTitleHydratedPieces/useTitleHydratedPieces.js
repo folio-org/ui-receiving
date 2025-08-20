@@ -41,6 +41,7 @@ export const useTitleHydratedPieces = ({
 
   const {
     pieces,
+    piecesCount,
     isLoading: isPiecesLoading,
   } = usePieces(
     {
@@ -103,6 +104,7 @@ export const useTitleHydratedPieces = ({
     pieceHoldingMap: keyBy(holdings, 'id'),
     pieceLocationMap: keyBy(locations, 'id'),
     pieces: data?.pieces || DEFAULT_DATA,
+    piecesCount,
     title,
   };
 };

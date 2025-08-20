@@ -63,9 +63,9 @@ const TitleDetailsContainer = ({
       },
     })
       .json()
-      .then(({ pieces }) => Boolean(pieces.length))
-      .catch(() => false)
-      .then(flag => ({ [status]: flag }))
+      .then(({ totalRecords }) => totalRecords)
+      .catch(() => 0)
+      .then((count) => ({ [status]: count }))
   ), [ky, titleId]);
 
   const fetchReceivingResources = useCallback((lineId) => {
