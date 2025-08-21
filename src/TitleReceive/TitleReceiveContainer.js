@@ -58,10 +58,9 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const titleId = match.params.id;
   const dateRange = location.state?.dateRange;
-  const dateRangeString = `${dateRange.startDate}:${dateRange.endDate}`;
   const searchQuery = (
     dateRange
-      ? `${buildDateRangeQuery(RECEIPT_DATE, dateRangeString)} sortBy ${RECEIPT_DATE}`
+      ? `${buildDateRangeQuery(RECEIPT_DATE, [dateRange.startDate, dateRange.endDate].join(':'))} sortBy ${RECEIPT_DATE}`
       : ''
   );
 
