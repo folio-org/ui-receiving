@@ -58,9 +58,10 @@ function TitleReceiveContainer({ history, location, match }) {
 
   const titleId = match.params.id;
   const dateRange = location.state?.dateRange;
+  const dateRangeString = `${dateRange.startDate}:${dateRange.endDate}`;
   const searchQuery = (
     dateRange
-      ? `${buildDateRangeQuery(RECEIPT_DATE, `${dateRange.startDate}:${dateRange.endDate}`)} sortBy ${RECEIPT_DATE}`
+      ? `${buildDateRangeQuery(RECEIPT_DATE, dateRangeString)} sortBy ${RECEIPT_DATE}`
       : ''
   );
 
@@ -107,13 +108,16 @@ function TitleReceiveContainer({ history, location, match }) {
     onCancel();
   }, [onCancel]);
 
-  const onSubmit = useCallback(({ receivedItems }) => {
-    const renderNextChunk = () => {
-      startTransition(() => {
-        setPagination((prev) => ({ ...prev, offset: prev.offset + RESULT_COUNT_INCREMENT }));
-      });
-    };
+  const renderNextChunk = useCallback(() => {
+    startTransition(() => {
+      setPagination((prev) => ({
+        ...prev,
+        offset: prev.offset + RESULT_COUNT_INCREMENT,
+      }));
+    });
+  }, [setPagination]);
 
+  const onSubmit = useCallback(({ receivedItems }) => {
     const selectedItems = receivedItems.filter(({ checked }) => checked === true);
 
     if (!selectedItems?.length) {
@@ -140,7 +144,7 @@ function TitleReceiveContainer({ history, location, match }) {
         await handleReceiveErrorResponse(showCallout, response);
         onCancel();
       });
-  }, [receive, setPagination, showCallout, isPiecesChunksExhausted, onCancel]);
+  }, [receive, renderNextChunk, showCallout, isPiecesChunksExhausted, onCancel]);
 
   const initialValues = useMemo(() => ({ receivedItems: paginatedData }), [paginatedData]);
 

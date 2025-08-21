@@ -145,7 +145,6 @@ TitleReceive.propTypes = {
   paneSub: PropTypes.string,
   paneTitle: PropTypes.string.isRequired,
   poLine: PropTypes.object.isRequired,
-  pristine: PropTypes.bool.isRequired,
   receivingNote: PropTypes.string,
   submitButtonLabel: PropTypes.node.isRequired,
   submitting: PropTypes.bool.isRequired,
