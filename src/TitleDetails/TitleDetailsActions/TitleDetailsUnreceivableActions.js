@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Button,
@@ -28,7 +28,6 @@ export function TitleDetailsUnreceivableActions({
   titleId,
   renderColumnsMenu,
 }) {
-  const intl = useIntl();
   const { isCentralRouting } = useReceivingSearchContext();
 
   if (!hasRecords) return null;
@@ -43,10 +42,7 @@ export function TitleDetailsUnreceivableActions({
       }}
     >
       <DropdownMenu>
-        <MenuSection
-          label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
-          id="unreceivable-pieces-menu-actions"
-        >
+        <MenuSection id="unreceivable-pieces-menu-actions">
           <Button
             to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/expect/${titleId}`}
             buttonStyle="dropdownItem"

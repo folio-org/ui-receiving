@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { FilterMenu } from '@folio/stripes-acq-components';
 import {
@@ -32,8 +32,6 @@ export function TitleDetailsExpectedActions({
   toggleColumn,
   visibleColumns,
 }) {
-  const intl = useIntl();
-
   return (
     <Dropdown
       data-testid="expected-pieces-action-dropdown"
@@ -44,10 +42,7 @@ export function TitleDetailsExpectedActions({
       }}
     >
       <DropdownMenu>
-        <MenuSection
-          label={intl.formatMessage({ id: 'stripes-components.paneMenuActionsToggleLabel' })}
-          id="expected-pieces-menu-actions"
-        >
+        <MenuSection id="expected-pieces-menu-actions">
           {(!actionsHidden?.[EXPECTED_PIECES_ACTION_NAMES.addPiece]) && (
             <Button
               data-testid="add-piece-button"

@@ -10,7 +10,10 @@ export const useReceive = (options = {}) => {
 
   const ky = useOkapiKy({ tenant: tenantId });
 
-  const { mutateAsync } = useMutation({
+  const {
+    isLoading,
+    mutateAsync,
+  } = useMutation({
     mutationFn: (pieces) => {
       const selectedPieces = pieces
         .map(piece => ({
@@ -73,6 +76,7 @@ export const useReceive = (options = {}) => {
   });
 
   return {
+    isLoading,
     receive: mutateAsync,
   };
 };

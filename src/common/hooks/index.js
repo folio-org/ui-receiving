@@ -1,3 +1,4 @@
+export * from './useAsyncConfirmationModal';
 export * from './useHoldingItems';
 export * from './useItem';
 export * from './useNumberGeneratorOptions';

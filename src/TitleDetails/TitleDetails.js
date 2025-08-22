@@ -1,14 +1,12 @@
+import get from 'lodash/get';
+import noop from 'lodash/noop';
+import PropTypes from 'prop-types';
 import {
   useCallback,
   useMemo,
   useState,
   useRef,
 } from 'react';
-import {
-  get,
-  noop,
-} from 'lodash';
-import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   useIntl,
@@ -50,6 +48,7 @@ import {
   ORDER_FORMATS,
   ORDER_STATUSES,
   PIECE_STATUS,
+  RESULT_COUNT_INCREMENT,
   RoutingListAccordion,
   useAcqRestrictions,
   useFilters,
@@ -58,9 +57,13 @@ import {
 
 import {
   ConfirmReceivingModal,
+  DateRangeModal,
   RemoveFromPackageModals,
 } from '../common/components';
-import { useRemoveFromPackage } from '../common/hooks';
+import {
+  useAsyncConfirmationModal,
+  useRemoveFromPackage,
+} from '../common/hooks';
 import {
   CENTRAL_RECEIVING_PIECE_CREATE_ROUTE,
   CENTRAL_RECEIVING_PIECE_EDIT_ROUTE,
@@ -120,6 +123,13 @@ const TitleDetails = ({
   const confirmReceivingPromise = useRef({});
   const accordionStatusRef = useRef();
   const receivingNote = get(poLine, 'details.receivingNote');
+
+  const {
+    cancel: cancelExpectedDateRangeModal,
+    confirm: confirmExpectedDateRangeModal,
+    init: initExpectedDateRangeModal,
+    isModalOpen: isExpectedDateRangeModalOpen,
+  } = useAsyncConfirmationModal();
 
   const {
     isCentralRouting,
@@ -207,12 +217,37 @@ const TitleDetails = ({
     });
   }, [history, isCentralRouting, location.search, titleId]);
 
-  const goToReceiveList = useCallback(() => {
-    history.push({
-      pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
-      search: location.search,
-    });
-  }, [titleId, history, isCentralRouting, location.search]);
+  /**
+   * Navigates to the receive list page for the current title.
+   * If the number of expected pieces exceeds the result count increment,
+   * opens a modal to select a date range before navigating.
+   * Otherwise, navigates directly to the receive list.
+   *
+   * @async
+   * @function goToReceiveList
+   * @returns {Promise<void>} Resolves when navigation is complete.
+   */
+  const goToReceiveList = useCallback(async () => {
+    const historyPush = (state) => {
+      history.push({
+        pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/receive/${titleId}`,
+        search: location.search,
+        state,
+      });
+    };
+
+    const piecesCount = piecesExistence?.[EXPECTED_PIECES_SEARCH_VALUE];
+
+    if (piecesCount > RESULT_COUNT_INCREMENT) {
+      await initExpectedDateRangeModal()
+        .then((dateRange) => historyPush({ dateRange }))
+        .catch(noop);
+
+      return;
+    }
+
+    historyPush();
+  }, [piecesExistence, history, isCentralRouting, titleId, location.search, initExpectedDateRangeModal]);
 
   const onPieceCreate = useCallback(() => {
     setConfirmAcknowledgeNote(() => goToPieceCreateForm);
@@ -236,18 +271,15 @@ const TitleDetails = ({
     );
   }, [goToPieceEditForm, isAcknowledged, toggleAcknowledgeNote]);
 
-  const openReceiveList = useCallback(
-    () => {
-      setConfirmAcknowledgeNote(() => goToReceiveList);
+  const openReceiveList = useCallback(() => {
+    setConfirmAcknowledgeNote(() => goToReceiveList);
 
-      return (
-        isAcknowledged
-          ? toggleAcknowledgeNote()
-          : goToReceiveList()
-      );
-    },
-    [goToReceiveList, isAcknowledged, toggleAcknowledgeNote],
-  );
+    return (
+      isAcknowledged
+        ? toggleAcknowledgeNote()
+        : goToReceiveList()
+    );
+  }, [goToReceiveList, isAcknowledged, toggleAcknowledgeNote]);
 
   const confirmReceiving = useCallback(
     () => new Promise((resolve, reject) => {
@@ -678,6 +710,13 @@ const TitleDetails = ({
           open={isConfirmReceiving}
           onCancel={onCancelReceiving}
           onConfirm={onConfirmReceiving}
+        />
+
+        <DateRangeModal
+          open={isExpectedDateRangeModalOpen}
+          confirmLabel={<FormattedMessage id="ui-receiving.title.details.button.receive" />}
+          onConfirm={confirmExpectedDateRangeModal}
+          onCancel={cancelExpectedDateRangeModal}
         />
       </Pane>
     </HasCommand>

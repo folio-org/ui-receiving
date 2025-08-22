@@ -1,6 +1,5 @@
-import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { useMemo } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
 
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -8,6 +7,7 @@ import {
   checkScope,
   HasCommand,
   Layout,
+  Loading,
   MessageBanner,
   Pane,
   Paneset,
@@ -24,33 +24,39 @@ import { TitleReceiveList } from './TitleReceiveList';
 const FIELD_NAME = 'receivedItems';
 
 const TitleReceive = ({
-  crossTenant = false,
   createInventoryValues,
+  crossTenant = false,
   form,
   handleSubmit,
   instanceId,
+  isLoading,
+  isPiecesChunksExhausted,
+  locations,
   onCancel,
+  paneSub,
   paneTitle,
-  pristine,
+  poLine,
   receivingNote,
+  submitButtonLabel,
   submitting,
   values,
-  locations,
-  poLine,
 }) => {
-  const isReceiveDisabled = values[FIELD_NAME].every(({ checked }) => !checked);
-  const poLineLocationIds = useMemo(
-    () => poLine?.locations?.map(({ locationId }) => locationId).filter(Boolean),
-    [poLine],
-  );
+  const isReceiveDisabled = useMemo(() => {
+    return isPiecesChunksExhausted && !values[FIELD_NAME].some(({ checked }) => checked);
+  }, [isPiecesChunksExhausted, values]);
+
+  const poLineLocationIds = useMemo(() => {
+    return poLine?.locations
+      ?.map(({ locationId }) => locationId)
+      ?.filter(Boolean);
+  }, [poLine]);
 
   const paneFooter = (
     <FormFooter
       handleSubmit={handleSubmit}
       isSubmitDisabled={isReceiveDisabled}
-      label={<FormattedMessage id="ui-receiving.title.details.button.receive" />}
+      label={submitButtonLabel}
       onCancel={onCancel}
-      pristine={pristine}
       submitting={submitting}
     />
   );
@@ -83,6 +89,7 @@ const TitleReceive = ({
             id="pane-title-receive-list"
             onClose={onCancel}
             paneTitle={paneTitle}
+            paneSub={paneSub}
           >
             <LineLocationsView
               crossTenant={crossTenant}
@@ -97,20 +104,27 @@ const TitleReceive = ({
                 </MessageBanner>
               </Layout>
             )}
-            <FieldArray
-              component={TitleReceiveList}
-              id="receivedItems"
-              name={FIELD_NAME}
-              props={{
-                crossTenant,
-                createInventoryValues,
-                instanceId,
-                selectLocation: form.mutators.setLocationValue,
-                toggleCheckedAll: form.mutators.toggleCheckedAll,
-                locations,
-                poLineLocationIds,
-              }}
-            />
+            {isLoading && (
+              <Layout className="display-flex centerContent">
+                <Loading size="large" />
+              </Layout>
+            )}
+            {!isLoading && (
+              <FieldArray
+                component={TitleReceiveList}
+                id="receivedItems"
+                name={FIELD_NAME}
+                props={{
+                  createInventoryValues,
+                  crossTenant,
+                  instanceId,
+                  locations,
+                  poLineLocationIds,
+                  selectLocation: form.mutators.setLocationValue,
+                  toggleCheckedAll: form.mutators.toggleCheckedAll,
+                }}
+              />
+            )}
           </Pane>
         </Paneset>
       </HasCommand>
@@ -121,22 +135,23 @@ const TitleReceive = ({
 TitleReceive.propTypes = {
   crossTenant: PropTypes.bool,
   createInventoryValues: PropTypes.object.isRequired,
-  form: PropTypes.object,  // form object to get initialValues
+  form: PropTypes.object, // form object to get initialValues
   handleSubmit: PropTypes.func.isRequired,
   instanceId: PropTypes.string,
-  onCancel: PropTypes.func.isRequired,
-  paneTitle: PropTypes.string.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  receivingNote: PropTypes.string,
-  submitting: PropTypes.bool.isRequired,
-  values: PropTypes.object.isRequired,  // current form values
+  isLoading: PropTypes.bool,
+  isPiecesChunksExhausted: PropTypes.bool,
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  paneSub: PropTypes.string,
+  paneTitle: PropTypes.string.isRequired,
   poLine: PropTypes.object.isRequired,
+  receivingNote: PropTypes.string,
+  submitButtonLabel: PropTypes.node.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  values: PropTypes.object.isRequired, // current form values
 };
 
 export default stripesFinalForm({
-  navigationCheck: true,
-  subscription: { values: true },
   mutators: {
     setLocationValue: setLocationValueFormMutator,
     toggleCheckedAll: (args, state, tools) => {
@@ -147,4 +162,6 @@ export default stripesFinalForm({
       });
     },
   },
+  navigationCheck: true,
+  subscription: { values: true },
 })(TitleReceive);

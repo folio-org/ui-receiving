@@ -23,6 +23,7 @@ import {
   PIECE_STATUS, PIECE_FORMAT,
   INVENTORY_RECORDS_TYPE,
   ORDER_FORMATS,
+  RESULT_COUNT_INCREMENT,
 } from '@folio/stripes-acq-components';
 
 import { usePaginatedPieces } from '../common/hooks';
@@ -31,6 +32,7 @@ import {
   RECEIVING_PIECE_EDIT_ROUTE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
+import { EXPECTED_PIECES_SEARCH_VALUE } from '../Piece';
 import TitleDetails from './TitleDetails';
 
 jest.mock('react-router-dom', () => ({
@@ -193,8 +195,8 @@ describe('TitleDetails', () => {
 
   it('should display filter search inputs if there are pieces to receive/unreceive', async () => {
     const piecesExistence = {
-      [PIECE_STATUS.expected]: true,
-      [PIECE_STATUS.received]: true,
+      [EXPECTED_PIECES_SEARCH_VALUE]: 3,
+      [PIECE_STATUS.received]: 1,
     };
 
     renderTitleDetails({ piecesExistence });
@@ -261,6 +263,42 @@ describe('TitleDetails', () => {
       });
 
       expect(screen.queryByLabelText('ui-receiving.title.paneTitle.removeFromPackage')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Date Range Modal', () => {
+    it('should show date range modal when receiving pieces with large count', async () => {
+      const mockPiecesExistence = {
+        [EXPECTED_PIECES_SEARCH_VALUE]: RESULT_COUNT_INCREMENT + 1, // More than RESULT_COUNT_INCREMENT
+      };
+
+      renderTitleDetails({
+        piecesExistence: mockPiecesExistence,
+      });
+
+      await user.click(screen.getByTestId('receive-button'));
+
+      // The modal should be triggered by the goToReceiveList function
+      expect(screen.getByText('ui-receiving.piece.modal.expectedDateRange.heading')).toBeInTheDocument();
+    });
+
+    it('should navigate directly to receive list when pieces count is low', async () => {
+      const mockPiecesExistence = {
+        [EXPECTED_PIECES_SEARCH_VALUE]: 50, // Less than RESULT_COUNT_INCREMENT
+      };
+
+      renderTitleDetails({
+        piecesExistence: mockPiecesExistence,
+      });
+
+      await user.click(screen.getByTestId('receive-button'));
+
+      // Should navigate directly without showing modal
+      expect(historyMock.push).toHaveBeenCalledWith({
+        pathname: `/receiving/receive/${defaultProps.title.id}`,
+        search: 'search',
+        state: undefined,
+      });
     });
   });
 });

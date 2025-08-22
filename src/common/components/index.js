@@ -1,6 +1,7 @@
 export * from './AffiliationsNavigation';
 export * from './ConfirmReceivingModal';
 export * from './CreateItemField';
+export * from './DateRangeModal';
 export * from './FieldClaimingDate';
 export * from './LineLocationsView';
 export * from './NumberGeneratorModal';
