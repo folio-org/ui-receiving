@@ -61,7 +61,7 @@ describe('Render TitleReceiveList', () => {
       error: null,
     });
 
-    renderTitleReceiveList();
+    renderTitleReceiveList({ props: null });
 
     const button = screen.queryByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 
@@ -79,7 +79,7 @@ describe('Render TitleReceiveList', () => {
       error: null,
     });
 
-    renderTitleReceiveList();
+    renderTitleReceiveList({ props: {} });
 
     const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 

@@ -302,7 +302,7 @@ export const TitleReceiveList = ({ fields, props }) => {
     toggleCheckedAll = defaultListProps.toggleCheckedAll,
     locations = defaultListProps.locations,
     poLineLocationIds = defaultListProps.poLineLocationIds,
-  } = props || defaultListProps;
+  } = props || {};
 
   const intl = useIntl();
   const { change } = useForm();
