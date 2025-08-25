@@ -1,6 +1,8 @@
 import includes from 'lodash/includes';
+import noop from 'lodash/noop';
 import PropTypes from 'prop-types';
 import {
+  memo,
   useCallback,
   useMemo,
   useState,
@@ -281,16 +283,26 @@ const getColumnMappings = ({ intl, isAllChecked, toggleAll }) => ({
   actions: <FormattedMessage id="ui-receiving.button.actions" />,
 });
 
+const defaultListProps = {
+  crossTenant: false,
+  createInventoryValues: {},
+  selectLocation: noop,
+  toggleCheckedAll: noop,
+  locations: [],
+  poLineLocationIds: [],
+};
+
 export const TitleReceiveList = ({ fields, props }) => {
   const {
-    crossTenant = false,
-    createInventoryValues = {},
+    crossTenant = defaultListProps.crossTenant,
+    createInventoryValues = defaultListProps.createInventoryValues,
     instanceId,
-    selectLocation = () => {},
-    toggleCheckedAll = () => {},
-    locations = [],
-    poLineLocationIds = [],
-  } = props || {};
+    isLoading,
+    selectLocation = defaultListProps.selectLocation,
+    toggleCheckedAll = defaultListProps.toggleCheckedAll,
+    locations = defaultListProps.locations,
+    poLineLocationIds = defaultListProps.poLineLocationIds,
+  } = props || defaultListProps;
 
   const intl = useIntl();
   const { change } = useForm();
@@ -372,6 +384,7 @@ export const TitleReceiveList = ({ fields, props }) => {
         formatter={cellFormatters}
         id="title-receive-list"
         interactive={false}
+        loading={isLoading}
         totalCount={fields.value.length}
         visibleColumns={visibleColumnsWithActions}
       />
@@ -405,9 +418,12 @@ TitleReceiveList.propTypes = {
     crossTenant: PropTypes.bool,
     createInventoryValues: PropTypes.object.isRequired,
     instanceId: PropTypes.string,
+    isLoading: PropTypes.bool,
     selectLocation: PropTypes.func.isRequired,
     toggleCheckedAll: PropTypes.func.isRequired,
     poLineLocationIds: PropTypes.arrayOf(PropTypes.string),
     locations: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };
+
+export default memo(TitleReceiveList);
