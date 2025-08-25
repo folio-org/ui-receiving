@@ -42,8 +42,8 @@ const TitleReceive = ({
   values,
 }) => {
   const isReceiveDisabled = useMemo(() => {
-    return isPiecesChunksExhausted && !values[FIELD_NAME].some(({ checked }) => checked);
-  }, [isPiecesChunksExhausted, values]);
+    return isLoading || (isPiecesChunksExhausted && !values[FIELD_NAME].some(({ checked }) => checked));
+  }, [isLoading, isPiecesChunksExhausted, values]);
 
   const poLineLocationIds = useMemo(() => {
     return poLine?.locations
@@ -55,7 +55,16 @@ const TitleReceive = ({
     <FormFooter
       handleSubmit={handleSubmit}
       isSubmitDisabled={isReceiveDisabled}
-      label={submitButtonLabel}
+      label={(
+        isLoading
+          ? (
+            <>
+              {submitButtonLabel}
+              <Loading />
+            </>
+          )
+          : submitButtonLabel
+      )}
       onCancel={onCancel}
       submitting={submitting}
     />
@@ -104,27 +113,21 @@ const TitleReceive = ({
                 </MessageBanner>
               </Layout>
             )}
-            {isLoading && (
-              <Layout className="display-flex centerContent">
-                <Loading size="large" />
-              </Layout>
-            )}
-            {!isLoading && (
-              <FieldArray
-                component={TitleReceiveList}
-                id="receivedItems"
-                name={FIELD_NAME}
-                props={{
-                  createInventoryValues,
-                  crossTenant,
-                  instanceId,
-                  locations,
-                  poLineLocationIds,
-                  selectLocation: form.mutators.setLocationValue,
-                  toggleCheckedAll: form.mutators.toggleCheckedAll,
-                }}
-              />
-            )}
+            <FieldArray
+              component={TitleReceiveList}
+              id="receivedItems"
+              name={FIELD_NAME}
+              props={{
+                createInventoryValues,
+                crossTenant,
+                instanceId,
+                isLoading,
+                locations,
+                poLineLocationIds,
+                selectLocation: form.mutators.setLocationValue,
+                toggleCheckedAll: form.mutators.toggleCheckedAll,
+              }}
+            />
           </Pane>
         </Paneset>
       </HasCommand>

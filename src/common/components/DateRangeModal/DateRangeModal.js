@@ -12,6 +12,7 @@ export const DateRangeModal = ({
   onConfirm,
   startDateName,
   startDateRequired,
+  ...props
 }) => {
   return (
     <DateRangeModalForm
@@ -24,6 +25,7 @@ export const DateRangeModal = ({
       onSubmit={onConfirm}
       startDateName={startDateName}
       startDateRequired={startDateRequired}
+      {...props}
     />
   );
 };
