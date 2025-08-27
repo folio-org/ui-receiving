@@ -33,7 +33,6 @@ export const usePaginatedPieces = ({
   const {
     crossTenant,
     enabled = true,
-    instanceId,
     tenantId,
     activeTenantId,
     centralTenantId,
@@ -44,7 +43,6 @@ export const usePaginatedPieces = ({
 
   const { fetchPieceRequests } = usePieceRequestsFetch({ tenantId });
   const { fetchPieceItems } = usePieceItemsFetch({
-    instanceId,
     tenantId: crossTenant ? getConsortiumCentralTenantId(stripes) : tenantId,
   });
 

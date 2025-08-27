@@ -2,15 +2,15 @@ import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
 import {
-  fetchConsortiumPieceItems,
-  fetchLocalPieceItems,
-} from '../util';
+  fetchConsortiumPiecesItems,
+  fetchLocalPiecesItems,
+} from '../../../utils/api';
 import { usePieceItemsFetch } from './usePieceItemsFetch';
 
-jest.mock('../util', () => ({
-  ...jest.requireActual('../util'),
-  fetchConsortiumPieceItems: jest.fn(),
-  fetchLocalPieceItems: jest.fn(),
+jest.mock('../../../utils/api', () => ({
+  ...jest.requireActual('../../../utils/api'),
+  fetchConsortiumPiecesItems: jest.fn(),
+  fetchLocalPiecesItems: jest.fn(),
 }));
 
 const pieces = [{ id: 'piece-id-1' }];
@@ -37,7 +37,7 @@ describe('usePieceItemsFetch', () => {
       crossTenant: false,
     });
 
-    expect(fetchLocalPieceItems).toHaveBeenCalled();
+    expect(fetchLocalPiecesItems).toHaveBeenCalled();
   });
 
   describe('ECS mode', () => {
@@ -49,7 +49,7 @@ describe('usePieceItemsFetch', () => {
         crossTenant: true,
       });
 
-      expect(fetchConsortiumPieceItems).toHaveBeenCalled();
+      expect(fetchConsortiumPiecesItems).toHaveBeenCalled();
     });
   });
 });
