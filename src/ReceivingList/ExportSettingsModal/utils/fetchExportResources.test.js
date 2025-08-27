@@ -3,13 +3,13 @@ import {
   fetchExportDataByIds,
   HOLDINGS_API,
   IDENTIFIER_TYPES_API,
-  ITEMS_API,
   LINES_API,
   LOCATIONS_API,
   ORDERS_API,
   VENDORS_API,
 } from '@folio/stripes-acq-components';
 
+import { fetchLocalPiecesItems } from '../../../common/utils';
 import {
   fetchContributorNameTypesExportData,
   fetchIdentifierTypesExportData,
@@ -24,8 +24,17 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   fetchExportDataByIds: jest.fn(() => []),
 }));
+jest.mock('../../../common/utils', () => ({
+  ...jest.requireActual('../../../common/utils'),
+  fetchConsortiumPiecesItems: jest.fn(() => jest.fn(() => [])),
+  fetchLocalPiecesItems: jest.fn(() => jest.fn(() => [])),
+}));
 
-const kyMock = jest.fn();
+const kyMock = {
+  get: jest.fn(() => ({
+    json: () => Promise.resolve(),
+  })),
+};
 
 const purchaseOrders = [{
   id: 'purchaseOrderId',
@@ -48,7 +57,10 @@ const titles = [{
 describe('fetchExportResources', () => {
   beforeEach(() => {
     fetchExportDataByIds.mockClear();
-    kyMock.mockClear();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('fetchContributorNameTypesExportData', () => {
@@ -75,18 +87,15 @@ describe('fetchExportResources', () => {
 
   describe('fetchItemsExportData', () => {
     it('should fetch items by ids', async () => {
-      await fetchItemsExportData(kyMock)(pieces);
+      await fetchItemsExportData(kyMock, {})(pieces);
 
-      expect(fetchExportDataByIds).toHaveBeenCalledWith(expect.objectContaining({
-        api: ITEMS_API,
-        ids: ['itemId'],
-      }));
+      expect(fetchLocalPiecesItems.mock.results[0].value).toHaveBeenCalledWith(pieces);
     });
   });
 
   describe('fetchLocationsExportData', () => {
     it('should fetch pieces holdings and locations by ids', async () => {
-      await fetchLocationsExportData(kyMock)(pieces);
+      await fetchLocationsExportData(kyMock, {})(pieces);
 
       expect(fetchExportDataByIds).toHaveBeenNthCalledWith(1, expect.objectContaining({
         api: HOLDINGS_API,

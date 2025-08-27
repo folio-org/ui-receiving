@@ -9,8 +9,8 @@ import { usePieceItemsFetch } from './usePieceItemsFetch';
 
 jest.mock('../../../utils/api', () => ({
   ...jest.requireActual('../../../utils/api'),
-  fetchConsortiumPiecesItems: jest.fn(),
-  fetchLocalPiecesItems: jest.fn(),
+  fetchConsortiumPiecesItems: jest.fn(() => () => Promise.resolve()),
+  fetchLocalPiecesItems: jest.fn(() => () => Promise.resolve()),
 }));
 
 const pieces = [{ id: 'piece-id-1' }];

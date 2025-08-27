@@ -6,7 +6,7 @@ import { usePieceRequestsFetch } from './usePieceRequestsFetch';
 
 jest.mock('../../../utils/api', () => ({
   ...jest.requireActual('../../../utils/api'),
-  fetchLocalPiecesRequests: jest.fn(),
+  fetchLocalPiecesRequests: jest.fn(() => () => Promise.resolve()),
 }));
 
 const pieces = [{ id: 'piece-id-1' }];
