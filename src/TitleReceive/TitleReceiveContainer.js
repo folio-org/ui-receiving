@@ -1,6 +1,8 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
   useTransition,
 } from 'react';
@@ -52,6 +54,16 @@ function TitleReceiveContainer({ history, location, match }) {
     targetTenantId,
   } = useReceivingSearchContext();
 
+  const abortControllerRef = useRef(new AbortController());
+
+  useEffect(() => {
+    const abortController = abortControllerRef.current;
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
   const [isTransitionPending, startTransition] = useTransition();
 
   const [receivedPiecesWithRequests, setReceivedPiecesWithRequests] = useState([]);
@@ -93,7 +105,10 @@ function TitleReceiveContainer({ history, location, match }) {
   const {
     isLoading: isReceiveLoading,
     receive,
-  } = useReceive({ tenantId: targetTenantId });
+  } = useReceive({
+    signal: abortControllerRef.current.signal,
+    tenantId: targetTenantId,
+  });
 
   const onCancel = useCallback(() => {
     history.push({
