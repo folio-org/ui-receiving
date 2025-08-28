@@ -6,7 +6,9 @@ import { exportToCsv } from '@folio/stripes/components';
 import {
   useOkapiKy,
   useNamespace,
+  useStripes,
 } from '@folio/stripes/core';
+import { useCentralOrderingContext } from '@folio/stripes-acq-components';
 
 import {
   EXPORT_PIECE_FIELDS,
@@ -20,14 +22,21 @@ import {
 export const usePiecesExportCSV = ({ tenantId, signal } = {}) => {
   const intl = useIntl();
   const ky = useOkapiKy({ tenant: tenantId });
+  const stripes = useStripes();
   const [namespace] = useNamespace({ key: 'pieces-export-csv' });
+  const { isCentralOrderingEnabled } = useCentralOrderingContext();
+
+  const configs = {
+    isCentralOrderingEnabled,
+    stripes,
+  };
 
   const mutationKey = [namespace];
   const mutationFn = async ({
     exportFields,
     query,
   }) => {
-    const exportData = await getExportData(ky.extend({ signal }))({ exportFields, query });
+    const exportData = await getExportData(ky.extend({ signal }), configs)({ exportFields, query });
     const exportReport = createExportReport(exportData, { intl });
 
     const filename = `receiving-export-${moment().format('YYYY-MM-DD-hh:mm')}`;

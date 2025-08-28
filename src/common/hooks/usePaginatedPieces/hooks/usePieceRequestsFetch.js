@@ -1,6 +1,6 @@
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { fetchLocalPieceRequests } from '../util';
+import { fetchLocalPiecesRequests } from '../../../utils';
 
 export const usePieceRequestsFetch = ({ tenantId } = {}) => {
   const ky = useOkapiKy({ tenant: tenantId });
@@ -8,7 +8,7 @@ export const usePieceRequestsFetch = ({ tenantId } = {}) => {
   const fetchPieceRequests = ({ pieces, signal }) => {
     const kyExtended = ky.extend({ signal });
 
-    return fetchLocalPieceRequests(kyExtended, { pieces });
+    return fetchLocalPiecesRequests(kyExtended)(pieces);
   };
 
   return { fetchPieceRequests };

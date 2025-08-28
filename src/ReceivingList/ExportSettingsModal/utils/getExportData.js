@@ -32,7 +32,7 @@ const getFetchConfigs = (exportFields) => {
 
 const keyById = (data) => keyBy(data, 'id');
 
-export const getExportData = (ky) => async ({
+export const getExportData = (ky, configs) => async ({
   exportFields,
   query,
 }) => {
@@ -77,12 +77,20 @@ export const getExportData = (ky) => async ({
       records: 'pieces',
     });
 
-    const usersData = fetchConfigs.users ? await fetchUsersExportData(ky)(titles, piecesData) : [];
-    const itemsData = fetchConfigs.items ? await fetchItemsExportData(ky)(piecesData) : [];
+    const [
+      usersData,
+      itemsData,
+      locationsData,
+    ] = await Promise.all([
+      fetchConfigs.users ? fetchUsersExportData(ky)(titles, piecesData) : Promise.resolve([]),
+      fetchConfigs.items ? fetchItemsExportData(ky, configs)(piecesData) : Promise.resolve([]),
+      fetchConfigs.locations ? fetchLocationsExportData(ky, configs)(piecesData) : Promise.resolve({}),
+    ]);
+
     const {
       holdings = [],
       locations = [],
-    } = fetchConfigs.locations ? await fetchLocationsExportData(ky)(piecesData) : {};
+    } = locationsData;
 
     return {
       holdingsMap: keyById(holdings),

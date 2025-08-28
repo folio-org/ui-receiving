@@ -1,19 +1,19 @@
 import { useOkapiKy } from '@folio/stripes/core';
 
 import {
-  fetchConsortiumPieceItems,
-  fetchLocalPieceItems,
-} from '../util';
+  fetchConsortiumPiecesItems,
+  fetchLocalPiecesItems,
+} from '../../../utils/api';
 
-export const usePieceItemsFetch = ({ instanceId, tenantId }) => {
+export const usePieceItemsFetch = ({ tenantId }) => {
   const ky = useOkapiKy({ tenant: tenantId });
 
   const fetchPieceItems = ({ pieces, crossTenant, signal }) => {
     const kyExtended = ky.extend({ signal });
 
     return crossTenant
-      ? fetchConsortiumPieceItems(kyExtended, { instanceId, pieces })
-      : fetchLocalPieceItems(kyExtended, { pieces });
+      ? fetchConsortiumPiecesItems(kyExtended)(pieces)
+      : fetchLocalPiecesItems(kyExtended)(pieces);
   };
 
   return { fetchPieceItems };

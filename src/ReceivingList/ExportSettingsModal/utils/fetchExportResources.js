@@ -1,16 +1,24 @@
 import {
+  ALL_RECORDS_CQL,
+  CONSORTIUM_LOCATIONS_API,
   CONTRIBUTOR_NAME_TYPES_API,
+  fetchAllRecords,
   fetchExportDataByIds,
   HOLDINGS_API,
   IDENTIFIER_TYPES_API,
-  ITEMS_API,
   LINES_API,
   LOCATIONS_API,
   ORDERS_API,
-  VENDORS_API,
   USERS_API,
+  VENDORS_API,
 } from '@folio/stripes-acq-components';
 
+import {
+  fetchConsortiumHoldingsByIds,
+  fetchConsortiumPiecesItems,
+  fetchLocalPiecesItems,
+  getConsortiumCentralTenantKy,
+} from '../../../common/utils';
 import { mapUniqElements } from './mapUniqElements';
 
 export const fetchPOLinesExportData = (ky) => (titles = []) => {
@@ -76,33 +84,45 @@ export const fetchVendorsExportData = (ky) => (purchaseOrdersData = []) => {
   });
 };
 
-export const fetchItemsExportData = (ky) => (piecesData = []) => {
-  const itemIds = mapUniqElements(piecesData, ({ itemId }) => itemId);
-
-  return fetchExportDataByIds({
-    api: ITEMS_API,
-    ids: itemIds,
-    ky,
-    records: 'items',
-  });
+export const fetchItemsExportData = (ky, { isCentralOrderingEnabled }) => (piecesData = []) => {
+  return isCentralOrderingEnabled
+    ? fetchConsortiumPiecesItems(ky)(piecesData)
+    : fetchLocalPiecesItems(ky)(piecesData);
 };
 
-export const fetchLocationsExportData = (ky) => async (piecesData) => {
+export const fetchLocationsExportData = (ky, { isCentralOrderingEnabled, stripes }) => async (piecesData) => {
   const holdingIds = mapUniqElements(piecesData, ({ holdingId }) => holdingId);
-  const holdings = await fetchExportDataByIds({
-    api: HOLDINGS_API,
-    ids: holdingIds,
-    ky,
-    records: 'holdingsRecords',
-  });
 
-  const locationIds = mapUniqElements(piecesData, ({ locationId }) => locationId);
-  const locations = await fetchExportDataByIds({
-    api: LOCATIONS_API,
-    ids: [...locationIds, ...holdings.map(({ permanentLocationId }) => permanentLocationId)],
-    ky,
-    records: 'locations',
-  });
+  const holdings = isCentralOrderingEnabled
+    ? await fetchConsortiumHoldingsByIds(ky, stripes)(holdingIds).then((res) => res.holdings)
+    : await fetchExportDataByIds({
+      api: HOLDINGS_API,
+      ids: holdingIds,
+      ky,
+      records: 'holdingsRecords',
+    });
+
+  const locationIds = [
+    ...mapUniqElements(piecesData, ({ locationId }) => locationId),
+    ...holdings.map(({ permanentLocationId }) => permanentLocationId),
+  ];
+
+  const locations = isCentralOrderingEnabled
+    ? await fetchAllRecords({
+      GET: async ({ params: searchParams }) => {
+        return getConsortiumCentralTenantKy(ky, stripes)
+          .get(CONSORTIUM_LOCATIONS_API, { searchParams })
+          .json()
+          .then((res) => res.locations);
+      },
+      ALL_RECORDS_CQL,
+    })
+    : await fetchExportDataByIds({
+      api: LOCATIONS_API,
+      ids: locationIds,
+      ky,
+      records: 'locations',
+    });
 
   return { holdings, locations };
 };

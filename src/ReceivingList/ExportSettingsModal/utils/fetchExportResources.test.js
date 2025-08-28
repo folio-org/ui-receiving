@@ -3,13 +3,18 @@ import {
   fetchExportDataByIds,
   HOLDINGS_API,
   IDENTIFIER_TYPES_API,
-  ITEMS_API,
   LINES_API,
   LOCATIONS_API,
   ORDERS_API,
   VENDORS_API,
 } from '@folio/stripes-acq-components';
 
+import {
+  fetchConsortiumHoldingsByIds,
+  fetchConsortiumPiecesItems,
+  fetchLocalPiecesItems,
+  getConsortiumCentralTenantKy,
+} from '../../../common/utils';
 import {
   fetchContributorNameTypesExportData,
   fetchIdentifierTypesExportData,
@@ -24,8 +29,21 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   fetchExportDataByIds: jest.fn(() => []),
 }));
+jest.mock('../../../common/utils', () => ({
+  ...jest.requireActual('../../../common/utils'),
+  fetchConsortiumHoldingsByIds: jest.fn(() => jest.fn(() => Promise.resolve({
+    holdings: [],
+  }))),
+  fetchConsortiumPiecesItems: jest.fn(() => jest.fn(() => [])),
+  fetchLocalPiecesItems: jest.fn(() => jest.fn(() => [])),
+  getConsortiumCentralTenantKy: jest.fn(),
+}));
 
-const kyMock = jest.fn();
+const kyMock = {
+  get: jest.fn(() => ({
+    json: () => Promise.resolve(),
+  })),
+};
 
 const purchaseOrders = [{
   id: 'purchaseOrderId',
@@ -45,10 +63,20 @@ const titles = [{
   poLineId: 'poLineId',
 }];
 
+const centralTenantKyMock = {
+  get: jest.fn(() => ({
+    json: () => Promise.resolve(),
+  })),
+};
+
 describe('fetchExportResources', () => {
   beforeEach(() => {
     fetchExportDataByIds.mockClear();
-    kyMock.mockClear();
+    getConsortiumCentralTenantKy.mockReturnValue(centralTenantKyMock);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('fetchContributorNameTypesExportData', () => {
@@ -74,19 +102,22 @@ describe('fetchExportResources', () => {
   });
 
   describe('fetchItemsExportData', () => {
-    it('should fetch items by ids', async () => {
-      await fetchItemsExportData(kyMock)(pieces);
+    it('should fetch local tenant items by ids', async () => {
+      await fetchItemsExportData(kyMock, {})(pieces);
 
-      expect(fetchExportDataByIds).toHaveBeenCalledWith(expect.objectContaining({
-        api: ITEMS_API,
-        ids: ['itemId'],
-      }));
+      expect(fetchLocalPiecesItems.mock.results[0].value).toHaveBeenCalledWith(pieces);
+    });
+
+    it('should fetch consortium items by ids', async () => {
+      await fetchItemsExportData(kyMock, { isCentralOrderingEnabled: true })(pieces);
+
+      expect(fetchConsortiumPiecesItems.mock.results[0].value).toHaveBeenCalledWith(pieces);
     });
   });
 
   describe('fetchLocationsExportData', () => {
-    it('should fetch pieces holdings and locations by ids', async () => {
-      await fetchLocationsExportData(kyMock)(pieces);
+    it('should fetch local tenant pieces holdings and locations by ids', async () => {
+      await fetchLocationsExportData(kyMock, {})(pieces);
 
       expect(fetchExportDataByIds).toHaveBeenNthCalledWith(1, expect.objectContaining({
         api: HOLDINGS_API,
@@ -96,6 +127,13 @@ describe('fetchExportResources', () => {
         api: LOCATIONS_API,
         ids: ['locationId'],
       }));
+    });
+
+    it('should fetch consortium pieces holdings and locations by ids', async () => {
+      await fetchLocationsExportData(kyMock, { isCentralOrderingEnabled: true })(pieces);
+
+      expect(fetchConsortiumHoldingsByIds.mock.results[0].value).toHaveBeenCalledWith(['holdingId']);
+      expect(centralTenantKyMock.get).toHaveBeenCalled();
     });
   });
 

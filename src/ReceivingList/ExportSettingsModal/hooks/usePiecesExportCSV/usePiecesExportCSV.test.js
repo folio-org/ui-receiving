@@ -1,6 +1,12 @@
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { renderHook, act } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
 
+import {
+  act,
+  renderHook,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { exportToCsv } from '@folio/stripes/components';
 import { useOkapiKy } from '@folio/stripes/core';
 
@@ -10,9 +16,12 @@ jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   exportToCsv: jest.fn(),
 }));
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useCentralOrderingContext: jest.fn(() => ({ isCentralOrderingEnabled: false })),
+}));
 
 const queryClient = new QueryClient();
-// eslint-disable-next-line react/prop-types
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     {children}

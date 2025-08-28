@@ -17,11 +17,9 @@ import {
   ORDERS_API,
 } from '@folio/stripes-acq-components';
 
+import { BATCH_IDENTIFIER_TYPE } from '../common/constants';
 import {
-  BATCH_IDENTIFIER_TYPE,
-  CONSORTIUM_BATCH_HOLDINGS,
-} from '../common/constants';
-import {
+  fetchConsortiumBatchHoldings,
   fetchConsortiumInstanceLocations,
   getConsortiumCentralTenantKy,
 } from '../common/utils';
@@ -78,9 +76,7 @@ export const fetchConsortiumOrderLineHoldings = (ky, stripes) => async (orderLin
     identifierValues: instanceIds,
   };
 
-  const { holdings } = await getConsortiumCentralTenantKy(ky, stripes)
-    .post(CONSORTIUM_BATCH_HOLDINGS, { json: batchIdsDto })
-    .json();
+  const { holdings } = await fetchConsortiumBatchHoldings(ky, stripes)(batchIdsDto);
 
   return holdings;
 };
