@@ -11,7 +11,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { TitleReceiveList } from './TitleReceiveList';
 import { useNumberGeneratorOptions } from '../common/hooks';
 import {
   ACCESSION_NUMBER_SETTING,
@@ -21,6 +20,7 @@ import {
   GENERATOR_ON,
   GENERATOR_OFF,
 } from '../common/constants';
+import TitleReceiveList from './TitleReceiveList';
 
 jest.mock('../common/hooks', () => ({
   useNumberGeneratorOptions: jest.fn(),
@@ -61,7 +61,7 @@ describe('Render TitleReceiveList', () => {
       error: null,
     });
 
-    renderTitleReceiveList();
+    renderTitleReceiveList({ props: null });
 
     const button = screen.queryByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 
@@ -79,7 +79,7 @@ describe('Render TitleReceiveList', () => {
       error: null,
     });
 
-    renderTitleReceiveList();
+    renderTitleReceiveList({ props: {} });
 
     const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 

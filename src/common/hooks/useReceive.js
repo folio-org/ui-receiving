@@ -6,7 +6,12 @@ import { ITEM_STATUS } from '@folio/stripes-acq-components';
 import { CHECKIN_API } from '../constants';
 
 export const useReceive = (options = {}) => {
-  const { tenantId, ...mutationOptions } = options;
+  const {
+    mutationKey,
+    signal,
+    tenantId,
+    ...mutationOptions
+  } = options;
 
   const ky = useOkapiKy({ tenant: tenantId });
 
@@ -14,6 +19,7 @@ export const useReceive = (options = {}) => {
     isLoading,
     mutateAsync,
   } = useMutation({
+    mutationKey: ['receive', tenantId, mutationKey],
     mutationFn: (pieces) => {
       const selectedPieces = pieces
         .map(piece => ({
@@ -39,6 +45,7 @@ export const useReceive = (options = {}) => {
         }));
 
       return ky.post(CHECKIN_API, {
+        signal,
         json: {
           toBeCheckedIn: [{
             poLineId: pieces[0]?.poLineId,
