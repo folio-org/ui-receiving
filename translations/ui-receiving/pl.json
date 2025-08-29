@@ -22,7 +22,7 @@
     "title.received": "Odebrane",
     "title.receivingNote": "Uwaga do odbioru",
     "title.subscriptionFrom": "Subskrypcja od",
-    "title.subscriptionInterval": "Interwał subskrypcji",
+    "title.subscriptionInterval": "Okres subskrypcji",
     "title.subscriptionTo": "Subskrypcja do",
     "title.title": "Tytuł",
     "title.modalLabel.edit": "Dodaj tytuł",
@@ -280,5 +280,12 @@
     "title.confirmationModal.removeFromPackage.message": "Usunięcie tego tytułu z pakietu spowoduje usunięcie wszystkich powiązanych elementów oraz wszelkich powiązanych zasobów i egzemplarzy.",
     "title.confirmationModal.removeFromPackage.confirm": "Potwierdzić",
     "title.confirmationModal.removeFromPackage.success": "Powiązane elementy i wszelkie powiązane zasoby i egzemplarze zostały usunięte.",
-    "title.confirmationModal.removeHolding.message": "Powiązane zasoby nie odnoszą się do żadnych innych elementów ani egzemplarzy. Czy chcesz je usunąć?"
+    "title.confirmationModal.removeHolding.message": "Powiązane zasoby nie odnoszą się do żadnych innych elementów ani egzemplarzy. Czy chcesz je usunąć?",
+    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
+    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
+    "piece.modal.expectedDateRange.heading": "Select expected date range",
+    "piece.modal.expectedDateRange.startDate": "Start date",
+    "piece.modal.expectedDateRange.endDate": "End date",
+    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
+    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
 }
