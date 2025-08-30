@@ -280,5 +280,12 @@
     "title.confirmationModal.removeFromPackage.message": "Als u deze titel uit het pakket verwijdert, worden alle gerelateerde Stukken en alle gerelateerde inventaris Holdings en Items verwijderd.",
     "title.confirmationModal.removeFromPackage.confirm": "Bevestig",
     "title.confirmationModal.removeFromPackage.success": "Gerelateerde Stukken en alle Gerelateerd inventaris Holdings en Items zijn verwijderd.",
-    "title.confirmationModal.removeHolding.message": "Gerelateerde Holdings verwijzen niet naar andere Stukken of Items. Wilt u ze verwijderen?"
+    "title.confirmationModal.removeHolding.message": "Gerelateerde Holdings verwijzen niet naar andere Stukken of Items. Wilt u ze verwijderen?",
+    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
+    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
+    "piece.modal.expectedDateRange.heading": "Select expected date range",
+    "piece.modal.expectedDateRange.startDate": "Start date",
+    "piece.modal.expectedDateRange.endDate": "End date",
+    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
+    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
 }

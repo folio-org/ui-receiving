@@ -1,7 +1,7 @@
 {
     "meta.title": "Отримання",
     "titles.search": "Пошук",
-    "titles.orderStatus": "Статус замовлення",
+    "titles.orderStatus": "Статус замовлення комплектування",
     "titles.title": "Назва",
     "title.paneTitle.create": "Нова назва",
     "title.section.itemDetails": "Деталі примірника",
@@ -52,7 +52,7 @@
     "piece.receivingNoteModal.title": "Примітка отримання",
     "piece.supplement": "Додаток",
     "piece.title": "Назва",
-    "filter.orderStatus": "Статус замовлення",
+    "filter.orderStatus": "Статус замовлення комплектування",
     "filter.vendor": "Постачальник",
     "filter.orderType": "Тип замовлення",
     "filter.materialType": "Тип матеріалу",
@@ -223,7 +223,7 @@
     "piece.internalNote": "Внутрішня примітка",
     "validation.dateAfter": "Вибрана дата має бути пізнішою за поточну дату",
     "piece.displaySummary": "Відобразити стислу інформацію",
-    "errors.userNotAMemberOfTheAcq": "Action is restricted by acquisition unit. User is not assigned to the specified acquisitions unit.",
+    "errors.userNotAMemberOfTheAcq": "Операція не дозволена підрозділом для придбання/комплектування. Користувач не належить до зазначеного підрозділу придбання/комплектування",
     "errors.userHasNoPermission": "Операція не дозволена підрозділом для придбання/комплектування. Користувач не належить до зазначеного підрозділу придбання/комплектування",
     "piece.statusChangeLog.column.interval": "Інтервал",
     "systemUser.label": "Система",
@@ -280,5 +280,12 @@
     "title.confirmationModal.removeFromPackage.message": "Вилучення цієї назви з пакета призведе до видалення всіх пов'язаних частин примірників назви та видалить будь-які пов'язані дані про фонди (холдінгси) та примірники з додатку \"Облік фонду\". Дані про фонди (холдінгси), що містять примірники, не пов'язані з цим замовленням та назвою, що отримується, не будуть видалені.",
     "title.confirmationModal.removeFromPackage.confirm": "Підтвердити",
     "title.confirmationModal.removeFromPackage.success": "Пов'язані частини примірників назви та будь-які пов'язані дані про фонди (холдінгси) та примірники з додатку \"Облік фонду\" були видалені.",
-    "title.confirmationModal.removeHolding.message": "Один або декілька пов'язаних даних про фонди (холдінгси) не посилаються на жодні інші частини примірників назви чи примірники. Ви хочете їх видалити?"
+    "title.confirmationModal.removeHolding.message": "Один або декілька пов'язаних даних про фонди (холдінгси) не посилаються на жодні інші частини примірників назви чи примірники. Ви хочете їх видалити?",
+    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
+    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
+    "piece.modal.expectedDateRange.heading": "Select expected date range",
+    "piece.modal.expectedDateRange.startDate": "Start date",
+    "piece.modal.expectedDateRange.endDate": "End date",
+    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
+    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
 }

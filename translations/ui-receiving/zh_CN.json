@@ -280,5 +280,12 @@
     "title.confirmationModal.removeFromPackage.message": "从资源包中移除此标题将删除所有相关件，并删除所有相关的典藏馆藏和单件。包含与此订单和接收标题无关的单件的馆藏不会被删除。",
     "title.confirmationModal.removeFromPackage.confirm": "确认",
     "title.confirmationModal.removeFromPackage.success": "相关件和任何相关典藏馆藏和单件均已被删除。",
-    "title.confirmationModal.removeHolding.message": "一个或多个相关馆藏未引用任何其他件或单件。是否要删除它们？"
+    "title.confirmationModal.removeHolding.message": "一个或多个相关馆藏未引用任何其他件或单件。是否要删除它们？",
+    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
+    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
+    "piece.modal.expectedDateRange.heading": "Select expected date range",
+    "piece.modal.expectedDateRange.startDate": "Start date",
+    "piece.modal.expectedDateRange.endDate": "End date",
+    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
+    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
 }
