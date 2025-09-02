@@ -26,10 +26,10 @@ jest.mock('./hooks', () => ({
   usePieceItemsFetch: jest.fn(),
   usePieceRequestsFetch: jest.fn(),
 }));
-jest.mock('./util', () => ({
-  ...jest.requireActual('./util'),
-  fetchConsortiumPieceItems: jest.fn(),
-  fetchLocalPieceItems: jest.fn(),
+jest.mock('../../utils/api', () => ({
+  ...jest.requireActual('../../utils/api'),
+  fetchConsortiumPiecesItems: jest.fn(),
+  fetchLocalPiecesItems: jest.fn(),
 }));
 
 const queryClient = new QueryClient();

@@ -1,12 +1,12 @@
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { fetchLocalPieceRequests } from '../util';
+import { fetchLocalPiecesRequests } from '../../../utils';
 import { usePieceRequestsFetch } from './usePieceRequestsFetch';
 
-jest.mock('../util', () => ({
-  ...jest.requireActual('../util'),
-  fetchLocalPieceRequests: jest.fn(),
+jest.mock('../../../utils/api', () => ({
+  ...jest.requireActual('../../../utils/api'),
+  fetchLocalPiecesRequests: jest.fn(() => () => Promise.resolve()),
 }));
 
 const pieces = [{ id: 'piece-id-1' }];
@@ -30,6 +30,6 @@ describe('usePieceRequestsFetch', () => {
 
     await result.current.fetchPieceRequests({ pieces });
 
-    expect(fetchLocalPieceRequests).toHaveBeenCalled();
+    expect(fetchLocalPiecesRequests).toHaveBeenCalled();
   });
 });

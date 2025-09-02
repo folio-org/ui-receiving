@@ -1,3 +1,4 @@
+export * from './api';
 export * from './buildPieceRequestsSearchParams';
 export * from './dates';
 export * from './getDehydratedPiece';
@@ -7,6 +8,7 @@ export * from './getReceivingPieceItemStatus';
 export * from './getHydratedPieces';
 export * from './handleCommonErrors';
 export * from './handleReceiveErrorResponse';
+export * from './isConsortiaEnabled';
 export * from './isSyntheticUser';
 export * from './receive';
 export * from './setLocationValueFormMutator';
