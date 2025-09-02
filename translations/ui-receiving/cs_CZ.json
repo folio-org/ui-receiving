@@ -280,5 +280,12 @@
     "title.confirmationModal.removeFromPackage.message": "Odebráním tohoto titulu z balíčku smažete všechny související kusy a veškeré související Holdingy a Jednotky z katalogu. Holdingy s jednotkami, jež nesouvisí s touto obědnávkou a přijímajícím titulem nebudou odstraněny.",
     "title.confirmationModal.removeFromPackage.confirm": "Potvrdit",
     "title.confirmationModal.removeFromPackage.success": "Související kusy a veškeré související Holdingy a Jednotky v kataloku byly smazány.",
-    "title.confirmationModal.removeHolding.message": "Jeden nebo více souvisejících holdingů neodkazuje na žádné jiné kusy nebo jednotky. Chcete je odstranit?"
+    "title.confirmationModal.removeHolding.message": "Jeden nebo více souvisejících holdingů neodkazuje na žádné jiné kusy nebo jednotky. Chcete je odstranit?",
+    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
+    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
+    "piece.modal.expectedDateRange.heading": "Select expected date range",
+    "piece.modal.expectedDateRange.startDate": "Start date",
+    "piece.modal.expectedDateRange.endDate": "End date",
+    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
+    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
 }
