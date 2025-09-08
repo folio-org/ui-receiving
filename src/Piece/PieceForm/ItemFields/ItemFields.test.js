@@ -24,7 +24,6 @@ jest.mock('../../../common/hooks', () => ({
   useNumberGeneratorOptions: jest.fn(),
 }));
 
-
 const queryClient = new QueryClient();
 const renderItemFields = (props = {}) => {
   return render(
