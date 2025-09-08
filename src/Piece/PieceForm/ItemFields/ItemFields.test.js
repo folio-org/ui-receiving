@@ -24,6 +24,7 @@ jest.mock('../../../common/hooks', () => ({
   useNumberGeneratorOptions: jest.fn(),
 }));
 
+
 const queryClient = new QueryClient();
 const renderItemFields = (props = {}) => {
   return render(
@@ -102,14 +103,13 @@ describe('Render ItemFields with all number generator settings "off"', () => {
     expect(screen.getByLabelText('ui-receiving.piece.accessionNumber')).toBeInTheDocument();
   });
 
-  it('should disable the generateNumbers button', () => {
+  it('should not disable the generateNumbers button', () => {
     renderItemFields({
       disabled: false,
     });
 
-    const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateNumbers' });
+    const button = screen.queryByRole('button', { name: 'ui-receiving.numberGenerator.generateNumbers' });
 
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
+    expect(button).not.toBeInTheDocument();
   });
 });
