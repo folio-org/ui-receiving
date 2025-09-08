@@ -57,7 +57,7 @@ export const ItemFields = ({ disabled }) => {
 
   const [openGenerateModal, setOpenGenerateModal] = useState(false);
 
-  const isNumberGeneratorButtonDisabled = numberGeneratorData &&
+  const isNumberGeneratorOff= numberGeneratorData &&
     numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON &&
     numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON_EDITABLE &&
     numberGeneratorData[ACCESSION_NUMBER_SETTING] !== GENERATOR_ON &&
@@ -104,7 +104,7 @@ export const ItemFields = ({ disabled }) => {
             fullWidth
           />
         </Col>
-        {!isNumberGeneratorButtonDisabled &&
+        {!isNumberGeneratorOff &&
           <Col
             xs={6}
             md={3}
