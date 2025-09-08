@@ -57,7 +57,7 @@ export const ItemFields = ({ disabled }) => {
 
   const [openGenerateModal, setOpenGenerateModal] = useState(false);
 
-  const isNumberGeneratorOff= numberGeneratorData &&
+  const isNumberGeneratorOff = numberGeneratorData &&
     numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON &&
     numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON_EDITABLE &&
     numberGeneratorData[ACCESSION_NUMBER_SETTING] !== GENERATOR_ON &&
