@@ -57,7 +57,7 @@ export const ItemFields = ({ disabled }) => {
 
   const [openGenerateModal, setOpenGenerateModal] = useState(false);
 
-  const isNumberGeneratorButtonDisabled = numberGeneratorData &&
+  const isNumberGeneratorOff = numberGeneratorData &&
     numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON &&
     numberGeneratorData[BARCODE_SETTING] !== GENERATOR_ON_EDITABLE &&
     numberGeneratorData[ACCESSION_NUMBER_SETTING] !== GENERATOR_ON &&
@@ -104,22 +104,24 @@ export const ItemFields = ({ disabled }) => {
             fullWidth
           />
         </Col>
-        <Col
-          xs={6}
-          md={3}
-        >
-          <KeyValue
-            label={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
-            value={
-              <NumberGeneratorButton
-                disabled={disabled || isNumberGeneratorButtonDisabled}
-                onClick={() => setOpenGenerateModal(true)}
-                tooltipId="generate-numbers-btn"
-                tooltipLabel={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
-              />
-            }
-          />
-        </Col>
+        {!isNumberGeneratorOff &&
+          <Col
+            xs={6}
+            md={3}
+          >
+            <KeyValue
+              label={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
+              value={
+                <NumberGeneratorButton
+                  disabled={disabled}
+                  onClick={() => setOpenGenerateModal(true)}
+                  tooltipId="generate-numbers-btn"
+                  tooltipLabel={<FormattedMessage id="ui-receiving.numberGenerator.generateNumbers" />}
+                />
+              }
+            />
+          </Col>
+        }
       </Row>
       <Row>
         <Col
