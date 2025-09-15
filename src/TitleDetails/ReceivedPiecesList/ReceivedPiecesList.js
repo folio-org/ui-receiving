@@ -1,13 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  PIECE_STATUS,
-} from '@folio/stripes-acq-components';
+import { Loading } from '@folio/stripes/components';
+import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
 import { PIECE_COLUMNS } from '../../Piece';
-import PiecesList from '../PiecesList';
 import { usePiecesList } from '../hooks';
+import PiecesList from '../PiecesList';
 
 const ReceivedPiecesList = ({
   filters,
@@ -23,6 +21,7 @@ const ReceivedPiecesList = ({
 
   const {
     isFetching,
+    isLoading,
     pagination,
     pieces,
     setPagination,
@@ -35,6 +34,8 @@ const ReceivedPiecesList = ({
     title,
     queryParams: { receivingStatus: PIECE_STATUS.received },
   });
+
+  if (isLoading) return <Loading />;
 
   return (
     <PiecesList
