@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { noop } from 'lodash';
 
 import {
+  Checkbox,
   Icon,
   MultiColumnList,
   NoValue,
@@ -28,6 +29,13 @@ const formatter = {
   [PIECE_COLUMNS.receiptDate]: piece => <FolioFormattedDate value={piece.receiptDate} />,
   [PIECE_COLUMNS.receivedDate]: piece => <FolioFormattedDate value={piece.receivedDate} utc={false} />,
   [PIECE_COLUMNS.comment]: piece => piece.comment || <NoValue />,
+  [PIECE_COLUMNS.locationName]: piece => piece?.locationName || <NoValue />,
+  [PIECE_COLUMNS.displayToPublic]: piece => (
+    <Checkbox
+      checked={!!piece?.displayToPublic}
+      disabled
+    />
+  ),
   selection: () => <Icon icon="caret-right" />,
   arrow: (record) => <Icon data-testid={`arrow-${record.rowIndex}`} icon="caret-right" />,
 };

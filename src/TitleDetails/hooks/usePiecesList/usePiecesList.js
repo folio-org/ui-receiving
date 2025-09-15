@@ -1,8 +1,15 @@
+import noop from 'lodash/noop';
 import {
   useEffect,
+  useMemo,
   useState,
 } from 'react';
-import noop from 'lodash/noop';
+
+import {
+  getHoldingLocationName,
+  useInstanceHoldingsQuery,
+  useLocationsQuery,
+} from '@folio/stripes-acq-components';
 
 import { usePaginatedPieces } from '../../../common/hooks';
 import { useReceivingSearchContext } from '../../../contexts';
@@ -26,10 +33,21 @@ export const usePiecesList = ({
 
   const [sorting, setSorting] = useState(initialSorting);
   const [pagination, setPagination] = useState({ limit });
+
   const {
-    pieces,
+    isLoading: isLocationsLoading,
+    locations,
+  } = useLocationsQuery({ consortium: crossTenant });
+
+  const {
+    holdings,
+    isLoading: isHoldingsLoading,
+  } = useInstanceHoldingsQuery(title?.instanceId, { consortium: crossTenant });
+
+  const {
+    pieces: paginatedPieces,
     totalRecords,
-    isFetching,
+    isFetching: isPiecesFetching,
   } = usePaginatedPieces({
     pagination,
     queryParams: {
@@ -40,13 +58,15 @@ export const usePiecesList = ({
       ...sorting,
     },
     options: {
+      activeTenantId,
+      centralTenantId,
       crossTenant,
       instanceId: title?.instanceId,
       tenantId: targetTenantId,
-      centralTenantId,
-      activeTenantId,
     },
   });
+
+  const isFetching = isPiecesFetching || isLocationsLoading || isHoldingsLoading;
 
   useEffect(() => {
     setPagination(prev => ({ ...prev, offset: 0, timestamp: new Date() }));
@@ -54,8 +74,24 @@ export const usePiecesList = ({
 
   useEffect(() => {
     onLoadingStatusChange(isFetching);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetching]);
+
+  const pieces = useMemo(() => {
+    const holdingsMap = new Map(holdings?.map(holding => [holding.id, holding]));
+    const locationsMap = new Map(locations?.map(location => [location.id, location]));
+
+    return paginatedPieces.map(piece => {
+      const locationName = piece.holdingId
+        ? getHoldingLocationName(holdingsMap.get(piece.holdingId), Object.fromEntries(locationsMap.entries()))
+        : null;
+
+      return {
+        ...piece,
+        locationName,
+      };
+    });
+  }, [paginatedPieces, holdings, locations]);
 
   return {
     isFetching,

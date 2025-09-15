@@ -59,22 +59,24 @@ export const PIECE_FORM_CHECKBOX_FIELD_NAMES = [
 
 export const PIECE_COLUMNS = {
   accessionNumber: 'accessionNumber',
-  displaySummary: 'displaySummary',
+  barcode: 'barcode',
   callNumber: 'callNumber',
   checked: 'checked',
   chronology: 'chronology',
+  comment: 'comment',
   copyNumber: 'copyNumber',
   displayOnHolding: 'displayOnHolding',
+  displaySummary: 'displaySummary',
+  displayToPublic: 'displayToPublic',
   enumeration: 'enumeration',
+  format: 'format',
   isCreateItem: 'isCreateItem',
   itemStatus: 'itemStatus',
+  location: 'location',
+  locationName: 'locationName',
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
-  comment: 'comment',
-  format: 'format',
   request: 'request',
-  barcode: 'barcode',
-  location: 'location',
   status: 'status',
   supplement: 'supplement',
 };
@@ -99,6 +101,8 @@ export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
   PIECE_COLUMNS.status,
   ...PIECE_VISIBLE_COLUMNS.slice(1),
   PIECE_COLUMNS.receiptDate,
+  PIECE_COLUMNS.locationName,
+  PIECE_COLUMNS.displayToPublic,
   PIECE_COLUMNS.request,
 ];
 
@@ -106,6 +110,8 @@ export const RECEIVED_PIECE_VISIBLE_COLUMNS = [
   PIECE_COLUMNS.barcode,
   ...PIECE_VISIBLE_COLUMNS,
   PIECE_COLUMNS.receivedDate,
+  PIECE_COLUMNS.locationName,
+  PIECE_COLUMNS.displayToPublic,
   PIECE_COLUMNS.request,
 ];
 
@@ -118,6 +124,7 @@ export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.barcode]: <FormattedMessage id="ui-receiving.piece.barcode" />,
   [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,
   [PIECE_COLUMNS.displaySummary]: <FormattedMessage id="ui-receiving.piece.displaySummary" />,
+  [PIECE_COLUMNS.displayToPublic]: <FormattedMessage id="ui-receiving.piece.displayToPublic" />,
   [PIECE_COLUMNS.chronology]: <FormattedMessage id="ui-receiving.piece.chronology" />,
   [PIECE_COLUMNS.comment]: <FormattedMessage id="ui-receiving.piece.comment" />,
   [PIECE_COLUMNS.copyNumber]: <FormattedMessage id="ui-receiving.piece.copyNumber" />,
@@ -126,6 +133,7 @@ export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.format]: <FormattedMessage id="ui-receiving.piece.format" />,
   [PIECE_COLUMNS.isCreateItem]: <FormattedMessage id="ui-receiving.piece.createItem" />,
   [PIECE_COLUMNS.location]: <FormattedMessage id="ui-receiving.piece.location" />,
+  [PIECE_COLUMNS.locationName]: <FormattedMessage id="ui-receiving.piece.columns.location" />,
   [PIECE_COLUMNS.receiptDate]: <FormattedMessage id="ui-receiving.piece.receiptDate" />,
   [PIECE_COLUMNS.receivedDate]: <FormattedMessage id="ui-receiving.piece.receivedDate" />,
   [PIECE_COLUMNS.request]: <FormattedMessage id="ui-receiving.piece.request" />,
