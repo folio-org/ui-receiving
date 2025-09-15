@@ -46,6 +46,7 @@ export const PIECE_FORM_SERVICE_FIELD_NAMES = {
   deleteHolding: 'deleteHolding',
   isCreateAnother: 'isCreateAnother',
   postSubmitAction: 'postSubmitAction',
+  nextReceivingStatus: 'nextReceivingStatus',
 };
 
 export const PIECE_FORM_CHECKBOX_FIELD_NAMES = [

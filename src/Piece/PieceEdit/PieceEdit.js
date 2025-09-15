@@ -19,7 +19,7 @@ export const PieceEdit = ({ match }) => {
   const { targetTenantId: tenantId } = useReceivingSearchContext();
 
   const {
-    isLoading: isPieceLoading,
+    isFetching: isPieceFetching,
     piece,
   } = usePiece(pieceId, { tenantId });
 
@@ -41,7 +41,7 @@ export const PieceEdit = ({ match }) => {
     holdingsRecordId: piece?.holdingId,
   }), [item, piece, requests]);
 
-  const isLoading = isPieceLoading || isItemLoading || isRequestsLoading;
+  const isLoading = isPieceFetching || isItemLoading || isRequestsLoading;
 
   return (
     <PieceFormContainer

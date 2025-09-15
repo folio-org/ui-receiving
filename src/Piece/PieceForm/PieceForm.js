@@ -182,7 +182,7 @@ const PieceForm = ({
   }, [formValues, onUnreceiveProp]);
 
   const onStatusChange = useCallback((status) => {
-    change(PIECE_FORM_FIELD_NAMES.receivingStatus, status);
+    change(PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus, status);
     onSave();
   }, [change, onSave]);
 
