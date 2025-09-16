@@ -397,7 +397,7 @@ describe('PieceForm', () => {
       expect(defaultProps.onSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           claimingInterval: 3,
-          receivingStatus: PIECE_STATUS.claimDelayed,
+          nextReceivingStatus: PIECE_STATUS.claimDelayed,
         }),
         expect.anything(),
         expect.anything(),

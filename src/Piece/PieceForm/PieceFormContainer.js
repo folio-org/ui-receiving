@@ -193,17 +193,26 @@ export const PieceFormContainer = ({
 
   const onSubmit = useCallback((formValues, form) => {
     const {
-      deleteHolding,
-      postSubmitAction,
+      [PIECE_FORM_SERVICE_FIELD_NAMES.deleteHolding]: deleteHolding,
+      [PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus]: nextReceivingStatus,
+      [PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction]: postSubmitAction,
+      [PIECE_FORM_FIELD_NAMES.receivingStatus]: receivingStatus,
     } = formValues;
-
-    form.change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, null);
 
     const options = {
       searchParams: { ...(deleteHolding ? { deleteHolding } : {}) },
     };
 
-    const piece = omit(formValues, Object.values(PIECE_FORM_SERVICE_FIELD_NAMES));
+    const piece = omit(
+      {
+        ...formValues,
+        [PIECE_FORM_FIELD_NAMES.receivingStatus]: nextReceivingStatus || receivingStatus,
+      },
+      Object.values(PIECE_FORM_SERVICE_FIELD_NAMES),
+    );
+
+    form.change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, null);
+    form.change(PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus, null);
 
     return mutatePiece({ piece, options })
       .then((res) => {
