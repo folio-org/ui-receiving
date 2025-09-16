@@ -44,6 +44,8 @@ const TitleDetailsContainer = ({
 }) => {
   const titleId = match.params.id;
 
+  const [isResourcesLoading, setIsResourcesLoading] = useState();
+
   const {
     isCentralOrderingEnabled,
     isCentralRouting,
@@ -69,6 +71,7 @@ const TitleDetailsContainer = ({
   ), [ky, titleId]);
 
   const fetchReceivingResources = useCallback((lineId) => {
+    setIsResourcesLoading(true);
     setPiecesExistence();
 
     return Promise.all([
@@ -80,7 +83,8 @@ const TitleDetailsContainer = ({
         (acc, existence) => ({ ...acc, ...existence, key: new Date() }),
         {},
       )))
-      .catch(() => setPiecesExistence({}));
+      .catch(() => setPiecesExistence({}))
+      .finally(() => setIsResourcesLoading(false));
   }, [hasPieces]);
 
   /* Data fetching */
@@ -155,6 +159,7 @@ const TitleDetailsContainer = ({
   return (
     <TitleDetails
       crossTenant={isCentralOrderingEnabled}
+      isLoading={isResourcesLoading}
       onClose={onClose}
       onEdit={onEdit}
       order={order || DEFAULT_DATA_OBJECT}

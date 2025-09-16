@@ -1,14 +1,17 @@
 import { IntlProvider } from 'react-intl';
 
-import {
-  render,
-  fireEvent,
-} from '@folio/jest-config-stripes/testing-library/react';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { usePaginatedPieces } from '../../common/hooks';
 import { EXPECTED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
 import ExpectedPiecesList from './ExpectedPiecesList';
 
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useInstanceHoldingsQuery: jest.fn(() => ({ isLoading: false, holdings: [] })),
+  useLocationsQuery: jest.fn(() => ({ isLoading: false, locations: [] })),
+}));
 jest.mock('../../common/hooks', () => ({
   usePaginatedPieces: jest.fn(),
 }));
@@ -63,13 +66,10 @@ describe('Given Expected Pieces List', () => {
   });
 
   describe('When edit piece is pressed', () => {
-    it('Than passed callback should be called', () => {
+    it('Than passed callback should be called', async () => {
       const { getByText } = renderPiecesList(onEditPiece);
 
-      fireEvent(getByText(pieces[0].enumeration), new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-      }));
+      await userEvent.click(getByText(pieces[0].enumeration));
 
       expect(onEditPiece).toHaveBeenCalled();
     });

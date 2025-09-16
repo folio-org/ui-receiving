@@ -6,6 +6,11 @@ import { usePaginatedPieces } from '../../common/hooks';
 import { RECEIVED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
 import ReceivedPiecesList from './ReceivedPiecesList';
 
+jest.mock('@folio/stripes-acq-components', () => ({
+  ...jest.requireActual('@folio/stripes-acq-components'),
+  useInstanceHoldingsQuery: jest.fn(() => ({ isLoading: false, holdings: [] })),
+  useLocationsQuery: jest.fn(() => ({ isLoading: false, locations: [] })),
+}));
 jest.mock('../../common/hooks', () => ({
   usePaginatedPieces: jest.fn(),
 }));

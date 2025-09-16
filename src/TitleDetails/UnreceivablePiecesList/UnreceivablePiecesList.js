@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 
+import { Loading } from '@folio/stripes/components';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
 import { PIECE_COLUMNS } from '../../Piece';
@@ -20,6 +21,7 @@ export const UnreceivablePiecesList = ({
 }) => {
   const {
     isFetching,
+    isLoading,
     pagination,
     pieces,
     setPagination,
@@ -32,6 +34,8 @@ export const UnreceivablePiecesList = ({
     title,
     queryParams: { receivingStatus: PIECE_STATUS.unreceivable },
   });
+
+  if (isLoading) return <Loading />;
 
   return (
     <PiecesList

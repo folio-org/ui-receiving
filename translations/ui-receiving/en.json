@@ -230,6 +230,7 @@
   "piece.displayOnHolding": "Display on holding",
   "piece.displayToPublic": "Display to public",
   "piece.discoverySuppress": "Suppress from discovery",
+  "piece.columns.location": "Holdings location",
   "piece.confirmReceiving.title": "Order closed",
   "piece.confirmReceiving.message": "The order linked to this Title is closed. Are you sure you want to receive this piece(s)?",
   "piece.connectedItem": "Connected",

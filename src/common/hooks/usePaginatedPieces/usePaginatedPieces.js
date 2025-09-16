@@ -25,6 +25,8 @@ export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'sortby receiptDate',
 );
 
+const DEFAULT_DATA = [];
+
 export const usePaginatedPieces = ({
   pagination,
   queryParams = {},
@@ -96,14 +98,15 @@ export const usePaginatedPieces = ({
     keepPreviousData: true,
   };
 
-  const { isFetching, data } = useQuery({
+  const { data, ...rest } = useQuery({
     queryKey,
     queryFn,
     ...defaultOptions,
   });
 
   return ({
-    ...data,
-    isFetching,
+    pieces: data?.pieces || DEFAULT_DATA,
+    totalRecords: data?.totalRecords,
+    ...rest,
   });
 };
