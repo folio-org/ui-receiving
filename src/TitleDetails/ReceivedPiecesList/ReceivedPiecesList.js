@@ -1,13 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  PIECE_STATUS,
-} from '@folio/stripes-acq-components';
+import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
 import { PIECE_COLUMNS } from '../../Piece';
-import PiecesList from '../PiecesList';
 import { usePiecesList } from '../hooks';
+import PiecesList from '../PiecesList';
 
 const ReceivedPiecesList = ({
   filters,

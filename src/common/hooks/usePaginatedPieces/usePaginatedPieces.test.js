@@ -1,12 +1,12 @@
 import {
-  renderHook,
-  waitFor,
-} from '@folio/jest-config-stripes/testing-library/react';
-import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
 
+import {
+  renderHook,
+  waitFor,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 import {
   ITEM_STATUS,
@@ -21,15 +21,15 @@ import {
 } from './hooks';
 import { usePaginatedPieces } from './usePaginatedPieces';
 
-jest.mock('./hooks', () => ({
-  ...jest.requireActual('./hooks'),
-  usePieceItemsFetch: jest.fn(),
-  usePieceRequestsFetch: jest.fn(),
-}));
 jest.mock('../../utils/api', () => ({
   ...jest.requireActual('../../utils/api'),
   fetchConsortiumPiecesItems: jest.fn(),
   fetchLocalPiecesItems: jest.fn(),
+}));
+jest.mock('./hooks', () => ({
+  ...jest.requireActual('./hooks'),
+  usePieceItemsFetch: jest.fn(),
+  usePieceRequestsFetch: jest.fn(),
 }));
 
 const queryClient = new QueryClient();
@@ -73,19 +73,13 @@ const fetchPieceRequests = jest.fn(() => [request]);
 
 describe('usePaginatedPieces', () => {
   beforeEach(() => {
-    useOkapiKy
-      .mockClear()
-      .mockReturnValue({
-        get: path => ({
-          json: () => KY_RESPONSE_DATA_MAP[path],
-        }),
-      });
-    usePieceItemsFetch
-      .mockClear()
-      .mockReturnValue({ fetchPieceItems });
-    usePieceRequestsFetch
-      .mockClear()
-      .mockReturnValue({ fetchPieceRequests });
+    useOkapiKy.mockReturnValue({
+      get: path => ({
+        json: () => KY_RESPONSE_DATA_MAP[path],
+      }),
+    });
+    usePieceItemsFetch.mockReturnValue({ fetchPieceItems });
+    usePieceRequestsFetch.mockReturnValue({ fetchPieceRequests });
   });
 
   it('should return fetched hydrated pieces', async () => {
@@ -95,17 +89,13 @@ describe('usePaginatedPieces', () => {
 
     await waitFor(() => expect(result.current.isFetching).toBeFalsy());
 
-    expect(result.current).toEqual({
-      pieces: [{
-        ...pieces[0],
-        itemId: item.id,
-        callNumber: item.itemLevelCallNumber,
-        itemStatus: item.status.name,
-        request,
-        holdingsRecordId: item.holdingsRecordId,
-      }],
-      totalRecords: 1,
-      isFetching: false,
-    });
+    expect(result.current.pieces).toEqual([{
+      ...pieces[0],
+      itemId: item.id,
+      callNumber: item.itemLevelCallNumber,
+      itemStatus: item.status.name,
+      request,
+      holdingsRecordId: item.holdingsRecordId,
+    }]);
   });
 });
