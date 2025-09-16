@@ -16,8 +16,8 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
   Accordion,
-  AccordionStatus,
   AccordionSet,
+  AccordionStatus,
   Button,
   checkScope,
   Col,
@@ -26,11 +26,12 @@ import {
   ExpandAllButton,
   expandAllSections,
   HasCommand,
+  Icon,
+  Loading,
   MenuSection,
   MessageBanner,
   Pane,
   Row,
-  Icon,
 } from '@folio/stripes/components';
 import {
   IfPermission,
@@ -105,6 +106,7 @@ import css from './TitleDetails.css';
 
 const TitleDetails = ({
   history,
+  isLoading,
   location,
   onClose,
   onEdit,
@@ -581,14 +583,21 @@ const TitleDetails = ({
               id={TITLE_ACCORDION.expected}
               label={TITLE_ACCORDION_LABELS.expected}
             >
-              <ExpectedPiecesList
-                key={piecesExistence?.key}
-                filters={expectedPiecesFilters}
-                onLoadingStatusChange={setExpectedPiecesLoading}
-                title={title}
-                selectPiece={onPieceEdit}
-                visibleColumns={expectedPiecesVisibleColumns}
-              />
+              {
+                isLoading
+                  ? <Loading />
+                  : (
+                    <ExpectedPiecesList
+                      key={piecesExistence?.key}
+                      filters={expectedPiecesFilters}
+                      isLoading={isLoading}
+                      onLoadingStatusChange={setExpectedPiecesLoading}
+                      title={title}
+                      selectPiece={onPieceEdit}
+                      visibleColumns={expectedPiecesVisibleColumns}
+                    />
+                  )
+              }
             </Accordion>
 
             <Accordion
@@ -611,14 +620,21 @@ const TitleDetails = ({
               id={TITLE_ACCORDION.received}
               label={TITLE_ACCORDION_LABELS.received}
             >
-              <ReceivedPiecesList
-                key={piecesExistence?.key}
-                filters={receivedPiecesFilters}
-                onLoadingStatusChange={setReceivedPiecesLoading}
-                title={title}
-                selectPiece={onPieceEdit}
-                visibleColumns={receivedPiecesVisibleColumns}
-              />
+              {
+                isLoading
+                  ? <Loading />
+                  : (
+                    <ReceivedPiecesList
+                      key={piecesExistence?.key}
+                      filters={receivedPiecesFilters}
+                      isLoading={isLoading}
+                      onLoadingStatusChange={setReceivedPiecesLoading}
+                      title={title}
+                      selectPiece={onPieceEdit}
+                      visibleColumns={receivedPiecesVisibleColumns}
+                    />
+                  )
+              }
             </Accordion>
             {
               showRoutingList && (
@@ -658,14 +674,21 @@ const TitleDetails = ({
                   id={TITLE_ACCORDION.unreceivable}
                   label={TITLE_ACCORDION_LABELS[TITLE_ACCORDION.unreceivable]}
                 >
-                  <UnreceivablePiecesList
-                    key={piecesExistence?.key}
-                    filters={unreceivablePiecesFilters}
-                    onLoadingStatusChange={setIsUnreceivablePiecesLoading}
-                    title={title}
-                    selectPiece={onPieceEdit}
-                    visibleColumns={visibleColumns}
-                  />
+                  {
+                    isLoading
+                      ? <Loading />
+                      : (
+                        <UnreceivablePiecesList
+                          key={piecesExistence?.key}
+                          filters={unreceivablePiecesFilters}
+                          isLoading={isLoading}
+                          onLoadingStatusChange={setIsUnreceivablePiecesLoading}
+                          title={title}
+                          selectPiece={onPieceEdit}
+                          visibleColumns={visibleColumns}
+                        />
+                      )
+                  }
                 </Accordion>
               )}
             </ColumnManager>
@@ -725,6 +748,7 @@ const TitleDetails = ({
 
 TitleDetails.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
+  isLoading: PropTypes.bool,
   location: ReactRouterPropTypes.location.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
   onClose: PropTypes.func.isRequired,

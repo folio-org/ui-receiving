@@ -45,9 +45,10 @@ export const usePiecesList = ({
   } = useInstanceHoldingsQuery(title?.instanceId, { consortium: crossTenant });
 
   const {
+    isFetching,
+    isLoading: isPiecesLoading,
     pieces: paginatedPieces,
     totalRecords,
-    isFetching: isPiecesFetching,
   } = usePaginatedPieces({
     pagination,
     queryParams: {
@@ -66,16 +67,16 @@ export const usePiecesList = ({
     },
   });
 
-  const isFetching = isPiecesFetching || isLocationsLoading || isHoldingsLoading;
+  const isLoading = isPiecesLoading || isLocationsLoading || isHoldingsLoading;
 
   useEffect(() => {
     setPagination(prev => ({ ...prev, offset: 0, timestamp: new Date() }));
   }, [filters]);
 
   useEffect(() => {
-    onLoadingStatusChange(isFetching);
+    onLoadingStatusChange(isFetching || isLoading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetching]);
+  }, [isFetching, isLoading]);
 
   const pieces = useMemo(() => {
     const holdingsMap = new Map(holdings?.map(holding => [holding.id, holding]));
@@ -95,6 +96,7 @@ export const usePiecesList = ({
 
   return {
     isFetching,
+    isLoading,
     pagination,
     pieces,
     sorting,

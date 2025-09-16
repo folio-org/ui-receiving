@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
+import { Loading } from '@folio/stripes/components';
+
 import {
   EXPECTED_PIECES_STATUSES,
   PIECE_COLUMNS,
@@ -21,6 +23,7 @@ const ExpectedPiecesList = ({
 
   const {
     isFetching,
+    isLoading,
     pagination,
     pieces,
     setPagination,
@@ -33,6 +36,8 @@ const ExpectedPiecesList = ({
     title,
     queryParams: { receivingStatus: EXPECTED_PIECES_STATUSES },
   });
+
+  if (isLoading) return <Loading />;
 
   return (
     <PiecesList
