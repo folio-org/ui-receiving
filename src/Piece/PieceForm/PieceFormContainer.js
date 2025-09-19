@@ -217,20 +217,14 @@ export const PieceFormContainer = ({
     form.change(PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus, null);
 
     return mutatePiece({ piece, options })
-      .then((res) => {
+      .then(async (res) => {
         showCallout({
           messageId: 'ui-receiving.piece.actions.savePiece.success',
           type: 'success',
         });
+        await refetchTitle();
 
         return res;
-      })
-      .then(async (data) => {
-        const t = await refetchTitle();
-
-        console.log('t', t);
-
-        return data;
       })
       .then((data) => {
         if (!postSubmitAction) return data;
