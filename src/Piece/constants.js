@@ -39,6 +39,7 @@ export const PIECE_FORM_FIELD_NAMES = {
   receiptDate: 'receiptDate',
   receivingStatus: 'receivingStatus',
   receivingTenantId: 'receivingTenantId',
+  sequenceNumber: 'sequenceNumber',
   supplement: 'supplement',
 };
 
@@ -78,11 +79,13 @@ export const PIECE_COLUMNS = {
   receiptDate: 'receiptDate',
   receivedDate: 'receivedDate',
   request: 'request',
+  sequenceNumber: 'sequenceNumber',
   status: 'status',
   supplement: 'supplement',
 };
 
 const PIECE_VISIBLE_COLUMNS = [
+  PIECE_COLUMNS.sequenceNumber,
   PIECE_COLUMNS.displaySummary,
   PIECE_COLUMNS.copyNumber,
   PIECE_COLUMNS.enumeration,
@@ -92,15 +95,17 @@ const PIECE_VISIBLE_COLUMNS = [
 ];
 
 export const SORTABLE_COLUMNS = [
+  PIECE_COLUMNS.sequenceNumber,
   PIECE_COLUMNS.enumeration,
   PIECE_COLUMNS.receiptDate,
   PIECE_COLUMNS.receivedDate,
 ];
 
 export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
+  PIECE_COLUMNS.sequenceNumber,
   PIECE_COLUMNS.displaySummary,
   PIECE_COLUMNS.status,
-  ...PIECE_VISIBLE_COLUMNS.slice(1),
+  ...PIECE_VISIBLE_COLUMNS.slice(2),
   PIECE_COLUMNS.receiptDate,
   PIECE_COLUMNS.locationName,
   PIECE_COLUMNS.displayToPublic,
@@ -108,8 +113,9 @@ export const EXPECTED_PIECE_VISIBLE_COLUMNS = [
 ];
 
 export const RECEIVED_PIECE_VISIBLE_COLUMNS = [
+  PIECE_COLUMNS.sequenceNumber,
   PIECE_COLUMNS.barcode,
-  ...PIECE_VISIBLE_COLUMNS,
+  ...PIECE_VISIBLE_COLUMNS.slice(1),
   PIECE_COLUMNS.receivedDate,
   PIECE_COLUMNS.locationName,
   PIECE_COLUMNS.displayToPublic,
@@ -140,6 +146,7 @@ export const PIECE_COLUMN_MAPPING = {
   [PIECE_COLUMNS.request]: <FormattedMessage id="ui-receiving.piece.request" />,
   [PIECE_COLUMNS.status]: <FormattedMessage id="ui-receiving.piece.status" />,
   [PIECE_COLUMNS.itemStatus]: <FormattedMessage id="ui-receiving.piece.status" />,
+  [PIECE_COLUMNS.sequenceNumber]: <FormattedMessage id="ui-receiving.piece.sequence" />,
   [PIECE_COLUMNS.supplement]: <FormattedMessage id="ui-receiving.piece.supplement" />,
 };
 
@@ -150,6 +157,7 @@ export const PIECE_COLUMN_BASE_FORMATTER = {
   [PIECE_COLUMNS.displaySummary]: record => record.displaySummary || <NoValue />,
   [PIECE_COLUMNS.copyNumber]: record => record.copyNumber || <NoValue />,
   [PIECE_COLUMNS.barcode]: record => record.barcode || <NoValue />,
+  [PIECE_COLUMNS.sequenceNumber]: record => record.sequenceNumber || <NoValue />,
   [PIECE_COLUMNS.status]: record => record.receivingStatus || <NoValue />,
 };
 

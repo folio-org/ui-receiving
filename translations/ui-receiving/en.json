@@ -260,6 +260,8 @@
   "piece.receivingNoteModal.title": "Receiving note",
   "piece.request": "Request",
   "piece.request.isOpened": "Yes",
+  "piece.sequence": "Sequence",
+  "piece.sequence.scope": "of {count}",
   "piece.status": "Status",
   "piece.statusChangeLog.column.date": "Date",
   "piece.statusChangeLog.column.interval": "Interval",
@@ -299,6 +301,7 @@
   "validation.dateAfter": "Selected date must be later than the current date",
   "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
   "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
+  "validation.numberRange": "Please enter a number between {min} and {max}.",
 
   "permission.view": "Receiving: View",
   "permission.edit": "Receiving: View, edit",
