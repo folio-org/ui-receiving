@@ -11,24 +11,21 @@ export const useTitle = (titleId, options = {}) => {
   const {
     enabled = true,
     tenantId,
+    ...queryOptions
   } = options;
 
   const ky = useOkapiKy({ tenant: tenantId });
   const [namespace] = useNamespace({ key: 'receiving-title' });
 
-  const {
-    data,
-    isFetching,
-    isLoading,
-  } = useQuery({
+  const { data, ...rest } = useQuery({
     queryKey: [namespace, titleId, tenantId],
     queryFn: ({ signal }) => ky.get(`${TITLES_API}/${titleId}`, { signal }).json(),
     enabled: enabled && Boolean(titleId),
+    ...queryOptions,
   });
 
   return ({
     title: data,
-    isFetching,
-    isLoading,
+    ...rest,
   });
 };

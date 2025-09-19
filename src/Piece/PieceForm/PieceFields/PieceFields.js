@@ -25,6 +25,7 @@ import {
 } from '../../../common/components';
 import { useReceivingSearchContext } from '../../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
+import { SequenceNumberField } from './SequenceNumberField';
 
 import css from './PieceFields.css';
 
@@ -33,6 +34,7 @@ export const PieceFields = ({
   instanceId,
   locationIds,
   locations,
+  nextSequenceNumber,
   pieceFormatOptions,
   poLine,
   setLocationValue,
@@ -300,6 +302,15 @@ export const PieceFields = ({
             required={isLocationRequired}
           />
         </Col>
+        <Col
+          xs={6}
+          md={3}
+        >
+          <SequenceNumberField
+            isEditMode={values?.id}
+            nextSequenceNumber={nextSequenceNumber}
+          />
+        </Col>
       </Row>
     </>
   );
@@ -314,6 +325,7 @@ PieceFields.propTypes = {
   })),
   locationIds: PropTypes.arrayOf(PropTypes.string),
   locations: PropTypes.arrayOf(PropTypes.object),
+  nextSequenceNumber: PropTypes.number,
   poLine: PropTypes.object.isRequired,
   setLocationValue: PropTypes.func.isRequired,
   onChangeDisplayOnHolding: PropTypes.func.isRequired,

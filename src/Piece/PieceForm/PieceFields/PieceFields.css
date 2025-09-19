@@ -1,3 +1,17 @@
 .control {
   margin-bottom: var(--control-margin-bottom);
 }
+
+.sequenceNumber {
+  display: flex;
+  gap: calc(var(--gutter) / 2);
+
+  & .sequenceNumberScope {
+    align-self: flex-start;
+    margin-top: calc((var(--font-size-form-label) * var(--line-height)) + var(--control-label-margin-bottom));
+    min-height: var(--control-min-size-desktop);
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+}

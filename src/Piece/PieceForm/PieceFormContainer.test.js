@@ -151,7 +151,10 @@ describe('PieceFormContainer', () => {
       onConfirmReceive: jest.fn(),
       onQuickReceive: onQuickReceiveMock,
     });
-    useTitle.mockReturnValue({ title });
+    useTitle.mockReturnValue({
+      title,
+      refetch: jest.fn(() => Promise.resolve(title)),
+    });
     useReceive.mockReturnValue({ receive: receiveMock });
     useUnreceive.mockReturnValue({ unreceive: unreceiveMock });
   });
