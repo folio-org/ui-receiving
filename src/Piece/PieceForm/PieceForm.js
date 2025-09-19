@@ -416,6 +416,7 @@ PieceForm.propTypes = {
     protectDelete: PropTypes.bool,
     protectUpdate: PropTypes.bool,
   }),
+  submitting: PropTypes.bool,
   values: PropTypes.object.isRequired,
 };
 
