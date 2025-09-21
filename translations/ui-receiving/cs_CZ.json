@@ -281,11 +281,12 @@
     "title.confirmationModal.removeFromPackage.confirm": "Potvrdit",
     "title.confirmationModal.removeFromPackage.success": "Související kusy a veškeré související Holdingy a Jednotky v kataloku byly smazány.",
     "title.confirmationModal.removeHolding.message": "Jeden nebo více souvisejících holdingů neodkazuje na žádné jiné kusy nebo jednotky. Chcete je odstranit?",
-    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
-    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
-    "piece.modal.expectedDateRange.heading": "Select expected date range",
-    "piece.modal.expectedDateRange.startDate": "Start date",
-    "piece.modal.expectedDateRange.endDate": "End date",
-    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
-    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
+    "piece.receiveForm.limited.action.receiveAndLoad": "Přijímat a načítat další",
+    "piece.receiveForm.limited.paneSub": "{count} z {totalRecords} přijímání kusů",
+    "piece.modal.expectedDateRange.heading": "Zvolte očekávaný rozsah dat",
+    "piece.modal.expectedDateRange.startDate": "Datum zahájení",
+    "piece.modal.expectedDateRange.endDate": "Datum ukončení",
+    "validation.dateRange.startDate.beforeEndDate": "Datum zahájení musí být dřívější nebo rovno datu ukončení",
+    "validation.dateRange.endDate.afterStartDate": "Datum ukončení musí být pozdější nebo rovno datu zahájení.",
+    "piece.columns.location": "Lokace holdingu"
 }

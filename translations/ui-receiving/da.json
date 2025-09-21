@@ -287,5 +287,6 @@
     "piece.modal.expectedDateRange.startDate": "Start date",
     "piece.modal.expectedDateRange.endDate": "End date",
     "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
-    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
+    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
+    "piece.columns.location": "Holdings location"
 }
