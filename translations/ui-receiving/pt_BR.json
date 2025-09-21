@@ -287,5 +287,6 @@
     "piece.modal.expectedDateRange.startDate": "Data de início",
     "piece.modal.expectedDateRange.endDate": "Data final",
     "validation.dateRange.startDate.beforeEndDate": "A data de início deve ser anterior ou igual à data de término",
-    "validation.dateRange.endDate.afterStartDate": "A data final deve ser posterior ou igual à data inicial."
+    "validation.dateRange.endDate.afterStartDate": "A data final deve ser posterior ou igual à data inicial.",
+    "piece.columns.location": "Localização do acervo"
 }
