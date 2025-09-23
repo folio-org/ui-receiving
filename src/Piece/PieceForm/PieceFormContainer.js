@@ -83,6 +83,7 @@ export const PieceFormContainer = ({
 
   const {
     isLoading: isTitleLoading,
+    refetch: refetchTitle,
     title,
   } = useTitle(titleId, { tenantId });
 
@@ -177,6 +178,7 @@ export const PieceFormContainer = ({
         'itemId',
         'receivedDate',
         PIECE_FORM_FIELD_NAMES.receivingStatus,
+        PIECE_FORM_FIELD_NAMES.sequenceNumber,
       ]),
       [PIECE_FORM_FIELD_NAMES.isCreateItem]: values?.itemId ? true : values?.isCreateItem,
       [PIECE_FORM_SERVICE_FIELD_NAMES.isCreateAnother]: true,
@@ -215,11 +217,12 @@ export const PieceFormContainer = ({
     form.change(PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus, null);
 
     return mutatePiece({ piece, options })
-      .then((res) => {
+      .then(async (res) => {
         showCallout({
           messageId: 'ui-receiving.piece.actions.savePiece.success',
           type: 'success',
         });
+        await refetchTitle();
 
         return res;
       })
@@ -254,6 +257,7 @@ export const PieceFormContainer = ({
     onCloseForm,
     onCreateAnother,
     onQuickReceive,
+    refetchTitle,
     sendClaimsHandler,
     showCallout,
   ]);
@@ -350,6 +354,7 @@ export const PieceFormContainer = ({
         onUnreceive={onUnreceive}
         locationIds={locationIds}
         locations={locations}
+        nextSequenceNumber={title?.nextSequenceNumber}
         paneTitle={paneTitle}
         pieceFormatOptions={pieceFormatOptions}
         poLine={orderLine}

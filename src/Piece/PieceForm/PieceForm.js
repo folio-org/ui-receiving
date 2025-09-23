@@ -63,11 +63,13 @@ const PieceForm = ({
   onUnreceive: onUnreceiveProp,
   locationIds,
   locations,
+  nextSequenceNumber,
   paneTitle,
   pieceFormatOptions,
   poLine,
   pristine,
   restrictionsByAcqUnit,
+  submitting,
   values: formValues,
 }) => {
   const stripes = useStripes();
@@ -241,6 +243,7 @@ const PieceForm = ({
       onSave={onSave}
       onStatusChange={onStatusChange}
       status={receivingStatus}
+      submitting={submitting}
     />
   );
 
@@ -325,6 +328,7 @@ const PieceForm = ({
                         poLine={poLine}
                         locationIds={locationIds}
                         locations={locations}
+                        nextSequenceNumber={nextSequenceNumber}
                         setLocationValue={mutators.setLocationValue}
                         onChangeDisplayOnHolding={onChangeDisplayOnHolding}
                       />
@@ -395,6 +399,7 @@ PieceForm.propTypes = {
   instanceId: PropTypes.string,
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
+  nextSequenceNumber: PropTypes.number,
   onClaimSend: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
@@ -411,6 +416,7 @@ PieceForm.propTypes = {
     protectDelete: PropTypes.bool,
     protectUpdate: PropTypes.bool,
   }),
+  submitting: PropTypes.bool,
   values: PropTypes.object.isRequired,
 };
 

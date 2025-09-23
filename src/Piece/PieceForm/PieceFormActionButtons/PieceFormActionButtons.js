@@ -28,6 +28,7 @@ export const PieceFormActionButtons = ({
   onStatusChange,
   onUnreceivePiece,
   status = PIECE_STATUS.expected,
+  submitting,
 }) => {
   const onToggleRef = useRef(noop);
 
@@ -45,8 +46,11 @@ export const PieceFormActionButtons = ({
     status,
   });
   const saveButtonLabelId = 'stripes-components.saveAndClose';
-  const isSaveDisabled = actionsDisabled?.[PIECE_ACTION_NAMES.saveAndClose];
-  const isActionsMenuDisabled = isSaveDisabled && (actionsDisabled?.[PIECE_ACTION_NAMES.delete] || !isEditMode);
+  const isSaveDisabled = actionsDisabled?.[PIECE_ACTION_NAMES.saveAndClose] || submitting;
+  const isActionsMenuDisabled = (
+    (isSaveDisabled && (actionsDisabled?.[PIECE_ACTION_NAMES.delete] || !isEditMode))
+    || submitting
+  );
 
   if (actionMenu.length === 0) {
     return (
@@ -109,4 +113,5 @@ PieceFormActionButtons.propTypes = {
   onStatusChange: PropTypes.func.isRequired,
   onUnreceivePiece: PropTypes.func.isRequired,
   status: PropTypes.string,
+  submitting: PropTypes.bool,
 };
