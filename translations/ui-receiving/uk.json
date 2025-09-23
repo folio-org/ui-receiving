@@ -113,7 +113,7 @@
     "title.accessProvider": "Постачальник доступу",
     "title.materialSupplier": "Постачальник матеріалу",
     "title.orderType.One-Time": "Одноразове",
-    "title.orderType.Ongoing": "Безстрокове",
+    "title.orderType.Ongoing": "Безстрокове (постійне)",
     "title.orderType": "Тип замовлення",
     "title.vendor": "Постачальник",
     "piece.actions.selectAll": "Вибрати всі частини примірників назви",
@@ -281,11 +281,12 @@
     "title.confirmationModal.removeFromPackage.confirm": "Підтвердити",
     "title.confirmationModal.removeFromPackage.success": "Пов'язані частини примірників назви та будь-які пов'язані дані про фонди (холдінгси) та примірники з додатку \"Облік фонду\" були видалені.",
     "title.confirmationModal.removeHolding.message": "Один або декілька пов'язаних даних про фонди (холдінгси) не посилаються на жодні інші частини примірників назви чи примірники. Ви хочете їх видалити?",
-    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
-    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
-    "piece.modal.expectedDateRange.heading": "Select expected date range",
-    "piece.modal.expectedDateRange.startDate": "Start date",
-    "piece.modal.expectedDateRange.endDate": "End date",
-    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
-    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
+    "piece.receiveForm.limited.action.receiveAndLoad": "Отримати та завантажити більше",
+    "piece.receiveForm.limited.paneSub": "{count} з {totalRecords} отримуваних частин примірників назви",
+    "piece.modal.expectedDateRange.heading": "Виберіть очікуваний діапазон дат",
+    "piece.modal.expectedDateRange.startDate": "Дата початку",
+    "piece.modal.expectedDateRange.endDate": "Дата закінчення",
+    "validation.dateRange.startDate.beforeEndDate": "\"Дата початку\" повинна бути меншою або дорівнювати \"Даті закінчення\"",
+    "validation.dateRange.endDate.afterStartDate": "\"Дата закінчення\" повинна бути більшою або дорівнювати \"Даті початку\"",
+    "piece.columns.location": "Holdings location"
 }

@@ -281,11 +281,12 @@
     "title.confirmationModal.removeFromPackage.confirm": "Bevestig",
     "title.confirmationModal.removeFromPackage.success": "Gerelateerde Stukken en alle Gerelateerd inventaris Holdings en Items zijn verwijderd.",
     "title.confirmationModal.removeHolding.message": "Gerelateerde Holdings verwijzen niet naar andere Stukken of Items. Wilt u ze verwijderen?",
-    "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",
-    "piece.receiveForm.limited.paneSub": "{count} of {totalRecords} receiving pieces",
-    "piece.modal.expectedDateRange.heading": "Select expected date range",
-    "piece.modal.expectedDateRange.startDate": "Start date",
-    "piece.modal.expectedDateRange.endDate": "End date",
-    "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
-    "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date."
+    "piece.receiveForm.limited.action.receiveAndLoad": "Ontvangen & Meer Invoeren",
+    "piece.receiveForm.limited.paneSub": "{count} van {totalRecords} Ontvangen Stukken",
+    "piece.modal.expectedDateRange.heading": "Selecteer het verwachte datumbereik",
+    "piece.modal.expectedDateRange.startDate": "Begindatum",
+    "piece.modal.expectedDateRange.endDate": "Einddatum",
+    "validation.dateRange.startDate.beforeEndDate": "De begindatum moet eerder zijn dan of gelijk aan de einddatum",
+    "validation.dateRange.endDate.afterStartDate": "De einddatum moet later zijn dan of gelijk aan de begindatum.",
+    "piece.columns.location": "Holdings location"
 }
