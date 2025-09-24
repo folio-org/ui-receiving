@@ -6,7 +6,7 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_FORM_FIELD_NAMES } from '../../Piece';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 

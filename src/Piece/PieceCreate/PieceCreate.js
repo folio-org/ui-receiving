@@ -7,12 +7,10 @@ import {
   useOrderLine,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import { useTitle } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
-import {
-  ORDER_FORMAT_TO_PIECE_FORMAT,
-  PIECE_FORM_FIELD_NAMES,
-} from '../constants';
+import { ORDER_FORMAT_TO_PIECE_FORMAT } from '../constants';
 import { PieceFormContainer } from '../PieceForm';
 
 function getNewPieceValues(titleId, poLine, crossTenant) {

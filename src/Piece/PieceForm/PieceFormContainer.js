@@ -25,6 +25,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { ConfirmReceivingModal } from '../../common/components';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import {
   useOrder,
   usePieceMutator,
@@ -45,7 +46,6 @@ import { useReceivingSearchContext } from '../../contexts';
 import {
   PIECE_ACTION_NAMES,
   PIECE_FORM_CHECKBOX_FIELD_NAMES,
-  PIECE_FORM_FIELD_NAMES,
   PIECE_FORM_SERVICE_FIELD_NAMES,
 } from '../constants';
 import {

@@ -12,7 +12,7 @@ import {
   useLocaleDateFormat,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_FORM_FIELD_NAMES } from '../../../Piece';
+import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 import { getPieceStatusFromItem } from '../../utils';
 import {
   usePieceItemsFetch,

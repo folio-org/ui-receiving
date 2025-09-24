@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { TextField } from '@folio/stripes/components';
 import { validateRequired } from '@folio/stripes-acq-components';
 
-import { PIECE_FORM_FIELD_NAMES } from '../../../constants';
+import { PIECE_FORM_FIELD_NAMES } from '../../../../common/constants';
 
 import css from '../PieceFields.css';
 

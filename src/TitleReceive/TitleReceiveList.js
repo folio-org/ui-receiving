@@ -44,13 +44,13 @@ import {
   CALL_NUMBER_SETTING,
   GENERATOR_ON_EDITABLE,
   GENERATOR_ON,
+  PIECE_FORM_FIELD_NAMES,
 } from '../common/constants';
 import { useNumberGeneratorOptions } from '../common/hooks';
 import { useReceivingSearchContext } from '../contexts';
 import {
   PIECE_COLUMN_MAPPING,
   PIECE_COLUMNS,
-  PIECE_FORM_FIELD_NAMES,
 } from '../Piece';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 

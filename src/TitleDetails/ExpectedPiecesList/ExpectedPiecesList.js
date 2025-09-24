@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { Loading } from '@folio/stripes/components';
 import { ASC_DIRECTION } from '@folio/stripes-acq-components';
 
-import {
-  EXPECTED_PIECES_STATUSES,
-  PIECE_FORM_FIELD_NAMES,
-} from '../../Piece';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
+import { EXPECTED_PIECES_STATUSES } from '../../Piece';
 import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
 
