@@ -9,7 +9,10 @@ import {
 
 import { useTitle } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
-import { ORDER_FORMAT_TO_PIECE_FORMAT } from '../constants';
+import {
+  ORDER_FORMAT_TO_PIECE_FORMAT,
+  PIECE_FORM_FIELD_NAMES,
+} from '../constants';
 import { PieceFormContainer } from '../PieceForm';
 
 function getNewPieceValues(titleId, poLine, crossTenant) {
@@ -75,14 +78,16 @@ export const PieceCreate = ({
   });
 
   const initialValues = useMemo(() => {
-    return isCreateFromTemplate
-      ? state.pieceTemplate
-      : getNewPieceValues(titleId, orderLine, crossTenant);
+    return {
+      ...(isCreateFromTemplate ? state.pieceTemplate : getNewPieceValues(titleId, orderLine, crossTenant)),
+      [PIECE_FORM_FIELD_NAMES.sequenceNumber]: title?.nextSequenceNumber,
+    };
   }, [
     crossTenant,
     isCreateFromTemplate,
     orderLine,
     state?.pieceTemplate,
+    title?.nextSequenceNumber,
     titleId,
   ]);
 
