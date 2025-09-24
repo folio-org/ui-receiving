@@ -34,10 +34,10 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import { setLocationValueFormMutator } from '../../common/utils';
 import {
   PIECE_ACTION_NAMES,
-  PIECE_FORM_FIELD_NAMES,
   PIECE_FORM_SERVICE_FIELD_NAMES,
   PIECE_MODAL_ACCORDION,
   PIECE_MODAL_ACCORDION_LABELS,

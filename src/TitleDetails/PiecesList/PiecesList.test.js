@@ -5,10 +5,7 @@ import {
   fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import {
-  PIECE_COLUMNS,
-  RECEIVED_PIECE_VISIBLE_COLUMNS,
-} from '../../Piece';
+import { RECEIVED_PIECE_VISIBLE_COLUMNS } from '../../Piece';
 import PiecesList from './PiecesList';
 
 const pieces = [{
@@ -29,7 +26,6 @@ const renderPiecesList = (selectPiece) => (render(
       pieces={pieces}
       visibleColumns={RECEIVED_PIECE_VISIBLE_COLUMNS}
       selectPiece={selectPiece}
-      sortedColumn={PIECE_COLUMNS.receiptDate}
     />
   </IntlProvider>,
 ));

@@ -1,6 +1,7 @@
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { dayjs } from '@folio/stripes/components';
+import { useOkapiKy } from '@folio/stripes/core';
 import {
   ORDER_FORMATS,
   ORDER_STATUSES,
@@ -12,9 +13,9 @@ import {
   useOrderLine,
   usePiecesStatusBatchUpdate,
 } from '@folio/stripes-acq-components';
-import { useOkapiKy } from '@folio/stripes/core';
 
-import { renderWithRouter } from '../../../test/jest/helpers';
+import { renderWithRouter } from 'helpers';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import {
   useHoldingItems,
   useOrder,
@@ -115,6 +116,7 @@ const defaultProps = {
     id: 'piece-id',
     holdingId: 'holdingId',
     format: ORDER_FORMATS.physicalResource,
+    [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
   },
   paneTitle: 'Piece form',
 };
@@ -177,9 +179,9 @@ describe('PieceFormContainer', () => {
       },
     });
 
-    await user.type(await screen.findByLabelText('ui-receiving.piece.displaySummary'), 'Test');
-    await user.click(await screen.findByTestId('dropdown-trigger-button'));
-    await user.click(await screen.findByText('stripes-components.saveAndClose'));
+    await userEvent.type(await screen.findByLabelText('ui-receiving.piece.displaySummary'), 'Test');
+    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+    await userEvent.click(await screen.findByText('stripes-components.saveAndClose'));
 
     expect(mutatePieceMock).toHaveBeenCalled();
   });
@@ -192,8 +194,8 @@ describe('PieceFormContainer', () => {
       },
     });
 
-    await user.click(await screen.findByTestId('dropdown-trigger-button'));
-    await user.click(await screen.findByTestId('quickReceive'));
+    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+    await userEvent.click(await screen.findByTestId('quickReceive'));
 
     expect(onQuickReceiveMock).toHaveBeenCalled();
   });
@@ -206,8 +208,8 @@ describe('PieceFormContainer', () => {
       },
     });
 
-    await user.click(await screen.findByTestId('dropdown-trigger-button'));
-    await user.click(await screen.findByTestId('unReceive-piece-button'));
+    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+    await userEvent.click(await screen.findByTestId('unReceive-piece-button'));
 
     expect(unreceiveMock).toHaveBeenCalled();
   });
@@ -227,9 +229,9 @@ describe('PieceFormContainer', () => {
       },
     });
 
-    await user.click(await screen.findByTestId('dropdown-trigger-button'));
-    await user.click(await screen.findByTestId('delete-piece-button'));
-    await user.click(await screen.findByText('ui-receiving.piece.delete.confirm'));
+    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+    await userEvent.click(await screen.findByTestId('delete-piece-button'));
+    await userEvent.click(await screen.findByText('ui-receiving.piece.delete.confirm'));
 
     expect(mutatePieceMock).toHaveBeenCalledWith(expect.objectContaining({
       options: expect.objectContaining({
@@ -243,13 +245,13 @@ describe('PieceFormContainer', () => {
 
     renderPieceFormContainer();
 
-    await user.click(await screen.findByTestId('dropdown-trigger-button'));
-    await user.click(screen.getByTestId('send-claim-button'));
+    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+    await userEvent.click(screen.getByTestId('send-claim-button'));
 
     expect(screen.getByText('ui-receiving.piece.sendClaim.withIntegration.message')).toBeInTheDocument();
 
-    await user.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
-    await user.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
+    await userEvent.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    await userEvent.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
 
     expect(sendClaims).toHaveBeenCalledWith({
       data: {
@@ -264,13 +266,13 @@ describe('PieceFormContainer', () => {
   it('should handle "Send claim" action without claiming integration', async () => {
     renderPieceFormContainer();
 
-    await user.click(await screen.findByTestId('dropdown-trigger-button'));
-    await user.click(screen.getByTestId('send-claim-button'));
+    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+    await userEvent.click(screen.getByTestId('send-claim-button'));
 
     expect(screen.getByText('ui-receiving.piece.sendClaim.withoutIntegration.message')).toBeInTheDocument();
 
-    await user.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
-    await user.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
+    await userEvent.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    await userEvent.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
 
     expect(updatePiecesStatus).toHaveBeenCalledWith({
       data: {

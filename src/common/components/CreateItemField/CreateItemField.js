@@ -19,7 +19,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { useReceivingSearchContext } from '../../../contexts';
-import { PIECE_FORM_FIELD_NAMES } from '../../../Piece/constants';
+import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 
 import css from './style.css';
 

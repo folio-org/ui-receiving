@@ -10,37 +10,12 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../common/constants';
+
 export const ORDER_FORMAT_TO_PIECE_FORMAT = {
   [ORDER_FORMATS.electronicResource]: PIECE_FORMAT.electronic,
   [ORDER_FORMATS.physicalResource]: PIECE_FORMAT.physical,
   [ORDER_FORMATS.other]: PIECE_FORMAT.other,
-};
-
-export const PIECE_FORM_FIELD_NAMES = {
-  accessionNumber: 'accessionNumber',
-  barcode: 'barcode',
-  callNumber: 'callNumber',
-  chronology: 'chronology',
-  claimingInterval: 'claimingInterval',
-  comment: 'comment',
-  copyNumber: 'copyNumber',
-  discoverySuppress: 'discoverySuppress',
-  displayOnHolding: 'displayOnHolding',
-  displaySummary: 'displaySummary',
-  displayToPublic: 'displayToPublic',
-  enumeration: 'enumeration',
-  externalNote: 'externalNote',
-  format: 'format',
-  holdingId: 'holdingId',
-  internalNote: 'internalNote',
-  isBound: 'isBound',
-  isCreateItem: 'isCreateItem',
-  locationId: 'locationId',
-  receiptDate: 'receiptDate',
-  receivingStatus: 'receivingStatus',
-  receivingTenantId: 'receivingTenantId',
-  sequenceNumber: 'sequenceNumber',
-  supplement: 'supplement',
 };
 
 export const PIECE_FORM_SERVICE_FIELD_NAMES = {

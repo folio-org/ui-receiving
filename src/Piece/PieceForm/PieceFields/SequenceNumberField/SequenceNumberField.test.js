@@ -8,6 +8,7 @@ import {
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import stripesFinalForm from '@folio/stripes/final-form';
 
+import { PIECE_FORM_FIELD_NAMES } from '../../../../common/constants';
 import { SequenceNumberField } from './SequenceNumberField';
 
 const defaultProps = {
@@ -18,7 +19,10 @@ const defaultProps = {
 const Form = stripesFinalForm({})(({ children }) => <form>{children}</form>);
 const renderSequenceNumberField = (props = {}) => {
   return render(
-    <Form onSubmit={jest.fn()}>
+    <Form
+      onSubmit={jest.fn()}
+      initialValues={{ [PIECE_FORM_FIELD_NAMES.sequenceNumber]: defaultProps.nextSequenceNumber }}
+    >
       <SequenceNumberField
         {...defaultProps}
         {...props}
@@ -33,11 +37,20 @@ describe('SequenceNumberField', () => {
     jest.clearAllMocks();
   });
 
-  it('should render sequence number field', async () => {
+  it('should prevent sequence number field update', async () => {
     renderSequenceNumberField();
 
+    expect(screen.getByRole('spinbutton', { name: 'ui-receiving.piece.sequence' })).toBeDisabled();
+  });
+
+  it('should update sequence number field', async () => {
+    renderSequenceNumberField({ isEditMode: true });
+
     await act(async () => {
-      await userEvent.type(screen.getByRole('spinbutton', { name: 'ui-receiving.piece.sequence' }), '100');
+      const input = screen.getByRole('spinbutton', { name: 'ui-receiving.piece.sequence' });
+
+      await userEvent.clear(input);
+      await userEvent.type(input, '100');
     });
 
     expect(screen.getByRole('spinbutton', { name: 'ui-receiving.piece.sequence' })).toHaveValue(100);

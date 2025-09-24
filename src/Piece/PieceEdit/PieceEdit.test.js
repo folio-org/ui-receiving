@@ -6,7 +6,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import { usePiece } from '../../common/hooks';
-import { PieceFormContainer } from '../PieceForm';
 import { PieceEdit } from './PieceEdit';
 
 jest.mock('../../common/hooks', () => ({
@@ -40,11 +39,11 @@ const renderComponent = (props = {}) => render(
 
 describe('PieceCreate', () => {
   beforeEach(() => {
-    PieceFormContainer.mockClear();
+    usePiece.mockReturnValue({ piece: {} });
+  });
 
-    usePiece
-      .mockClear()
-      .mockReturnValue({ piece: {} });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render piece edit form', () => {

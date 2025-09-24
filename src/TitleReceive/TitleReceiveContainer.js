@@ -23,6 +23,7 @@ import {
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../common/constants';
 import {
   useReceive,
   useTitleHydratedPieces,
@@ -36,10 +37,7 @@ import {
   RECEIVING_ROUTE,
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
-import {
-  EXPECTED_PIECES_SEARCH_VALUE,
-  PIECE_FORM_FIELD_NAMES,
-} from '../Piece';
+import { EXPECTED_PIECES_SEARCH_VALUE } from '../Piece';
 import OpenedRequestsModal from './OpenedRequestsModal';
 import TitleReceive from './TitleReceive';
 

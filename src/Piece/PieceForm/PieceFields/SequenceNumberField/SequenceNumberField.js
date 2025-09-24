@@ -3,8 +3,9 @@ import { Field } from 'react-final-form';
 import { FormattedMessage } from 'react-intl';
 
 import { TextField } from '@folio/stripes/components';
+import { validateRequired } from '@folio/stripes-acq-components';
 
-import { PIECE_FORM_FIELD_NAMES } from '../../../constants';
+import { PIECE_FORM_FIELD_NAMES } from '../../../../common/constants';
 
 import css from '../PieceFields.css';
 
@@ -17,7 +18,7 @@ export const SequenceNumberField = ({
     : nextSequenceNumber;
 
   const validate = (val) => {
-    if (typeof val !== 'number') return undefined;
+    if (typeof val !== 'number') return validateRequired(val);
 
     const min = 1;
 
@@ -38,10 +39,12 @@ export const SequenceNumberField = ({
     <div className={css.sequenceNumber}>
       <Field
         component={TextField}
+        disabled={!isEditMode} // Change of sequence number is allowed only for existing pieces
         id={PIECE_FORM_FIELD_NAMES.sequenceNumber}
         label={<FormattedMessage id="ui-receiving.piece.sequence" />}
         name={PIECE_FORM_FIELD_NAMES.sequenceNumber}
         parse={(v) => (v ? Number(v) : undefined)}
+        required
         type="number"
         validate={validate}
         validateFields={[]}

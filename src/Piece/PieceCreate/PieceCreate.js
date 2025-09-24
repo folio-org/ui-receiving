@@ -7,6 +7,7 @@ import {
   useOrderLine,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import { useTitle } from '../../common/hooks';
 import { useReceivingSearchContext } from '../../contexts';
 import { ORDER_FORMAT_TO_PIECE_FORMAT } from '../constants';
@@ -75,14 +76,16 @@ export const PieceCreate = ({
   });
 
   const initialValues = useMemo(() => {
-    return isCreateFromTemplate
-      ? state.pieceTemplate
-      : getNewPieceValues(titleId, orderLine, crossTenant);
+    return {
+      ...(isCreateFromTemplate ? state.pieceTemplate : getNewPieceValues(titleId, orderLine, crossTenant)),
+      [PIECE_FORM_FIELD_NAMES.sequenceNumber]: title?.nextSequenceNumber,
+    };
   }, [
     crossTenant,
     isCreateFromTemplate,
     orderLine,
     state?.pieceTemplate,
+    title?.nextSequenceNumber,
     titleId,
   ]);
 

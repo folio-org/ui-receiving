@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import noop from 'lodash/noop';
 import PropTypes from 'prop-types';
-import { noop } from 'lodash';
+import { useMemo } from 'react';
 
 import {
   Checkbox,
@@ -41,16 +41,17 @@ const formatter = {
 };
 
 const PiecesList = ({
-  id,
-  columnIdPrefix,
-  isLoading,
-  pieces,
-  totalCount,
-  onNeedMoreData,
   applySorting,
+  columnIdPrefix,
+  id,
+  initialSorting,
+  isLoading,
+  onNeedMoreData,
   pagination,
-  visibleColumns,
+  pieces,
   selectPiece,
+  totalCount,
+  visibleColumns,
 }) => {
   const [sortingField, sortingDirection, changeSorting] = useSorting(noop, SORTABLE_COLUMNS);
 
@@ -74,29 +75,30 @@ const PiecesList = ({
   return (
     <>
       <MultiColumnList
-        id={id}
         columnIdPrefix={columnIdPrefix}
-        contentData={pieces}
-        totalCount={totalCount}
         columnMapping={PIECE_COLUMN_MAPPING}
-        visibleColumns={[...visibleColumns, 'arrow']}
+        contentData={pieces}
         formatter={formatter}
+        id={id}
         interactive={false}
+        loading={isLoading}
+        nonInteractiveHeaders={[...nonInteractiveHeaders, 'arrow']}
+        onHeaderClick={onHeaderClick}
         onRowClick={selectPiece}
         rowFormatter={acqRowFormatter}
         rowProps={rowProps}
-        nonInteractiveHeaders={[...nonInteractiveHeaders, 'arrow']}
-        onHeaderClick={onHeaderClick}
-        sortDirection={sortingDirection}
-        sortedColumn={sortingField}
+        sortDirection={sortingDirection || initialSorting?.sortingDirection}
+        sortedColumn={sortingField || initialSorting?.sorting}
+        totalCount={totalCount}
+        visibleColumns={[...visibleColumns, 'arrow']}
       />
 
       {pieces.length > 0 && (
         <PrevNextPagination
-          {...pagination}
-          totalCount={totalCount}
           disabled={isLoading}
           onChange={onPageChange}
+          totalCount={totalCount}
+          {...pagination}
         />
       )}
     </>
@@ -104,17 +106,23 @@ const PiecesList = ({
 };
 
 PiecesList.propTypes = {
-  pieces: PropTypes.arrayOf(PropTypes.object),
-  id: PropTypes.string,
-  columnIdPrefix: PropTypes.string,
-  selectPiece: PropTypes.func,
-  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  sortedColumn: PropTypes.string.isRequired,
-  isLoading: PropTypes.bool,
-  totalCount: PropTypes.number,
-  pagination: PropTypes.object,
-  onNeedMoreData: PropTypes.func,
   applySorting: PropTypes.func.isRequired,
+  columnIdPrefix: PropTypes.string,
+  id: PropTypes.string,
+  initialSorting: PropTypes.shape({
+    sorting: PropTypes.string,
+    sortingDirection: PropTypes.string,
+  }),
+  isLoading: PropTypes.bool,
+  onNeedMoreData: PropTypes.func,
+  pagination: PropTypes.shape({
+    limit: PropTypes.number,
+    offset: PropTypes.number,
+  }),
+  pieces: PropTypes.arrayOf(PropTypes.object),
+  selectPiece: PropTypes.func,
+  totalCount: PropTypes.number,
+  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default PiecesList;

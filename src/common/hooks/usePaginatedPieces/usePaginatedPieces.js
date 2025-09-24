@@ -12,6 +12,7 @@ import {
   useLocaleDateFormat,
 } from '@folio/stripes-acq-components';
 
+import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 import { getPieceStatusFromItem } from '../../utils';
 import {
   usePieceItemsFetch,
@@ -22,7 +23,12 @@ import { makeKeywordQueryBuilder } from './searchConfigs';
 export const buildPiecesQuery = dateFormat => makeQueryBuilder(
   'cql.allRecords=1',
   makeKeywordQueryBuilder(dateFormat),
-  'sortby receiptDate',
+  `sortby ${PIECE_FORM_FIELD_NAMES.sequenceNumber}/sort.descending`,
+  { /* Filter mappings */ },
+  {
+    /* Sort mappings */
+    [PIECE_FORM_FIELD_NAMES.sequenceNumber]: `${PIECE_FORM_FIELD_NAMES.sequenceNumber}/number`, // Sort by numeric value
+  },
 );
 
 const DEFAULT_DATA = [];
