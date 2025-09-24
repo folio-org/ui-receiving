@@ -58,14 +58,12 @@ const renderComponent = (props = {}) => render(
 
 describe('PieceCreate', () => {
   beforeEach(() => {
-    PieceFormContainer.mockClear();
+    useOrderLine.mockReturnValue({ orderLine });
+    useTitle.mockReturnValue({ title });
+  });
 
-    useOrderLine
-      .mockClear()
-      .mockReturnValue({ orderLine });
-    useTitle
-      .mockClear()
-      .mockReturnValue({ title });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render new piece create form', () => {

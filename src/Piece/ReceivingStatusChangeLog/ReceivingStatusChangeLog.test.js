@@ -49,9 +49,11 @@ const renderComponent = (props = {}) => render(
 
 describe('ReceivingStatusChangeLog', () => {
   beforeEach(() => {
-    usePieceStatusChangeLog
-      .mockClear()
-      .mockReturnValue({ data });
+    usePieceStatusChangeLog.mockReturnValue({ data });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render piece status log list', () => {
