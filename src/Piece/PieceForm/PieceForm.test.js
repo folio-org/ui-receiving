@@ -1,9 +1,9 @@
-import user from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   act,
   screen,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { dayjs } from '@folio/stripes/components';
 import {
   FieldInventory,
@@ -13,7 +13,8 @@ import {
   useCurrentUserTenants,
 } from '@folio/stripes-acq-components';
 
-import { renderWithRouter } from '../../../test/jest/helpers';
+import { renderWithRouter } from 'helpers';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import { usePieceStatusChangeLog } from '../hooks';
 import PieceForm from './PieceForm';
 
@@ -44,7 +45,10 @@ const defaultProps = {
   onDelete: jest.fn(),
   onSubmit: jest.fn(),
   onUnreceive: jest.fn(),
-  initialValues: { isCreateAnother: false },
+  initialValues: {
+    isCreateAnother: false,
+    [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
+  },
   instanceId: 'instanceId',
   locationIds: [],
   locations: [{ id: '001', name: 'Annex', code: 'AN' }],
@@ -106,19 +110,12 @@ const createNewHoldingForThePiece = (newHoldingId = 'newHoldingUUID') => {
 
 describe('PieceForm', () => {
   beforeEach(() => {
-    defaultProps.checkHoldingAbandonment.mockClear();
-    defaultProps.onClose.mockClear();
-    defaultProps.onDelete.mockClear();
-    defaultProps.onSubmit.mockClear();
-    defaultProps.onUnreceive.mockClear();
-    FieldInventory.mockClear();
-    usePieceStatusChangeLog
-      .mockClear()
-      .mockReturnValue({ data: logs });
+    useCurrentUserTenants.mockReturnValue(tenants);
+    usePieceStatusChangeLog.mockReturnValue({ data: logs });
+  });
 
-    useCurrentUserTenants
-      .mockClear()
-      .mockReturnValue(tenants);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should display the piece form', () => {
@@ -131,7 +128,7 @@ describe('PieceForm', () => {
     it('should close the piece form', async () => {
       renderPieceForm();
 
-      await user.click(await findButton('ui-receiving.piece.actions.cancel'));
+      await userEvent.click(await findButton('ui-receiving.piece.actions.cancel'));
 
       expect(defaultProps.onClose).toHaveBeenCalled();
     });
@@ -149,7 +146,7 @@ describe('PieceForm', () => {
         },
       });
 
-      await user.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
+      await userEvent.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
 
       expect(screen.getByLabelText('ui-receiving.piece.discoverySuppress')).not.toHaveAttribute('disabled');
     });
@@ -174,7 +171,7 @@ describe('PieceForm', () => {
 
       expect(screen.getByText('ui-receiving.piece.displayOnHolding')).toBeInTheDocument();
 
-      await user.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
+      await userEvent.click(screen.getByText('ui-receiving.piece.displayOnHolding'));
 
       const displayToPublic = await screen.findByLabelText('ui-receiving.piece.displayToPublic');
 
@@ -193,7 +190,7 @@ describe('PieceForm', () => {
 
       const displayOnHolding = screen.getByLabelText('ui-receiving.piece.displayOnHolding');
 
-      await user.click(displayOnHolding);
+      await userEvent.click(displayOnHolding);
 
       await waitFor(() => {
         expect(displayOnHolding).not.toBeChecked();
@@ -249,10 +246,11 @@ describe('PieceForm', () => {
           format,
           id: 'pieceId',
           holdingId: holding.id,
+          [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
         },
       });
 
-      await user.click(await findButton('stripes-components.saveAndClose'));
+      await userEvent.click(await findButton('stripes-components.saveAndClose'));
       expect(defaultProps.onSubmit).toHaveBeenCalled();
     });
 
@@ -265,11 +263,12 @@ describe('PieceForm', () => {
             id: 'pieceId',
             format: PIECE_FORMAT.physical,
             holdingId: holding.id,
+            [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
           },
         });
 
         await createNewHoldingForThePiece();
-        await user.click(await findButton('stripes-components.saveAndClose'));
+        await userEvent.click(await findButton('stripes-components.saveAndClose'));
 
         expect(await screen.findByText('stripes-acq-components.holdings.deleteModal.message')).toBeInTheDocument();
         expect(defaultProps.onSubmit).not.toHaveBeenCalled();
@@ -283,6 +282,7 @@ describe('PieceForm', () => {
         initialValues: {
           isCreateAnother: true,
           receivingStatus: PIECE_STATUS.expected,
+          [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
         },
       });
 
@@ -305,13 +305,14 @@ describe('PieceForm', () => {
         format: PIECE_FORMAT.physical,
         barcode: 'barcode',
         callNumber: 'callNumber',
+        [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
       },
     });
 
     const formatlabel = screen.getByText('ui-receiving.piece.format');
 
-    await user.click(formatlabel);
-    await user.selectOptions(screen.getByRole('combobox', { name: 'ui-receiving.piece.format' }), 'Electronic');
+    await userEvent.click(formatlabel);
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-receiving.piece.format' }), 'Electronic');
 
     expect(screen.getByLabelText('ui-receiving.piece.barcode')).toHaveValue('');
     expect(screen.getByLabelText('ui-receiving.piece.callNumber')).toHaveValue('');
@@ -337,16 +338,17 @@ describe('PieceForm', () => {
         receivingStatus: PIECE_STATUS.expected,
         itemId: 'itemUUID',
         request: {},
+        [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
       },
     });
 
     const dropdownButton = screen.getByTestId('dropdown-trigger-button');
 
-    await user.click(dropdownButton);
+    await userEvent.click(dropdownButton);
 
     const unreceivableButton = screen.getByTestId('unreceivable-button');
 
-    await user.click(unreceivableButton);
+    await userEvent.click(unreceivableButton);
 
     expect(defaultProps.onSubmit).toHaveBeenCalled();
   });
@@ -364,14 +366,15 @@ describe('PieceForm', () => {
         isCreateItem: false,
         receivingStatus: PIECE_STATUS.received,
         receivedDate: new Date().toISOString(),
+        [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
       },
     });
 
-    await user.click(screen.getByTestId('dropdown-trigger-button'));
+    await userEvent.click(screen.getByTestId('dropdown-trigger-button'));
     const unReceiveButton = await screen.findByTestId('unReceive-piece-button');
 
     expect(unReceiveButton).toBeInTheDocument();
-    await user.click(unReceiveButton);
+    await userEvent.click(unReceiveButton);
 
     expect(defaultProps.onUnreceive).toHaveBeenCalled();
   });
@@ -380,19 +383,20 @@ describe('PieceForm', () => {
     const initialValues = {
       format: PIECE_FORMAT.other,
       holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+      [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
     };
     const date = today.add(3, 'days');
 
     beforeEach(async () => {
       renderPieceForm({ initialValues });
 
-      await user.click(screen.getByTestId('dropdown-trigger-button'));
+      await userEvent.click(screen.getByTestId('dropdown-trigger-button'));
     });
 
     it('should handle "Delay claim" action', async () => {
-      await user.click(screen.getByTestId('delay-claim-button'));
-      await user.type(screen.getByRole('textbox', { name: /field.delayTo/ }), date.format(DATE_FORMAT));
-      await user.click(await findButton('stripes-acq-components.FormFooter.save'));
+      await userEvent.click(screen.getByTestId('delay-claim-button'));
+      await userEvent.type(screen.getByRole('textbox', { name: /field.delayTo/ }), date.format(DATE_FORMAT));
+      await userEvent.click(await findButton('stripes-acq-components.FormFooter.save'));
 
       expect(defaultProps.onSubmit).toHaveBeenCalledWith(
         expect.objectContaining({

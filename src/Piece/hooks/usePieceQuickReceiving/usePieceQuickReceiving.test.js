@@ -39,12 +39,11 @@ describe('usePieceQuickReceiving', () => {
 
   beforeEach(() => {
     receivePieceMock = jest.fn();
+    useReceive.mockReturnValue({ receive: receivePieceMock });
+  });
 
-    getItemById.mockClear();
-    getPieceById.mockClear();
-    useReceive
-      .mockClear()
-      .mockReturnValue({ receive: receivePieceMock });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should call receive', async () => {

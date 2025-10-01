@@ -25,6 +25,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { ConfirmReceivingModal } from '../../common/components';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import {
   useOrder,
   usePieceMutator,
@@ -45,7 +46,6 @@ import { useReceivingSearchContext } from '../../contexts';
 import {
   PIECE_ACTION_NAMES,
   PIECE_FORM_CHECKBOX_FIELD_NAMES,
-  PIECE_FORM_FIELD_NAMES,
   PIECE_FORM_SERVICE_FIELD_NAMES,
 } from '../constants';
 import {
@@ -222,6 +222,21 @@ export const PieceFormContainer = ({
           messageId: 'ui-receiving.piece.actions.savePiece.success',
           type: 'success',
         });
+
+        const initialSequenceNumber = form.getState().initialValues[PIECE_FORM_FIELD_NAMES.sequenceNumber];
+        const sequenceNumber = res[PIECE_FORM_FIELD_NAMES.sequenceNumber];
+
+        // Notify user if the sequence number was changed
+        if (initialSequenceNumber !== sequenceNumber) {
+          showCallout({
+            messageId: 'ui-receiving.piece.actions.savePiece.changeSequenceNumber.success',
+            values: {
+              oldSequenceNumber: initialSequenceNumber,
+              newSequenceNumber: sequenceNumber,
+            },
+          });
+        }
+
         await refetchTitle();
 
         return res;

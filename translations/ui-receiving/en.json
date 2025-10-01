@@ -186,6 +186,7 @@
   "piece.actions.addItem": "Add item",
   "piece.actions.savePiece.error": "The piece was <b>not saved</b>",
   "piece.actions.savePiece.success": "The piece was successfully <b>saved</b>",
+  "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>",
   "piece.actions.cancel": "Cancel",
   "piece.actions.checkInItem.error": "Receiving error",
   "piece.actions.checkInItem.success": "The piece <b>{enumeration}</b> was successfully <b>received</b>",

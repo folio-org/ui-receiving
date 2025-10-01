@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
 
 import { Loading } from '@folio/stripes/components';
+import { ASC_DIRECTION } from '@folio/stripes-acq-components';
 
-import {
-  EXPECTED_PIECES_STATUSES,
-  PIECE_COLUMNS,
-} from '../../Piece';
+import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
+import { EXPECTED_PIECES_STATUSES } from '../../Piece';
 import { usePiecesList } from '../hooks';
 import PiecesList from '../PiecesList';
+
+const initialSorting = {
+  sorting: PIECE_FORM_FIELD_NAMES.sequenceNumber,
+  sortingDirection: ASC_DIRECTION,
+};
 
 const ExpectedPiecesList = ({
   filters,
@@ -16,11 +20,6 @@ const ExpectedPiecesList = ({
   selectPiece,
   visibleColumns,
 }) => {
-  const initialSorting = {
-    sorting: 'receiptDate',
-    sortingDirection: 'ascending',
-  };
-
   const {
     isFetching,
     isLoading,
@@ -41,16 +40,16 @@ const ExpectedPiecesList = ({
 
   return (
     <PiecesList
-      columnIdPrefix="expected-pieces"
-      pieces={pieces}
-      isLoading={isFetching}
-      totalCount={totalRecords}
-      selectPiece={selectPiece}
-      visibleColumns={visibleColumns}
-      sortedColumn={PIECE_COLUMNS.receiptDate}
-      pagination={pagination}
-      onNeedMoreData={setPagination}
       applySorting={setSorting}
+      columnIdPrefix="expected-pieces"
+      initialSorting={initialSorting}
+      isLoading={isFetching}
+      onNeedMoreData={setPagination}
+      pagination={pagination}
+      pieces={pieces}
+      selectPiece={selectPiece}
+      totalCount={totalRecords}
+      visibleColumns={visibleColumns}
     />
   );
 };

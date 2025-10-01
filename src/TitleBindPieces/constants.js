@@ -39,7 +39,7 @@ export const COLUMN_FORMATTER = {
   [PIECE_COLUMNS.callNumber]: record => record.callNumber || <NoValue />,
 };
 
-export const PIECE_FORM_FIELD_NAMES = {
+export const BIND_ITEM_FORM_FIELD_NAMES = {
   barcode: 'bindItem.barcode',
   callNumber: 'bindItem.callNumber',
   materialTypeId: 'bindItem.materialTypeId',

@@ -23,8 +23,8 @@ import {
   CreateItemField,
   LineLocationsView,
 } from '../../../common/components';
+import { PIECE_FORM_FIELD_NAMES } from '../../../common/constants';
 import { useReceivingSearchContext } from '../../../contexts';
-import { PIECE_FORM_FIELD_NAMES } from '../../constants';
 import { SequenceNumberField } from './SequenceNumberField';
 
 import css from './PieceFields.css';

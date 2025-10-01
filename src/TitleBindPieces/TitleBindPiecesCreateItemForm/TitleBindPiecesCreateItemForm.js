@@ -20,7 +20,7 @@ import {
 } from '@folio/stripes/components';
 
 import { useReceivingSearchContext } from '../../contexts';
-import { PIECE_FORM_FIELD_NAMES } from '../constants';
+import { BIND_ITEM_FORM_FIELD_NAMES } from '../constants';
 import {
   useLoanTypes,
   useMaterialTypes,
@@ -75,9 +75,9 @@ export const TitleBindPiecesCreateItemForm = ({
         <Field
           component={TextField}
           fullWidth
-          id={PIECE_FORM_FIELD_NAMES.barcode}
+          id={BIND_ITEM_FORM_FIELD_NAMES.barcode}
           label={<FormattedMessage id="ui-receiving.piece.barcode" />}
-          name={PIECE_FORM_FIELD_NAMES.barcode}
+          name={BIND_ITEM_FORM_FIELD_NAMES.barcode}
           type="text"
         />
       </Col>
@@ -88,9 +88,9 @@ export const TitleBindPiecesCreateItemForm = ({
         <Field
           component={TextField}
           fullWidth
-          id={PIECE_FORM_FIELD_NAMES.callNumber}
+          id={BIND_ITEM_FORM_FIELD_NAMES.callNumber}
           label={<FormattedMessage id="ui-receiving.piece.callNumber" />}
-          name={PIECE_FORM_FIELD_NAMES.callNumber}
+          name={BIND_ITEM_FORM_FIELD_NAMES.callNumber}
           type="text"
         />
       </Col>
@@ -104,9 +104,9 @@ export const TitleBindPiecesCreateItemForm = ({
           required
           validate={validateRequired}
           dataOptions={materialTypesOptions}
-          id={PIECE_FORM_FIELD_NAMES.materialTypeId}
+          id={BIND_ITEM_FORM_FIELD_NAMES.materialTypeId}
           label={<FormattedMessage id="ui-receiving.piece.materialTypeId" />}
-          name={PIECE_FORM_FIELD_NAMES.materialTypeId}
+          name={BIND_ITEM_FORM_FIELD_NAMES.materialTypeId}
         />
       </Col>
       <Col
@@ -119,9 +119,9 @@ export const TitleBindPiecesCreateItemForm = ({
           required
           validate={validateRequired}
           dataOptions={loanTypesOptions}
-          id={PIECE_FORM_FIELD_NAMES.permanentLoanTypeId}
+          id={BIND_ITEM_FORM_FIELD_NAMES.permanentLoanTypeId}
           label={<FormattedMessage id="ui-receiving.piece.permanentLoanTypeId" />}
-          name={PIECE_FORM_FIELD_NAMES.permanentLoanTypeId}
+          name={BIND_ITEM_FORM_FIELD_NAMES.permanentLoanTypeId}
         />
       </Col>
       <Col
@@ -129,13 +129,13 @@ export const TitleBindPiecesCreateItemForm = ({
         md={4}
       >
         <FieldInventoryComponent
-          affiliationName={PIECE_FORM_FIELD_NAMES.tenantId}
+          affiliationName={BIND_ITEM_FORM_FIELD_NAMES.tenantId}
           instanceId={instanceId}
           isLoading={isLocationsLoading}
           locationIds={locationIds}
           locations={locations}
-          holdingName={PIECE_FORM_FIELD_NAMES.holdingId}
-          locationName={PIECE_FORM_FIELD_NAMES.locationId}
+          holdingName={BIND_ITEM_FORM_FIELD_NAMES.holdingId}
+          locationName={BIND_ITEM_FORM_FIELD_NAMES.locationId}
           onChange={selectLocation}
           locationLabelId="ui-receiving.piece.permanentLocationId"
           holdingLabelId="ui-receiving.piece.permanentLocationId"
