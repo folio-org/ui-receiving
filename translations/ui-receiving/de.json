@@ -144,7 +144,7 @@
     "piece.copyNumber": "Exemplarnummer",
     "piece.enumeration": "Zählung",
     "piece.chronology": "Chronologie",
-    "piece.displayOnHolding": "Anzeige",
+    "piece.displayOnHolding": "Anzeige im Bestandsdatensatz",
     "piece.discoverySuppress": "Nachweis unterdrückt",
     "piece.lineLocations": "Bestellpostenstandorte",
     "piece.delete.deleteHoldingsAndItem.message": "Dieses Teil ist mit Datensätzen in der Katalog-App verbunden. Es gibt keine weiteren Exemplare, die mit diesem Bestandsdatensatz verbunden sind. Möchten Sie, dass FOLIO nach dem Löschen des Teiles den Bestandsdatensatz löscht?",
@@ -288,5 +288,9 @@
     "piece.modal.expectedDateRange.endDate": "End date",
     "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
     "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
-    "piece.columns.location": "Holdings location"
+    "piece.columns.location": "Holdings location",
+    "piece.sequence": "Sequence",
+    "piece.sequence.scope": "of {count}",
+    "validation.numberRange": "Please enter a number between {min} and {max}.",
+    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
 }

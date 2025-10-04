@@ -288,5 +288,9 @@
     "piece.modal.expectedDateRange.endDate": "Дата закінчення",
     "validation.dateRange.startDate.beforeEndDate": "\"Дата початку\" повинна бути меншою або дорівнювати \"Даті закінчення\"",
     "validation.dateRange.endDate.afterStartDate": "\"Дата закінчення\" повинна бути більшою або дорівнювати \"Даті початку\"",
-    "piece.columns.location": "Holdings location"
+    "piece.columns.location": "Місце розміщення даних про фонди (холдінгси)",
+    "piece.sequence": "Послідовність",
+    "piece.sequence.scope": "з {count}",
+    "validation.numberRange": "Введіть, будь ласка, номер між {min} та {max}.",
+    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
 }
