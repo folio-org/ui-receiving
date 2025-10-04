@@ -288,5 +288,9 @@
     "piece.modal.expectedDateRange.endDate": "Datum ukončení",
     "validation.dateRange.startDate.beforeEndDate": "Datum zahájení musí být dřívější nebo rovno datu ukončení",
     "validation.dateRange.endDate.afterStartDate": "Datum ukončení musí být pozdější nebo rovno datu zahájení.",
-    "piece.columns.location": "Lokace holdingu"
+    "piece.columns.location": "Lokace holdingu",
+    "piece.sequence": "Sequence",
+    "piece.sequence.scope": "of {count}",
+    "validation.numberRange": "Please enter a number between {min} and {max}.",
+    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
 }

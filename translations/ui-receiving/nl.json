@@ -288,5 +288,9 @@
     "piece.modal.expectedDateRange.endDate": "Einddatum",
     "validation.dateRange.startDate.beforeEndDate": "De begindatum moet eerder zijn dan of gelijk aan de einddatum",
     "validation.dateRange.endDate.afterStartDate": "De einddatum moet later zijn dan of gelijk aan de begindatum.",
-    "piece.columns.location": "Holdings location"
+    "piece.columns.location": "Holdings location",
+    "piece.sequence": "Sequence",
+    "piece.sequence.scope": "of {count}",
+    "validation.numberRange": "Please enter a number between {min} and {max}.",
+    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
 }
