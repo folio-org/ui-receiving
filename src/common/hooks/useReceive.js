@@ -23,25 +23,27 @@ export const useReceive = (options = {}) => {
     mutationFn: (pieces) => {
       const selectedPieces = pieces
         .map(piece => ({
-          id: piece.id,
-          barcode: piece.barcode,
           accessionNumber: piece.accessionNumber,
+          barcode: piece.barcode,
           callNumber: piece.callNumber,
-          comment: piece.comment,
-          displaySummary: piece.displaySummary,
           chronology: piece.chronology,
-          receiptDate: piece.receiptDate,
+          comment: piece.comment,
           copyNumber: piece.copyNumber,
-          displayOnHolding: piece.displayOnHolding,
-          enumeration: piece.enumeration,
-          supplement: piece.supplement,
-          receivingTenantId: piece.receivingTenantId,
-          locationId: piece.locationId || null,
-          holdingId: piece.holdingId || null,
           createItem: piece.isCreateItem,
+          displayOnHolding: piece.displayOnHolding,
+          displaySummary: piece.displaySummary,
+          displayToPublic: piece.displayToPublic,
+          enumeration: piece.enumeration,
+          holdingId: piece.holdingId || null,
+          id: piece.id,
           itemStatus: piece.itemStatus === ITEM_STATUS.undefined
             ? ITEM_STATUS.inProcess
             : piece.itemStatus,
+          locationId: piece.locationId || null,
+          receiptDate: piece.receiptDate,
+          receivingTenantId: piece.receivingTenantId,
+          sequenceNumber: piece.sequenceNumber,
+          supplement: piece.supplement,
         }));
 
       return ky.post(CHECKIN_API, {

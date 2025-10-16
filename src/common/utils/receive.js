@@ -8,14 +8,16 @@ export const unreceivePieces = (pieces, mutatorUnreceive) => {
   const selectedPieces = pieces
     .filter(({ checked }) => checked === true)
     .map(piece => ({
-      displaySummary: piece.displaySummary,
       chronology: piece.chronology,
       comment: piece.comment,
       copyNumber: piece.copyNumber,
       displayOnHolding: piece.displayOnHolding,
+      displaySummary: piece.displaySummary,
+      displayToPublic: piece.displayToPublic,
       enumeration: piece.enumeration,
-      pieceId: piece.id,
       itemStatus: ITEM_STATUS.onOrder,
+      pieceId: piece.id,
+      sequenceNumber: piece.sequenceNumber,
     }));
 
   const postData = {
