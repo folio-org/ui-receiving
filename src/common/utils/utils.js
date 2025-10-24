@@ -3,7 +3,6 @@ import identity from 'lodash/identity';
 
 import {
   CONSORTIUM_LOCATIONS_API,
-  getConsortiumCentralTenantId,
   OKAPI_TENANT_HEADER,
   ORDER_PIECES_API,
   SEARCH_API,
@@ -43,10 +42,6 @@ export const chunkRequests = (items, queryFn, chunkResolver = identity) => {
 
       return Promise.resolve([...accResolved, ...chunkResponsesMap]);
     }, Promise.resolve([]));
-};
-
-export const getConsortiumCentralTenantKy = (ky, stripes) => {
-  return extendKyWithTenant(ky, getConsortiumCentralTenantId(stripes));
 };
 
 export const fetchConsortiumInstanceHoldings = (ky, options = {}) => {

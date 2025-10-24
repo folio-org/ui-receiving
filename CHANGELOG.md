@@ -15,6 +15,7 @@
 * Improve display in receiving. Refs UIREC-464.
 * Implement "Sequence" field in the piece form. Refs UIREC-465.
 * Include `displayToPublic` and `sequenceNumber` fields in the request payload for receive and unreceive. Refs UIREC-474.
+* Remove local implementation of shared functionality. Refs UIREC-476.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)

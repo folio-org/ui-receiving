@@ -3,7 +3,9 @@ import {
   CONSORTIUM_LOCATIONS_API,
   CONTRIBUTOR_NAME_TYPES_API,
   fetchAllRecords,
+  fetchConsortiumHoldingsByIds,
   fetchExportDataByIds,
+  getConsortiumCentralTenantKy,
   HOLDINGS_API,
   IDENTIFIER_TYPES_API,
   LINES_API,
@@ -14,10 +16,8 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  fetchConsortiumHoldingsByIds,
   fetchConsortiumPiecesItems,
   fetchLocalPiecesItems,
-  getConsortiumCentralTenantKy,
 } from '../../../common/utils';
 import { mapUniqElements } from './mapUniqElements';
 
