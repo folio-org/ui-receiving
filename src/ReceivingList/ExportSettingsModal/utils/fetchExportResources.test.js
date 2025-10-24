@@ -27,14 +27,14 @@ import {
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
+  fetchConsortiumHoldingsByIds: jest.fn(() => jest.fn(() => Promise.resolve({
+    holdings: [],
+  }))),
   fetchExportDataByIds: jest.fn(() => []),
   getConsortiumCentralTenantKy: jest.fn(),
 }));
 jest.mock('../../../common/utils', () => ({
   ...jest.requireActual('../../../common/utils'),
-  fetchConsortiumHoldingsByIds: jest.fn(() => jest.fn(() => Promise.resolve({
-    holdings: [],
-  }))),
   fetchConsortiumPiecesItems: jest.fn(() => jest.fn(() => [])),
   fetchLocalPiecesItems: jest.fn(() => jest.fn(() => [])),
 }));
