@@ -293,6 +293,22 @@ describe('ReceivingList utils', () => {
           },
         );
       });
+
+      it('should return an empty array when no holdings are provided', async () => {
+        const ky = {
+          extend: () => ky,
+          post: jest.fn(() => ({
+            json: () => Promise.resolve({ holdings: [] }),
+          })),
+        };
+
+        const orderLines = [{ id: 'line-id' }];
+
+        const result = await fetchConsortiumOrderLineHoldings(ky, {})(orderLines);
+
+        expect(ky.post).not.toHaveBeenCalled();
+        expect(result).toEqual([]);
+      });
     });
 
     describe('fetchConsortiumOrderLineLocations', () => {
