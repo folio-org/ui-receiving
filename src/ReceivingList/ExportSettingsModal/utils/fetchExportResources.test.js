@@ -1,6 +1,8 @@
 import {
   CONTRIBUTOR_NAME_TYPES_API,
+  fetchConsortiumHoldingsByIds,
   fetchExportDataByIds,
+  getConsortiumCentralTenantKy,
   HOLDINGS_API,
   IDENTIFIER_TYPES_API,
   LINES_API,
@@ -10,10 +12,8 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
-  fetchConsortiumHoldingsByIds,
   fetchConsortiumPiecesItems,
   fetchLocalPiecesItems,
-  getConsortiumCentralTenantKy,
 } from '../../../common/utils';
 import {
   fetchContributorNameTypesExportData,
@@ -27,16 +27,16 @@ import {
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
-  fetchExportDataByIds: jest.fn(() => []),
-}));
-jest.mock('../../../common/utils', () => ({
-  ...jest.requireActual('../../../common/utils'),
   fetchConsortiumHoldingsByIds: jest.fn(() => jest.fn(() => Promise.resolve({
     holdings: [],
   }))),
+  fetchExportDataByIds: jest.fn(() => []),
+  getConsortiumCentralTenantKy: jest.fn(),
+}));
+jest.mock('../../../common/utils', () => ({
+  ...jest.requireActual('../../../common/utils'),
   fetchConsortiumPiecesItems: jest.fn(() => jest.fn(() => [])),
   fetchLocalPiecesItems: jest.fn(() => jest.fn(() => [])),
-  getConsortiumCentralTenantKy: jest.fn(),
 }));
 
 const kyMock = {

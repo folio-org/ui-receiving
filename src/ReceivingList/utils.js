@@ -11,6 +11,8 @@ import {
   buildFilterQuery,
   buildSortingQuery,
   connectQuery,
+  fetchConsortiumBatchHoldings,
+  getConsortiumCentralTenantKy,
   HOLDINGS_API,
   LINES_API,
   LOCATIONS_API,
@@ -18,11 +20,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { BATCH_IDENTIFIER_TYPE } from '../common/constants';
-import {
-  fetchConsortiumBatchHoldings,
-  fetchConsortiumInstanceLocations,
-  getConsortiumCentralTenantKy,
-} from '../common/utils';
+import { fetchConsortiumInstanceLocations } from '../common/utils';
 import {
   FILTERS,
   ORDER_FORMAT_MATERIAL_TYPE_MAP,
@@ -70,6 +68,8 @@ export const fetchConsortiumOrderLineHoldings = (ky, stripes) => async (orderLin
       .map(({ instanceId }) => instanceId)
       .filter(Boolean),
   )];
+
+  if (!instanceIds.length) return [];
 
   const batchIdsDto = {
     identifierType: BATCH_IDENTIFIER_TYPE.instanceId,
