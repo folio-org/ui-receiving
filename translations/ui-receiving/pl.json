@@ -290,7 +290,7 @@
     "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
     "piece.columns.location": "Holdings location",
     "piece.sequence": "Sequence",
-    "piece.sequence.scope": "of {count}",
+    "piece.sequence.scope": "z {count}",
     "validation.numberRange": "Please enter a number between {min} and {max}.",
     "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
 }
