@@ -11,8 +11,8 @@ import {
 } from './utils';
 
 export const FieldClaimingDate = ({
-  name,
-  required,
+  name = 'claimingDate',
+  required = true,
   ...props
 }) => {
   const validate = (value) => {
@@ -37,9 +37,4 @@ export const FieldClaimingDate = ({
 FieldClaimingDate.propTypes = {
   name: PropTypes.string,
   required: PropTypes.bool,
-};
-
-FieldClaimingDate.defaultProps = {
-  name: 'claimingDate',
-  required: true,
 };

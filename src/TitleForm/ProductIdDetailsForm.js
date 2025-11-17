@@ -1,15 +1,14 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Col,
   Label,
+  RepeatableField,
   Row,
   TextField,
-  RepeatableField,
 } from '@folio/stripes/components';
 import {
   FieldSelectFinal,
@@ -44,7 +43,10 @@ const headLabels = (
   </Row>
 );
 
-function ProductIdDetailsForm({ disabled, identifierTypes }) {
+function ProductIdDetailsForm({
+  disabled = false,
+  identifierTypes,
+}) {
   if (!identifierTypes) return null;
   const identifierTypesOptions = identifierTypes.map(({ id, name }) => ({
     value: id,
@@ -106,12 +108,8 @@ function ProductIdDetailsForm({ disabled, identifierTypes }) {
 }
 
 ProductIdDetailsForm.propTypes = {
-  identifierTypes: PropTypes.arrayOf(PropTypes.object),
   disabled: PropTypes.bool,
-};
-
-ProductIdDetailsForm.defaultProps = {
-  disabled: false,
+  identifierTypes: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ProductIdDetailsForm;
