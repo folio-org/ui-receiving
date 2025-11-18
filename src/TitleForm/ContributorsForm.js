@@ -1,8 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Col,
@@ -38,7 +37,12 @@ const headLabels = (
   </Row>
 );
 
-function ContributorsForm({ contributorNameTypes, disabled }) {
+const DEFAULT_CONTRIBUTOR_NAME_TYPES = [];
+
+function ContributorsForm({
+  contributorNameTypes = DEFAULT_CONTRIBUTOR_NAME_TYPES,
+  disabled = false,
+}) {
   const contributorNameTypesOptions = contributorNameTypes.map(({ id, name }) => ({
     value: id,
     label: name,
@@ -91,11 +95,6 @@ function ContributorsForm({ contributorNameTypes, disabled }) {
 ContributorsForm.propTypes = {
   contributorNameTypes: PropTypes.arrayOf(PropTypes.object),
   disabled: PropTypes.bool,
-};
-
-ContributorsForm.defaultProps = {
-  contributorNameTypes: [],
-  disabled: false,
 };
 
 export default ContributorsForm;

@@ -1,10 +1,10 @@
+import includes from 'lodash/includes';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import {
   FormattedMessage,
   useIntl,
 } from 'react-intl';
-import { includes } from 'lodash';
 import { Link } from 'react-router-dom';
 
 import {
@@ -18,8 +18,8 @@ import {
   PIECE_STATUS,
 } from '@folio/stripes-acq-components';
 
-import { useReceivingSearchContext } from '../../../contexts';
 import { PIECE_FORM_FIELD_NAMES } from '../../constants';
+import { useReceivingSearchContext } from '../../../contexts';
 
 import css from './style.css';
 
@@ -27,8 +27,8 @@ function CreateItemField({
   createInventoryValues,
   instanceId,
   label,
+  name = PIECE_FORM_FIELD_NAMES.isCreateItem,
   piece,
-  name,
 }) {
   const { activeTenantId: currentTenantId } = useReceivingSearchContext();
 
@@ -98,10 +98,6 @@ CreateItemField.propTypes = {
   label: PropTypes.node,
   name: PropTypes.string,
   piece: PropTypes.object.isRequired,
-};
-
-CreateItemField.defaultProps = {
-  name: PIECE_FORM_FIELD_NAMES.isCreateItem,
 };
 
 export default CreateItemField;

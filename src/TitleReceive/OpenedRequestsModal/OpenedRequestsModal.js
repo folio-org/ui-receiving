@@ -1,11 +1,14 @@
-import React, { useMemo } from 'react';
+import groupBy from 'lodash/groupBy';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { groupBy } from 'lodash';
+import { useMemo } from 'react';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
 import {
-  Modal,
   Button,
+  Modal,
   Row,
 } from '@folio/stripes/components';
 
@@ -24,7 +27,12 @@ const buildFooter = closeModal => {
   );
 };
 
-const OpenedRequestsModal = ({ pieces, closeModal }) => {
+const DEFAULT_PIECES = [];
+
+const OpenedRequestsModal = ({
+  closeModal,
+  pieces = DEFAULT_PIECES,
+}) => {
   const intl = useIntl();
   const footer = useMemo(() => buildFooter(closeModal), [closeModal]);
 
@@ -74,10 +82,6 @@ const OpenedRequestsModal = ({ pieces, closeModal }) => {
 OpenedRequestsModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   pieces: PropTypes.arrayOf(PropTypes.object),
-};
-
-OpenedRequestsModal.defaultProps = {
-  pieces: [],
 };
 
 export default OpenedRequestsModal;
