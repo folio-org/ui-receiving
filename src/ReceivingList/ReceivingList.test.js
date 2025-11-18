@@ -1,10 +1,12 @@
-/* istanbul ignore */
 import faker from 'faker';
 import noop from 'lodash/noop';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router-dom';
 
-import { render } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { useLocalStorageFilters } from '@folio/stripes-acq-components';
 
 import ReceivingList from './ReceivingList';
@@ -56,20 +58,25 @@ const generateTitle = (idx) => ({
 const titlesCount = 24;
 const titles = [...Array(titlesCount)].map((_, idx) => generateTitle(idx));
 
-const renderReceivingList = () => (render(
+const defaultProps = {
+  isLoading: false,
+  onNeedMoreData: noop,
+  resetData: noop,
+  titles,
+  titlesCount,
+  filtersStorageKey: 'receiving',
+};
+
+const renderReceivingList = (props = {}) => render(
   <IntlProvider locale="en">
     <MemoryRouter>
       <ReceivingList
-        isLoading={false}
-        onNeedMoreData={noop}
-        resetData={noop}
-        titles={titles}
-        titlesCount={titlesCount}
-        filtersStorageKey="receiving"
+        {...defaultProps}
+        {...props}
       />
     </MemoryRouter>
   </IntlProvider>,
-));
+);
 
 describe('Given Receiving List', () => {
   beforeEach(() => {
@@ -90,5 +97,15 @@ describe('Given Receiving List', () => {
     titles.forEach(({ title }) => {
       expect(getByText(title)).toBeDefined();
     });
+  });
+
+  it('should handle default props and render empty list', () => {
+    renderReceivingList({
+      isLoading: undefined,
+      titles: undefined,
+      titlesCount: undefined,
+    });
+
+    expect(screen.getAllByText(/sas.noResults/).length).toBeGreaterThan(0);
   });
 });

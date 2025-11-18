@@ -1,16 +1,19 @@
-import React, { useCallback, useMemo } from 'react';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
+import {
+  useCallback,
+  useMemo,
+} from 'react';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import {
   matchPath,
   Route,
   withRouter,
 } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import {
-  FormattedMessage,
-  useIntl,
-} from 'react-intl';
-import { get } from 'lodash';
 
 import {
   checkScope,
@@ -90,12 +93,14 @@ const getResultsFormatter = ({ isCentralRouting, search }) => ({
   'orderWorkflow': title => ORDER_STATUS_LABEL[title.poLine?.orderWorkflow],
 });
 
+const DEFAULT_TITLES = [];
+
 const ReceivingList = ({
   crossTenant = false,
-  history,
-  isLoading,
-  location,
   filtersStorageKey,
+  history,
+  isLoading = false,
+  location,
   match,
   onNeedMoreData,
   pagination,
@@ -103,8 +108,8 @@ const ReceivingList = ({
   refreshList,
   resetData,
   tenantId,
-  titles,
-  titlesCount,
+  titles = DEFAULT_TITLES,
+  titlesCount = 0,
 }) => {
   const intl = useIntl();
   const stripes = useStripes();
@@ -304,12 +309,6 @@ ReceivingList.propTypes = {
   tenantId: PropTypes.string.isRequired,
   titles: PropTypes.arrayOf(PropTypes.object),
   titlesCount: PropTypes.number,
-};
-
-ReceivingList.defaultProps = {
-  titlesCount: 0,
-  isLoading: false,
-  titles: [],
 };
 
 export default withRouter(ReceivingList);
