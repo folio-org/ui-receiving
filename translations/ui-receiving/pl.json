@@ -269,7 +269,7 @@
     "errors.unableToGenerateClaimsForOrgNoIntegrationDetails": "Nie można wygenerować roszczeń, ponieważ organizacja nie posiada integracji roszczeń.",
     "piece.sendClaim.withIntegration.message": "Spowoduje to wygenerowanie zadania roszczenia, które można wyświetlić w Zarządzaniu eksportem. Kontynuować?",
     "piece.sendClaim.withoutIntegration.message": "Brak integracji roszczeń dla tej organizacji. Element zostanie ustawiony na status „Roszczenie wysłane”. Kontynuować?",
-    "numberGenerator.accessionAndCallNumberSequence": "Kolejność numeru dowodu wpływu i sygnatury",
+    "numberGenerator.accessionAndCallNumberSequence": "Sekwencja numeru dowodu wpływu i sygnatury",
     "numberGenerator.accessionNumberSequence": "Kolejność numeru dowodu wpływu",
     "numberGenerator.barcodeSequence": "Kolejność kodu kreskowego",
     "numberGenerator.callNumberSequence": "Kolejność sygnatury",
@@ -289,7 +289,7 @@
     "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
     "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
     "piece.columns.location": "Holdings location",
-    "piece.sequence": "Sequence",
+    "piece.sequence": "Sekwencja",
     "piece.sequence.scope": "z {count}",
     "validation.numberRange": "Please enter a number between {min} and {max}.",
     "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
