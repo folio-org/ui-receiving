@@ -60,7 +60,6 @@ const PieceForm = ({
   onClaimSend: onClaimSendProp,
   onClose,
   onDelete: onDeleteProp,
-  onUnreceive: onUnreceiveProp,
   locationIds,
   locations,
   nextSequenceNumber,
@@ -175,13 +174,9 @@ const PieceForm = ({
   }, [change, onSave]);
 
   const onUnreceive = useCallback(() => {
-    const currentPiece = {
-      ...formValues,
-      checked: true,
-    };
-
-    return onUnreceiveProp([currentPiece]);
-  }, [formValues, onUnreceiveProp]);
+    change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.unReceive);
+    onSave();
+  }, [change, onSave]);
 
   const onStatusChange = useCallback((status) => {
     change(PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus, status);
@@ -403,7 +398,6 @@ PieceForm.propTypes = {
   onClaimSend: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onUnreceive: PropTypes.func.isRequired,
   paneTitle: PropTypes.node.isRequired,
   pieceFormatOptions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
