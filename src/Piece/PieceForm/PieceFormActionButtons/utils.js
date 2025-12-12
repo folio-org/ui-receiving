@@ -10,5 +10,7 @@ export const getPieceActionMenu = ({ status, ...rest }) => {
     return [];
   }
 
-  return actions.map(action => PIECE_ACTIONS(rest)[action]);
+  return actions
+    .map(action => PIECE_ACTIONS(rest)[action])
+    .filter(Boolean);
 };

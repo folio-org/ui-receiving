@@ -24,26 +24,27 @@ describe('getPieceActionMenus', () => {
     expect(result).toEqual([]);
   });
 
-  it('should return array of action menus', () => {
+  it('should return array of action menus for an existing piece in "Expected" status', () => {
     const result = getPieceActionMenu({
       onToggle,
       status: expected,
+      isEditMode: true,
     });
 
     expect(result).toHaveLength(PIECE_ACTIONS_BY_STATUS[expected].length);
   });
 
-  describe('delete action', () => {
-    it('should not return `delete` action menu if `isEditMode` is false', () => {
-      const result = getPieceActionMenu({
-        onToggle,
-        status: expected,
-        isEditMode: false,
-      });
-
-      expect(result).toContain(null);
+  it('should return array of action menus for an new piece', () => {
+    const result = getPieceActionMenu({
+      onToggle,
+      status: expected,
+      isEditMode: false,
     });
 
+    expect(result).toHaveLength(PIECE_ACTIONS_BY_STATUS[expected].length - 2); // excluding 'delete' and 'send claim' actions
+  });
+
+  describe('delete action', () => {
     it('should `delete` button be disabled', () => {
       const result = getPieceActionMenu({
         actionsDisabled: { [PIECE_ACTION_NAMES.delete]: true },

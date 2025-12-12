@@ -62,21 +62,25 @@ export const PIECE_ACTIONS = ({
       }}
     />
   ),
-  [PIECE_ACTION_NAMES.delete]: isEditMode ? (
-    <Button
-      buttonStyle="dropdownItem"
-      data-testid="delete-piece-button"
-      disabled={actionsDisabled[PIECE_ACTION_NAMES.delete]}
-      onClick={() => {
-        onToggle();
-        onDelete();
-      }}
-    >
-      <Icon icon="trash">
-        <FormattedMessage id="ui-receiving.piece.action.button.delete" />
-      </Icon>
-    </Button>
-  ) : null,
+  [PIECE_ACTION_NAMES.delete]: (
+    isEditMode
+      ? (
+        <Button
+          buttonStyle="dropdownItem"
+          data-testid="delete-piece-button"
+          disabled={actionsDisabled[PIECE_ACTION_NAMES.delete]}
+          onClick={() => {
+            onToggle();
+            onDelete();
+          }}
+        >
+          <Icon icon="trash">
+            <FormattedMessage id="ui-receiving.piece.action.button.delete" />
+          </Icon>
+        </Button>
+      )
+      : null
+  ),
   [PIECE_ACTION_NAMES.expect]: (
     <Button
       disabled={actionsDisabled[PIECE_ACTION_NAMES.expect]}
@@ -123,13 +127,17 @@ export const PIECE_ACTIONS = ({
     </Button>
   ),
   [PIECE_ACTION_NAMES.sendClaim]: (
-    <SendClaimActionMenuItem
-      disabled={actionsDisabled[PIECE_ACTION_NAMES.sendClaim]}
-      onClick={(e) => {
-        onToggle(e);
-        onClaimSend();
-      }}
-    />
+    isEditMode
+      ? (
+        <SendClaimActionMenuItem
+          disabled={actionsDisabled[PIECE_ACTION_NAMES.sendClaim]}
+          onClick={(e) => {
+            onToggle(e);
+            onClaimSend();
+          }}
+        />
+      )
+      : null
   ),
   [PIECE_ACTION_NAMES.unReceive]: (
     <Button
