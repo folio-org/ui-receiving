@@ -58,6 +58,10 @@ import PieceForm from './PieceForm';
 /* Set of post-submission actions that should not close the form after piece saving */
 const NOT_CLOSURE_ACTIONS_SET = new Set([PIECE_ACTION_NAMES.saveAndCreate]);
 
+const SUCCESS_MESSAGE_ID_BY_ACTION = {
+  [PIECE_ACTION_NAMES.unReceive]: 'ui-receiving.title.actions.unreceive.success',
+};
+
 export const PieceFormContainer = ({
   initialValues,
   isLoading: isLoadingProp = false,
@@ -193,6 +197,16 @@ export const PieceFormContainer = ({
     });
   }, [history, isCentralRouting, search, titleId]);
 
+  const unreceiveHandler = useCallback((piece) => {
+    const data = [{
+      ...piece,
+      checked: true,
+    }];
+
+    return unreceive(data)
+      .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems: data }));
+  }, [showCallout, unreceive]);
+
   const onSubmit = useCallback((formValues, form) => {
     const {
       [PIECE_FORM_SERVICE_FIELD_NAMES.deleteHolding]: deleteHolding,
@@ -218,8 +232,10 @@ export const PieceFormContainer = ({
 
     return mutatePiece({ piece, options })
       .then(async (res) => {
+        const successMessageId = SUCCESS_MESSAGE_ID_BY_ACTION[postSubmitAction] || 'ui-receiving.piece.actions.savePiece.success';
+
         showCallout({
-          messageId: 'ui-receiving.piece.actions.savePiece.success',
+          messageId: successMessageId,
           type: 'success',
         });
 
@@ -248,6 +264,7 @@ export const PieceFormContainer = ({
           [PIECE_ACTION_NAMES.saveAndCreate, onCreateAnother],
           [PIECE_ACTION_NAMES.quickReceive, onQuickReceive],
           [PIECE_ACTION_NAMES.sendClaim, sendClaimsHandler],
+          [PIECE_ACTION_NAMES.unReceive, unreceiveHandler],
         ]).get(postSubmitAction) || identity;
 
         return postSubmitHandler(data);
@@ -275,6 +292,7 @@ export const PieceFormContainer = ({
     refetchTitle,
     sendClaimsHandler,
     showCallout,
+    unreceiveHandler,
   ]);
 
   const onDelete = useCallback((pieceToDelete, options = {}) => {
@@ -311,19 +329,6 @@ export const PieceFormContainer = ({
       )
       .then(onCloseForm);
   }, [onCloseForm, mutatePiece, showCallout]);
-
-  const onUnreceive = useCallback((pieces) => {
-    return unreceive(pieces)
-      .then(async () => {
-        showCallout({
-          messageId: 'ui-receiving.title.actions.unreceive.success',
-          type: 'success',
-        });
-      })
-      .then(onCloseForm)
-      .catch(async (error) => handleUnrecieveErrorResponse({ error, showCallout, receivedItems: pieces }));
-  }, [onCloseForm, showCallout, unreceive]);
-
   /* --- */
 
   const formInitialValues = useMemo(() => {
@@ -366,7 +371,6 @@ export const PieceFormContainer = ({
         onClose={onCloseForm}
         onDelete={onDelete}
         onSubmit={onSubmit}
-        onUnreceive={onUnreceive}
         locationIds={locationIds}
         locations={locations}
         nextSequenceNumber={title?.nextSequenceNumber}

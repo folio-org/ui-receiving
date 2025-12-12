@@ -15,6 +15,7 @@ import {
 
 import { renderWithRouter } from 'helpers';
 import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
+import { PIECE_ACTION_NAMES } from '../constants';
 import { usePieceStatusChangeLog } from '../hooks';
 import PieceForm from './PieceForm';
 
@@ -44,7 +45,6 @@ const defaultProps = {
   onClose: jest.fn(),
   onDelete: jest.fn(),
   onSubmit: jest.fn(),
-  onUnreceive: jest.fn(),
   initialValues: {
     isCreateAnother: false,
     [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
@@ -353,47 +353,46 @@ describe('PieceForm', () => {
     expect(defaultProps.onSubmit).toHaveBeenCalled();
   });
 
-  it('should unreceive piece', async () => {
-    renderPieceForm({
-      hasValidationErrors: false,
-      initialValues: {
-        id: 'cd3fd1e7-c195-4d8e-af75-525e1039d643',
-        format: 'Other',
-        poLineId: 'a92ae36c-e093-4daf-b234-b4c6dc33a258',
-        titleId: '03329fea-1b5d-43ab-b955-20bcd9ba530d',
-        holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
-        isCreateAnother: false,
-        isCreateItem: false,
-        receivingStatus: PIECE_STATUS.received,
-        receivedDate: new Date().toISOString(),
-        [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
-      },
-    });
-
-    await userEvent.click(screen.getByTestId('dropdown-trigger-button'));
-    const unReceiveButton = await screen.findByTestId('unReceive-piece-button');
-
-    expect(unReceiveButton).toBeInTheDocument();
-    await userEvent.click(unReceiveButton);
-
-    expect(defaultProps.onUnreceive).toHaveBeenCalled();
-  });
-
   describe('Actions', () => {
-    const initialValues = {
-      format: PIECE_FORMAT.other,
-      holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
-      [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
-    };
     const date = today.add(3, 'days');
 
-    beforeEach(async () => {
-      renderPieceForm({ initialValues });
+    it('should handle "Unreceive" action', async () => {
+      renderPieceForm({
+        hasValidationErrors: false,
+        initialValues: {
+          id: 'cd3fd1e7-c195-4d8e-af75-525e1039d643',
+          format: 'Other',
+          poLineId: 'a92ae36c-e093-4daf-b234-b4c6dc33a258',
+          titleId: '03329fea-1b5d-43ab-b955-20bcd9ba530d',
+          holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+          isCreateAnother: false,
+          isCreateItem: false,
+          receivingStatus: PIECE_STATUS.received,
+          receivedDate: new Date().toISOString(),
+          [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
+        },
+      });
 
       await userEvent.click(screen.getByTestId('dropdown-trigger-button'));
+      await userEvent.click(await screen.findByTestId('unReceive-piece-button'));
+
+      expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({ postSubmitAction: PIECE_ACTION_NAMES.unReceive }),
+        expect.anything(),
+        expect.anything(),
+      );
     });
 
     it('should handle "Delay claim" action', async () => {
+      renderPieceForm({
+        initialValues: {
+          format: PIECE_FORMAT.other,
+          holdingId: '60c67dc5-b646-425e-bf08-a8bf2d0681fb',
+          [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
+        },
+      });
+
+      await userEvent.click(screen.getByTestId('dropdown-trigger-button'));
       await userEvent.click(screen.getByTestId('delay-claim-button'));
       await userEvent.type(screen.getByRole('textbox', { name: /field.delayTo/ }), date.format(DATE_FORMAT));
       await userEvent.click(await findButton('stripes-acq-components.FormFooter.save'));
