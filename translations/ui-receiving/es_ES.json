@@ -288,7 +288,7 @@
     "piece.modal.expectedDateRange.endDate": "End date",
     "validation.dateRange.startDate.beforeEndDate": "Start date must be earlier than or equal to the end date",
     "validation.dateRange.endDate.afterStartDate": "End date must be later than or equal to the start date.",
-    "piece.columns.location": "Holdings location",
+    "piece.columns.location": "Ubicación de las holdings",
     "piece.sequence": "Sequence",
     "piece.sequence.scope": "of {count}",
     "validation.numberRange": "Please enter a number between {min} and {max}.",

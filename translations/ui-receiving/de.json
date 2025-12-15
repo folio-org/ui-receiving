@@ -132,7 +132,7 @@
     "search.poLine.vendorDetail.referenceNumbers": "Lieferanten-Referenznummer",
     "errors.receivingProcessEncumbrancesError": "Teile können nicht vom Titel gelöscht oder zum Titel zugefügt werden, bevor nicht alle Fonds der zugehörigen Bestellposten von Betrag in Prozent umgewandelt sind.",
     "titles.invalidReference": "Ungültige Referenz",
-    "title.changePieceQuantityMessage": "Das Hinzufügen oder Entfernen von Teilen aktualisiert die Anzahl der Bestellposten und die Standortdetails und damit auch den Schätzpreis.",
+    "title.changePieceQuantityMessage": "Das Hinzufügen oder Entfernen von Teilen aktualisiert die Anzahl und die Standortdetails im Bestellposten und damit auch den Schätzpreis.",
     "title.receiptDue": "Eingang fällig",
     "title.requester": "Bestandsanfrage für",
     "title.rush": "Eilt",
