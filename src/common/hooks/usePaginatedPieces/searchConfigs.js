@@ -1,5 +1,4 @@
-import moment from 'moment';
-
+import { dayjs } from '@folio/stripes/components';
 import { DATE_FORMAT } from '@folio/stripes-acq-components';
 
 const indexes = [
@@ -14,7 +13,7 @@ const indexes = [
 ];
 
 export const searchByDate = (dateFormat, query) => {
-  const isoDate = moment.utc(query, dateFormat).format(DATE_FORMAT);
+  const isoDate = dayjs.utc(query, dateFormat).format(DATE_FORMAT);
 
   return `${isoDate}*`;
 };

@@ -113,7 +113,7 @@ export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) =
     });
 };
 
-export const buildTitlesQuery = (queryParams) => {
+export const buildTitlesQuery = (queryParams, options) => {
   let materialTypeFilterQuery;
 
   const materialType = queryParams[FILTERS.MATERIAL_TYPE];
@@ -164,6 +164,8 @@ export const buildTitlesQuery = (queryParams) => {
       [FILTERS.POL_TAGS]: buildArrayFieldQuery.bind(null, [FILTERS.POL_TAGS]),
       [FILTERS.ACQUISITIONS_UNIT]: buildArrayFieldQuery.bind(null, [FILTERS.ACQUISITIONS_UNIT]),
     },
+    true,
+    options,
   );
 
   const filterQuery = compact([queryParamsFilterQuery, materialTypeFilterQuery]).join(' and ') || 'cql.allRecords=1';
