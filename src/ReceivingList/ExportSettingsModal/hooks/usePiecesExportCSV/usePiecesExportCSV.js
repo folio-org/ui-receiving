@@ -1,8 +1,10 @@
-import moment from 'moment';
 import { useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 
-import { exportToCsv } from '@folio/stripes/components';
+import {
+  dayjs,
+  exportToCsv,
+} from '@folio/stripes/components';
 import {
   useOkapiKy,
   useNamespace,
@@ -39,7 +41,7 @@ export const usePiecesExportCSV = ({ tenantId, signal } = {}) => {
     const exportData = await getExportData(ky.extend({ signal }), configs)({ exportFields, query });
     const exportReport = createExportReport(exportData, { intl });
 
-    const filename = `receiving-export-${moment().format('YYYY-MM-DD-hh:mm')}`;
+    const filename = `receiving-export-${dayjs().format('YYYY-MM-DD-hh:mm')}`;
 
     exportToCsv(
       [{ ...EXPORT_TITLE_FIELDS, ...EXPORT_PIECE_FIELDS }, ...exportReport],

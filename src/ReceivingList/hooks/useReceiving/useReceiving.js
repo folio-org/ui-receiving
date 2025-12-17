@@ -1,4 +1,3 @@
-import moment from 'moment';
 import queryString from 'query-string';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router';
@@ -33,11 +32,7 @@ export const useReceiving = ({
   const queryParams = queryString.parse(search);
   const filtersCount = getFiltersCount(queryParams);
 
-  moment.tz.setDefault(timezone);
-
-  const query = buildTitlesQuery(queryParams);
-
-  moment.tz.setDefault();
+  const query = buildTitlesQuery(queryParams, { timezone });
 
   const defaultSearchParams = {
     query,

@@ -19,6 +19,7 @@
 * React v19: Refactor away from default props for functional components. Refs UIREC-359.
 * Remove "Send claim" action from the "Add piece" form. Refs UIREC-444.
 * Unify "Unreceive" action with other actions. Refs UIREC-475.
+* Replace `moment` library with `dayjs`. Refs UIREC-438.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)
