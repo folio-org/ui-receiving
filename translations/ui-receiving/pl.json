@@ -187,7 +187,7 @@
     "errors.locationIdAndHoldingIdAbsentError": "A holdings or location reference must present",
     "errors.mayBeLinkToEitherHoldingOrLocationError": "There is a holdingsId and locationId presented already",
     "errors.missingHoldingsSourceId": "Nie znaleziono zasobów w katalogu",
-    "errors.multipleNonPackageTitles": "Non-package PO Line must not contain more than one title reference",
+    "errors.multipleNonPackageTitles": "Pozycja zamówienia niebędąca pakietem nie może zawierać więcej niż jednego odniesienia do tytułu",
     "errors.partiallyReturnedCollection": "The piece record is already received",
     "errors.pgException": "Database error occured during request processing",
     "errors.pieceAlreadyReceived": "The piece record is already received",
