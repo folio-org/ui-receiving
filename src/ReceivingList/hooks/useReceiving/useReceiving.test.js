@@ -15,8 +15,8 @@ import {
 } from '@folio/stripes/core';
 import { NO_DST_TIMEZONES } from '@folio/stripes-acq-components/test/jest/fixtures';
 
-import { useReceiving } from './useReceiving';
 import { FILTERS } from '../../constants';
+import { useReceiving } from './useReceiving';
 
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
