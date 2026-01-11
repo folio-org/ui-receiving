@@ -2,42 +2,52 @@ import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
 import { PIECE_ACTION_NAMES } from '../../constants';
 import { PIECE_ACTIONS_BY_STATUS } from './constants';
-import { getPieceActionMenu } from './utils';
+import {
+  getPieceActionsByStatus,
+  getPieceActionsMenu,
+} from './utils';
 
-const { expected, unreceivable, received } = PIECE_STATUS;
+const {
+  expected,
+  received,
+  unreceivable,
+} = PIECE_STATUS;
 
 describe('getPieceActionMenus', () => {
   const onToggle = jest.fn();
 
   it('should return empty array if status is not provided', () => {
-    const result = getPieceActionMenu({ onToggle });
+    const result = getPieceActionsMenu({ onToggle });
 
     expect(result).toEqual([]);
   });
 
   it('should return empty array if status is not in PIECE_ACTIONS_BY_STATUS', () => {
-    const result = getPieceActionMenu({
+    const actions = getPieceActionsByStatus('status');
+    const result = getPieceActionsMenu({
+      actions,
       onToggle,
-      status: 'status',
     });
 
     expect(result).toEqual([]);
   });
 
   it('should return array of action menus for an existing piece in "Expected" status', () => {
-    const result = getPieceActionMenu({
-      onToggle,
-      status: expected,
+    const actions = getPieceActionsByStatus(expected);
+    const result = getPieceActionsMenu({
+      actions,
       isEditMode: true,
+      onToggle,
     });
 
     expect(result).toHaveLength(PIECE_ACTIONS_BY_STATUS[expected].length);
   });
 
   it('should return array of action menus for an new piece', () => {
-    const result = getPieceActionMenu({
+    const actions = getPieceActionsByStatus(expected);
+    const result = getPieceActionsMenu({
+      actions,
       onToggle,
-      status: expected,
       isEditMode: false,
     });
 
@@ -46,11 +56,12 @@ describe('getPieceActionMenus', () => {
 
   describe('delete action', () => {
     it('should `delete` button be disabled', () => {
-      const result = getPieceActionMenu({
+      const actions = getPieceActionsByStatus(expected);
+      const result = getPieceActionsMenu({
+        actions,
         actionsDisabled: { [PIECE_ACTION_NAMES.delete]: true },
         isEditMode: true,
         onToggle,
-        status: expected,
       });
       const deleteButton = result.find(i => i.props['data-testid'] === 'delete-piece-button');
 
@@ -61,8 +72,9 @@ describe('getPieceActionMenus', () => {
   describe('expect action', () => {
     it('should `onStatusChange` be called with `Expected` status value', () => {
       const onStatusChange = jest.fn();
-      const result = getPieceActionMenu({
-        status: unreceivable,
+      const actions = getPieceActionsByStatus(unreceivable);
+      const result = getPieceActionsMenu({
+        actions,
         onStatusChange,
         onToggle,
       });
@@ -77,8 +89,9 @@ describe('getPieceActionMenus', () => {
   describe('unReceive action', () => {
     it('should `onUnreceivePiece` be called with `Expected` status value', () => {
       const onUnreceivePiece = jest.fn();
-      const result = getPieceActionMenu({
-        status: received,
+      const actions = getPieceActionsByStatus(received);
+      const result = getPieceActionsMenu({
+        actions,
         onToggle,
         onUnreceivePiece,
       });
@@ -93,8 +106,9 @@ describe('getPieceActionMenus', () => {
   describe('unReceivable action', () => {
     it('should `onStatusChange` be called with `Unreceivable` status value', () => {
       const onStatusChange = jest.fn();
-      const result = getPieceActionMenu({
-        status: expected,
+      const actions = getPieceActionsByStatus(expected);
+      const result = getPieceActionsMenu({
+        actions,
         onStatusChange,
         onToggle,
       });
@@ -110,8 +124,9 @@ describe('getPieceActionMenus', () => {
     it('should call `onStatusChange` with `Late` status value', () => {
       const onStatusChange = jest.fn();
 
-      const result = getPieceActionMenu({
-        status: expected,
+      const actions = getPieceActionsByStatus(expected);
+      const result = getPieceActionsMenu({
+        actions,
         onStatusChange,
         onToggle,
       });

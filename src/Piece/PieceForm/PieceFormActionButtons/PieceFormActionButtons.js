@@ -1,6 +1,4 @@
-import noop from 'lodash/noop';
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -12,7 +10,10 @@ import {
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
 import { PIECE_ACTION_NAMES } from '../../constants';
-import { getPieceActionMenu } from './utils';
+import {
+  getPieceActionsMenu,
+  getPieceActionsByStatus,
+} from './utils';
 
 import css from './PieceFormActionButtons.css';
 
@@ -30,21 +31,8 @@ export const PieceFormActionButtons = ({
   status = PIECE_STATUS.expected,
   submitting,
 }) => {
-  const onToggleRef = useRef(noop);
+  const pieceActions = getPieceActionsByStatus(status);
 
-  const actionMenu = getPieceActionMenu({
-    actionsDisabled,
-    isEditMode,
-    onClaimDelay,
-    onClaimSend,
-    onCreateAnotherPiece,
-    onDelete,
-    onReceive,
-    onStatusChange,
-    onToggle: onToggleRef.current,
-    onUnreceivePiece,
-    status,
-  });
   const saveButtonLabelId = 'stripes-components.saveAndClose';
   const isSaveDisabled = actionsDisabled?.[PIECE_ACTION_NAMES.saveAndClose] || submitting;
   const isActionsMenuDisabled = (
@@ -52,7 +40,7 @@ export const PieceFormActionButtons = ({
     || submitting
   );
 
-  if (actionMenu.length === 0) {
+  if (pieceActions.length === 0) {
     return (
       <Button
         buttonStyle="primary"
@@ -88,7 +76,19 @@ export const PieceFormActionButtons = ({
         }}
       >
         {({ onToggle }) => {
-          onToggleRef.current = onToggle;
+          const actionMenu = getPieceActionsMenu({
+            actions: pieceActions,
+            actionsDisabled,
+            isEditMode,
+            onClaimDelay,
+            onClaimSend,
+            onCreateAnotherPiece,
+            onDelete,
+            onReceive,
+            onStatusChange,
+            onToggle,
+            onUnreceivePiece,
+          });
 
           return (
             <DropdownMenu data-role="menu">
