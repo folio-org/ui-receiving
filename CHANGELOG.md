@@ -20,6 +20,7 @@
 * Remove "Send claim" action from the "Add piece" form. Refs UIREC-444.
 * Unify "Unreceive" action with other actions. Refs UIREC-475.
 * Replace `moment` library with `dayjs`. Refs UIREC-438.
+* Remove close button in select number generator sequences modal. Refs UIREC-480.
 * Refactor piece form actions menu. Refs UIREC-478.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)

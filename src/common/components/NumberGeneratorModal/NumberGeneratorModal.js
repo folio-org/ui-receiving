@@ -126,7 +126,6 @@ const NumberGeneratorModal = ({
 
   return (
     <Modal
-      dismissible
       // Necessary since typedown uses overlays
       enforceFocus={false}
       footer={
