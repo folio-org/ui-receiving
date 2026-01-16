@@ -22,6 +22,7 @@
 * Replace `moment` library with `dayjs`. Refs UIREC-438.
 * Remove close button in select number generator sequences modal. Refs UIREC-480.
 * Refactor piece form actions menu. Refs UIREC-478.
+* Provide `accessionNumber`, `barcode` and `callNumber` in "unreceive" payload. Refs UIREC-483.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)
