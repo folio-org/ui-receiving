@@ -292,5 +292,5 @@
     "piece.sequence": "Pořadí",
     "piece.sequence.scope": "z {count}",
     "validation.numberRange": "Zadejte prosím číslo mezi {min} a {max}.",
-    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
+    "piece.actions.savePiece.changeSequenceNumber.success": "Sekvence dílu byla úspěšně změněna z <b>{oldSequenceNumber}</b> na <b>{newSequenceNumber}</b>"
 }
