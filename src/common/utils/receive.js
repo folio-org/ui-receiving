@@ -8,6 +8,9 @@ export const unreceivePieces = (pieces, mutatorUnreceive) => {
   const selectedPieces = pieces
     .filter(({ checked }) => checked === true)
     .map(piece => ({
+      accessionNumber: piece.accessionNumber,
+      barcode: piece.barcode,
+      callNumber: piece.callNumber,
       chronology: piece.chronology,
       comment: piece.comment,
       copyNumber: piece.copyNumber,
