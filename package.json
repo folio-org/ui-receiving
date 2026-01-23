@@ -60,14 +60,18 @@
     "permissionSets": [
       {
         "permissionName": "module.receiving.enabled",
-        "displayName": "UI: Receiving module is enabled"
+        "displayName": "UI: Receiving module is enabled",
+        "subPermissions": [
+          "stripes-core.settings.read"
+        ]
       },
       {
         "permissionName": "settings.receiving.enabled",
         "displayName": "Settings (Receiving): Display list of settings for Receiving",
         "visible": false,
         "subPermissions": [
-          "settings.enabled"
+          "settings.enabled",
+          "stripes-core.settings.read"
         ]
       },
       {
@@ -96,12 +100,14 @@
           "inventory-storage.locations.item.get",
           "inventory-storage.material-types.collection.get",
           "inventory.items.collection.get",
+          "inventory.items.item.get",
           "inventory.tenant-items.collection.get",
           "orders.pieces.collection.get",
           "orders.piece-requests.collection.get",
           "orders.po-lines.item.get",
           "organizations.organizations.collection.get",
           "tags.collection.get",
+          "mod-settings.global.read.ui-tags.tags.manage",
           "consortia.publications.item.get",
           "consortia.publications.item.post",
           "consortia.publications-results.item.get"
