@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   useCallback,
   useMemo,
+  useState,
 } from 'react';
 import {
   useHistory,
@@ -67,6 +68,8 @@ export const PieceFormContainer = ({
   isLoading: isLoadingProp = false,
   paneTitle,
 }) => {
+  const [isLoadingState, setIsLoadingState] = useState(false);
+
   const showCallout = useShowCallout();
   const history = useHistory();
   const { search } = useLocation();
@@ -208,6 +211,8 @@ export const PieceFormContainer = ({
   }, [showCallout, unreceive]);
 
   const onSubmit = useCallback((formValues, form) => {
+    setIsLoadingState(true);
+
     const {
       [PIECE_FORM_SERVICE_FIELD_NAMES.deleteHolding]: deleteHolding,
       [PIECE_FORM_SERVICE_FIELD_NAMES.nextReceivingStatus]: nextReceivingStatus,
@@ -283,6 +288,9 @@ export const PieceFormContainer = ({
             type: 'error',
           });
         }
+      })
+      .finally(() => {
+        setIsLoadingState(false);
       });
   }, [
     mutatePiece,
@@ -350,6 +358,7 @@ export const PieceFormContainer = ({
   const isLoading = (
     !initialValues
     || isLoadingProp
+    || isLoadingState
     || isLocationsLoading
     || isTitleLoading
     || isOrderLineLoading
