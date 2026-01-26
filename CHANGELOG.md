@@ -24,6 +24,7 @@
 * Refactor piece form actions menu. Refs UIREC-478.
 * Provide `accessionNumber`, `barcode` and `callNumber` in "unreceive" payload. Refs UIREC-483.
 * Provide the minimum set of permissions required for a user to correctly work with the "UI Receiving – View" capability set. Refs UIREC-479.
+* Display loading state while piece is processing. Refs UIREC-482.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)
