@@ -20,9 +20,9 @@ export const useReceive = (options = {}) => {
     mutateAsync,
   } = useMutation({
     mutationKey: ['receive', tenantId, mutationKey],
-    mutationFn: (pieces) => {
+    mutationFn: ({ pieces, deleteHoldings }) => {
       const selectedPieces = pieces
-        .map(piece => ({
+        .map((piece) => ({
           accessionNumber: piece.accessionNumber,
           barcode: piece.barcode,
           callNumber: piece.callNumber,
@@ -46,7 +46,10 @@ export const useReceive = (options = {}) => {
           supplement: piece.supplement,
         }));
 
+      const searchParams = { deleteHoldings };
+
       return ky.post(CHECKIN_API, {
+        searchParams,
         signal,
         json: {
           toBeCheckedIn: [{

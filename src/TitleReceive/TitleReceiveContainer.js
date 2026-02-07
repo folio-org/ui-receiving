@@ -1,3 +1,4 @@
+import noop from 'lodash/noop';
 import {
   useCallback,
   useEffect,
@@ -17,8 +18,10 @@ import {
 import {
   buildDateRangeQuery,
   formatDate,
+  HoldingsAbandonmentPieceStrategy,
   PIECE_FORMAT,
   RESULT_COUNT_INCREMENT,
+  useHoldingsAbandonmentAnalyzer,
   useLocalPagination,
   useShowCallout,
 } from '@folio/stripes-acq-components';
@@ -38,8 +41,10 @@ import {
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import { EXPECTED_PIECES_SEARCH_VALUE } from '../Piece';
+import { getHoldingsAbandonmentCheckData } from './getHoldingsAbandonmentCheckData';
 import OpenedRequestsModal from './OpenedRequestsModal';
 import TitleReceive from './TitleReceive';
+import { useDeleteHoldingsModal } from './useDeleteHoldingsModal';
 
 const { receiptDate: RECEIPT_DATE } = PIECE_FORM_FIELD_NAMES;
 
@@ -75,6 +80,7 @@ function TitleReceiveContainer({ history, location, match }) {
   );
 
   const {
+    holdings,
     isLoading: isPiecesLoading,
     locations,
     orderLine: poLine,
@@ -108,6 +114,16 @@ function TitleReceiveContainer({ history, location, match }) {
     tenantId: targetTenantId,
   });
 
+  const {
+    analyzerFactory,
+    isLoading: isAnalyzing,
+  } = useHoldingsAbandonmentAnalyzer();
+
+  const {
+    initDeleteHoldingsModal,
+    modal: deleteHoldingsModal,
+  } = useDeleteHoldingsModal();
+
   const onCancel = useCallback(() => {
     history.push({
       pathname: `${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${titleId}/view`,
@@ -129,20 +145,17 @@ function TitleReceiveContainer({ history, location, match }) {
     });
   }, [setPagination]);
 
-  const onSubmit = useCallback(({ receivedItems }) => {
-    const selectedItems = receivedItems.filter(({ checked }) => checked === true);
-
-    if (!selectedItems?.length) {
-      return renderNextChunk();
-    }
-
-    return receive(selectedItems.map(item => ({ ...item, itemStatus: getReceivingPieceItemStatus(item) })))
+  const handleReceive = useCallback(async (values, selectedItems, { deleteHoldings = false } = {}) => {
+    return receive({
+      pieces: selectedItems.map(item => ({ ...item, itemStatus: getReceivingPieceItemStatus(item) })),
+      deleteHoldings,
+    })
       .then(() => {
         showCallout({
           messageId: 'ui-receiving.title.actions.receive.success',
           type: 'success',
         });
-        const receivedItemsWithRequests = receivedItems.filter(({ request }) => Boolean(request));
+        const receivedItemsWithRequests = values.filter(({ request }) => Boolean(request));
 
         if (receivedItemsWithRequests.length) {
           return setReceivedPiecesWithRequests(receivedItemsWithRequests);
@@ -156,7 +169,52 @@ function TitleReceiveContainer({ history, location, match }) {
         await handleReceiveErrorResponse(showCallout, response);
         onCancel();
       });
-  }, [receive, renderNextChunk, showCallout, isPiecesChunksExhausted, onCancel]);
+  }, [isPiecesChunksExhausted, onCancel, receive, renderNextChunk, showCallout]);
+
+  const onSubmit = useCallback(async ({ receivedItems }, form) => {
+    const selectedItems = receivedItems.filter(({ checked }) => checked === true);
+
+    if (!selectedItems?.length) {
+      return renderNextChunk();
+    }
+
+    const {
+      holdingIds: holdingIdsToCheck,
+      pieceIds: pieceIdsToCheck,
+    } = getHoldingsAbandonmentCheckData(form);
+
+    // If there are holdingIds to check, run the analyzer to get the abandonment analysis result for the selected pieces and their associated holdings.
+    if (holdingIdsToCheck.length) {
+      const analyzer = await analyzerFactory({
+        holdingIds: holdingIdsToCheck,
+        signal: abortControllerRef.current.signal,
+      });
+
+      const abandonmentAnalysisResult = await analyzer.analyze({
+        explain: true,
+        holdingIds: holdingIdsToCheck,
+        ids: pieceIdsToCheck,
+        strategy: HoldingsAbandonmentPieceStrategy.name,
+      });
+      const abandonedHoldingsResults = abandonmentAnalysisResult?.filter(({ abandoned }) => abandoned) || [];
+
+      if (abandonedHoldingsResults.length) {
+        // If there are pieces that are associated with holdings at risk of abandonment, show the delete holdings confirmation modal to the user before receiving the pieces.
+        return initDeleteHoldingsModal(abandonedHoldingsResults, holdings, locations)
+          .then((deleteHoldings) => handleReceive(receivedItems, selectedItems, { deleteHoldings }))
+          .catch(noop);
+      }
+    }
+
+    return handleReceive(receivedItems, selectedItems);
+  }, [
+    analyzerFactory,
+    handleReceive,
+    holdings,
+    initDeleteHoldingsModal,
+    locations,
+    renderNextChunk,
+  ]);
 
   const initialValues = useMemo(() => ({ receivedItems: paginatedData }), [paginatedData]);
 
@@ -193,6 +251,12 @@ function TitleReceiveContainer({ history, location, match }) {
     ? intl.formatMessage({ id: 'ui-receiving.title.details.button.receive' })
     : intl.formatMessage({ id: 'ui-receiving.piece.receiveForm.limited.action.receiveAndLoad' });
 
+  const isLoading = (
+    isReceiveLoading
+    || isTransitionPending
+    || isAnalyzing
+  );
+
   return (
     <>
       <TitleReceive
@@ -200,7 +264,7 @@ function TitleReceiveContainer({ history, location, match }) {
         createInventoryValues={createInventoryValues}
         initialValues={initialValues}
         instanceId={instanceId}
-        isLoading={isReceiveLoading || isTransitionPending}
+        isLoading={isLoading}
         isPiecesChunksExhausted={isPiecesChunksExhausted}
         locations={locations}
         onCancel={onCancel}
@@ -211,12 +275,15 @@ function TitleReceiveContainer({ history, location, match }) {
         receivingNote={poLine?.details?.receivingNote}
         submitButtonLabel={submitButtonLabel}
       />
+
       {!!receivedPiecesWithRequests.length && (
         <OpenedRequestsModal
           closeModal={closeOpenedRequestsModal}
           pieces={receivedPiecesWithRequests}
         />
       )}
+
+      {deleteHoldingsModal}
     </>
   );
 }

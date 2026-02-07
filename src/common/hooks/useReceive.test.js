@@ -35,7 +35,7 @@ describe('useReceive', () => {
       { wrapper },
     );
 
-    await result.current.receive([pieceValues]);
+    await result.current.receive({ pieces: [pieceValues] });
 
     expect(postMock).toHaveBeenCalled();
   });
