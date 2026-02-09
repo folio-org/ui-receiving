@@ -122,7 +122,7 @@ function TitleReceiveContainer({ history, location, match }) {
   const {
     initDeleteHoldingsModal,
     modal: deleteHoldingsModal,
-  } = useDeleteHoldingsModal();
+  } = useDeleteHoldingsModal({ crossTenant });
 
   const onCancel = useCallback(() => {
     history.push({
@@ -180,6 +180,7 @@ function TitleReceiveContainer({ history, location, match }) {
 
     const {
       holdingIds: holdingIdsToCheck,
+      incoming,
       pieceIds: pieceIdsToCheck,
     } = getHoldingsAbandonmentCheckData(form);
 
@@ -194,6 +195,7 @@ function TitleReceiveContainer({ history, location, match }) {
         explain: true,
         holdingIds: holdingIdsToCheck,
         ids: pieceIdsToCheck,
+        incoming,
         strategy: HoldingsAbandonmentPieceStrategy.name,
       });
       const abandonedHoldingsResults = abandonmentAnalysisResult?.filter(({ abandoned }) => abandoned) || [];

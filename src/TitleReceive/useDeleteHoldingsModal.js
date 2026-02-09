@@ -10,13 +10,16 @@ import {
   List,
 } from '@folio/stripes/components';
 import {
-  getHoldingLocationName,
   DeleteHoldingsModal,
+  getHoldingLocationName,
+  useConsortiumTenants,
 } from '@folio/stripes-acq-components';
 
 import { useAsyncConfirmationModal } from '../common/hooks';
 
-export const useDeleteHoldingsModal = () => {
+export const useDeleteHoldingsModal = ({ crossTenant = false } = {}) => {
+  const { tenants } = useConsortiumTenants();
+
   const {
     cancel: cancelDeleteHoldingsModal,
     confirm: confirmDeleteHoldingsModal,
@@ -29,15 +32,19 @@ export const useDeleteHoldingsModal = () => {
   const initDeleteHoldingsModal = useCallback((abandonedHoldingsResults, holdings, locations) => {
     const holdingsMap = new Map(holdings?.map(h => [h.id, h]));
     const locationsMap = new Map(locations?.map((l) => [l.id, l]));
+    const tenantsMap = new Map(tenants?.map((t) => [t.id, t]));
 
     setAbandonedHoldingNames(() => {
       return abandonedHoldingsResults.map((el) => {
-        return getHoldingLocationName(holdingsMap.get(el.id), Object.fromEntries(locationsMap.entries()));
+        const holdingName = getHoldingLocationName(holdingsMap.get(el.id), Object.fromEntries(locationsMap.entries()));
+        const tenantName = crossTenant && tenantsMap.get(holdingsMap.get(el.id)?.tenantId)?.name;
+
+        return [holdingName, tenantName && <i>&nbsp;({tenantName})</i>].filter(Boolean);
       });
     });
 
     return init();
-  }, [init]);
+  }, [crossTenant, init, tenants]);
 
   const message = useMemo(() => (
     <>
