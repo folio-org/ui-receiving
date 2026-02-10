@@ -73,9 +73,9 @@ describe('usePieceQuickReceiving', () => {
 
       await quickReceive({ ...pieceValues, itemId });
 
-      expect(receivePieceMock).toHaveBeenCalledWith([expect.objectContaining({
-        itemStatus: ITEM_STATUS.inProcess,
-      })]);
+      expect(receivePieceMock).toHaveBeenCalledWith({
+        pieces: [expect.objectContaining({ itemStatus: ITEM_STATUS.inProcess })],
+      });
     });
 
     it('should update item status from \'Order closed\' to \'In process\'', async () => {
@@ -86,9 +86,9 @@ describe('usePieceQuickReceiving', () => {
 
       await quickReceive({ ...pieceValues, itemId });
 
-      expect(receivePieceMock).toHaveBeenCalledWith([expect.objectContaining({
-        itemStatus: ITEM_STATUS.inProcess,
-      })]);
+      expect(receivePieceMock).toHaveBeenCalledWith({
+        pieces: [expect.objectContaining({ itemStatus: ITEM_STATUS.inProcess })],
+      });
     });
 
     it('should NOT update item status if it is different from \'On order\' or \'Order closed\'', async () => {
@@ -99,9 +99,9 @@ describe('usePieceQuickReceiving', () => {
 
       await quickReceive({ ...pieceValues, itemId });
 
-      expect(receivePieceMock).toHaveBeenCalledWith([expect.objectContaining({
-        itemStatus: ITEM_STATUS.inTransit,
-      })]);
+      expect(receivePieceMock).toHaveBeenCalledWith({
+        pieces: [expect.objectContaining({ itemStatus: ITEM_STATUS.inTransit })],
+      });
     });
   });
 });
