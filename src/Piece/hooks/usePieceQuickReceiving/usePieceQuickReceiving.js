@@ -49,7 +49,7 @@ export const usePieceQuickReceiving = ({
       }
       : {};
 
-    return receive([{ ...piece, ...itemData }]);
+    return receive({ pieces: [{ ...piece, ...itemData }] });
   }, [ky, receive, tenantId]);
 
   const handleQuickReceive = useCallback((values, mutationFn) => {
