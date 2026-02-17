@@ -278,7 +278,7 @@
     "numberGenerator.generateHelpText": "Wybrane sekwencje zostaną użyte do wygenerowania nowych liczb. Wybierz „Generuj liczby” aby kontynuować.",
     "title.paneTitle.removeFromPackage": "Usuń z pakietu",
     "title.confirmationModal.removeFromPackage.message": "Usunięcie tego tytułu z pakietu spowoduje usunięcie wszystkich powiązanych elementów oraz wszelkich powiązanych zasobów i egzemplarzy.",
-    "title.confirmationModal.removeFromPackage.confirm": "Potwierdzić",
+    "title.confirmationModal.removeFromPackage.confirm": "Potwierdź",
     "title.confirmationModal.removeFromPackage.success": "Powiązane elementy i wszelkie powiązane zasoby i egzemplarze zostały usunięte.",
     "title.confirmationModal.removeHolding.message": "Powiązane zasoby nie odnoszą się do żadnych innych elementów ani egzemplarzy. Czy chcesz je usunąć?",
     "piece.receiveForm.limited.action.receiveAndLoad": "Receive & load more",

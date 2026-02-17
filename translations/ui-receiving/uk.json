@@ -249,7 +249,7 @@
     "bind.pieces.modal.button.not.transfer": "Не переміщувати",
     "piece.materialTypeId": "Тип матеріалу",
     "piece.materialTypeId.empty": "Вибрати тип матеріалу",
-    "piece.permanentLoanTypeId": "Тип постійної видачі",
+    "piece.permanentLoanTypeId": "Постійний тип видачі",
     "piece.permanentLoanTypeId.empty": "Вибрати тип видачі",
     "piece.permanentLocationId": "Постійне місце розміщення",
     "title.boundItems": "Зробити зшиток з примірників",
