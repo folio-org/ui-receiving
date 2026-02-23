@@ -12,6 +12,7 @@
   "errors.holdingsByIdNotFoundError": "Holdings with ids not found",
   "errors.itemUpdateFailed": "Piece <b>{enumeration}</b> was not received. The item record failed to be updated",
   "errors.instanceId": "Piece was not received. Instance record could not be found.",
+  "errors.lastPiece": "The piece was not deleted because you cannot delete all pieces when ordering and receiving quantity are synchronized.",
   "errors.locationIdAndHoldingIdAbsentError": "A holdings or location reference must present",
   "errors.mayBeLinkToEitherHoldingOrLocationError": "There is a holdingsId and locationId presented already",
   "errors.missingHoldingsSourceId": "Holdings not found in inventory",

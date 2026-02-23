@@ -4,18 +4,18 @@ const DEFAULT_RECEIVE_ERROR = 'ui-receiving.title.actions.receive.error';
 const DEFAULT_UNRECEIVE_ERROR = 'ui-receiving.title.actions.unreceive.error';
 
 export async function handleReceiveErrorResponse(showCallout, response, defaultError = DEFAULT_RECEIVE_ERROR) {
+  const hasCommonErrors = await handleCommonErrors(showCallout, response);
+
+  if (hasCommonErrors) {
+    return;
+  }
+
   let parsed;
 
   try {
     parsed = await response.json();
-  } catch (parsingException) {
+  } catch {
     parsed = response;
-  }
-
-  const hasCommonErrors = await handleCommonErrors(showCallout, parsed);
-
-  if (hasCommonErrors) {
-    return;
   }
 
   if (parsed?.errorPieces?.length) {
