@@ -3,6 +3,20 @@ import {
   handleUnrecieveErrorResponse,
 } from './handleReceiveErrorResponse';
 
+const getErrorResponseMock = (...errors) => {
+  const errorBody = {
+    errors: [...errors],
+    total_records: errors.length,
+  };
+
+  const errorResponse = {
+    clone: jest.fn().mockReturnThis(),
+    json: jest.fn().mockResolvedValue(errorBody),
+  };
+
+  return errorResponse;
+};
+
 describe('test handleReceiveErrorResponse', () => {
   let showCallout;
 
@@ -24,7 +38,7 @@ describe('test handleReceiveErrorResponse', () => {
   });
 
   it('should call showCallout with unknown error', async () => {
-    const response = { errors: [{ parameters: [{ key: 'key' }] }] };
+    const response = getErrorResponseMock({ parameters: [{ key: 'key' }] });
     const result = await handleReceiveErrorResponse(showCallout, response);
 
     expect(result).toBeFalsy();
@@ -35,7 +49,7 @@ describe('test handleReceiveErrorResponse', () => {
   });
 
   it('should call showCallout with common error', async () => {
-    const response = { errors: [{ parameters: [{ key: 'instanceId' }] }] };
+    const response = getErrorResponseMock({ parameters: [{ key: 'instanceId' }] });
     const result = await handleReceiveErrorResponse(showCallout, response);
 
     expect(result).toBeFalsy();

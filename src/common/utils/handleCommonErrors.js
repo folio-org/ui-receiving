@@ -28,7 +28,9 @@ export async function handleCommonErrors(showCallout, response) {
     }
 
     errorsMap.forEach((error) => {
-      if (error.getParameter('permanentLoanTypeId')) {
+      const parameters = error.getParameters();
+
+      if (parameters.has('permanentLoanTypeId')) {
         showCallout({
           messageId: 'ui-receiving.title.actions.missingLoanTypeId.error',
           type: 'error',
@@ -36,7 +38,7 @@ export async function handleCommonErrors(showCallout, response) {
         hasCommonErrors = true;
       }
 
-      if (error.getParameter('instanceId')) {
+      if (parameters.has('instanceId')) {
         showCallout({
           messageId: 'ui-receiving.errors.instanceId',
           type: 'error',
