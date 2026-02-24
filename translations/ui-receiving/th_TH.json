@@ -216,7 +216,7 @@
     "piece.statusChangeLog.column.date": "Date",
     "piece.statusChangeLog.column.status": "Status change",
     "piece.statusChangeLog.column.updatedBy": "Updated by",
-    "piece.status": "Status",
+    "piece.status": "สถานะ",
     "permission.acq-units.assignment.assign": "Receiving: Assign acquisition units to new receiving title",
     "permission.acq-units.assignment.manage": "Receiving: Manage acquisition units",
     "piece.externalNote": "External note",
