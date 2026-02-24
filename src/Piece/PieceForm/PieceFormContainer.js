@@ -323,7 +323,7 @@ export const PieceFormContainer = ({
             values: { enumeration: pieceToDelete?.enumeration },
           });
         },
-        async (response) => {
+        async ({ response }) => {
           const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
           if (!hasCommonErrors) {

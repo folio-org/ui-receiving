@@ -4,6 +4,20 @@ import {
   handleCommonErrors,
 } from './handleCommonErrors';
 
+const getErrorResponseMock = (...errors) => {
+  const errorBody = {
+    errors: [...errors],
+    total_records: errors.length,
+  };
+
+  const errorResponse = {
+    clone: jest.fn().mockReturnThis(),
+    json: jest.fn().mockResolvedValue(errorBody),
+  };
+
+  return errorResponse;
+};
+
 describe('handleCommonErrors', () => {
   let showCallout;
 
@@ -12,7 +26,7 @@ describe('handleCommonErrors', () => {
   });
 
   it('should call showCallout with receivingProcessEncumbrancesError error', async () => {
-    const response = { errors: [{ code: ERROR_CODES.receivingProcessEncumbrancesError }] };
+    const response = getErrorResponseMock({ code: ERROR_CODES.receivingProcessEncumbrancesError });
 
     await handleCommonErrors(showCallout, response);
 
@@ -23,7 +37,7 @@ describe('handleCommonErrors', () => {
   });
 
   it('should call showCallout with barcodeMustBeUniquer error', async () => {
-    const response = { errors: [{ message: BARCODE_NOT_UNIQUE_MESSAGE }] };
+    const response = getErrorResponseMock({ message: BARCODE_NOT_UNIQUE_MESSAGE });
 
     await handleCommonErrors(showCallout, response);
 
@@ -34,7 +48,7 @@ describe('handleCommonErrors', () => {
   });
 
   it('should not call showCallout and return false', async () => {
-    const response = { errors: [{ code: '' }] };
+    const response = getErrorResponseMock({ code: '' });
     const result = await handleCommonErrors(showCallout, response);
 
     expect(result).toBeFalsy();

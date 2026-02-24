@@ -7,6 +7,7 @@ export const ERROR_CODES = {
   forbiddenDeleteSystemValues: 'forbiddenDeleteSystemValues',
   forbiddenDeleteUsedValue: 'forbiddenDeleteUsedValue',
   holdingsByIdNotFoundError: 'holdingsByIdNotFoundError',
+  lastPiece: 'lastPiece',
   locationIdAndHoldingIdAbsentError: 'locationIdAndHoldingIdAbsentError',
   mayBeLinkToEitherHoldingOrLocationError: 'mayBeLinkToEitherHoldingOrLocationError',
   missingHoldingsSourceId: 'missingHoldingsSourceId',

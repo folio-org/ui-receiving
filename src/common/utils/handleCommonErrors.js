@@ -1,3 +1,5 @@
+import { ResponseErrorsContainer } from '@folio/stripes-acq-components';
+
 import { ERROR_CODES } from '../constants';
 
 export const BARCODE_NOT_UNIQUE_MESSAGE = 'Barcode must be unique';
@@ -7,19 +9,17 @@ const isBarcodeUnique = (message) => {
 };
 
 export async function handleCommonErrors(showCallout, response) {
-  let parsed = response;
+  const { handler } = await ResponseErrorsContainer.create(response);
+
   let hasCommonErrors = false;
+  const errorsMap = handler.getErrors();
 
-  try {
-    parsed = await response.json();
-  // eslint-disable-next-line no-empty
-  } catch (parsingException) {
-  }
+  if (errorsMap.size) {
+    const code = handler.getError().code;
 
-  if (parsed?.errors?.length) {
-    if (parsed.errors[0]?.code in ERROR_CODES) {
+    if (code in ERROR_CODES) {
       showCallout({
-        messageId: `ui-receiving.errors.${parsed.errors[0].code}`,
+        messageId: `ui-receiving.errors.${code}`,
         type: 'error',
       });
       hasCommonErrors = true;
@@ -27,8 +27,10 @@ export async function handleCommonErrors(showCallout, response) {
       return hasCommonErrors;
     }
 
-    parsed.errors.forEach(({ parameters, message }) => {
-      if (parameters?.some(({ key }) => key === 'permanentLoanTypeId')) {
+    errorsMap.forEach((error) => {
+      const parameters = error.getParameters();
+
+      if (parameters.has('permanentLoanTypeId')) {
         showCallout({
           messageId: 'ui-receiving.title.actions.missingLoanTypeId.error',
           type: 'error',
@@ -36,7 +38,7 @@ export async function handleCommonErrors(showCallout, response) {
         hasCommonErrors = true;
       }
 
-      if (parameters?.some(({ key }) => key === 'instanceId')) {
+      if (parameters.has('instanceId')) {
         showCallout({
           messageId: 'ui-receiving.errors.instanceId',
           type: 'error',
@@ -44,7 +46,7 @@ export async function handleCommonErrors(showCallout, response) {
         hasCommonErrors = true;
       }
 
-      if (isBarcodeUnique(message)) {
+      if (isBarcodeUnique(error.message)) {
         showCallout({
           messageId: 'ui-receiving.errors.barcodeIsNotUnique',
           type: 'error',
