@@ -202,19 +202,25 @@
         ]
       },
       {
-        "permissionName": "ui-receiving.acq-units.assignment.assign",
+        "permissionName": "ui-receiving.titles.acquisitions_units.assign.execute",
         "displayName": "Receiving: Assign acquisition units to new receiving title",
         "visible": true,
+        "replaces": [
+          "ui-receiving.acq-units.assignment.assign"
+        ],
         "subPermissions": [
-          "titles.acquisitions-units-assignments.assign"
+          "titles.acquisitions-units-assignments.create.execute"
         ]
       },
       {
-        "permissionName": "ui-receiving.acq-units.assignment.manage",
+        "permissionName": "ui-receiving.titles.acquisitions_units.manage.execute",
         "displayName": "Receiving: Manage acquisition units",
         "visible": true,
+        "replaces": [
+          "ui-receiving.acq-units.assignment.manage"
+        ],
         "subPermissions": [
-          "titles.acquisitions-units-assignments.manage"
+          "titles.acquisitions-units-assignments.manage.execute"
         ]
       },
       {
