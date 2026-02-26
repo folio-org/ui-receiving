@@ -27,6 +27,7 @@
 * Display loading state while piece is processing. Refs UIREC-482.
 * Check holdings abandonment on pieces receiving form. Refs UIREC-350.
 * Improve error message when deleting synchronized piece. Refs UIREC-481.
+* Rename permissions to make it easier to differentiate between them. Refs UIREC-490.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)

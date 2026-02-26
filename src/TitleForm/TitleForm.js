@@ -56,8 +56,8 @@ import ContributorsForm from './ContributorsForm';
 import ProductIdDetailsForm from './ProductIdDetailsForm';
 
 const ALLOWED_YEAR_LENGTH = 4;
-const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.assign';
-const MANAGE_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.manage';
+const ASSIGN_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.create.execute';
+const MANAGE_ACQ_UNITS_PERM = 'titles.acquisitions-units-assignments.manage.execute';
 
 const validateClaimingInterval = (value, { claimingActive }) => {
   if (!claimingActive) return undefined;
