@@ -13,7 +13,7 @@ const isBarcodeUnique = (message) => {
 const strategyAdapter = (handle) => ({ handle });
 
 /* Error handle strategies */
-const defaultErrorByCodeStrategy = ({ sendCallout, values }) => {
+const defaultErrorCodeBasedStrategy = ({ sendCallout, values }) => {
   return strategyAdapter((container) => {
     sendCallout({
       messageId: `ui-receiving.errors.${container.getError().code}`,
@@ -24,7 +24,7 @@ const defaultErrorByCodeStrategy = ({ sendCallout, values }) => {
 };
 
 const polNumberInvalidOrTooLongStrategy = ({ sendCallout }) => {
-  return defaultErrorByCodeStrategy({
+  return defaultErrorCodeBasedStrategy({
     sendCallout,
     values: { count: PO_LINE_NUMBER_LENGTH_LIMIT },
   });
@@ -67,7 +67,7 @@ const STRATEGY_MATCHERS = [
   },
   {
     select: (handler) => handler.getError().code in ERROR_CODES,
-    strategy: defaultErrorByCodeStrategy,
+    strategy: defaultErrorCodeBasedStrategy,
   },
   // Any errors, including errors in the specified parameters or message.
   // Combining strategies into one to maintain existing behavior.
