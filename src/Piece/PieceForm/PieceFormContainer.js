@@ -102,7 +102,15 @@ export const PieceFormContainer = ({
   const {
     isLoading: isOrderLoading,
     order,
-  } = useOrder(orderLine?.purchaseOrderId, { tenantId });
+  } = useOrder(
+    orderLine?.purchaseOrderId,
+    {
+      tenantId,
+      onError: ({ response }) => {
+        handleCommonErrors(showCallout, response);
+      },
+    },
+  );
 
   const {
     isLoading: isRestrictionsLoading,

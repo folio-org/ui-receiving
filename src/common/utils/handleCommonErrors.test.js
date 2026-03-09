@@ -25,6 +25,10 @@ describe('handleCommonErrors', () => {
     showCallout = jest.fn();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should call showCallout with receivingProcessEncumbrancesError error', async () => {
     const response = getErrorResponseMock({ code: ERROR_CODES.receivingProcessEncumbrancesError });
 

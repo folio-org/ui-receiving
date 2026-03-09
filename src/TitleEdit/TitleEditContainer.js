@@ -22,6 +22,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titleResource } from '../common/resources';
+import { handleCommonErrors } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -68,7 +69,7 @@ function TitleEditContainer({
       })
       .then(setPoLine)
       .catch(() => showCallout({ messageId: 'ui-receiving.title.actions.load.error', type: 'error' }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleId]);
 
   const onCancel = useCallback(
@@ -99,23 +100,27 @@ function TitleEditContainer({
           onCancel();
         })
         .catch(async (response) => {
-          const errorCode = await getErrorCodeFromResponse(response);
-          const values = {
-            title: <b>{newTitle.title}</b>,
-            poLineNumber: <b>{line.poLineNumber}</b>,
-          };
-          const message = (
-            <FormattedMessage
-              id={`ui-receiving.title.actions.save.error.${errorCode}`}
-              defaultMessage={intl.formatMessage({ id: `ui-receiving.title.actions.save.error.${ERROR_CODE_GENERIC}` }, values)}
-              values={values}
-            />
-          );
+          const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
-          showCallout({
-            message,
-            type: 'error',
-          });
+          if (!hasCommonErrors) {
+            const errorCode = await getErrorCodeFromResponse(response);
+            const values = {
+              title: <b>{newTitle.title}</b>,
+              poLineNumber: <b>{line.poLineNumber}</b>,
+            };
+            const message = (
+              <FormattedMessage
+                id={`ui-receiving.title.actions.save.error.${errorCode}`}
+                defaultMessage={intl.formatMessage({ id: `ui-receiving.title.actions.save.error.${ERROR_CODE_GENERIC}` }, values)}
+                values={values}
+              />
+            );
+
+            showCallout({
+              message,
+              type: 'error',
+            });
+          }
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

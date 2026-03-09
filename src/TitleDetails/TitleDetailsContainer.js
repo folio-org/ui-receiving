@@ -11,6 +11,7 @@ import {
   ORDER_PIECES_API,
   PIECE_STATUS,
   useOrderLine,
+  useShowCallout,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -18,6 +19,7 @@ import {
   useOrganizationsBatch,
   useTitle,
 } from '../common/hooks';
+import { handleCommonErrors } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -44,6 +46,7 @@ const TitleDetailsContainer = ({
 }) => {
   const titleId = match.params.id;
 
+  const showCallout = useShowCallout();
   const [isResourcesLoading, setIsResourcesLoading] = useState();
 
   const {
@@ -92,6 +95,9 @@ const TitleDetailsContainer = ({
   const commonHookOptions = {
     tenantId,
     enabled: Boolean(tenantId),
+    onError: ({ response }) => {
+      handleCommonErrors(showCallout, response);
+    },
   };
 
   const {
