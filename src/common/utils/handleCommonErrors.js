@@ -3,7 +3,7 @@ import { ResponseErrorsContainer } from '@folio/stripes-acq-components';
 import { ERROR_CODES } from '../constants';
 
 export const BARCODE_NOT_UNIQUE_MESSAGE = 'Barcode must be unique';
-const PO_LINE_NUMBER_LENGTH_LIMIT = 26;
+export const PO_LINE_NUMBER_LENGTH_LIMIT = 26;
 
 const isBarcodeUnique = (message) => {
   return message?.includes(BARCODE_NOT_UNIQUE_MESSAGE);

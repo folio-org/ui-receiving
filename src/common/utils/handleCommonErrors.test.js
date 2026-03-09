@@ -2,6 +2,7 @@ import { ERROR_CODES } from '../constants';
 import {
   BARCODE_NOT_UNIQUE_MESSAGE,
   handleCommonErrors,
+  PO_LINE_NUMBER_LENGTH_LIMIT,
 } from './handleCommonErrors';
 
 const getErrorResponseMock = (...errors) => {
@@ -56,5 +57,32 @@ describe('handleCommonErrors', () => {
     const result = await handleCommonErrors(showCallout, response);
 
     expect(result).toBeFalsy();
+  });
+
+  it('should handle invalid POL number error', async () => {
+    const response = getErrorResponseMock({ code: ERROR_CODES.polNumberInvalidOrTooLong });
+    const result = await handleCommonErrors(showCallout, response);
+
+    expect(result).toBeTruthy();
+    expect(showCallout).toHaveBeenCalledWith({
+      messageId: `ui-receiving.errors.${ERROR_CODES.polNumberInvalidOrTooLong}`,
+      type: 'error',
+      values: { count: PO_LINE_NUMBER_LENGTH_LIMIT },
+    });
+  });
+
+  it('should handle errors for specified parameters and message', async () => {
+    const response = getErrorResponseMock(
+      { message: BARCODE_NOT_UNIQUE_MESSAGE },
+      { code: 'test1', parameters: [{ key: 'permanentLoanTypeId' }] },
+      { code: 'test2', parameters: [{ key: 'instanceId' }] },
+    );
+
+    const result = await handleCommonErrors(showCallout, response);
+
+    expect(result).toBeTruthy();
+    expect(showCallout).toHaveBeenNthCalledWith(1, expect.objectContaining({ messageId: 'ui-receiving.errors.barcodeIsNotUnique' }));
+    expect(showCallout).toHaveBeenNthCalledWith(2, expect.objectContaining({ messageId: 'ui-receiving.title.actions.missingLoanTypeId.error' }));
+    expect(showCallout).toHaveBeenNthCalledWith(3, expect.objectContaining({ messageId: 'ui-receiving.errors.instanceId' }));
   });
 });
