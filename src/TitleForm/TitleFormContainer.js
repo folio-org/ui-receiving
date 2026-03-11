@@ -20,6 +20,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { titlesResource } from '../common/resources';
+import { handleCommonErrors } from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -78,23 +79,27 @@ function TitleFormContainer({
           });
         })
         .catch(async (response) => {
-          const errorCode = await getErrorCodeFromResponse(response);
-          const values = {
-            title: <b>{newTitle.title}</b>,
-            poLineNumber: <b>{poLine.poLineNumber}</b>,
-          };
-          const message = (
-            <FormattedMessage
-              id={`ui-receiving.title.actions.save.error.${errorCode}`}
-              defaultMessage={intl.formatMessage({ id: `ui-receiving.title.actions.save.error.${ERROR_CODE_GENERIC}` }, values)}
-              values={values}
-            />
-          );
+          const hasCommonErrors = await handleCommonErrors(showCallout, response);
 
-          showCallout({
-            message,
-            type: 'error',
-          });
+          if (!hasCommonErrors) {
+            const errorCode = await getErrorCodeFromResponse(response);
+            const values = {
+              title: <b>{newTitle.title}</b>,
+              poLineNumber: <b>{poLine.poLineNumber}</b>,
+            };
+            const message = (
+              <FormattedMessage
+                id={`ui-receiving.title.actions.save.error.${errorCode}`}
+                defaultMessage={intl.formatMessage({ id: `ui-receiving.title.actions.save.error.${ERROR_CODE_GENERIC}` }, values)}
+                values={values}
+              />
+            );
+
+            showCallout({
+              message,
+              type: 'error',
+            });
+          }
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
