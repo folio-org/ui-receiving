@@ -292,5 +292,8 @@
     "piece.sequence": "Volgorde",
     "piece.sequence.scope": "van {count}",
     "validation.numberRange": "Voer een getal in tussen {min} en {max}.",
-    "piece.actions.savePiece.changeSequenceNumber.success": "De volgorde van het Stuk is succesvol veranderd van <b>.{oldSequenceNumber}</b> naar <b>{newSequenceNumber}</b>"
+    "piece.actions.savePiece.changeSequenceNumber.success": "De volgorde van het Stuk is succesvol veranderd van <b>.{oldSequenceNumber}</b> naar <b>{newSequenceNumber}</b>",
+    "errors.lastPiece": "Het Stuk is niet verwijderd omdat u niet alle Stukken kunt verwijderen wanneer de bestelde en ontvangen hoeveelheid gesynchroniseerd zijn.",
+    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
+    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
 }

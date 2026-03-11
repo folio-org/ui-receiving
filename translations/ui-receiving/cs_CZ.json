@@ -292,5 +292,8 @@
     "piece.sequence": "Pořadí",
     "piece.sequence.scope": "z {count}",
     "validation.numberRange": "Zadejte prosím číslo mezi {min} a {max}.",
-    "piece.actions.savePiece.changeSequenceNumber.success": "Sekvence dílu byla úspěšně změněna z <b>{oldSequenceNumber}</b> na <b>{newSequenceNumber}</b>"
+    "piece.actions.savePiece.changeSequenceNumber.success": "Sekvence dílu byla úspěšně změněna z <b>{oldSequenceNumber}</b> na <b>{newSequenceNumber}</b>",
+    "errors.lastPiece": "Kus nebyl smazán, protože při synchronizaci objednávaného a přijímaného množství nelze smazat všechny kusy.",
+    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
+    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
 }
