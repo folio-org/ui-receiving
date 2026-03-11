@@ -1,6 +1,7 @@
 export * from './api';
 export * from './buildPieceRequestsSearchParams';
 export * from './dates';
+export * from './getCentralOrderingReceivingTenantId';
 export * from './getDehydratedPiece';
 export * from './getHoldingsItemsAndPieces';
 export * from './getItemById';
