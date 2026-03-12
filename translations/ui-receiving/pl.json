@@ -292,5 +292,8 @@
     "piece.sequence": "Sekwencja",
     "piece.sequence.scope": "z {count}",
     "validation.numberRange": "Please enter a number between {min} and {max}.",
-    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>"
+    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>",
+    "errors.lastPiece": "The piece was not deleted because you cannot delete all pieces when ordering and receiving quantity are synchronized.",
+    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
+    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
 }

@@ -292,5 +292,8 @@
     "piece.sequence": "Sıra",
     "piece.sequence.scope": ". {count}",
     "validation.numberRange": "Lütfen aşağıdakiler arasında bir sayı girin {min} ve {max}.",
-    "piece.actions.savePiece.changeSequenceNumber.success": "Parça'nın sırası <b>'den başarıyla değiştirildi{oldSequenceNumber}</b>'den <b>'ye{newSequenceNumber}</b>"
+    "piece.actions.savePiece.changeSequenceNumber.success": "Parça'nın sırası <b>'den başarıyla değiştirildi{oldSequenceNumber}</b>'den <b>'ye{newSequenceNumber}</b>",
+    "errors.lastPiece": "The piece was not deleted because you cannot delete all pieces when ordering and receiving quantity are synchronized.",
+    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
+    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
 }
