@@ -132,7 +132,7 @@
     "search.poLine.vendorDetail.referenceNumbers": "供应商参考号",
     "errors.receivingProcessEncumbrancesError": "在相关采购订单行上的所有经费分配都从金额转换为百分比之前，不能在此标题中添加或删除件。",
     "titles.invalidReference": "无效参考",
-    "title.changePieceQuantityMessage": "在此记录中添加或移除件将更新采购订单行数量和位置详情，进而更新估计价格。",
+    "title.changePieceQuantityMessage": "在此记录中添加或移除件将更新采购订单行数量和馆藏地详情，进而更新估计价格。",
     "title.receiptDue": "接收到期",
     "title.requester": "请求者",
     "title.rush": "忙碌",
@@ -292,5 +292,8 @@
     "piece.sequence": "顺序",
     "piece.sequence.scope": "共{count}个",
     "validation.numberRange": "请输入一个介于{min}和{max}之间的数字。",
-    "piece.actions.savePiece.changeSequenceNumber.success": "该件的序列已成功从<b>{oldSequenceNumber}</b>更改为<b>{newSequenceNumber}</b>"
+    "piece.actions.savePiece.changeSequenceNumber.success": "该件的序列已成功从<b>{oldSequenceNumber}</b>更改为<b>{newSequenceNumber}</b>",
+    "errors.lastPiece": "由于订购和接收数量同步时无法删除所有件，因此没有删除该件。",
+    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
+    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
 }
