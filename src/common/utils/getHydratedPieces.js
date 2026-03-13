@@ -6,8 +6,6 @@ export const getPieceStatusFromItem = (item) => {
 
 export function getHydratedPieces({
   crossTenant,
-  activeTenantId,
-  centralTenantId,
   fetchPieceItems,
   fetchPieceRequests,
   pieces,
@@ -25,13 +23,6 @@ export function getHydratedPieces({
       const requestsMap = requestsResponse.reduce((acc, r) => ({ ...acc, [r.itemId]: r }), {});
 
       return piecesResponse
-        .filter(piece => {
-          if (crossTenant && activeTenantId !== centralTenantId) {
-            return activeTenantId === piece.receivingTenantId;
-          }
-
-          return true;
-        })
         .map((piece) => ({
           ...piece,
           itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,

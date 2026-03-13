@@ -12,6 +12,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { usePaginatedPieces } from '../../../common/hooks';
+import { getCentralOrderingReceivingTenantId } from '../../../common/utils';
 import { useReceivingSearchContext } from '../../../contexts';
 
 const RESULT_COUNT_INCREMENT = 30;
@@ -25,10 +26,10 @@ export const usePiecesList = ({
   title,
 }) => {
   const {
+    activeTenantId,
+    centralTenantId,
     crossTenant,
     targetTenantId,
-    centralTenantId,
-    activeTenantId,
   } = useReceivingSearchContext();
 
   const [sorting, setSorting] = useState(initialSorting);
@@ -54,15 +55,17 @@ export const usePiecesList = ({
     queryParams: {
       titleId: title?.id,
       poLineId: title?.poLineId,
+      receivingTenantId: getCentralOrderingReceivingTenantId({
+        activeTenantId,
+        centralTenantId,
+        crossTenant,
+      }),
       ...queryParams,
       ...filters,
       ...sorting,
     },
     options: {
-      activeTenantId,
-      centralTenantId,
       crossTenant,
-      instanceId: title?.instanceId,
       tenantId: targetTenantId,
     },
   });

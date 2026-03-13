@@ -3,13 +3,17 @@ import { useQuery } from 'react-query';
 
 import { useNamespace } from '@folio/stripes/core';
 import {
+  CQL_AND_OPERATOR,
   useOrderLine,
   useLocationsQuery,
   useInstanceHoldingsQuery,
 } from '@folio/stripes-acq-components';
 
 import { useReceivingSearchContext } from '../../../contexts';
-import { getHydratedPieces } from '../../utils';
+import {
+  getCentralOrderingReceivingTenantId,
+  getHydratedPieces,
+} from '../../utils';
 import {
   usePieceItemsFetch,
   usePieceRequestsFetch,
@@ -27,7 +31,17 @@ export const useTitleHydratedPieces = ({
 } = {}) => {
   const [namespace] = useNamespace({ key: 'title-hydrated-pieces' });
 
-  const { activeTenantId, crossTenant, centralTenantId } = useReceivingSearchContext();
+  const {
+    activeTenantId,
+    centralTenantId,
+    crossTenant,
+  } = useReceivingSearchContext();
+
+  const receivingTenantId = getCentralOrderingReceivingTenantId({
+    activeTenantId,
+    centralTenantId,
+    crossTenant,
+  });
 
   const {
     title,
@@ -47,7 +61,15 @@ export const useTitleHydratedPieces = ({
     {
       tenantId,
       searchParams: {
-        query: `titleId=${titleId} and poLineId==${orderLine?.id} and receivingStatus==${receivingStatus}` + (searchQuery ? ` and ${searchQuery}` : ''),
+        query: [
+          `titleId=${titleId}`,
+          `poLineId==${orderLine?.id}`,
+          `receivingStatus==${receivingStatus}`,
+          receivingTenantId && `receivingTenantId==${receivingTenantId}`,
+          searchQuery,
+        ]
+          .filter(Boolean)
+          .join(` ${CQL_AND_OPERATOR} `),
       },
     },
     { enabled: Boolean(titleId && orderLine?.id && receivingStatus) },
@@ -81,12 +103,10 @@ export const useTitleHydratedPieces = ({
     queryKey: [namespace, pieces, receivingStatus, tenantId, titleId],
     queryFn: async () => {
       const hydratedPieces = await getHydratedPieces({
-        pieces,
+        crossTenant,
         fetchPieceItems,
         fetchPieceRequests,
-        activeTenantId,
-        crossTenant,
-        centralTenantId,
+        pieces,
       });
 
       return {

@@ -42,8 +42,6 @@ export const usePaginatedPieces = ({
     crossTenant,
     enabled = true,
     tenantId,
-    activeTenantId,
-    centralTenantId,
   } = options;
 
   const stripes = useStripes();
@@ -82,13 +80,6 @@ export const usePaginatedPieces = ({
     return {
       totalRecords,
       pieces: pieces
-        .filter(piece => {
-          if (crossTenant && activeTenantId !== centralTenantId) {
-            return activeTenantId === piece.receivingTenantId;
-          }
-
-          return true;
-        })
         .map((piece) => ({
           ...piece,
           itemId: itemsMap[piece.itemId] ? piece.itemId : undefined,

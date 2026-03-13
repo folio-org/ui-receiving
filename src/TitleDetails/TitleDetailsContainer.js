@@ -7,6 +7,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { useOkapiKy } from '@folio/stripes/core';
 import {
+  CQL_AND_OPERATOR,
   LoadingPane,
   ORDER_PIECES_API,
   PIECE_STATUS,
@@ -19,7 +20,10 @@ import {
   useOrganizationsBatch,
   useTitle,
 } from '../common/hooks';
-import { handleCommonErrors } from '../common/utils';
+import {
+  getCentralOrderingReceivingTenantId,
+  handleCommonErrors,
+} from '../common/utils';
 import {
   CENTRAL_RECEIVING_ROUTE,
   RECEIVING_ROUTE,
@@ -50,6 +54,9 @@ const TitleDetailsContainer = ({
   const [isResourcesLoading, setIsResourcesLoading] = useState();
 
   const {
+    activeTenantId,
+    centralTenantId,
+    crossTenant,
     isCentralOrderingEnabled,
     isCentralRouting,
     targetTenantId: tenantId,
@@ -60,18 +67,33 @@ const TitleDetailsContainer = ({
   const [piecesExistence, setPiecesExistence] = useState();
   const [vendorsMap, setVendorsMap] = useState({});
 
-  const hasPieces = useCallback((lineId, status) => (
-    ky.get(ORDER_PIECES_API, {
-      searchParams: {
-        limit: 1,
-        query: `titleId==${titleId} and poLineId==${lineId} and receivingStatus==(${status})`,
-      },
-    })
-      .json()
-      .then(({ totalRecords }) => totalRecords)
-      .catch(() => 0)
-      .then((count) => ({ [status]: count }))
-  ), [ky, titleId]);
+  const hasPieces = useCallback((lineId, status) => {
+    const receivingTenantId = getCentralOrderingReceivingTenantId({
+      activeTenantId,
+      centralTenantId,
+      crossTenant,
+    });
+
+    return (
+      ky.get(ORDER_PIECES_API, {
+        searchParams: {
+          limit: 1,
+          query: [
+            `titleId==${titleId}`,
+            `poLineId==${lineId}`,
+            `receivingStatus==(${status})`,
+            receivingTenantId && `receivingTenantId==${receivingTenantId}`,
+          ]
+            .filter(Boolean)
+            .join(` ${CQL_AND_OPERATOR} `),
+        },
+      })
+        .json()
+        .then(({ totalRecords }) => totalRecords)
+        .catch(() => 0)
+        .then((count) => ({ [status]: count }))
+    );
+  }, [activeTenantId, centralTenantId, crossTenant, ky, titleId]);
 
   const fetchReceivingResources = useCallback((lineId) => {
     setIsResourcesLoading(true);
