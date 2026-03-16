@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   memo,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -31,6 +32,7 @@ import {
   getItemStatusLabel,
   INVENTORY_RECORDS_TYPE,
   PIECE_FORMAT_LABELS,
+  useEventEmitter,
 } from '@folio/stripes-acq-components';
 
 import {
@@ -45,6 +47,7 @@ import {
   GENERATOR_ON_EDITABLE,
   GENERATOR_ON,
   PIECE_FORM_FIELD_NAMES,
+  EMITTER_EVENTS,
 } from '../common/constants';
 import { useNumberGeneratorOptions } from '../common/hooks';
 import { useReceivingSearchContext } from '../contexts';
@@ -87,6 +90,7 @@ const getResultFormatter = ({
   createInventoryValues,
   crossTenant,
   field,
+  fieldInventoryKey,
   fieldsValue,
   instanceId,
   intl,
@@ -199,6 +203,7 @@ const getResultFormatter = ({
 
     return (
       <FieldInventoryComponent
+        key={fieldInventoryKey}
         affiliationName={`${field}[${record.rowIndex}].${PIECE_FORM_FIELD_NAMES.receivingTenantId}`}
         instanceId={isHolding ? instanceId : undefined}
         locationIds={locationIds}
@@ -304,22 +309,38 @@ export const TitleReceiveList = ({ fields, props }) => {
     poLineLocationIds = defaultListProps.poLineLocationIds,
   } = props || {};
 
+  const eventEmitter = useEventEmitter();
   const intl = useIntl();
   const { change } = useForm();
   const { targetTenantId } = useReceivingSearchContext();
   const { data: numberGeneratorData } = useNumberGeneratorOptions({ tenantId: targetTenantId });
 
   const [numberGeneratorModalRecord, setNumberGeneratorModalRecord] = useState();
+  const [fieldInventoryKey, setFieldInventoryKey] = useState();
 
   const field = fields.name;
 
   const { onKeyDown: onFieldKeyDown } = useFieldArrowNavigation(field, []);
+
+  /*
+    Subscribe on receiving page change and force the location fields unmounting when the page changes.
+  */
+  useEffect(() => {
+    const cb = () => { setFieldInventoryKey(Date.now()); };
+
+    eventEmitter.on(EMITTER_EVENTS.RECEIVING_FORM_PAGE_CHANGED, cb);
+
+    return () => {
+      eventEmitter.off(EMITTER_EVENTS.RECEIVING_FORM_PAGE_CHANGED, cb);
+    };
+  }, [eventEmitter]);
 
   const cellFormatters = useMemo(() => getResultFormatter({
     numberGeneratorData,
     createInventoryValues,
     crossTenant,
     field,
+    fieldInventoryKey,
     fieldsValue: fields.value,
     instanceId,
     intl,
@@ -332,6 +353,7 @@ export const TitleReceiveList = ({ fields, props }) => {
     createInventoryValues,
     crossTenant,
     field,
+    fieldInventoryKey,
     fields.value,
     instanceId,
     intl,
