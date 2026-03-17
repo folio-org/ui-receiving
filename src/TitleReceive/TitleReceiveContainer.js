@@ -21,12 +21,16 @@ import {
   HoldingsAbandonmentPieceStrategy,
   PIECE_FORMAT,
   RESULT_COUNT_INCREMENT,
+  useEventEmitter,
   useHoldingsAbandonmentAnalyzer,
   useLocalPagination,
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import { PIECE_FORM_FIELD_NAMES } from '../common/constants';
+import {
+  EMITTER_EVENTS,
+  PIECE_FORM_FIELD_NAMES,
+} from '../common/constants';
 import {
   useReceive,
   useTitleHydratedPieces,
@@ -49,6 +53,7 @@ import { useDeleteHoldingsModal } from './useDeleteHoldingsModal';
 const { receiptDate: RECEIPT_DATE } = PIECE_FORM_FIELD_NAMES;
 
 function TitleReceiveContainer({ history, location, match }) {
+  const eventEmitter = useEventEmitter();
   const intl = useIntl();
   const showCallout = useShowCallout();
   const {
@@ -143,7 +148,8 @@ function TitleReceiveContainer({ history, location, match }) {
         offset: prev.offset + RESULT_COUNT_INCREMENT,
       }));
     });
-  }, [setPagination]);
+    eventEmitter.emit(EMITTER_EVENTS.RECEIVING_FORM_PAGE_CHANGED);
+  }, [eventEmitter, setPagination]);
 
   const handleReceive = useCallback(async (values, selectedItems, { deleteHoldings = false } = {}) => {
     return receive({
