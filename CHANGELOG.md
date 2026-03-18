@@ -31,6 +31,7 @@
 * Handle `fundsNotFound` and `polNumberInvalidOrTooLong` error codes. Refs UIREC-488.
 * Use the `receivingTenantId` parameter to filter pieces in central ordering mode. UIREC-486.
 * Force unmounting of the location component on receiving page change. Refs UIREC-487.
+* Reuse shared utils to check holdings abandonment on piece form. Refs UIREC-491.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)

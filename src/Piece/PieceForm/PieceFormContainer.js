@@ -361,7 +361,7 @@ export const PieceFormContainer = ({
     return { ...initialValues, ...initialCheckboxValues };
   }, [initialValues]);
 
-  const { checkHoldingAbandonment } = usePieceHoldingAbandonmentCheck(formInitialValues);
+  const { checkHoldingAbandonment } = usePieceHoldingAbandonmentCheck();
 
   const isLoading = (
     !initialValues
