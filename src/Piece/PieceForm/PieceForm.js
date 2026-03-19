@@ -141,7 +141,7 @@ const PieceForm = ({
     const shouldCheckHoldingAbandonment = (id && initialHoldingId) && (currentHoldingId !== initialHoldingId);
 
     if (shouldCheckHoldingAbandonment) {
-      return checkHoldingAbandonment(initialHoldingId)
+      return checkHoldingAbandonment(id, initialHoldingId)
         .then(({ willAbandoned }) => (
           willAbandoned
             ? toggleDeleteHoldingsConfirmation()
