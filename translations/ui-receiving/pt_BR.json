@@ -294,6 +294,6 @@
     "validation.numberRange": "Insira um número entre {min} e {max}.",
     "piece.actions.savePiece.changeSequenceNumber.success": "A sequência da parte foi alterada com sucesso de <b>{oldSequenceNumber}</b> Para <b>{newSequenceNumber}</b>",
     "errors.lastPiece": "A peça não foi eliminada porque não é possível eliminar todas as peças quando a quantidade de pedidos e de recebimentos está sincronizada.",
-    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
-    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
+    "errors.fundsNotFound": "Um ou mais fundos não puderam ser carregados. O(s) fundo(s) pode(m) ter sido excluído(s) ou você pode não ter permissão para visualizar o(s) fundo(s) associado(s).",
+    "errors.polNumberInvalidOrTooLong": "O número da Linha do Pedido de Compra é inválido ou maior que {count, number} caracteres alfanuméricos."
 }

@@ -84,7 +84,7 @@
     "piece.itemStatus.Received": "Received",
     "piece.itemStatus.Undefined": "Undefined",
     "piece.itemStatus": "Item status",
-    "piece.request": "Request",
+    "piece.request": "คำขอ",
     "piece.request.isOpened": "Yes",
     "title.details.button.receive": "Receive",
     "title.actions.receive.error": "Receive error",
