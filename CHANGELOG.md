@@ -2,6 +2,8 @@
 
 ## 8.1.0 (IN PROGRESS)
 
+* Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
+
 ## [8.0.0](https://github.com/folio-org/ui-receiving/tree/v8.0.0) (2026-04-17)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.2...v8.0.0)
 

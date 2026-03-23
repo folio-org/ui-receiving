@@ -1,0 +1,10 @@
+.receiveListWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.receiveListContent {
+  flex: 1;
+  min-height: 0;
+}
