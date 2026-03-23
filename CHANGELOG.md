@@ -2,6 +2,7 @@
 
 ## 8.0.0 (IN PROGRESS)
 
+* Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
 * *BREAKING* Update `orders` and `order-lines` interfaces to `13.0` and `4.0` accordingly. Refs UIREC-447.
 * Allow user to "Unlink" title from package POL view. Refs UIREC-448.
 * Hide "Remove from package" actions for titles related to non-package PO Lines. Refs UIREC-452.
