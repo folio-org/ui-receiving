@@ -1,4 +1,14 @@
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
+import {
+  act,
+  screen,
+  waitFor,
+  within,
+} from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { dayjs } from '@folio/stripes/components';
 import { useOkapiKy } from '@folio/stripes/core';
@@ -9,6 +19,7 @@ import {
   useAcqRestrictions,
   useClaimsSend,
   useCurrentUserTenants,
+  useHoldingsAbandonmentAnalyzer,
   useLocationsQuery,
   useOrderLine,
   usePiecesStatusBatchUpdate,
@@ -28,6 +39,10 @@ import {
 import { usePieceQuickReceiving } from '../hooks';
 import { PieceFormContainer } from './PieceFormContainer';
 
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  Loading: jest.fn(() => 'Loading'),
+}));
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
@@ -35,6 +50,7 @@ jest.mock('@folio/stripes-acq-components', () => ({
   useCentralOrderingContext: jest.fn(),
   useClaimsSend: jest.fn(),
   useCurrentUserTenants: jest.fn(),
+  useHoldingsAbandonmentAnalyzer: jest.fn(),
   useLocationsQuery: jest.fn(),
   useOrderLine: jest.fn(),
   usePiecesStatusBatchUpdate: jest.fn(),
@@ -121,16 +137,26 @@ const defaultProps = {
   paneTitle: 'Piece form',
 };
 
+const queryClient = new QueryClient();
+const wrapper = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    {children}
+  </QueryClientProvider>
+);
+
 const renderPieceFormContainer = (props = {}) => renderWithRouter(
   <PieceFormContainer
     {...defaultProps}
     {...props}
   />,
+  { wrapper },
 );
 
 describe('PieceFormContainer', () => {
   const sendClaims = jest.fn(() => Promise.resolve());
   const updatePiecesStatus = jest.fn(() => Promise.resolve());
+  const analyzeHoldings = jest.fn(() => [{ abandoned: false }]);
+  const analyzerFactory = jest.fn(() => ({ analyze: analyzeHoldings }));
 
   const kyMock = {
     get: jest.fn(() => ({ json: () => Promise.resolve({ configs: [] }) })),
@@ -140,6 +166,7 @@ describe('PieceFormContainer', () => {
     useAcqRestrictions.mockReturnValue({ restrictions });
     useClaimsSend.mockReturnValue({ sendClaims });
     useCurrentUserTenants.mockReturnValue(tenants);
+    useHoldingsAbandonmentAnalyzer.mockReturnValue({ analyzerFactory });
     useHoldingItems.mockReturnValue({ itemsCount: 2 });
     useOkapiKy.mockReturnValue(kyMock);
     useOrder.mockReturnValue({ order });
@@ -229,9 +256,16 @@ describe('PieceFormContainer', () => {
       },
     });
 
-    await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
-    await userEvent.click(await screen.findByTestId('delete-piece-button'));
-    await userEvent.click(await screen.findByText('ui-receiving.piece.delete.confirm'));
+    await act(async () => {
+      await userEvent.click(await screen.findByTestId('dropdown-trigger-button'));
+      await userEvent.click(await screen.findByTestId('delete-piece-button'));
+    });
+
+    await waitFor(() => expect(within(document.getElementById('delete-piece-confirmation-content')).queryByText('Loading')).not.toBeInTheDocument());
+
+    await act(async () => {
+      await userEvent.click(await screen.findByText('ui-receiving.piece.delete.confirm'));
+    });
 
     expect(mutatePieceMock).toHaveBeenCalledWith(expect.objectContaining({
       options: expect.objectContaining({

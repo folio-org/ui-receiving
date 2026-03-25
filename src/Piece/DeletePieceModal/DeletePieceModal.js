@@ -3,52 +3,57 @@ import {
   FormattedMessage,
   useIntl,
 } from 'react-intl';
+import { useQuery } from 'react-query';
 
 import {
   Button,
-  Modal,
   Loading,
+  Modal,
 } from '@folio/stripes/components';
-import { ModalFooter } from '@folio/stripes-acq-components';
-
 import {
-  usePieces,
-  useHoldingItems,
-} from '../../common/hooks';
+  HoldingsAbandonmentPieceStrategy,
+  ModalFooter,
+  useHoldingsAbandonmentAnalyzer,
+} from '@folio/stripes-acq-components';
 
 export const DeletePieceModal = ({
   onCancel,
   onConfirm,
   piece,
 }) => {
-  const { itemId, holdingId } = piece;
-
-  const { itemsCount, isFetching: isItemsFetching } = useHoldingItems(
-    holdingId,
-    { searchParams: { limit: 1 } },
-  );
   const {
-    piecesCount,
-    isFetching: isPiecesFetching,
-  } = usePieces(
-    {
-      searchParams: {
-        limit: 1,
-        query: `holdingId==${holdingId}`,
-      },
-    },
-    { enabled: Boolean(holdingId) },
-  );
+    holdingId,
+    id,
+    itemId,
+  } = piece;
+
+  const { analyzerFactory } = useHoldingsAbandonmentAnalyzer();
 
   const intl = useIntl();
   const modalLabel = intl.formatMessage({ id: 'ui-receiving.piece.delete.heading' });
 
-  const isFetching = isItemsFetching || isPiecesFetching;
-  const canDeleteHolding = Boolean(
-    holdingId
-    && piecesCount === 1
-    && ((itemsCount === 1 && itemId) || itemsCount === 0),
-  );
+  const {
+    data: canDeleteHolding = false,
+    isFetching,
+  } = useQuery({
+    queryKey: [holdingId, id, itemId],
+    queryFn: async ({ signal }) => {
+      const analyzer = await analyzerFactory({
+        holdingIds: [holdingId],
+        signal,
+      });
+
+      const abandonmentAnalysisResult = await analyzer.analyze({
+        explain: true,
+        holdingIds: [holdingId],
+        ids: [id],
+        strategy: HoldingsAbandonmentPieceStrategy.name,
+      });
+
+      return abandonmentAnalysisResult[0]?.abandoned;
+    },
+    enabled: Boolean(id && holdingId),
+  });
 
   const start = (
     <Button
@@ -123,7 +128,7 @@ export const DeletePieceModal = ({
 };
 
 DeletePieceModal.propTypes = {
-  onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
   piece: PropTypes.object.isRequired,
 };
