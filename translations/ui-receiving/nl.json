@@ -294,6 +294,6 @@
     "validation.numberRange": "Voer een getal in tussen {min} en {max}.",
     "piece.actions.savePiece.changeSequenceNumber.success": "De volgorde van het Stuk is succesvol veranderd van <b>.{oldSequenceNumber}</b> naar <b>{newSequenceNumber}</b>",
     "errors.lastPiece": "Het Stuk is niet verwijderd omdat u niet alle Stukken kunt verwijderen wanneer de bestelde en ontvangen hoeveelheid gesynchroniseerd zijn.",
-    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
-    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
+    "errors.fundsNotFound": "Een of meer fondsen konden niet worden ingevoerd. De fondsen zijn mogelijk verwijderd of u hebt geen toestemming om de bijbehorende fondsen te bekijken.",
+    "errors.polNumberInvalidOrTooLong": "RPO-nummer is ongeldig of groter dan {count, number} alfanumerieke tekens."
 }

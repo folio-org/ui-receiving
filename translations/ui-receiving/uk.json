@@ -292,8 +292,8 @@
     "piece.sequence": "Послідовність",
     "piece.sequence.scope": "з {count}",
     "validation.numberRange": "Введіть, будь ласка, номер між {min} та {max}.",
-    "piece.actions.savePiece.changeSequenceNumber.success": "The sequence of the piece was successfully changed from <b>{oldSequenceNumber}</b> to <b>{newSequenceNumber}</b>",
-    "errors.lastPiece": "The piece was not deleted because you cannot delete all pieces when ordering and receiving quantity are synchronized.",
-    "errors.fundsNotFound": "One or more funds could not be loaded. The fund(s) may have been deleted or you may not have permission to view the associated fund(s).",
-    "errors.polNumberInvalidOrTooLong": "POL number is invalid or bigger than {count, number} alphanumeric characters."
+    "piece.actions.savePiece.changeSequenceNumber.success": "Послідовність частини примірників назви успішно змінено з <b>{oldSequenceNumber}</b> на <b>{newSequenceNumber}</b>",
+    "errors.lastPiece": "Частина примірників назви не була видалена, оскільки неможливо видалити всю частину примірників назви, коли кількість для замовлення та отримання є синхронізованою.",
+    "errors.fundsNotFound": "Не вдалося завантажити один або декілька фондів (грошових коштів). Можливо, фонд(и) (грошові кошти) було видалено, або у вас немає дозволу на перегляд пов'язаних фондів (грошових коштів).",
+    "errors.polNumberInvalidOrTooLong": "Номер рядка замовлення на придбання недійсний або більший за {count, number} буквено-цифрових символів."
 }
