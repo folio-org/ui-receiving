@@ -92,7 +92,6 @@ const logs = [
   },
 ];
 
-const DATE_FORMAT = 'MM/DD/YYYY';
 const today = dayjs();
 
 const renderPieceForm = (props = {}) => renderWithRouter(
@@ -394,7 +393,10 @@ describe('PieceForm', () => {
 
       await userEvent.click(screen.getByTestId('dropdown-trigger-button'));
       await userEvent.click(screen.getByTestId('delay-claim-button'));
-      await userEvent.type(screen.getByRole('textbox', { name: /field.delayTo/ }), date.format(DATE_FORMAT));
+
+      const delayToInput = screen.getByRole('textbox', { name: /field.delayTo/ });
+
+      await userEvent.type(delayToInput, date.format(delayToInput.placeholder));
       await userEvent.click(await findButton('stripes-acq-components.FormFooter.save'));
 
       expect(defaultProps.onSubmit).toHaveBeenCalledWith(
