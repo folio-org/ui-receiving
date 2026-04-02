@@ -2,7 +2,6 @@
 
 ## 8.0.0 (IN PROGRESS)
 
-* Fix locale-dependent date format in PieceForm tests. Refs UIREC-495.
 * *BREAKING* Update `orders` and `order-lines` interfaces to `13.0` and `4.0` accordingly. Refs UIREC-447.
 * Allow user to "Unlink" title from package POL view. Refs UIREC-448.
 * Hide "Remove from package" actions for titles related to non-package PO Lines. Refs UIREC-452.
@@ -33,6 +32,7 @@
 * Use the `receivingTenantId` parameter to filter pieces in central ordering mode. UIREC-486.
 * Force unmounting of the location component on receiving page change. Refs UIREC-487.
 * Reuse shared utils to check holdings abandonment on piece form. Refs UIREC-491.
+* Fix locale-dependent date format in PieceForm tests. Refs UIREC-495.
 
 ## [7.0.2](https://github.com/folio-org/ui-receiving/tree/v7.0.2) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.1...v7.0.2)
