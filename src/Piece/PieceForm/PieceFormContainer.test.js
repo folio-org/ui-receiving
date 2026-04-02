@@ -82,7 +82,6 @@ jest.mock('../hooks', () => ({
   usePieceStatusChangeLog: jest.fn(() => ({ data: [] })),
 }));
 
-const DATE_FORMAT = 'MM/DD/YYYY';
 const today = dayjs();
 
 const mutatePieceMock = jest.fn(() => Promise.resolve({ id: 'piece-id' }));
@@ -284,7 +283,9 @@ describe('PieceFormContainer', () => {
 
     expect(screen.getByText('ui-receiving.piece.sendClaim.withIntegration.message')).toBeInTheDocument();
 
-    await userEvent.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    const claimExpiryInput1 = screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ });
+
+    await userEvent.type(claimExpiryInput1, today.add(3, 'days').format(claimExpiryInput1.placeholder));
     await userEvent.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
 
     expect(sendClaims).toHaveBeenCalledWith({
@@ -305,7 +306,9 @@ describe('PieceFormContainer', () => {
 
     expect(screen.getByText('ui-receiving.piece.sendClaim.withoutIntegration.message')).toBeInTheDocument();
 
-    await userEvent.type(screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ }), today.add(3, 'days').format(DATE_FORMAT));
+    const claimExpiryInput2 = screen.getByRole('textbox', { name: /sendClaim.field.claimExpiryDate/ });
+
+    await userEvent.type(claimExpiryInput2, today.add(3, 'days').format(claimExpiryInput2.placeholder));
     await userEvent.click(await screen.findByRole('button', { name: 'stripes-acq-components.FormFooter.save' }));
 
     expect(updatePiecesStatus).toHaveBeenCalledWith({
