@@ -20,7 +20,6 @@ import {
 import { LineLocationsView } from '../common/components';
 import { setLocationValueFormMutator } from '../common/utils';
 import { TitleReceiveList } from './TitleReceiveList';
-import css from './TitleReceive.css';
 
 const FIELD_NAME = 'receivedItems';
 
@@ -101,38 +100,34 @@ const TitleReceive = ({
             paneTitle={paneTitle}
             paneSub={paneSub}
           >
-            <div className={css.receiveListWrapper}>
-              <LineLocationsView
-                crossTenant={crossTenant}
-                instanceId={instanceId}
-                poLine={poLine}
-                locations={locations}
-              />
-              {receivingNote && (
-                <Layout className="marginTopHalf">
-                  <MessageBanner>
-                    {receivingNote}
-                  </MessageBanner>
-                </Layout>
-              )}
-              <div className={css.receiveListContent}>
-                <FieldArray
-                  component={TitleReceiveList}
-                  id="receivedItems"
-                  name={FIELD_NAME}
-                  props={{
-                    createInventoryValues,
-                    crossTenant,
-                    instanceId,
-                    isLoading,
-                    locations,
-                    poLineLocationIds,
-                    selectLocation: form.mutators.setLocationValue,
-                    toggleCheckedAll: form.mutators.toggleCheckedAll,
-                  }}
-                />
-              </div>
-            </div>
+            <LineLocationsView
+              crossTenant={crossTenant}
+              instanceId={instanceId}
+              poLine={poLine}
+              locations={locations}
+            />
+            {receivingNote && (
+              <Layout className="marginTopHalf">
+                <MessageBanner>
+                  {receivingNote}
+                </MessageBanner>
+              </Layout>
+            )}
+            <FieldArray
+              component={TitleReceiveList}
+              id="receivedItems"
+              name={FIELD_NAME}
+              props={{
+                createInventoryValues,
+                crossTenant,
+                instanceId,
+                isLoading,
+                locations,
+                poLineLocationIds,
+                selectLocation: form.mutators.setLocationValue,
+                toggleCheckedAll: form.mutators.toggleCheckedAll,
+              }}
+            />
           </Pane>
         </Paneset>
       </HasCommand>
