@@ -400,7 +400,6 @@ export const TitleReceiveList = ({ fields, props }) => {
     <>
       <MultiColumnList
         rowProps={rowProps}
-        autosize
         columnMapping={columnMapping}
         columnWidths={columnWidths}
         contentData={fields.value}

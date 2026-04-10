@@ -11,8 +11,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { MultiColumnList } from '@folio/stripes/components';
-
 import { useNumberGeneratorOptions } from '../common/hooks';
 import {
   ACCESSION_NUMBER_SETTING,
@@ -22,20 +20,11 @@ import {
   GENERATOR_ON,
   GENERATOR_OFF,
 } from '../common/constants';
-import { TitleReceiveList } from './TitleReceiveList';
+import TitleReceiveList from './TitleReceiveList';
 
 jest.mock('../common/hooks', () => ({
   useNumberGeneratorOptions: jest.fn(),
 }));
-
-jest.mock('@folio/stripes/components', () => {
-  const actual = jest.requireActual('@folio/stripes/components');
-
-  return {
-    ...actual,
-    MultiColumnList: jest.fn(actual.MultiColumnList),
-  };
-});
 
 const defaultProps = {
   fields: {
@@ -61,29 +50,6 @@ const renderTitleReceiveList = (props = {}) => {
 };
 
 describe('Render TitleReceiveList', () => {
-  beforeEach(() => {
-    MultiColumnList.mockClear();
-  });
-
-  it('should render MultiColumnList with autosize prop', () => {
-    useNumberGeneratorOptions.mockReturnValue({
-      data: {
-        [BARCODE_SETTING]: GENERATOR_OFF,
-        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
-        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
-      },
-      isLoading: false,
-      error: null,
-    });
-
-    renderTitleReceiveList();
-
-    expect(MultiColumnList).toHaveBeenCalledWith(
-      expect.objectContaining({ autosize: true }),
-      expect.anything(),
-    );
-  });
-
   it('should not show the number generator button if generator settings are off', async () => {
     useNumberGeneratorOptions.mockReturnValue({
       data: {
