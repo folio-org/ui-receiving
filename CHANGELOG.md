@@ -1,6 +1,9 @@
 # Change history for ui-receiving
 
-## 8.0.0 (IN PROGRESS)
+## 8.1.0 (IN PROGRESS)
+
+## [8.0.0](https://github.com/folio-org/ui-receiving/tree/v8.0.0) (2026-04-17)
+[Full Changelog](https://github.com/folio-org/ui-receiving/compare/v7.0.2...v8.0.0)
 
 * *BREAKING* Update `orders` and `order-lines` interfaces to `13.0` and `4.0` accordingly. Refs UIREC-447.
 * Allow user to "Unlink" title from package POL view. Refs UIREC-448.
