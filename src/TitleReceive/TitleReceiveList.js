@@ -1,11 +1,14 @@
 import includes from 'lodash/includes';
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
+import pick from 'lodash/pick';
 import PropTypes from 'prop-types';
 import {
   memo,
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -75,6 +78,24 @@ const visibleColumns = [
   PIECE_COLUMNS.isCreateItem,
   PIECE_COLUMNS.displayOnHolding,
   PIECE_COLUMNS.supplement,
+];
+
+// Only the fields actually consumed by cell formatters or CreateItemField.
+// Form-bound values (displaySummary, enumeration, comment, etc.) are resolved
+// via <Field name> and must be excluded so MCL's dataChangedOrLess() does not
+// treat every keystroke as content change and reset scrollTop to 0.
+const CONTENT_DATA_FIELDS = [
+  'id',
+  'bindItemId',
+  'format',
+  'holdingsRecordId',
+  'isBound',
+  'isCreateItem',
+  'itemId',
+  'itemStatus',
+  'receivingStatus',
+  'receivingTenantId',
+  'request',
 ];
 
 const accessionNumberFieldName = (field, index) => `${field}[${index}].accessionNumber`;
@@ -378,6 +399,18 @@ export const TitleReceiveList = ({ fields, props }) => {
     onKeyDown: onFieldKeyDown,
   }), [onFieldKeyDown]);
 
+  const contentDataRef = useRef();
+  const stableContentData = useMemo(() => {
+    const next = fields.value.map(item => pick(item, CONTENT_DATA_FIELDS));
+
+    if (contentDataRef.current && isEqual(contentDataRef.current, next)) {
+      return contentDataRef.current;
+    }
+    contentDataRef.current = next;
+
+    return next;
+  }, [fields.value]);
+
   const visibleColumnsWithActions = useMemo(() => {
     const vcwa = [...visibleColumns];
 
@@ -403,12 +436,12 @@ export const TitleReceiveList = ({ fields, props }) => {
         autosize
         columnMapping={columnMapping}
         columnWidths={columnWidths}
-        contentData={fields.value}
+        contentData={stableContentData}
         formatter={cellFormatters}
         id="title-receive-list"
         interactive={false}
         loading={isLoading}
-        totalCount={fields.value.length}
+        totalCount={stableContentData.length}
         visibleColumns={visibleColumnsWithActions}
       />
       <NumberGeneratorModal
