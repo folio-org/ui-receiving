@@ -11,6 +11,8 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 
+import { MultiColumnList } from '@folio/stripes/components';
+
 import { useNumberGeneratorOptions } from '../common/hooks';
 import {
   ACCESSION_NUMBER_SETTING,
@@ -20,11 +22,20 @@ import {
   GENERATOR_ON,
   GENERATOR_OFF,
 } from '../common/constants';
-import TitleReceiveList from './TitleReceiveList';
+import { TitleReceiveList } from './TitleReceiveList';
 
 jest.mock('../common/hooks', () => ({
   useNumberGeneratorOptions: jest.fn(),
 }));
+
+jest.mock('@folio/stripes/components', () => {
+  const actual = jest.requireActual('@folio/stripes/components');
+
+  return {
+    ...actual,
+    MultiColumnList: jest.fn(actual.MultiColumnList),
+  };
+});
 
 const defaultProps = {
   fields: {
@@ -50,6 +61,29 @@ const renderTitleReceiveList = (props = {}) => {
 };
 
 describe('Render TitleReceiveList', () => {
+  beforeEach(() => {
+    MultiColumnList.mockClear();
+  });
+
+  it('should render MultiColumnList with autosize prop', () => {
+    useNumberGeneratorOptions.mockReturnValue({
+      data: {
+        [BARCODE_SETTING]: GENERATOR_OFF,
+        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
+        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    renderTitleReceiveList();
+
+    expect(MultiColumnList).toHaveBeenCalledWith(
+      expect.objectContaining({ autosize: true }),
+      expect.anything(),
+    );
+  });
+
   it('should not show the number generator button if generator settings are off', async () => {
     useNumberGeneratorOptions.mockReturnValue({
       data: {
@@ -84,6 +118,80 @@ describe('Render TitleReceiveList', () => {
     const button = screen.getByRole('button', { name: 'ui-receiving.numberGenerator.generateForRow' });
 
     expect(button).toBeEnabled();
+  });
+
+  it('should keep contentData reference stable when only form-bound fields change', () => {
+    useNumberGeneratorOptions.mockReturnValue({
+      data: {
+        [BARCODE_SETTING]: GENERATOR_OFF,
+        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
+        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    const baseRecord = { id: 'a', itemId: 'i', format: 'P', isCreateItem: false };
+    const renderWith = (value) => (
+      <QueryClientProvider client={queryClient}>
+        <Form
+          onSubmit={() => {}}
+          render={() => (
+            <TitleReceiveList
+              fields={{ value: [value], name: 'receivedItems' }}
+              props={defaultProps.props}
+            />
+          )}
+        />
+      </QueryClientProvider>
+    );
+
+    const { rerender } = render(renderWith({ ...baseRecord, displaySummary: 'old' }));
+    const firstContentData = MultiColumnList.mock.calls[0][0].contentData;
+
+    MultiColumnList.mockClear();
+    rerender(renderWith({ ...baseRecord, displaySummary: 'new' }));
+
+    const secondContentData = MultiColumnList.mock.calls[0][0].contentData;
+
+    expect(secondContentData).toBe(firstContentData);
+  });
+
+  it('should rebuild contentData reference when a record field changes', () => {
+    useNumberGeneratorOptions.mockReturnValue({
+      data: {
+        [BARCODE_SETTING]: GENERATOR_OFF,
+        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
+        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
+      },
+      isLoading: false,
+      error: null,
+    });
+
+    const baseRecord = { id: 'a', itemId: 'i', isCreateItem: false, displaySummary: 'x' };
+    const renderWith = (value) => (
+      <QueryClientProvider client={queryClient}>
+        <Form
+          onSubmit={() => {}}
+          render={() => (
+            <TitleReceiveList
+              fields={{ value: [value], name: 'receivedItems' }}
+              props={defaultProps.props}
+            />
+          )}
+        />
+      </QueryClientProvider>
+    );
+
+    const { rerender } = render(renderWith({ ...baseRecord, format: 'Physical' }));
+    const firstContentData = MultiColumnList.mock.calls[0][0].contentData;
+
+    MultiColumnList.mockClear();
+    rerender(renderWith({ ...baseRecord, format: 'Electronic' }));
+
+    const secondContentData = MultiColumnList.mock.calls[0][0].contentData;
+
+    expect(secondContentData).not.toBe(firstContentData);
   });
 
   it('should show the number generator modal when a number generator is enabled', async () => {
