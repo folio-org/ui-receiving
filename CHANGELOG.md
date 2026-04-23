@@ -2,6 +2,7 @@
 
 ## 8.1.0 (IN PROGRESS)
 
+* Add column manager to the Receiving results list. Refs UIREC-494.
 * Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
 
 ## [8.0.4](https://github.com/folio-org/ui-receiving/tree/v8.0.4) (2026-05-25)

@@ -26,7 +26,10 @@ import {
   TitleManager,
   useStripes,
 } from '@folio/stripes/core';
-import { PersistedPaneset } from '@folio/stripes/smart-components';
+import {
+  PersistedPaneset,
+  useColumnManager,
+} from '@folio/stripes/smart-components';
 import {
   FiltersPane,
   FolioFormattedDate,
@@ -55,6 +58,11 @@ import {
 } from '../constants';
 import { useReceivingSearchContext } from '../contexts';
 import TitleDetailsContainer from '../TitleDetails';
+import {
+  RECEIVING_COLUMN_MANAGER_ID,
+  RECEIVING_COLUMN_MAPPING,
+  RECEIVING_SORTABLE_FIELDS,
+} from './constants';
 import { ExportSettingsModal } from './ExportSettingsModal';
 import { ReceivingListActionMenu } from './ReceivingListActionMenu';
 import ReceivingListFilter from './ReceivingListFilter';
@@ -63,25 +71,6 @@ import {
 } from './ReceivingListSearchConfig';
 
 const resultsPaneTitle = <FormattedMessage id="ui-receiving.meta.title" />;
-const visibleColumns = [
-  'title', 'poLine.physical.expectedReceiptDate',
-  'poLine.titleOrPackage', 'poLine.poLineNumber',
-  'poLine.receivingNote', 'locations', 'orderWorkflow',
-];
-const sortableFields = [
-  'title', 'poLine.receiptDate',
-  'poLine.titleOrPackage', 'poLine.poLineNumber',
-  'poLine.receivingNote',
-];
-const columnMapping = {
-  'title': <FormattedMessage id="ui-receiving.titles.title" />,
-  'poLine.physical.expectedReceiptDate': <FormattedMessage id="ui-receiving.title.expectedReceiptDate" />,
-  'poLine.titleOrPackage': <FormattedMessage id="ui-receiving.title.package" />,
-  'poLine.poLineNumber': <FormattedMessage id="ui-receiving.title.polNumber" />,
-  'poLine.receivingNote': <FormattedMessage id="ui-receiving.title.receivingNote" />,
-  'locations': <FormattedMessage id="ui-receiving.title.locations" />,
-  'orderWorkflow': <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
-};
 
 const getResultsFormatter = ({ isCentralRouting, search }) => ({
   'title': data => <TextLink to={`${isCentralRouting ? CENTRAL_RECEIVING_ROUTE : RECEIVING_ROUTE}/${data.id}/view${search}`}>{data.title}</TextLink>,
@@ -129,7 +118,11 @@ const ReceivingList = ({
     sortingField,
     sortingDirection,
     changeSorting,
-  ] = useLocationSorting(location, history, resetData, sortableFields);
+  ] = useLocationSorting(location, history, resetData, RECEIVING_SORTABLE_FIELDS);
+  const {
+    visibleColumns,
+    toggleColumn,
+  } = useColumnManager(RECEIVING_COLUMN_MANAGER_ID, RECEIVING_COLUMN_MAPPING);
   const { isFiltersOpened, toggleFilters } = useFiltersToogle('ui-receiving/filters');
   const [isExportModalOpened, toggleExportModal] = useModalToggle();
 
@@ -148,10 +141,12 @@ const ReceivingList = ({
       <ReceivingListActionMenu
         onToggle={onToggle}
         titlesCount={titlesCount}
+        toggleColumn={toggleColumn}
         toggleExportModal={toggleExportModal}
+        visibleColumns={visibleColumns}
       />
     );
-  }, [titlesCount, toggleExportModal]);
+  }, [titlesCount, toggleColumn, toggleExportModal, visibleColumns]);
 
   const resultsStatusMessage = (
     <NoResultsMessage
@@ -249,7 +244,7 @@ const ReceivingList = ({
                 totalCount={titlesCount}
                 contentData={titles}
                 visibleColumns={visibleColumns}
-                columnMapping={columnMapping}
+                columnMapping={RECEIVING_COLUMN_MAPPING}
                 formatter={getResultsFormatter({ search: location.search, isCentralRouting })}
                 loading={isLoading}
                 onNeedMoreData={onNeedMoreData}
