@@ -1,14 +1,6 @@
-import noop from 'lodash/noop';
-import {
-  useCallback,
-  useRef,
-} from 'react';
+import { useCallback } from 'react';
 
-import {
-  ORDER_STATUSES,
-  useModalToggle,
-  useShowCallout,
-} from '@folio/stripes-acq-components';
+import { useShowCallout } from '@folio/stripes-acq-components';
 import { useOkapiKy } from '@folio/stripes/core';
 
 import { useReceive } from '../../../common/hooks';
@@ -21,18 +13,14 @@ import {
   handleReceiveErrorResponse,
 } from '../../../common/utils';
 
-export const usePieceQuickReceiving = ({
-  order,
-  tenantId,
-}) => {
+export const usePieceQuickReceiving = ({ tenantId } = {}) => {
   const ky = useOkapiKy({ tenant: tenantId });
   const showCallout = useShowCallout();
-  const [isConfirmReceiving, toggleConfirmReceiving] = useModalToggle();
 
-  const confirmReceivingPromise = useRef(Promise);
-  const isOrderClosed = order?.workflowStatus === ORDER_STATUSES.closed;
-
-  const { receive } = useReceive({ tenantId });
+  const {
+    isLoading,
+    receive,
+  } = useReceive({ tenantId });
 
   const quickReceive = useCallback(async (pieceValues) => {
     const { id } = pieceValues;
@@ -52,8 +40,8 @@ export const usePieceQuickReceiving = ({
     return receive({ pieces: [{ ...piece, ...itemData }] });
   }, [ky, receive, tenantId]);
 
-  const handleQuickReceive = useCallback((values, mutationFn) => {
-    return quickReceive(values, mutationFn)
+  const onQuickReceive = useCallback((values) => {
+    return quickReceive(values)
       .then((res) => {
         if (!values.id) {
           showCallout({
@@ -75,34 +63,8 @@ export const usePieceQuickReceiving = ({
       });
   }, [quickReceive, showCallout]);
 
-  const confirmReceiving = useCallback(
-    () => new Promise((resolve, reject) => {
-      confirmReceivingPromise.current = { resolve, reject };
-      toggleConfirmReceiving();
-    }),
-    [toggleConfirmReceiving],
-  );
-
-  const onQuickReceive = useCallback((values) => {
-    return isOrderClosed
-      ? confirmReceiving().then(() => handleQuickReceive(values), noop)
-      : handleQuickReceive(values);
-  }, [confirmReceiving, handleQuickReceive, isOrderClosed]);
-
-  const onConfirmReceive = () => {
-    confirmReceivingPromise.current.resolve();
-    toggleConfirmReceiving();
-  };
-
-  const onCancelReceive = () => {
-    confirmReceivingPromise.current.reject();
-    toggleConfirmReceiving();
-  };
-
   return {
-    isConfirmReceiving,
+    isLoading,
     onQuickReceive,
-    onCancelReceive,
-    onConfirmReceive,
   };
 };
