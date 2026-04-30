@@ -1,9 +1,6 @@
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 
-import {
-  ITEM_STATUS,
-  ORDER_STATUSES,
-} from '@folio/stripes-acq-components';
+import { ITEM_STATUS } from '@folio/stripes-acq-components';
 
 import { useReceive } from '../../../common/hooks';
 import {
@@ -29,11 +26,6 @@ const pieceValues = {
   displaySummary: 'v1',
 };
 
-const order = {
-  id: 'po-id',
-  workflowStatus: ORDER_STATUSES.pending,
-};
-
 describe('usePieceQuickReceiving', () => {
   let receivePieceMock;
 
@@ -47,7 +39,7 @@ describe('usePieceQuickReceiving', () => {
   });
 
   it('should call receive', async () => {
-    const { result } = renderHook(() => usePieceQuickReceiving({ order }));
+    const { result } = renderHook(() => usePieceQuickReceiving({ tenantId: 'tenantId' }));
 
     await result.current.onQuickReceive(pieceValues);
 
@@ -60,7 +52,7 @@ describe('usePieceQuickReceiving', () => {
 
     beforeEach(() => {
       getPieceById.mockReturnValue(() => Promise.resolve({ json: () => ({ ...pieceValues, itemId }) }));
-      const { result } = renderHook(() => usePieceQuickReceiving({ order }));
+      const { result } = renderHook(() => usePieceQuickReceiving());
 
       quickReceive = result.current.onQuickReceive;
     });

@@ -25,7 +25,6 @@ import {
   useShowCallout,
 } from '@folio/stripes-acq-components';
 
-import { ConfirmReceivingModal } from '../../common/components';
 import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
 import {
   useOrder,
@@ -126,15 +125,7 @@ export const PieceFormContainer = ({
   const { mutatePiece } = usePieceMutator({ tenantId });
   const { unreceive } = useUnreceive({ tenantId });
 
-  const {
-    isConfirmReceiving,
-    onCancelReceive,
-    onConfirmReceive,
-    onQuickReceive,
-  } = usePieceQuickReceiving({
-    order,
-    tenantId,
-  });
+  const { onQuickReceive } = usePieceQuickReceiving({ tenantId });
 
   const {
     claimSendModalProps,
@@ -388,6 +379,7 @@ export const PieceFormContainer = ({
         onClose={onCloseForm}
         onDelete={onDelete}
         onSubmit={onSubmit}
+        order={order}
         locationIds={locationIds}
         locations={locations}
         nextSequenceNumber={title?.nextSequenceNumber}
@@ -395,12 +387,6 @@ export const PieceFormContainer = ({
         pieceFormatOptions={pieceFormatOptions}
         poLine={orderLine}
         restrictionsByAcqUnit={restrictions}
-      />
-
-      <ConfirmReceivingModal
-        open={isConfirmReceiving}
-        onCancel={onCancelReceive}
-        onConfirm={onConfirmReceive}
       />
 
       <SendClaimsModal

@@ -8,6 +8,7 @@ import { dayjs } from '@folio/stripes/components';
 import {
   FieldInventory,
   INVENTORY_RECORDS_TYPE,
+  ORDER_STATUSES,
   PIECE_FORMAT,
   PIECE_STATUS,
   useCurrentUserTenants,
@@ -45,6 +46,9 @@ const defaultProps = {
   onClose: jest.fn(),
   onDelete: jest.fn(),
   onSubmit: jest.fn(),
+  order: {
+    workflowStatus: ORDER_STATUSES.open,
+  },
   initialValues: {
     isCreateAnother: false,
     [PIECE_FORM_FIELD_NAMES.sequenceNumber]: 42,
@@ -354,6 +358,57 @@ describe('PieceForm', () => {
 
   describe('Actions', () => {
     const date = today.add(3, 'days');
+
+    describe('Quick receive', () => {
+      it('should handle quick receive action for piece connected to open order', async () => {
+        renderPieceForm({
+          order: { workflowStatus: ORDER_STATUSES.open },
+          initialValues: {
+            ...defaultProps.initialValues,
+            receivingStatus: PIECE_STATUS.expected,
+            format: PIECE_FORMAT.physical,
+          },
+        });
+
+        await act(async () => userEvent.click(await screen.findByTestId('quickReceive')));
+
+        expect(screen.queryByText(/piece.confirmReceiving.title/)).not.toBeInTheDocument();
+        expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({ postSubmitAction: PIECE_ACTION_NAMES.quickReceive }),
+          expect.anything(),
+          expect.anything(),
+        );
+      });
+
+      it('should handle quick receive action for piece connected to closed order', async () => {
+        renderPieceForm({
+          order: { workflowStatus: ORDER_STATUSES.closed },
+          initialValues: {
+            ...defaultProps.initialValues,
+            receivingStatus: PIECE_STATUS.expected,
+            format: PIECE_FORMAT.physical,
+          },
+        });
+
+        await act(async () => userEvent.click(await screen.findByTestId('quickReceive')));
+
+        // Confirmation modal should be shown for closed order
+        expect(screen.getByText(/piece.confirmReceiving.title/)).toBeInTheDocument();
+
+        await act(async () => userEvent.click(await findButton(/stripes-components.cancel/)));
+
+        expect(defaultProps.onSubmit).not.toHaveBeenCalled();
+
+        await act(async () => userEvent.click(await screen.findByTestId('quickReceive')));
+        await act(async () => userEvent.click(await findButton(/piece.actions.confirm/)));
+
+        expect(defaultProps.onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({ postSubmitAction: PIECE_ACTION_NAMES.quickReceive }),
+          expect.anything(),
+          expect.anything(),
+        );
+      });
+    });
 
     it('should handle "Unreceive" action', async () => {
       renderPieceForm({
