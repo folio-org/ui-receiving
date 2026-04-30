@@ -1,3 +1,4 @@
+import { noop } from 'lodash';
 import PropTypes from 'prop-types';
 import {
   useCallback,
@@ -29,12 +30,15 @@ import {
   DeleteHoldingsModal,
   getClaimingIntervalFromDate,
   handleKeyCommand,
+  ORDER_STATUSES,
   PIECE_FORMAT,
   PIECE_STATUS,
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
+import { ConfirmReceivingModal } from '../../common/components';
 import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
+import { useAsyncConfirmationModal } from '../../common/hooks';
 import { setLocationValueFormMutator } from '../../common/utils';
 import {
   PIECE_ACTION_NAMES,
@@ -63,6 +67,7 @@ const PieceForm = ({
   locationIds,
   locations,
   nextSequenceNumber,
+  order,
   paneTitle,
   pieceFormatOptions,
   poLine,
@@ -107,6 +112,13 @@ const PieceForm = ({
   const [isDeleteConfirmation, toggleDeleteConfirmation] = useModalToggle();
   const [isDeleteHoldingsConfirmation, toggleDeleteHoldingsConfirmation] = useModalToggle();
   const [isClaimDelayModalOpen, toggleClaimDelayModal] = useModalToggle();
+
+  const {
+    cancel: onCancelReceive,
+    confirm: onConfirmReceive,
+    init: initConfirmReceive,
+    isModalOpen: isConfirmReceiving,
+  } = useAsyncConfirmationModal();
 
   const { protectCreate, protectUpdate, protectDelete } = restrictionsByAcqUnit;
   const isEditMode = Boolean(id);
@@ -168,10 +180,21 @@ const PieceForm = ({
     onSave();
   }, [change, onSave]);
 
-  const onQuickReceive = useCallback(() => {
-    change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.quickReceive);
-    onSave();
-  }, [change, onSave]);
+  const onQuickReceive = useCallback(async () => {
+    const handleQuickReceive = () => {
+      change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.quickReceive);
+      onSave();
+    };
+
+    // Show confirmation modal if order is closed, otherwise receive piece immediately
+    if (order.workflowStatus === ORDER_STATUSES.closed) {
+      await initConfirmReceive()
+        .then(handleQuickReceive)
+        .catch(noop);
+    } else {
+      handleQuickReceive();
+    }
+  }, [change, initConfirmReceive, onSave, order.workflowStatus]);
 
   const onUnreceive = useCallback(() => {
     change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.unReceive);
@@ -377,6 +400,12 @@ const PieceForm = ({
             onCancel={toggleClaimDelayModal}
             onSubmit={onClaimDelay}
           />
+
+          <ConfirmReceivingModal
+            open={isConfirmReceiving}
+            onCancel={onCancelReceive}
+            onConfirm={onConfirmReceive}
+          />
         </Pane>
       </Paneset>
     </HasCommand>
@@ -395,6 +424,9 @@ PieceForm.propTypes = {
   locationIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   locations: PropTypes.arrayOf(PropTypes.object),
   nextSequenceNumber: PropTypes.number,
+  order: PropTypes.shape({
+    workflowStatus: PropTypes.string,
+  }).isRequired,
   onClaimSend: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,

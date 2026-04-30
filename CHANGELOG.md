@@ -2,6 +2,8 @@
 
 ## 8.1.0 (IN PROGRESS)
 
+* Display the quick receive confirmation for "Closed order" before a piece mutation. Refs UIREC-497.
+
 ## [8.0.1](https://github.com/folio-org/ui-receiving/tree/v8.0.1) (2026-05-01)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.0...v8.0.1)
 
