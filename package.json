@@ -1,6 +1,6 @@
 {
   "name": "@folio/receiving",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Description for receiving",
   "main": "index.js",
   "repository": "",
@@ -290,7 +290,7 @@
     "react-router-prop-types": "^1.0.4"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-instance": "^9.0.0",
+    "@folio/plugin-find-instance": "^10.0.0",
     "@folio/plugin-find-organization": "^6.0.0",
     "@folio/plugin-find-po-line": "^6.0.0"
   },
