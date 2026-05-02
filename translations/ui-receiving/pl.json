@@ -78,7 +78,7 @@
     "piece.barcode": "Kod kreskowy",
     "piece.callNumber": "Sygnatura",
     "piece.itemStatus.Available": "Dostępny",
-    "piece.itemStatus.In process": "W toku",
+    "piece.itemStatus.In process": "W trakcie opracowania",
     "piece.itemStatus.In transit": "W drodze",
     "piece.itemStatus.On order": "Na zamówienie",
     "piece.itemStatus.Received": "Odebrane",
