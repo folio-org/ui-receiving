@@ -8,6 +8,7 @@
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.1...v8.0.2)
 
 * Display the quick receive confirmation for "Closed order" before a piece mutation. Refs UIREC-497.
+* Add column manager to the Receiving results list. Refs UIREC-494.
 
 ## [8.0.1](https://github.com/folio-org/ui-receiving/tree/v8.0.1) (2026-05-01)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.0...v8.0.1)
