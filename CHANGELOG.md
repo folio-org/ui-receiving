@@ -2,6 +2,8 @@
 
 ## 8.1.0 (IN PROGRESS)
 
+* Title with special characters is not found in receiving search. Refs UIREC-500.
+
 ## [8.0.2](https://github.com/folio-org/ui-receiving/tree/v8.0.2) (2026-05-06)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.1...v8.0.2)
 

@@ -143,7 +143,7 @@ export const buildTitlesQuery = (queryParams, options) => {
     queryParams,
     (query, qindex) => {
       if (qindex) {
-        return `(${qindex}==*${query}*)`;
+        return `(${qindex}=="*${query}*")`;
       }
 
       return getKeywordQuery(query);
