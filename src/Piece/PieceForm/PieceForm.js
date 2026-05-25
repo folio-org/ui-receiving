@@ -187,14 +187,14 @@ const PieceForm = ({
     };
 
     // Show confirmation modal if order is closed, otherwise receive piece immediately
-    if (order.workflowStatus === ORDER_STATUSES.closed) {
+    if (order?.workflowStatus === ORDER_STATUSES.closed) {
       await initConfirmReceive()
         .then(handleQuickReceive)
         .catch(noop);
     } else {
       handleQuickReceive();
     }
-  }, [change, initConfirmReceive, onSave, order.workflowStatus]);
+  }, [change, initConfirmReceive, onSave, order?.workflowStatus]);
 
   const onUnreceive = useCallback(() => {
     change(PIECE_FORM_SERVICE_FIELD_NAMES.postSubmitAction, PIECE_ACTION_NAMES.unReceive);
