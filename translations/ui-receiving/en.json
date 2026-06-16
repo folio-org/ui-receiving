@@ -64,6 +64,7 @@
   "numberGenerator.generateForRow": "Generate numbers for row {rowIndex}",
   "numberGenerator.generateNumbers": "Generate numbers",
   "numberGenerator.generateHelpText": "The selected sequences will be used to generate new numbers. Select \"Generate numbers\" to go ahead.",
+  "numberGenerator.noPermission": "You do not have the necessary permissions to use number generator sequences. Please contact your system administrator.",
 
   "filter.orderStatus": "Order status",
   "filter.vendor": "Vendor",
