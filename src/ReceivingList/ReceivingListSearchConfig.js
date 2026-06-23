@@ -22,15 +22,15 @@ export const searchableIndexes = [
 const buildEqualQuery = (sIndex, sQuery) => new CQLBuilder().equal(sIndex, sQuery).build();
 
 const formatSearchCqlMap = {
-  [INDEXES.PO_LINE_NUMBER]: (sIndex, sQuery) => buildEqualQuery(sIndex, sQuery),
-  [INDEXES.PO_NUMBER]: (sIndex, sQuery) => buildEqualQuery(sIndex, sQuery),
+  [INDEXES.PO_LINE_NUMBER]: buildEqualQuery,
+  [INDEXES.PO_NUMBER]: buildEqualQuery,
 };
 
 export const formatSearchCql = (sIndex, sQuery) => {
-  const formatQueryFn = formatSearchCqlMap[sIndex];
+  const formatCqlFn = formatSearchCqlMap[sIndex];
 
-  return formatQueryFn
-    ? formatQueryFn(sIndex, sQuery)
+  return formatCqlFn
+    ? formatCqlFn(sIndex, sQuery)
     : new CQLBuilder().fuzzy(sIndex, sQuery).build();
 };
 
@@ -38,11 +38,7 @@ export const getKeywordQuery = (query) => INDEXES_VALUES.reduce(
   (acc, sIndex) => {
     const formattedQuery = formatSearchCql(sIndex, query);
 
-    if (acc) {
-      return `${acc} or ${formattedQuery}`;
-    } else {
-      return formattedQuery;
-    }
+    return acc ? `${acc} or ${formattedQuery}` : formattedQuery;
   },
   '',
 );
