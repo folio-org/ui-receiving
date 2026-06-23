@@ -1,6 +1,8 @@
 # Change history for ui-receiving
 
-## 8.1.0 (IN PROGRESS)
+## 9.0.0 (IN PROGRESS)
+
+* *BREAKING* Update CQL queries to use the new indices. Refs UIREC-504.
 
 ## [8.0.4](https://github.com/folio-org/ui-receiving/tree/v8.0.4) (2026-05-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.3...v8.0.4)

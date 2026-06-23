@@ -5,12 +5,13 @@ import uniq from 'lodash/uniq';
 
 import {
   batchRequest,
-  buildArrayFieldQuery,
   buildDateRangeQuery,
   buildDateTimeRangeQuery,
   buildFilterQuery,
+  buildMultiSelectionCqlQuery,
   buildSortingQuery,
   connectQuery,
+  CQLBuilder,
   fetchConsortiumBatchHoldings,
   getConsortiumCentralTenantKy,
   HOLDINGS_API,
@@ -25,7 +26,10 @@ import {
   FILTERS,
   ORDER_FORMAT_MATERIAL_TYPE_MAP,
 } from './constants';
-import { getKeywordQuery } from './ReceivingListSearchConfig';
+import {
+  formatSearchQuery,
+  getKeywordQuery,
+} from './ReceivingListSearchConfig';
 
 export const fetchTitleOrderLines = (ky, titles, fetchedOrderLinesMap) => {
   const orderLineIds = titles
@@ -113,6 +117,21 @@ export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) =
     });
 };
 
+const buildLocationsQuery = (filterValue) => {
+  return [
+    buildMultiSelectionCqlQuery(FILTERS.LOCATION, filterValue, { modifiers: [{ name: '@locationId' }] }),
+    buildMultiSelectionCqlQuery('poLine.searchLocations', filterValue),
+  ].join(` ${CQLBuilder.OPERATORS.OR} `);
+};
+
+const getSearchQuery = (query, qindex) => {
+  if (qindex) {
+    return formatSearchQuery(qindex, query);
+  }
+
+  return getKeywordQuery(query);
+};
+
 export const buildTitlesQuery = (queryParams, options) => {
   let materialTypeFilterQuery;
 
@@ -141,13 +160,7 @@ export const buildTitlesQuery = (queryParams, options) => {
 
   const queryParamsFilterQuery = buildFilterQuery(
     queryParams,
-    (query, qindex) => {
-      if (qindex) {
-        return `(${qindex}=="*${query}*")`;
-      }
-
-      return getKeywordQuery(query);
-    },
+    getSearchQuery,
     {
       [FILTERS.DATE_CREATED]: buildDateTimeRangeQuery.bind(null, [FILTERS.DATE_CREATED]),
       [FILTERS.DATE_UPDATED]: buildDateTimeRangeQuery.bind(null, [FILTERS.DATE_UPDATED]),
@@ -156,13 +169,9 @@ export const buildTitlesQuery = (queryParams, options) => {
       [FILTERS.EXPECTED_RECEIPT_DATE]: buildDateRangeQuery.bind(null, [FILTERS.EXPECTED_RECEIPT_DATE]),
       [FILTERS.RECEIVED_DATE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIVED_DATE]),
       [FILTERS.RECEIPT_DUE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIPT_DUE]),
-      [FILTERS.LOCATION]: (filterValue) => `(${
-        [FILTERS.LOCATION, 'poLine.searchLocationIds']
-          .map((filterKey) => buildArrayFieldQuery(filterKey, filterValue))
-          .join(' or ')
-      })`,
-      [FILTERS.POL_TAGS]: buildArrayFieldQuery.bind(null, [FILTERS.POL_TAGS]),
-      [FILTERS.ACQUISITIONS_UNIT]: buildArrayFieldQuery.bind(null, [FILTERS.ACQUISITIONS_UNIT]),
+      [FILTERS.LOCATION]: (filterValue) => buildLocationsQuery(filterValue),
+      [FILTERS.POL_TAGS]: buildMultiSelectionCqlQuery.bind(null, FILTERS.POL_TAGS),
+      [FILTERS.ACQUISITIONS_UNIT]: buildMultiSelectionCqlQuery.bind(null, FILTERS.ACQUISITIONS_UNIT),
     },
     true,
     options,

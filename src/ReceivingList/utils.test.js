@@ -1,5 +1,6 @@
 import {
   CONSORTIUM_LOCATIONS_API,
+  CQLBuilder,
   HOLDINGS_API,
   LIMIT_MAX,
   LINES_API,
@@ -25,6 +26,8 @@ jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
   getConsortiumCentralTenantId: jest.fn(() => 'centralTenantId'),
 }));
+
+const { FUZZY, OR } = CQLBuilder.OPERATORS;
 
 describe('ReceivingList utils', () => {
   describe('fetchTitleOrderLines', () => {
@@ -252,7 +255,12 @@ describe('ReceivingList utils', () => {
     it('should return search query based on location filter', () => {
       const query = buildTitlesQuery({ [FILTERS.LOCATION]: 'locationId' });
 
-      expect(query).toContain('(poLine.locations=="*locationId*" or poLine.searchLocationIds=="*locationId*")');
+      expect(query).toContain(
+        [
+          `poLine.locations ${FUZZY}/@locationId "locationId"`,
+          `poLine.searchLocations${FUZZY}"locationId"`,
+        ].join(` ${OR} `),
+      );
     });
   });
 
