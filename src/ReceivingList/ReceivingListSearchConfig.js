@@ -21,13 +21,13 @@ export const searchableIndexes = [
 
 const buildEqualQuery = (sIndex, sQuery) => new CQLBuilder().equal(sIndex, sQuery).build();
 
-const formatSearchQueryMap = {
+const formatSearchCqlMap = {
   [INDEXES.PO_LINE_NUMBER]: (sIndex, sQuery) => buildEqualQuery(sIndex, sQuery),
   [INDEXES.PO_NUMBER]: (sIndex, sQuery) => buildEqualQuery(sIndex, sQuery),
 };
 
-export const formatSearchQuery = (sIndex, sQuery) => {
-  const formatQueryFn = formatSearchQueryMap[sIndex];
+export const formatSearchCql = (sIndex, sQuery) => {
+  const formatQueryFn = formatSearchCqlMap[sIndex];
 
   return formatQueryFn
     ? formatQueryFn(sIndex, sQuery)
@@ -36,7 +36,7 @@ export const formatSearchQuery = (sIndex, sQuery) => {
 
 export const getKeywordQuery = (query) => INDEXES_VALUES.reduce(
   (acc, sIndex) => {
-    const formattedQuery = formatSearchQuery(sIndex, query);
+    const formattedQuery = formatSearchCql(sIndex, query);
 
     if (acc) {
       return `${acc} or ${formattedQuery}`;

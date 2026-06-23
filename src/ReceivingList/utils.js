@@ -27,7 +27,7 @@ import {
   ORDER_FORMAT_MATERIAL_TYPE_MAP,
 } from './constants';
 import {
-  formatSearchQuery,
+  formatSearchCql,
   getKeywordQuery,
 } from './ReceivingListSearchConfig';
 
@@ -126,7 +126,7 @@ const buildLocationsQuery = (filterValue) => {
 
 const getSearchQuery = (query, qindex) => {
   if (qindex) {
-    return formatSearchQuery(qindex, query);
+    return formatSearchCql(qindex, query);
   }
 
   return getKeywordQuery(query);
