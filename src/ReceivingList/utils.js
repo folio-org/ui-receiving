@@ -8,7 +8,7 @@ import {
   buildDateRangeQuery,
   buildDateTimeRangeQuery,
   buildFilterQuery,
-  buildMultiSelectionCqlQuery,
+  buildMultiOptionCqlQuery,
   buildSortingQuery,
   connectQuery,
   CQLBuilder,
@@ -119,8 +119,8 @@ export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) =
 
 const buildLocationsQuery = (filterValue) => {
   return [
-    buildMultiSelectionCqlQuery(FILTERS.LOCATION, filterValue, { modifiers: [{ name: '@locationId' }] }),
-    buildMultiSelectionCqlQuery('poLine.searchLocations', filterValue),
+    buildMultiOptionCqlQuery(FILTERS.LOCATION, filterValue, { modifiers: [{ name: '@locationId' }] }),
+    buildMultiOptionCqlQuery('poLine.searchLocations', filterValue),
   ].join(` ${CQLBuilder.OPERATORS.OR} `);
 };
 
@@ -170,8 +170,8 @@ export const buildTitlesQuery = (queryParams, options) => {
       [FILTERS.RECEIVED_DATE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIVED_DATE]),
       [FILTERS.RECEIPT_DUE]: buildDateRangeQuery.bind(null, [FILTERS.RECEIPT_DUE]),
       [FILTERS.LOCATION]: (filterValue) => buildLocationsQuery(filterValue),
-      [FILTERS.POL_TAGS]: buildMultiSelectionCqlQuery.bind(null, FILTERS.POL_TAGS),
-      [FILTERS.ACQUISITIONS_UNIT]: buildMultiSelectionCqlQuery.bind(null, FILTERS.ACQUISITIONS_UNIT),
+      [FILTERS.POL_TAGS]: buildMultiOptionCqlQuery.bind(null, FILTERS.POL_TAGS),
+      [FILTERS.ACQUISITIONS_UNIT]: buildMultiOptionCqlQuery.bind(null, FILTERS.ACQUISITIONS_UNIT),
     },
     true,
     options,
