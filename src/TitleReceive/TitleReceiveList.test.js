@@ -52,30 +52,20 @@ const defaultProps = {
 };
 
 const queryClient = new QueryClient();
-const renderTitleReceiveList = (props = {}) => {
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <Form onSubmit={() => {}} render={() => <TitleReceiveList {...defaultProps} {...props} />} />
-    </QueryClientProvider>,
-  );
-};
+const buildTitleReceiveList = (props = {}) => (
+  <QueryClientProvider client={queryClient}>
+    <Form onSubmit={() => {}} render={() => <TitleReceiveList {...defaultProps} {...props} />} />
+  </QueryClientProvider>
+);
+const renderTitleReceiveList = (props = {}) => render(buildTitleReceiveList(props));
 
 describe('Render TitleReceiveList', () => {
   beforeEach(() => {
     MultiColumnList.mockClear();
+    useNumberGeneratorOptions.mockReturnValue({ data: {} });
   });
 
   it('should render MultiColumnList with autosize prop', () => {
-    useNumberGeneratorOptions.mockReturnValue({
-      data: {
-        [BARCODE_SETTING]: GENERATOR_OFF,
-        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
-        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
-      },
-      isLoading: false,
-      error: null,
-    });
-
     renderTitleReceiveList();
 
     expect(MultiColumnList).toHaveBeenCalledWith(
@@ -121,36 +111,14 @@ describe('Render TitleReceiveList', () => {
   });
 
   it('should keep contentData reference stable when only form-bound fields change', () => {
-    useNumberGeneratorOptions.mockReturnValue({
-      data: {
-        [BARCODE_SETTING]: GENERATOR_OFF,
-        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
-        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
-      },
-      isLoading: false,
-      error: null,
-    });
-
     const baseRecord = { id: 'a', itemId: 'i', format: 'P', isCreateItem: false };
-    const renderWith = (value) => (
-      <QueryClientProvider client={queryClient}>
-        <Form
-          onSubmit={() => {}}
-          render={() => (
-            <TitleReceiveList
-              fields={{ value: [value], name: 'receivedItems' }}
-              props={defaultProps.props}
-            />
-          )}
-        />
-      </QueryClientProvider>
-    );
+    const fieldsWith = (value) => ({ fields: { value: [value], name: 'receivedItems' } });
 
-    const { rerender } = render(renderWith({ ...baseRecord, displaySummary: 'old' }));
+    const { rerender } = render(buildTitleReceiveList(fieldsWith({ ...baseRecord, displaySummary: 'old' })));
     const firstContentData = MultiColumnList.mock.calls[0][0].contentData;
 
     MultiColumnList.mockClear();
-    rerender(renderWith({ ...baseRecord, displaySummary: 'new' }));
+    rerender(buildTitleReceiveList(fieldsWith({ ...baseRecord, displaySummary: 'new' })));
 
     const secondContentData = MultiColumnList.mock.calls[0][0].contentData;
 
@@ -158,36 +126,14 @@ describe('Render TitleReceiveList', () => {
   });
 
   it('should rebuild contentData reference when a record field changes', () => {
-    useNumberGeneratorOptions.mockReturnValue({
-      data: {
-        [BARCODE_SETTING]: GENERATOR_OFF,
-        [CALL_NUMBER_SETTING]: GENERATOR_OFF,
-        [ACCESSION_NUMBER_SETTING]: GENERATOR_OFF,
-      },
-      isLoading: false,
-      error: null,
-    });
-
     const baseRecord = { id: 'a', itemId: 'i', isCreateItem: false, displaySummary: 'x' };
-    const renderWith = (value) => (
-      <QueryClientProvider client={queryClient}>
-        <Form
-          onSubmit={() => {}}
-          render={() => (
-            <TitleReceiveList
-              fields={{ value: [value], name: 'receivedItems' }}
-              props={defaultProps.props}
-            />
-          )}
-        />
-      </QueryClientProvider>
-    );
+    const fieldsWith = (value) => ({ fields: { value: [value], name: 'receivedItems' } });
 
-    const { rerender } = render(renderWith({ ...baseRecord, format: 'Physical' }));
+    const { rerender } = render(buildTitleReceiveList(fieldsWith({ ...baseRecord, format: 'Physical' })));
     const firstContentData = MultiColumnList.mock.calls[0][0].contentData;
 
     MultiColumnList.mockClear();
-    rerender(renderWith({ ...baseRecord, format: 'Electronic' }));
+    rerender(buildTitleReceiveList(fieldsWith({ ...baseRecord, format: 'Electronic' })));
 
     const secondContentData = MultiColumnList.mock.calls[0][0].contentData;
 
