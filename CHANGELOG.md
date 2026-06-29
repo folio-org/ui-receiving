@@ -2,6 +2,7 @@
 
 ## 8.1.0 (IN PROGRESS)
 
+* Add column manager to the Receive table. Refs UIREC-492.
 * Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
 * Add notice when searching sequences in number generators modal without permissions. Refs SI-166.
 

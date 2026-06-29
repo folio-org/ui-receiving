@@ -136,8 +136,28 @@ export const PIECE_COLUMN_BASE_FORMATTER = {
   [PIECE_COLUMNS.status]: record => record.receivingStatus || <NoValue />,
 };
 
+export const RECEIVE_PIECE_VISIBLE_COLUMNS = [
+  PIECE_COLUMNS.displaySummary,
+  PIECE_COLUMNS.enumeration,
+  PIECE_COLUMNS.chronology,
+  PIECE_COLUMNS.copyNumber,
+  PIECE_COLUMNS.accessionNumber,
+  PIECE_COLUMNS.barcode,
+  PIECE_COLUMNS.format,
+  PIECE_COLUMNS.receiptDate,
+  PIECE_COLUMNS.request,
+  PIECE_COLUMNS.comment,
+  PIECE_COLUMNS.location,
+  PIECE_COLUMNS.itemStatus,
+  PIECE_COLUMNS.callNumber,
+  PIECE_COLUMNS.isCreateItem,
+  PIECE_COLUMNS.displayOnHolding,
+  PIECE_COLUMNS.supplement,
+];
+
 export const EXPECTED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, EXPECTED_PIECE_VISIBLE_COLUMNS);
 export const RECEIVED_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, RECEIVED_PIECE_VISIBLE_COLUMNS);
+export const RECEIVE_PIECE_COLUMN_MAPPING = pick(PIECE_COLUMN_MAPPING, RECEIVE_PIECE_VISIBLE_COLUMNS);
 export const UNRECEIVABLE_PIECE_COLUMN_MAPPING = {
   ...pick(PIECE_COLUMN_MAPPING, UNRECEIVABLE_PIECE_VISIBLE_COLUMNS),
   [PIECE_COLUMNS.callNumber]: <FormattedMessage id="ui-receiving.piece.callNumber" />,

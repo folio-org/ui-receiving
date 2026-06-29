@@ -22,6 +22,7 @@ import {
   GENERATOR_ON,
   GENERATOR_OFF,
 } from '../common/constants';
+import { RECEIVE_PIECE_VISIBLE_COLUMNS } from '../Piece/constants';
 import { TitleReceiveList } from './TitleReceiveList';
 
 jest.mock('../common/hooks', () => ({
@@ -48,6 +49,7 @@ const defaultProps = {
     toggleCheckedAll: jest.fn(),
     poLineLocationIds: [],
     locations: [],
+    visibleColumns: RECEIVE_PIECE_VISIBLE_COLUMNS,
   },
 };
 
@@ -72,6 +74,28 @@ describe('Render TitleReceiveList', () => {
       expect.objectContaining({ autosize: true }),
       expect.anything(),
     );
+  });
+
+  it('should prepend the checked column to the visibleColumns from props', () => {
+    renderTitleReceiveList();
+
+    const { visibleColumns } = MultiColumnList.mock.calls.at(-1)[0];
+
+    expect(visibleColumns[0]).toBe('checked');
+    expect(visibleColumns).not.toContain('actions');
+  });
+
+  it('should pass only the checked column and the provided visibleColumns when some are hidden', () => {
+    renderTitleReceiveList({
+      props: {
+        ...defaultProps.props,
+        visibleColumns: ['displaySummary', 'barcode'],
+      },
+    });
+
+    const { visibleColumns } = MultiColumnList.mock.calls.at(-1)[0];
+
+    expect(visibleColumns).toEqual(['checked', 'displaySummary', 'barcode']);
   });
 
   it('should not show the number generator button if generator settings are off', async () => {

@@ -5,8 +5,15 @@ import {
 } from 'react-query';
 import { MemoryRouter } from 'react-router-dom';
 
-import { render } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  fireEvent,
+  render,
+} from '@folio/jest-config-stripes/testing-library/react';
 
+import {
+  PIECE_COLUMNS,
+  RECEIVE_PIECE_VISIBLE_COLUMNS,
+} from '../Piece/constants';
 import TitleReceive from './TitleReceive';
 
 jest.mock('@folio/stripes/components', () => ({
@@ -158,6 +165,21 @@ describe('Receiving title', () => {
       });
 
       expect(getByText(submitButtonLabel)).toBeInTheDocument();
+    });
+  });
+
+  describe('Column manager', () => {
+    it('should render a column checkbox for every non-mandatory column', () => {
+      renderTitleReceive();
+
+      fireEvent.click(document.querySelector('[data-test-pane-header-actions-button]'));
+
+      RECEIVE_PIECE_VISIBLE_COLUMNS
+        .filter((key) => key !== PIECE_COLUMNS.displaySummary)
+        .forEach((key) => {
+          expect(document.getElementById(`receive-piece-column-checkbox-${key}`)).toBeInTheDocument();
+        });
+      expect(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.displaySummary}`)).not.toBeInTheDocument();
     });
   });
 });
