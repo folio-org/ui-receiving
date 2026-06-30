@@ -8,6 +8,7 @@ import { MemoryRouter } from 'react-router-dom';
 import {
   fireEvent,
   render,
+  screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import {
@@ -180,6 +181,23 @@ describe('Receiving title', () => {
           expect(document.getElementById(`receive-piece-column-checkbox-${key}`)).toBeInTheDocument();
         });
       expect(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.displaySummary}`)).not.toBeInTheDocument();
+    });
+
+    it('should keep a hidden column field value in form state and restore it when shown again', () => {
+      renderTitleReceive();
+
+      // The barcode field is visible by default and shows its initial value.
+      expect(screen.getByDisplayValue('10001')).toBeInTheDocument();
+
+      fireEvent.click(document.querySelector('[data-test-pane-header-actions-button]'));
+
+      // Hiding the barcode column unmounts the field, but its value is preserved.
+      fireEvent.click(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.barcode}`));
+      expect(screen.queryByDisplayValue('10001')).not.toBeInTheDocument();
+
+      // Showing it again restores the field with the original value.
+      fireEvent.click(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.barcode}`));
+      expect(screen.getByDisplayValue('10001')).toBeInTheDocument();
     });
   });
 });
