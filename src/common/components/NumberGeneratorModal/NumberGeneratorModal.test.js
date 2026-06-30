@@ -5,6 +5,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { Button as MockButton } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
 
 import NumberGeneratorModal from './NumberGeneratorModal';
 
@@ -274,5 +275,33 @@ describe('Render NumberGeneratorModal', () => {
       expect(mockGenerate).toHaveBeenCalled();
       expect(mockGenerate).toHaveBeenCalledTimes(2);
     });
+  });
+});
+
+describe('Render NumberGeneratorModal without permission', () => {
+  let originalUseStripesImpl;
+
+  beforeEach(() => {
+    originalUseStripesImpl = useStripes.getMockImplementation();
+    useStripes.mockImplementation(() => ({ hasPerm: () => false }));
+  });
+
+  afterEach(() => {
+    useStripes.mockImplementation(originalUseStripesImpl);
+  });
+
+  it('should render the no permission notice instead of the selectors', () => {
+    renderNumberGeneratorModal({
+      accessionNumber: 'onEditable',
+      barcode: 'onEditable',
+      callNumber: 'onEditable',
+      useSharedNumber: false,
+    });
+
+    expect(screen.getByText('ui-receiving.numberGenerator.noPermission')).toBeInTheDocument();
+    expect(screen.queryByText('ui-receiving.numberGenerator.generateHelpText')).not.toBeInTheDocument();
+    expect(screen.queryByText('ui-receiving.numberGenerator.accessionNumberSequence')).not.toBeInTheDocument();
+    expect(screen.queryByText('ui-receiving.numberGenerator.barcodeSequence')).not.toBeInTheDocument();
+    expect(screen.queryByText('ui-receiving.numberGenerator.callNumberSequence')).not.toBeInTheDocument();
   });
 });
