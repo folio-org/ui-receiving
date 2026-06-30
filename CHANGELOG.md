@@ -3,6 +3,7 @@
 ## 8.1.0 (IN PROGRESS)
 
 * Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
+* Add notice when searching sequences in number generators modal without permissions. Refs SI-166.
 
 ## [8.0.4](https://github.com/folio-org/ui-receiving/tree/v8.0.4) (2026-05-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.3...v8.0.4)
