@@ -11,6 +11,7 @@ import {
   Modal,
   ModalFooter,
 } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
 
 import {
   ACCESSION_NUMBER_GENERATOR_CODE,
@@ -31,6 +32,9 @@ const NumberGeneratorModal = ({
   const [selectedAccessionNumberSequence, setSelectedAccessionNumberSequence] = useState();
   const [selectedBarcodeSequence, setSelectedBarcodeSequence] = useState();
   const [selectedCallNumberSequence, setSelectedCallNumberSequence] = useState();
+
+  const stripes = useStripes();
+  const hasPerm = stripes.hasPerm('ui-service-interaction.numberGenerator.view');
 
   // In the case of "useAccessionNumberForCallNumber" this should do both callbacks
   const accessionNumberCallback = (val) => {
@@ -157,21 +161,26 @@ const NumberGeneratorModal = ({
       onClose={onClose}
       open={open}
     >
-      <FormattedMessage id="ui-receiving.numberGenerator.generateHelpText" />
-      {(
-        numberGeneratorData.barcode === 'onNotEditable' ||
-        numberGeneratorData.barcode === 'onEditable'
-      ) &&
-        <NumberGeneratorSelector
-          displayClearItem
-          generator={BARCODE_GENERATOR_CODE}
-          id={`${BARCODE_GENERATOR_CODE}-selector`}
-          label={<FormattedMessage id="ui-receiving.numberGenerator.barcodeSequence" />}
-          onSequenceChange={seq => setSelectedBarcodeSequence(seq)}
-          selectFirstSequenceOnMount={false}
-        />
+      {hasPerm ? (
+        <>
+          <FormattedMessage id="ui-receiving.numberGenerator.generateHelpText" />
+          {(
+            numberGeneratorData.barcode === 'onNotEditable' ||
+            numberGeneratorData.barcode === 'onEditable'
+          ) &&
+            <NumberGeneratorSelector
+              displayClearItem
+              generator={BARCODE_GENERATOR_CODE}
+              id={`${BARCODE_GENERATOR_CODE}-selector`}
+              label={<FormattedMessage id="ui-receiving.numberGenerator.barcodeSequence" />}
+              onSequenceChange={seq => setSelectedBarcodeSequence(seq)}
+              selectFirstSequenceOnMount={false}
+            />
+          }
+          {renderAccessionAndCallNumberSelectors()}
+        </>
+      ) : <FormattedMessage id="ui-receiving.numberGenerator.noPermission" />
       }
-      {renderAccessionAndCallNumberSelectors()}
     </Modal>
   );
 };
