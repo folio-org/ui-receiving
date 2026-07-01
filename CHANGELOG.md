@@ -1,6 +1,8 @@
 # Change history for ui-receiving
 
-## 8.1.0 (IN PROGRESS)
+## 9.0.0 (IN PROGRESS)
+
+* *BREAKING* Update CQL queries to use the new indices. Refs UIREC-504.
 
 * Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
 * Add notice when searching sequences in number generators modal without permissions. Refs SI-166.

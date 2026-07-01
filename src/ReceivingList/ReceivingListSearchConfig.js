@@ -1,27 +1,44 @@
-const indexes = [
-  'title',
-  'poLine.titleOrPackage',
-  'productIds',
-  'purchaseOrder.poNumber',
-  'poLine.poLineNumber',
-  'poLine.vendorDetail.referenceNumbers',
-];
+import { CQLBuilder } from '@folio/stripes-acq-components';
+
+const INDEXES = {
+  TITLE: 'title',
+  TITLE_OR_PACKAGE: 'poLine.titleOrPackage',
+  PRODUCT_IDS: 'productIds',
+  PO_NUMBER: 'purchaseOrder.poNumber',
+  PO_LINE_NUMBER: 'poLine.poLineNumber',
+  VENDOR_DETAIL_REFERENCE_NUMBERS: 'poLine.vendorDetail.referenceNumbers',
+};
+
+const INDEXES_VALUES = Object.values(INDEXES);
 
 export const searchableIndexes = [
   {
     labelId: 'ui-receiving.search.keyword',
     value: '',
   },
-  ...indexes.map(index => ({ labelId: `ui-receiving.search.${index}`, value: index })),
+  ...INDEXES_VALUES.map(index => ({ labelId: `ui-receiving.search.${index}`, value: index })),
 ];
 
-export const getKeywordQuery = query => indexes.reduce(
+const buildEqualQuery = (sIndex, sQuery) => new CQLBuilder().equal(sIndex, sQuery).build();
+
+const formatSearchCqlMap = {
+  [INDEXES.PO_LINE_NUMBER]: buildEqualQuery,
+  [INDEXES.PO_NUMBER]: buildEqualQuery,
+};
+
+export const formatSearchCql = (sIndex, sQuery) => {
+  const formatCqlFn = formatSearchCqlMap[sIndex];
+
+  return formatCqlFn
+    ? formatCqlFn(sIndex, sQuery)
+    : new CQLBuilder().fuzzy(sIndex, sQuery).build();
+};
+
+export const getKeywordQuery = (query) => INDEXES_VALUES.reduce(
   (acc, sIndex) => {
-    if (acc) {
-      return `${acc} or ${sIndex}=="*${query}*"`;
-    } else {
-      return `${sIndex}=="*${query}*"`;
-    }
+    const formattedQuery = formatSearchCql(sIndex, query);
+
+    return acc ? `${acc} or ${formattedQuery}` : formattedQuery;
   },
   '',
 );
