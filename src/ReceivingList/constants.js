@@ -1,6 +1,50 @@
+import { FormattedMessage } from 'react-intl';
+
 import {
   ORDER_FORMATS,
 } from '@folio/stripes-acq-components';
+
+export const RECEIVING_COLUMNS = {
+  TITLE: 'title',
+  EXPECTED_RECEIPT_DATE: 'poLine.physical.expectedReceiptDate',
+  TITLE_OR_PACKAGE: 'poLine.titleOrPackage',
+  PO_LINE_NUMBER: 'poLine.poLineNumber',
+  RECEIVING_NOTE: 'poLine.receivingNote',
+  LOCATIONS: 'locations',
+  ORDER_WORKFLOW: 'orderWorkflow',
+};
+
+export const RECEIVING_VISIBLE_COLUMNS = [
+  RECEIVING_COLUMNS.TITLE,
+  RECEIVING_COLUMNS.EXPECTED_RECEIPT_DATE,
+  RECEIVING_COLUMNS.TITLE_OR_PACKAGE,
+  RECEIVING_COLUMNS.PO_LINE_NUMBER,
+  RECEIVING_COLUMNS.RECEIVING_NOTE,
+  RECEIVING_COLUMNS.LOCATIONS,
+  RECEIVING_COLUMNS.ORDER_WORKFLOW,
+];
+
+export const RECEIVING_MANDATORY_COLUMNS = [RECEIVING_COLUMNS.TITLE];
+
+export const RECEIVING_COLUMN_MAPPING = {
+  [RECEIVING_COLUMNS.TITLE]: <FormattedMessage id="ui-receiving.titles.title" />,
+  [RECEIVING_COLUMNS.EXPECTED_RECEIPT_DATE]: <FormattedMessage id="ui-receiving.title.expectedReceiptDate" />,
+  [RECEIVING_COLUMNS.TITLE_OR_PACKAGE]: <FormattedMessage id="ui-receiving.title.package" />,
+  [RECEIVING_COLUMNS.PO_LINE_NUMBER]: <FormattedMessage id="ui-receiving.title.polNumber" />,
+  [RECEIVING_COLUMNS.RECEIVING_NOTE]: <FormattedMessage id="ui-receiving.title.receivingNote" />,
+  [RECEIVING_COLUMNS.LOCATIONS]: <FormattedMessage id="ui-receiving.title.locations" />,
+  [RECEIVING_COLUMNS.ORDER_WORKFLOW]: <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
+};
+
+export const RECEIVING_SORTABLE_FIELDS = [
+  RECEIVING_COLUMNS.TITLE,
+  'poLine.receiptDate',
+  RECEIVING_COLUMNS.TITLE_OR_PACKAGE,
+  RECEIVING_COLUMNS.PO_LINE_NUMBER,
+  RECEIVING_COLUMNS.RECEIVING_NOTE,
+];
+
+export const RECEIVING_COLUMN_MANAGER_ID = 'receiving-list';
 
 export const FILTERS = {
   ACQUISITIONS_UNIT: 'purchaseOrder.acqUnitIds',
