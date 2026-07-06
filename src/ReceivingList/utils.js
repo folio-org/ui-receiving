@@ -118,10 +118,12 @@ export const fetchConsortiumOrderLineLocations = (ky, stripes) => (orderLines) =
 };
 
 const buildLocationsQuery = (filterValue) => {
-  return [
+  const query = [
     buildMultiOptionCqlQuery(FILTERS.LOCATION, filterValue, { modifiers: [{ name: '@locationId' }] }),
     buildMultiOptionCqlQuery('poLine.searchLocations', filterValue),
   ].join(` ${CQLBuilder.OPERATORS.OR} `);
+
+  return `(${query})`;
 };
 
 const getSearchQuery = (query, qindex) => {
