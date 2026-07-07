@@ -5,8 +5,16 @@ import {
 } from 'react-query';
 import { MemoryRouter } from 'react-router-dom';
 
-import { render } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 
+import {
+  PIECE_COLUMNS,
+  RECEIVE_PIECE_VISIBLE_COLUMNS,
+} from '../Piece/constants';
 import TitleReceive from './TitleReceive';
 
 jest.mock('@folio/stripes/components', () => ({
@@ -158,6 +166,38 @@ describe('Receiving title', () => {
       });
 
       expect(getByText(submitButtonLabel)).toBeInTheDocument();
+    });
+  });
+
+  describe('Column manager', () => {
+    it('should render a column checkbox for every non-mandatory column', () => {
+      renderTitleReceive();
+
+      fireEvent.click(document.querySelector('[data-test-pane-header-actions-button]'));
+
+      RECEIVE_PIECE_VISIBLE_COLUMNS
+        .filter((key) => key !== PIECE_COLUMNS.displaySummary)
+        .forEach((key) => {
+          expect(document.getElementById(`receive-piece-column-checkbox-${key}`)).toBeInTheDocument();
+        });
+      expect(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.displaySummary}`)).not.toBeInTheDocument();
+    });
+
+    it('should keep a hidden column field value in form state and restore it when shown again', () => {
+      renderTitleReceive();
+
+      // The barcode field is visible by default and shows its initial value.
+      expect(screen.getByDisplayValue('10001')).toBeInTheDocument();
+
+      fireEvent.click(document.querySelector('[data-test-pane-header-actions-button]'));
+
+      // Hiding the barcode column unmounts the field, but its value is preserved.
+      fireEvent.click(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.barcode}`));
+      expect(screen.queryByDisplayValue('10001')).not.toBeInTheDocument();
+
+      // Showing it again restores the field with the original value.
+      fireEvent.click(document.getElementById(`receive-piece-column-checkbox-${PIECE_COLUMNS.barcode}`));
+      expect(screen.getByDisplayValue('10001')).toBeInTheDocument();
     });
   });
 });

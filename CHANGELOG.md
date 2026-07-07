@@ -6,6 +6,7 @@
 * Standardize scrollbar behavior of the Receive table. Refs UIREC-493.
 * *BREAKING* Update CQL queries to use the new indices. Refs UIREC-504.
 * Add notice when searching sequences in number generators modal without permissions. Refs SI-166.
+* Add column manager to the Receive table. Refs UIREC-492.
 
 ## [8.0.4](https://github.com/folio-org/ui-receiving/tree/v8.0.4) (2026-05-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.3...v8.0.4)

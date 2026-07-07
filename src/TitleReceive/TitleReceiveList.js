@@ -60,26 +60,6 @@ import {
 } from '../Piece';
 import { useFieldArrowNavigation } from './useFieldArrowNavigation';
 
-const visibleColumns = [
-  'checked',
-  PIECE_COLUMNS.displaySummary,
-  PIECE_COLUMNS.enumeration,
-  PIECE_COLUMNS.chronology,
-  PIECE_COLUMNS.copyNumber,
-  PIECE_COLUMNS.accessionNumber,
-  PIECE_COLUMNS.barcode,
-  PIECE_COLUMNS.format,
-  PIECE_COLUMNS.receiptDate,
-  PIECE_COLUMNS.request,
-  PIECE_COLUMNS.comment,
-  PIECE_COLUMNS.location,
-  PIECE_COLUMNS.itemStatus,
-  PIECE_COLUMNS.callNumber,
-  PIECE_COLUMNS.isCreateItem,
-  PIECE_COLUMNS.displayOnHolding,
-  PIECE_COLUMNS.supplement,
-];
-
 // Only the fields actually consumed by cell formatters or CreateItemField.
 // Form-bound values (displaySummary, enumeration, comment, etc.) are resolved
 // via <Field name> and must be excluded so MCL's dataChangedOrLess() does not
@@ -328,6 +308,7 @@ export const TitleReceiveList = ({ fields, props }) => {
     toggleCheckedAll = defaultListProps.toggleCheckedAll,
     locations = defaultListProps.locations,
     poLineLocationIds = defaultListProps.poLineLocationIds,
+    visibleColumns = [],
   } = props || {};
 
   const eventEmitter = useEventEmitter();
@@ -412,7 +393,7 @@ export const TitleReceiveList = ({ fields, props }) => {
   }, [fields.value]);
 
   const visibleColumnsWithActions = useMemo(() => {
-    const vcwa = [...visibleColumns];
+    const vcwa = ['checked', ...visibleColumns];
 
     if (
       numberGeneratorData[ACCESSION_NUMBER_SETTING] === GENERATOR_ON ||
@@ -427,7 +408,7 @@ export const TitleReceiveList = ({ fields, props }) => {
     }
 
     return vcwa;
-  }, [numberGeneratorData]);
+  }, [numberGeneratorData, visibleColumns]);
 
   return (
     <>

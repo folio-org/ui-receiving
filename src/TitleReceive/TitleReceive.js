@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FieldArray } from 'react-final-form-arrays';
 
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -13,14 +13,24 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 import {
+  ColumnManagerMenu,
+  useColumnManager,
+} from '@folio/stripes/smart-components';
+import {
   FormFooter,
   handleKeyCommand,
 } from '@folio/stripes-acq-components';
 
 import { LineLocationsView } from '../common/components';
 import { setLocationValueFormMutator } from '../common/utils';
+import {
+  PIECE_COLUMNS,
+  RECEIVE_PIECE_COLUMN_MAPPING,
+} from '../Piece';
 import { TitleReceiveList } from './TitleReceiveList';
 import css from './TitleReceive.css';
+
+const COLUMN_MANAGER_ID = 'receive-piece-column-manager';
 
 const FIELD_NAME = 'receivedItems';
 
@@ -42,6 +52,21 @@ const TitleReceive = ({
   submitting,
   values,
 }) => {
+  const {
+    visibleColumns,
+    toggleColumn,
+  } = useColumnManager(COLUMN_MANAGER_ID, RECEIVE_PIECE_COLUMN_MAPPING);
+
+  const renderActionMenu = useCallback(() => (
+    <ColumnManagerMenu
+      prefix="receive-piece"
+      columnMapping={RECEIVE_PIECE_COLUMN_MAPPING}
+      visibleColumns={visibleColumns}
+      toggleColumn={toggleColumn}
+      excludeColumns={[PIECE_COLUMNS.displaySummary]}
+    />
+  ), [visibleColumns, toggleColumn]);
+
   const isReceiveDisabled = useMemo(() => {
     return isLoading || (isPiecesChunksExhausted && !values[FIELD_NAME].some(({ checked }) => checked));
   }, [isLoading, isPiecesChunksExhausted, values]);
@@ -93,6 +118,7 @@ const TitleReceive = ({
       >
         <Paneset>
           <Pane
+            actionMenu={renderActionMenu}
             defaultWidth="fill"
             dismissible
             footer={paneFooter}
@@ -129,6 +155,7 @@ const TitleReceive = ({
                     poLineLocationIds,
                     selectLocation: form.mutators.setLocationValue,
                     toggleCheckedAll: form.mutators.toggleCheckedAll,
+                    visibleColumns,
                   }}
                 />
               </div>
