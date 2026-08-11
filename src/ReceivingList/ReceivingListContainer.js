@@ -30,8 +30,6 @@ const ReceivingListContainer = () => {
   const {
     isLoading: isSearchModeLoading,
     crossTenant,
-    isCentralOrderingEnabled,
-    isTargetTenantCentral,
     targetTenantId,
   } = useReceivingSearchContext();
 
@@ -39,16 +37,15 @@ const ReceivingListContainer = () => {
 
   const fetchReferences = useCallback(async (titles, ky) => {
     const orderLinesResponse = await fetchTitleOrderLines(ky, titles, {});
-    const isConsortiaRequest = isCentralOrderingEnabled && isTargetTenantCentral;
 
     const holdingsResponse = await (
-      isConsortiaRequest
+      crossTenant
         ? fetchConsortiumOrderLineHoldings(ky, stripes)
         : fetchOrderLineHoldings(ky)
     )(orderLinesResponse);
 
     const locationsResponse = await (
-      isConsortiaRequest
+      crossTenant
         ? fetchConsortiumOrderLineLocations(ky, stripes)
         : fetchOrderLineLocations(ky)
     )(
@@ -101,7 +98,7 @@ const ReceivingListContainer = () => {
     }, {});
 
     return { orderLinesMap };
-  }, [invalidReferenceMessage, isCentralOrderingEnabled, isTargetTenantCentral, stripes]);
+  }, [crossTenant, invalidReferenceMessage, stripes]);
 
   const { pagination, changePage, refreshPage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
   const {
@@ -118,7 +115,7 @@ const ReceivingListContainer = () => {
     },
   });
 
-  const filtersStorageKey = `@folio/receiving/${isCentralOrderingEnabled && isTargetTenantCentral ? 'central/' : ''}filters`;
+  const filtersStorageKey = `@folio/receiving/${crossTenant ? 'central/' : ''}filters`;
 
   return (
     <ReceivingList

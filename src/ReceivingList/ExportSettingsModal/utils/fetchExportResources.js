@@ -84,16 +84,16 @@ export const fetchVendorsExportData = (ky) => (purchaseOrdersData = []) => {
   });
 };
 
-export const fetchItemsExportData = (ky, { isCentralOrderingEnabled }) => (piecesData = []) => {
-  return isCentralOrderingEnabled
+export const fetchItemsExportData = (ky, { crossTenant }) => (piecesData = []) => {
+  return crossTenant
     ? fetchConsortiumPiecesItems(ky)(piecesData)
     : fetchLocalPiecesItems(ky)(piecesData);
 };
 
-export const fetchLocationsExportData = (ky, { isCentralOrderingEnabled, stripes }) => async (piecesData) => {
+export const fetchLocationsExportData = (ky, { crossTenant, stripes }) => async (piecesData) => {
   const holdingIds = mapUniqElements(piecesData, ({ holdingId }) => holdingId);
 
-  const holdings = isCentralOrderingEnabled
+  const holdings = crossTenant
     ? await fetchConsortiumHoldingsByIds(ky, stripes)(holdingIds).then((res) => res.holdings)
     : await fetchExportDataByIds({
       api: HOLDINGS_API,
@@ -107,7 +107,7 @@ export const fetchLocationsExportData = (ky, { isCentralOrderingEnabled, stripes
     ...holdings.map(({ permanentLocationId }) => permanentLocationId),
   ];
 
-  const locations = isCentralOrderingEnabled
+  const locations = crossTenant
     ? await fetchAllRecords({
       GET: async ({ params: searchParams }) => {
         return getConsortiumCentralTenantKy(ky, stripes)

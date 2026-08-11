@@ -109,7 +109,7 @@ describe('fetchExportResources', () => {
     });
 
     it('should fetch consortium items by ids', async () => {
-      await fetchItemsExportData(kyMock, { isCentralOrderingEnabled: true })(pieces);
+      await fetchItemsExportData(kyMock, { crossTenant: true })(pieces);
 
       expect(fetchConsortiumPiecesItems.mock.results[0].value).toHaveBeenCalledWith(pieces);
     });
@@ -130,7 +130,7 @@ describe('fetchExportResources', () => {
     });
 
     it('should fetch consortium pieces holdings and locations by ids', async () => {
-      await fetchLocationsExportData(kyMock, { isCentralOrderingEnabled: true })(pieces);
+      await fetchLocationsExportData(kyMock, { crossTenant: true })(pieces);
 
       expect(fetchConsortiumHoldingsByIds.mock.results[0].value).toHaveBeenCalledWith(['holdingId']);
       expect(centralTenantKyMock.get).toHaveBeenCalled();

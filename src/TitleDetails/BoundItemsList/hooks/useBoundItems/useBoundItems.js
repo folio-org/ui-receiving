@@ -24,17 +24,16 @@ export const useBoundItems = ({ titleId, poLineId, options = {} }) => {
 
   const {
     activeTenantId,
+    crossTenant,
     isCentralOrderingEnabled,
     targetTenantId,
-    isTargetTenantCentral,
     centralTenantId,
   } = useReceivingSearchContext();
   const ky = useOkapiKy({ tenant: targetTenantId });
 
   let boundItemsQuery = `titleId==${titleId} and poLineId==${poLineId} and isBound==true`;
   const showActiveTenantItems = (
-    isCentralOrderingEnabled
-    && isTargetTenantCentral
+    crossTenant
     && (centralTenantId !== activeTenantId)
   );
 

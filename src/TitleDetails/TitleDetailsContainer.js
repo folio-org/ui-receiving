@@ -57,7 +57,6 @@ const TitleDetailsContainer = ({
     activeTenantId,
     centralTenantId,
     crossTenant,
-    isCentralOrderingEnabled,
     isCentralRouting,
     targetTenantId: tenantId,
   } = useReceivingSearchContext();
@@ -186,7 +185,6 @@ const TitleDetailsContainer = ({
 
   return (
     <TitleDetails
-      crossTenant={isCentralOrderingEnabled}
       isLoading={isResourcesLoading}
       onClose={onClose}
       onEdit={onEdit}

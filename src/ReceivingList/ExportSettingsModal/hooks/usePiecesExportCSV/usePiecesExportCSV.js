@@ -10,7 +10,6 @@ import {
   useNamespace,
   useStripes,
 } from '@folio/stripes/core';
-import { useCentralOrderingContext } from '@folio/stripes-acq-components';
 
 import {
   EXPORT_PIECE_FIELDS,
@@ -20,16 +19,17 @@ import {
   createExportReport,
   getExportData,
 } from '../../utils';
+import { useReceivingSearchContext } from '../../../../contexts';
 
 export const usePiecesExportCSV = ({ tenantId, signal } = {}) => {
   const intl = useIntl();
   const ky = useOkapiKy({ tenant: tenantId });
   const stripes = useStripes();
   const [namespace] = useNamespace({ key: 'pieces-export-csv' });
-  const { isCentralOrderingEnabled } = useCentralOrderingContext();
+  const { crossTenant } = useReceivingSearchContext();
 
   const configs = {
-    isCentralOrderingEnabled,
+    crossTenant,
     stripes,
   };
 
