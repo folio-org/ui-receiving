@@ -15,7 +15,11 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { renderWithRouter } from 'helpers';
-import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
+import { ConnectedTasksJobsPane } from '../../common/components';
+import {
+  CONNECTED_RECORD_TYPES,
+  PIECE_FORM_FIELD_NAMES,
+} from '../../common/constants';
 import { PIECE_ACTION_NAMES } from '../constants';
 import { usePieceStatusChangeLog } from '../hooks';
 import PieceForm from './PieceForm';
@@ -25,6 +29,11 @@ jest.mock('@folio/stripes-acq-components', () => ({
   FieldInventory: jest.fn().mockReturnValue('FieldInventory'),
   useCentralOrderingContext: jest.fn(),
   useCurrentUserTenants: jest.fn(),
+}));
+jest.mock('../../common/components', () => ({
+  ...jest.requireActual('../../common/components'),
+  ConnectedTasksJobsButton: jest.fn(() => null),
+  ConnectedTasksJobsPane: jest.fn(() => null),
 }));
 jest.mock('../../common/components/LineLocationsView/LineLocationsView', () => jest.fn().mockReturnValue('LineLocationsView'));
 jest.mock('../hooks', () => ({
@@ -44,6 +53,7 @@ const defaultProps = {
   checkHoldingAbandonment: jest.fn(() => Promise.resolve({ willAbandoned: false })),
   createInventoryValues: {},
   onClose: jest.fn(),
+  onClaimSend: jest.fn(),
   onDelete: jest.fn(),
   onSubmit: jest.fn(),
   order: {
@@ -125,6 +135,31 @@ describe('PieceForm', () => {
     renderPieceForm();
 
     expect(screen.getByText(defaultProps.paneTitle)).toBeInTheDocument();
+  });
+
+  it('should pass existing Piece context to Connected Tasks/Jobs', () => {
+    const piece = {
+      id: 'pieceId',
+      displaySummary: 'Piece summary',
+      receiptDate: '2026-09-15',
+      receivingStatus: PIECE_STATUS.expected,
+      titleId: 'titleId',
+    };
+
+    renderPieceForm({ initialValues: piece });
+
+    expect(ConnectedTasksJobsPane.mock.calls.map(([props]) => props)).toContainEqual(
+      expect.objectContaining({
+        recordId: piece.id,
+        recordObject: {
+          displaySummary: piece.displaySummary,
+          expectedReceiptDate: piece.receiptDate,
+          receivingStatus: piece.receivingStatus,
+          titleId: piece.titleId,
+        },
+        recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
+      }),
+    );
   });
 
   describe('Close piece form', () => {

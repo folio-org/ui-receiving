@@ -1,5 +1,6 @@
 export * from './AffiliationsNavigation';
 export * from './ConfirmReceivingModal';
+export * from './ConnectedTasksJobs';
 export * from './CreateItemField';
 export * from './DateRangeModal';
 export * from './FieldClaimingDate';

@@ -3,6 +3,7 @@ import {
   screen,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { usePagination } from '@folio/stripes-acq-components';
 
 import { useReceiving } from './hooks';
 import ReceivingListContainer from './ReceivingListContainer';
@@ -18,7 +19,7 @@ import {
 
 jest.mock('@folio/stripes-acq-components', () => ({
   ...jest.requireActual('@folio/stripes-acq-components'),
-  usePagination: () => ({}),
+  usePagination: jest.fn(() => ({})),
 }));
 jest.mock('./ReceivingList', () => jest.fn().mockReturnValue('ReceivingList'));
 jest.mock('./hooks/useReceiving', () => ({
@@ -32,6 +33,7 @@ jest.mock('./utils', () => ({
   fetchOrderLineLocations: jest.fn(),
   fetchOrdersVendors: jest.fn(),
   fetchTitleOrderLines: jest.fn(),
+  LIST_IGNORED_QUERY_PARAMS: ['layer'],
 }));
 
 const renderReceivingListContainer = (props = {}) => render(
@@ -96,6 +98,10 @@ describe('ReceivingListContainer', () => {
     renderReceivingListContainer();
 
     expect(screen.getByText('ReceivingList')).toBeDefined();
+    expect(usePagination).toHaveBeenCalledWith(
+      expect.any(Object),
+      { ignoredSearchParams: ['layer'] },
+    );
   });
 
   it('should load order lines, orders and receiving locations when fetchReferences is called', async () => {
