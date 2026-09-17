@@ -61,6 +61,7 @@ import TitleDetailsContainer from '../TitleDetails';
 import {
   RECEIVING_COLUMN_MANAGER_ID,
   RECEIVING_COLUMN_MAPPING,
+  RECEIVING_COLUMN_WIDTHS,
   RECEIVING_SORTABLE_FIELDS,
 } from './constants';
 import { ExportSettingsModal } from './ExportSettingsModal';
@@ -246,6 +247,7 @@ const ReceivingList = ({
                 contentData={titles}
                 visibleColumns={visibleColumns}
                 columnMapping={RECEIVING_COLUMN_MAPPING}
+                columnWidths={RECEIVING_COLUMN_WIDTHS}
                 formatter={getResultsFormatter({ search: location.search, isCentralRouting })}
                 loading={isLoading}
                 onNeedMoreData={onNeedMoreData}

@@ -9,6 +9,7 @@
 * Add column manager to the Receive table. Refs UIREC-492.
 * Use `crossTenant` from the receiving search context to distinguish between central and local resources when fetching data. Refs UIREC-509.
 * Add "Vendor" column to the Receiving results list. Refs UIREC-499.
+* Set a fixed width for the "Title" column in the Receiving results list. Refs UIREC-510.
 
 ## [8.0.4](https://github.com/folio-org/ui-receiving/tree/v8.0.4) (2026-05-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.3...v8.0.4)
