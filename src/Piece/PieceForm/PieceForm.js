@@ -141,7 +141,7 @@ const PieceForm = ({
       recordId: id,
       recordObject: {
         displaySummary: formValues.displaySummary,
-        expectedReceiptDate: receiptDate,
+        receiptDate,
         receivingStatus,
         titleId,
       },

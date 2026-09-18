@@ -153,7 +153,7 @@ describe('PieceForm', () => {
         recordId: piece.id,
         recordObject: {
           displaySummary: piece.displaySummary,
-          expectedReceiptDate: piece.receiptDate,
+          receiptDate: piece.receiptDate,
           receivingStatus: piece.receivingStatus,
           titleId: piece.titleId,
         },

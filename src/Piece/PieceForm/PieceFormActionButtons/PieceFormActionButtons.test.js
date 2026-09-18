@@ -57,7 +57,7 @@ describe('PieceFormActionButtons', () => {
       recordId: 'pieceId',
       recordObject: {
         displaySummary: 'Piece summary',
-        expectedReceiptDate: '2026-09-15',
+        receiptDate: '2026-09-15',
         receivingStatus: PIECE_STATUS.expected,
       },
       recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
