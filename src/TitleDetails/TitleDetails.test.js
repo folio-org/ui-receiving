@@ -28,6 +28,11 @@ import {
 
 import { usePaginatedPieces } from '../common/hooks';
 import {
+  ConnectedTasksJobsButton,
+  ConnectedTasksJobsPane,
+} from '../common/components';
+import { CONNECTED_RECORD_TYPES } from '../common/constants';
+import {
   RECEIVING_PIECE_CREATE_ROUTE,
   RECEIVING_PIECE_EDIT_ROUTE,
 } from '../constants';
@@ -55,6 +60,8 @@ jest.mock('./Title', () => jest.fn().mockReturnValue('Title'));
 jest.mock('./POLDetails', () => jest.fn().mockReturnValue('POLDetails'));
 jest.mock('../common/components', () => ({
   ...jest.requireActual('../common/components'),
+  ConnectedTasksJobsButton: jest.fn(() => null),
+  ConnectedTasksJobsPane: jest.fn(() => null),
   LineLocationsView: jest.fn().mockReturnValue('LineLocationsView'),
 }));
 jest.mock('../common/hooks', () => ({
@@ -89,7 +96,7 @@ const defaultProps = {
     physical: { createInventory: INVENTORY_RECORDS_TYPE.instance },
     orderFormat: ORDER_FORMATS.PEMix,
   },
-  title: { id: 'titleId', instanceId: null },
+  title: { id: 'titleId', instanceId: null, title: 'Receiving title' },
   vendorsMap: {},
   locations: [{ id: 'locationId', name: 'locationName', code: 'locationCode' }],
   onEdit: jest.fn(),
@@ -162,6 +169,23 @@ describe('TitleDetails', () => {
     expect(screen.getByText('ui-receiving.title.polDetails')).toBeInTheDocument();
     expect(screen.getByText('ui-receiving.title.expected')).toBeInTheDocument();
     expect(screen.getByText('ui-receiving.title.received')).toBeInTheDocument();
+  });
+
+  it('should pass Receiving title context to Connected Tasks/Jobs', () => {
+    renderTitleDetails();
+
+    const expectedProps = {
+      recordId: defaultProps.title.id,
+      recordObject: { title: defaultProps.title.title },
+      recordType: CONNECTED_RECORD_TYPES.RECEIVING_TITLE,
+    };
+
+    expect(ConnectedTasksJobsButton.mock.calls.map(([props]) => props)).toContainEqual(
+      expect.objectContaining(expectedProps),
+    );
+    expect(ConnectedTasksJobsPane.mock.calls.map(([props]) => props)).toContainEqual(
+      expect.objectContaining(expectedProps),
+    );
   });
 
   it('should navigate to piece create form', async () => {

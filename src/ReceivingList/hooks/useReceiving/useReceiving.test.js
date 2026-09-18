@@ -76,6 +76,23 @@ describe('useReceiving', () => {
     });
   });
 
+  it('should ignore the Connected Tasks/Jobs layer parameter', async () => {
+    useLocation.mockReturnValue({ search: 'layer=connected-tasks-jobs' });
+
+    const { result } = renderTestHook({
+      pagination: { limit: 5, offset: 0, timestamp: 42 },
+    });
+
+    await waitForLoading(result);
+
+    expect(result.current).toEqual({
+      titles: [],
+      totalRecords: 0,
+      isFetching: false,
+    });
+    expect(kyMock.get).not.toHaveBeenCalled();
+  });
+
   it('should return fetched hydrated receivings list', async () => {
     useLocation.mockReturnValue({ search: 'purchaseOrder.workflowStatus=Open' });
 

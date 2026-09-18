@@ -11,6 +11,7 @@ import {
   SendClaimActionMenuItem,
 } from '@folio/stripes-acq-components';
 
+import { ConnectedTasksJobsButton } from '../../../common/components';
 import { PIECE_ACTION_NAMES } from '../../constants';
 import { PIECE_ACTIONS_BY_STATUS } from './constants';
 
@@ -161,10 +162,24 @@ export const getPieceActionsMenuDict = ({
 });
 
 // Returns array of action components for the given action names
-export const getPieceActionsMenu = ({ actions = [], ...rest }) => {
+export const getPieceActionsMenu = ({
+  actions = [],
+  connectedTasksJobsProps,
+  ...rest
+}) => {
   const actionsMenuDict = getPieceActionsMenuDict(rest);
-
-  return actions
+  const pieceActions = actions
     .map((action) => actionsMenuDict[action])
     .filter(Boolean);
+
+  return [
+    ...pieceActions,
+    connectedTasksJobsProps && (
+      <ConnectedTasksJobsButton
+        {...connectedTasksJobsProps}
+        onClick={rest.onToggle}
+        variant="dropdownItem"
+      />
+    ),
+  ].filter(Boolean);
 };
