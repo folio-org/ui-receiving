@@ -1,4 +1,3 @@
-import queryString from 'query-string';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router';
 
@@ -10,7 +9,10 @@ import {
 import { getFiltersCount } from '@folio/stripes-acq-components';
 
 import { TITLES_API } from '../../../common/constants';
-import { buildTitlesQuery } from '../../utils';
+import {
+  buildTitlesQuery,
+  getQueryParams,
+} from '../../utils';
 
 export const useReceiving = ({
   pagination,
@@ -29,7 +31,7 @@ export const useReceiving = ({
   const { timezone } = useStripes();
 
   const { search } = useLocation();
-  const queryParams = queryString.parse(search);
+  const queryParams = getQueryParams(search);
   const filtersCount = getFiltersCount(queryParams);
 
   const query = buildTitlesQuery(queryParams, { timezone });

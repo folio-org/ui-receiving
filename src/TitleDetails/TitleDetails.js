@@ -31,6 +31,7 @@ import {
   MenuSection,
   MessageBanner,
   Pane,
+  PaneMenu,
   Row,
 } from '@folio/stripes/components';
 import {
@@ -57,10 +58,13 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  ConnectedTasksJobsButton,
+  ConnectedTasksJobsPane,
   ConfirmReceivingModal,
   DateRangeModal,
   RemoveFromPackageModals,
 } from '../common/components';
+import { CONNECTED_RECORD_TYPES } from '../common/constants';
 import {
   useAsyncConfirmationModal,
   useRemoveFromPackage,
@@ -141,6 +145,11 @@ const TitleDetails = ({
 
   const { id: poLineId, physical, poLineNumber, checkinItems, orderFormat, requester, rush } = poLine;
   const titleId = title.id;
+  const connectedTasksJobsProps = {
+    recordId: titleId,
+    recordObject: { title: title.title },
+    recordType: CONNECTED_RECORD_TYPES.RECEIVING_TITLE,
+  };
   const isAcknowledged = title.isAcknowledged;
   const isOrderClosed = order.workflowStatus === ORDER_STATUSES.closed;
   const isOrderPending = order.workflowStatus === ORDER_STATUSES.pending;
@@ -485,6 +494,11 @@ const TitleDetails = ({
         id="pane-title-details"
         defaultWidth="fill"
         dismissible
+        lastMenu={
+          <PaneMenu>
+            <ConnectedTasksJobsButton {...connectedTasksJobsProps} />
+          </PaneMenu>
+        }
         paneTitle={title.title}
         paneSub={poLineNumber}
         onClose={onClose}
@@ -742,6 +756,7 @@ const TitleDetails = ({
           onCancel={cancelExpectedDateRangeModal}
         />
       </Pane>
+      <ConnectedTasksJobsPane {...connectedTasksJobsProps} />
     </HasCommand>
   );
 };

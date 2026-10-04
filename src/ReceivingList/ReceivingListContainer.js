@@ -20,6 +20,7 @@ import {
   fetchOrderLineLocations,
   fetchOrdersVendors,
   fetchTitleOrderLines,
+  LIST_IGNORED_QUERY_PARAMS,
 } from './utils';
 
 const resetData = () => {};
@@ -126,7 +127,10 @@ const ReceivingListContainer = () => {
     return { orderLinesMap };
   }, [crossTenant, invalidReferenceMessage, stripes]);
 
-  const { pagination, changePage, refreshPage } = usePagination({ limit: RESULT_COUNT_INCREMENT, offset: 0 });
+  const { pagination, changePage, refreshPage } = usePagination(
+    { limit: RESULT_COUNT_INCREMENT, offset: 0 },
+    { ignoredSearchParams: LIST_IGNORED_QUERY_PARAMS },
+  );
   const {
     isFetching,
     query,

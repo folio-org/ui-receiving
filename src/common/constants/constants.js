@@ -23,3 +23,8 @@ export const MAX_PARALLEL_REQUESTS = 5;
 export const EMITTER_EVENTS = {
   RECEIVING_FORM_PAGE_CHANGED: 'RECEIVING_FORM_PAGE_CHANGED',
 };
+
+export const CONNECTED_RECORD_TYPES = {
+  RECEIVING_TITLE: 'receivingTitle',
+  RECEIVING_PIECE: 'receivingPiece',
+};

@@ -1,5 +1,7 @@
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
+import { ConnectedTasksJobsButton } from '../../../common/components';
+import { CONNECTED_RECORD_TYPES } from '../../../common/constants';
 import { PIECE_ACTION_NAMES } from '../../constants';
 import { PIECE_ACTIONS_BY_STATUS } from './constants';
 import {
@@ -52,6 +54,26 @@ describe('getPieceActionMenus', () => {
     });
 
     expect(result).toHaveLength(PIECE_ACTIONS_BY_STATUS[expected].length - 2); // excluding 'delete' and 'send claim' actions
+  });
+
+  it('should include Connected Tasks/Jobs when record context is provided', () => {
+    const connectedTasksJobsProps = {
+      recordId: 'pieceId',
+      recordObject: { displaySummary: 'Piece summary' },
+      recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
+    };
+    const result = getPieceActionsMenu({
+      connectedTasksJobsProps,
+      onToggle,
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].type).toBe(ConnectedTasksJobsButton);
+    expect(result[0].props).toEqual(expect.objectContaining({
+      ...connectedTasksJobsProps,
+      onClick: onToggle,
+      variant: 'dropdownItem',
+    }));
   });
 
   describe('delete action', () => {

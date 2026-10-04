@@ -36,8 +36,14 @@ import {
   useModalToggle,
 } from '@folio/stripes-acq-components';
 
-import { ConfirmReceivingModal } from '../../common/components';
-import { PIECE_FORM_FIELD_NAMES } from '../../common/constants';
+import {
+  ConnectedTasksJobsPane,
+  ConfirmReceivingModal,
+} from '../../common/components';
+import {
+  CONNECTED_RECORD_TYPES,
+  PIECE_FORM_FIELD_NAMES,
+} from '../../common/constants';
 import { useAsyncConfirmationModal } from '../../common/hooks';
 import { setLocationValueFormMutator } from '../../common/utils';
 import {
@@ -95,7 +101,9 @@ const PieceForm = ({
     isBound,
     isCreateItem,
     metadata,
+    receiptDate,
     receivingStatus,
+    titleId,
   } = formValues;
 
   useEffect(() => {
@@ -128,6 +136,18 @@ const PieceForm = ({
   const isSaveAndCloseDisabled = disabled || (protectUpdate && isEditMode);
   const isEditDisabled = disabled || protectUpdate;
   const isOriginalItemDetailsVisible = Boolean(itemId && bindItemId && isBound);
+  const connectedTasksJobsProps = isEditMode
+    ? {
+      recordId: id,
+      recordObject: {
+        displaySummary: formValues.displaySummary,
+        receiptDate,
+        receivingStatus,
+        titleId,
+      },
+      recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
+    }
+    : undefined;
   const itemDetailsAccordionLabelId = isOriginalItemDetailsVisible
     ? PIECE_MODAL_ACCORDION.originalItemDetails
     : PIECE_MODAL_ACCORDION.itemDetails;
@@ -251,6 +271,7 @@ const PieceForm = ({
   const end = (
     <PieceFormActionButtons
       actionsDisabled={actionsDisabled}
+      connectedTasksJobsProps={connectedTasksJobsProps}
       isEditMode={isEditMode}
       onCreateAnotherPiece={onCreateAnotherPiece}
       onClaimDelay={toggleClaimDelayModal}
@@ -407,6 +428,9 @@ const PieceForm = ({
             onConfirm={onConfirmReceive}
           />
         </Pane>
+        {connectedTasksJobsProps && (
+          <ConnectedTasksJobsPane {...connectedTasksJobsProps} />
+        )}
       </Paneset>
     </HasCommand>
   );

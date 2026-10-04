@@ -1,7 +1,9 @@
 import compact from 'lodash/compact';
 import flatten from 'lodash/flatten';
 import map from 'lodash/map';
+import omit from 'lodash/omit';
 import uniq from 'lodash/uniq';
+import queryString from 'query-string';
 
 import {
   batchRequest,
@@ -31,6 +33,12 @@ import {
   formatSearchCql,
   getKeywordQuery,
 } from './ReceivingListSearchConfig';
+
+export const LIST_IGNORED_QUERY_PARAMS = ['layer'];
+
+export const getQueryParams = search => (
+  omit(queryString.parse(search), LIST_IGNORED_QUERY_PARAMS)
+);
 
 export const fetchTitleOrderLines = (ky, titles, fetchedOrderLinesMap) => {
   const orderLineIds = titles
