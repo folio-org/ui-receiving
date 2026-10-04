@@ -39,6 +39,11 @@ export const RECEIVING_COLUMN_MAPPING = {
   [RECEIVING_COLUMNS.ORDER_WORKFLOW]: <FormattedMessage id="ui-receiving.titles.orderWorkflow" />,
 };
 
+// Fixed rather than a `max` hint, which would freeze on the first result set.
+export const RECEIVING_COLUMN_WIDTHS = {
+  [RECEIVING_COLUMNS.TITLE]: '400px',
+};
+
 export const RECEIVING_SORTABLE_FIELDS = [
   RECEIVING_COLUMNS.TITLE,
   'poLine.receiptDate',
