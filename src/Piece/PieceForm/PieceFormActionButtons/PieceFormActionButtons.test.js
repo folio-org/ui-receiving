@@ -5,13 +5,7 @@ import {
 import user from '@folio/jest-config-stripes/testing-library/user-event';
 import { PIECE_STATUS } from '@folio/stripes-acq-components';
 
-import { ConnectedTasksJobsButton } from '../../../common/components';
-import { CONNECTED_RECORD_TYPES } from '../../../common/constants';
 import { PieceFormActionButtons } from './PieceFormActionButtons';
-
-jest.mock('../../../common/components', () => ({
-  ConnectedTasksJobsButton: jest.fn(() => 'ConnectedTasksJobsButton'),
-}));
 
 const onSave = jest.fn();
 const onDelete = jest.fn();
@@ -52,28 +46,28 @@ describe('PieceFormActionButtons', () => {
     expect(onSave).toHaveBeenCalled();
   });
 
-  it('should display Connected Tasks/Jobs in the existing Piece actions menu', async () => {
-    const connectedTasksJobsProps = {
-      recordId: 'pieceId',
-      recordObject: {
-        displaySummary: 'Piece summary',
-        receiptDate: '2026-09-15',
-        receivingStatus: PIECE_STATUS.expected,
-      },
-      recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
+  describe('Actions menu availability', () => {
+    const actionsDisabled = {
+      saveAndClose: true,
+      delete: true,
     };
 
-    renderComponent({ connectedTasksJobsProps, isEditMode: true });
+    it('should disable the menu in edit mode when save and delete are disabled', () => {
+      renderComponent({ actionsDisabled, isEditMode: true });
 
-    await user.click(screen.getByTestId('dropdown-trigger-button'));
+      expect(screen.getByTestId('dropdown-trigger-button')).toBeDisabled();
+    });
 
-    expect(screen.getByText('ConnectedTasksJobsButton')).toBeInTheDocument();
-    expect(ConnectedTasksJobsButton.mock.calls.map(([props]) => props)).toContainEqual(
-      expect.objectContaining({
-        ...connectedTasksJobsProps,
-        onClick: expect.any(Function),
-        variant: 'dropdownItem',
-      }),
-    );
+    it('should disable the menu in create mode when save is disabled', () => {
+      renderComponent({ actionsDisabled, isEditMode: false });
+
+      expect(screen.getByTestId('dropdown-trigger-button')).toBeDisabled();
+    });
+
+    it('should disable the menu while submitting', () => {
+      renderComponent({ isEditMode: true, submitting: true });
+
+      expect(screen.getByTestId('dropdown-trigger-button')).toBeDisabled();
+    });
   });
 });

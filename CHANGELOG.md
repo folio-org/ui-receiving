@@ -11,6 +11,7 @@
 * Add "Vendor" column to the Receiving results list. Refs UIREC-499.
 * Add Connected Tasks/Jobs to Receiving title and Piece pages. Refs UIREC-511.
 * Set a fixed width for the "Title" column in the Receiving results list. Refs UIREC-510.
+* Move Connected Tasks/Jobs button to piece form pane header and restore disabled "Actions" menu. Refs UIREC-511.
 
 ## [8.0.4](https://github.com/folio-org/ui-receiving/tree/v8.0.4) (2026-05-25)
 [Full Changelog](https://github.com/folio-org/ui-receiving/compare/v8.0.3...v8.0.4)
