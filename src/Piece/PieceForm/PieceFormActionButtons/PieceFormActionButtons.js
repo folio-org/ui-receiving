@@ -19,7 +19,6 @@ import css from './PieceFormActionButtons.css';
 
 export const PieceFormActionButtons = ({
   actionsDisabled,
-  connectedTasksJobsProps,
   isEditMode,
   onClaimDelay,
   onClaimSend,
@@ -36,9 +35,12 @@ export const PieceFormActionButtons = ({
 
   const saveButtonLabelId = 'stripes-components.saveAndClose';
   const isSaveDisabled = actionsDisabled?.[PIECE_ACTION_NAMES.saveAndClose] || submitting;
-  const isActionsMenuDisabled = submitting || (!isEditMode && isSaveDisabled);
+  const isActionsMenuDisabled = (
+    (isSaveDisabled && (actionsDisabled?.[PIECE_ACTION_NAMES.delete] || !isEditMode))
+    || submitting
+  );
 
-  if (pieceActions.length === 0 && !connectedTasksJobsProps) {
+  if (pieceActions.length === 0) {
     return (
       <Button
         buttonStyle="primary"
@@ -77,7 +79,6 @@ export const PieceFormActionButtons = ({
           const actionMenu = getPieceActionsMenu({
             actions: pieceActions,
             actionsDisabled,
-            connectedTasksJobsProps,
             isEditMode,
             onClaimDelay,
             onClaimSend,
@@ -102,11 +103,6 @@ export const PieceFormActionButtons = ({
 
 PieceFormActionButtons.propTypes = {
   actionsDisabled: PropTypes.objectOf(PropTypes.bool),
-  connectedTasksJobsProps: PropTypes.shape({
-    recordId: PropTypes.string.isRequired,
-    recordObject: PropTypes.object,
-    recordType: PropTypes.string.isRequired,
-  }),
   isEditMode: PropTypes.bool.isRequired,
   onClaimDelay: PropTypes.func.isRequired,
   onClaimSend: PropTypes.func.isRequired,

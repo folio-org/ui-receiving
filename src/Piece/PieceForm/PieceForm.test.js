@@ -15,7 +15,10 @@ import {
 } from '@folio/stripes-acq-components';
 
 import { renderWithRouter } from 'helpers';
-import { ConnectedTasksJobsPane } from '../../common/components';
+import {
+  ConnectedTasksJobsButton,
+  ConnectedTasksJobsPane,
+} from '../../common/components';
 import {
   CONNECTED_RECORD_TYPES,
   PIECE_FORM_FIELD_NAMES,
@@ -160,6 +163,36 @@ describe('PieceForm', () => {
         recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
       }),
     );
+  });
+
+  describe('Connected Tasks/Jobs button', () => {
+    const piece = {
+      id: 'pieceId',
+      displaySummary: 'Piece summary',
+      receiptDate: '2026-09-15',
+      receivingStatus: PIECE_STATUS.expected,
+      titleId: 'titleId',
+    };
+
+    it('should render Connected Tasks/Jobs button in the pane header for an existing piece', () => {
+      renderPieceForm({ initialValues: piece });
+
+      expect(ConnectedTasksJobsButton.mock.calls.map(([props]) => props)).toContainEqual(
+        expect.objectContaining({
+          recordId: piece.id,
+          recordType: CONNECTED_RECORD_TYPES.RECEIVING_PIECE,
+        }),
+      );
+    });
+
+    it('should disable the actions menu when user cannot edit the piece', () => {
+      renderPieceForm({
+        initialValues: piece,
+        restrictionsByAcqUnit: { protectCreate: true, protectDelete: true, protectUpdate: true },
+      });
+
+      expect(screen.getByTestId('dropdown-trigger-button')).toBeDisabled();
+    });
   });
 
   describe('Close piece form', () => {

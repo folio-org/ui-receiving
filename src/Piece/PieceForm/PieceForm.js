@@ -20,6 +20,7 @@ import {
   HasCommand,
   Pane,
   PaneFooter,
+  PaneMenu,
   Paneset,
   Row,
 } from '@folio/stripes/components';
@@ -37,6 +38,7 @@ import {
 } from '@folio/stripes-acq-components';
 
 import {
+  ConnectedTasksJobsButton,
   ConnectedTasksJobsPane,
   ConfirmReceivingModal,
 } from '../../common/components';
@@ -271,7 +273,6 @@ const PieceForm = ({
   const end = (
     <PieceFormActionButtons
       actionsDisabled={actionsDisabled}
-      connectedTasksJobsProps={connectedTasksJobsProps}
       isEditMode={isEditMode}
       onCreateAnotherPiece={onCreateAnotherPiece}
       onClaimDelay={toggleClaimDelayModal}
@@ -339,6 +340,11 @@ const PieceForm = ({
           onClose={onClose}
           paneTitle={paneTitle}
           footer={formFooter}
+          lastMenu={connectedTasksJobsProps && (
+            <PaneMenu>
+              <ConnectedTasksJobsButton {...connectedTasksJobsProps} />
+            </PaneMenu>
+          )}
         >
           <Row>
             <Col

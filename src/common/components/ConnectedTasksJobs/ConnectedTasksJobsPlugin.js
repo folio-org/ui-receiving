@@ -13,24 +13,20 @@ export const connectedTasksJobsPropTypes = {
 
 export const ConnectedTasksJobsPlugin = ({
   componentType,
-  onClick,
   recordId,
   recordObject,
   recordType,
-  variant,
 }) => {
   const location = useLocation();
 
   return (
     <Pluggable
       componentType={componentType}
-      onClick={onClick}
       recordId={recordId}
       recordObject={recordObject}
       recordType={recordType}
       recordUrl={`${location.pathname}${location.search || ''}`}
       type="task-list"
-      variant={variant}
     />
   );
 };
@@ -40,7 +36,5 @@ ConnectedTasksJobsPlugin.propTypes = {
     'ConnectedTasksJobsButton',
     'ConnectedTasksJobsPane',
   ]).isRequired,
-  onClick: PropTypes.func,
-  variant: PropTypes.oneOf(['dropdownItem', 'icon']),
   ...connectedTasksJobsPropTypes,
 };
